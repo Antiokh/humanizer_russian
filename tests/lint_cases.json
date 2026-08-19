@@ -255,10 +255,10 @@
       "must_find": ["ilyakhov: intensifier cluster"]
     },
     {
-      "id": "extended-ilyakhov-present-time",
+      "id": "extended-ilyakhov-present-time-metric-only",
       "mode": "extended",
       "text": "В настоящее время компания выпускает три модели.",
-      "must_find": ["ilyakhov: present-time wrapper"]
+      "must_not_find": ["ilyakhov: present-time wrapper"]
     },
     {
       "id": "extended-ilyakhov-meta-intro",
