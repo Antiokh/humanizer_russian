@@ -1,23 +1,25 @@
 """Chukovsky-inspired positive editing checks for humanizer+ru.
 
-These are deliberately soft. They do not decide whether a construction is
-"wrong"; they surface places where a more direct, precise, audience-fit or
-better-sounding Russian variant may exist.
+These checks are deliberately soft. They do not decide whether a construction
+is "wrong" and never block publication. They surface places where the editor
+can build a more direct, precise, audience-fit or better-sounding alternative
+and compare it with the original.
 
-The source model is Korney Chukovsky's "Живой как жизнь": register fit,
-anti-purism, cancelearite, lexical economy, rhythm/phonetics, and idiom
-integrity. Current norm still belongs to the NORM layer.
+Source model: Korney Chukovsky, "Живой как жизнь" — register fit, anti-purism,
+cancelearite, lexical economy, rhythm/phonetics, and idiom integrity.
+Current norm remains the responsibility of the NORM layer.
 """
 
 from __future__ import annotations
 
-from collections import Counter
 import re
 from typing import Iterable
 
 
 WORD_RE = re.compile(r"[A-Za-zА-Яа-яЁё]+(?:-[A-Za-zА-Яа-яЁё]+)?")
 
+# These are not stop words. A hit means: compare a version without the
+# announcing phrase and keep it when it performs real discourse work.
 METADISCOURSE = [
     "важно отметить",
     "стоит отметить",
@@ -33,6 +35,8 @@ METADISCOURSE = [
     "нельзя не признать",
 ]
 
+# A bureaucratic register warning requires a CLUSTER across at least two
+# families. A single official-looking word is deliberately insufficient.
 BUREAUCRATIC_FAMILIES = {
     "deictic-paper": re.compile(
         r"\b(?:данн(?:ый|ая|ое|ые|ого|ому|ым|ой|ых)|"
@@ -45,17 +49,25 @@ BUREAUCRATIC_FAMILIES = {
         re.I,
     ),
     "existence-wrapper": re.compile(
-        r"\b(?:имеет\s+место|имел[аио]?\s+место|имеются?|наличи[еяю])\b",
+        r"\b(?:имеет\s+место|имел[аио]?\s+место|"
+        r"име(?:ется|ются)|наличи(?:е|я|ю|ем|и))\b",
         re.I,
     ),
-    "official-action": re.compile(
+    "official-action-family": re.compile(
         r"\b(?:осуществл\w*|обеспеч\w*|произвед\w*|производ\w*)\b",
         re.I,
     ),
 }
 
+# Unlike the broad family marker above, this check deliberately requires a
+# VERBAL form followed by a nominalization. It must not flag bare noun phrases
+# such as "осуществление проекта".
 LIGHT_VERB_NOMINAL = re.compile(
-    r"\b(?:осуществл\w*|обеспеч\w*|производ\w*)\s+"
+    r"\b(?:"
+    r"осуществ(?:лять|ляет|ляют|ляем|ляете|лял|ляла|ляли|ляется|ляются|лялось|лялись)|"
+    r"обеспеч(?:ивать|ивает|ивают|иваем|иваете|ивал|ивала|ивали|ивается|иваются|ивалось|ивались)|"
+    r"производ(?:ить|ит|ят|им|ите|ил|ила|или|ится|ятся|ился|илась|ились)"
+    r")\s+"
     r"(?:[а-яё-]+\s+){0,2}"
     r"[а-яё-]+(?:ание|ания|анию|анием|аний|"
     r"ение|ения|ению|ением|ений|"
@@ -63,15 +75,19 @@ LIGHT_VERB_NOMINAL = re.compile(
     re.I,
 )
 
+# Small, conservative set for a *subtraction test*. Even here the linter only
+# suggests A/B comparison: context can make an apparently redundant modifier
+# contrastive or restrictive.
 REDUNDANT_QUALIFIERS = [
     ("достигнутые успехи", re.compile(r"\bдостигнут\w*\s+успех\w*\b", re.I)),
     ("имеющиеся ошибки", re.compile(r"\bимеющ\w*\s+ошиб\w*\b", re.I)),
     ("приглашённые гости", re.compile(r"\bприглаш[её]нн\w*\s+гост\w*\b", re.I)),
-    ("важнейшая основа", re.compile(r"\bважнейш\w*\s+основ\w*\b", re.I)),
     ("главная суть", re.compile(r"\bглавн\w*\s+суть\b", re.I)),
     ("конечный итог", re.compile(r"\bконечн\w*\s+итог\w*\b", re.I)),
 ]
 
+# Chukovsky's point is serial, automatic use. One occurrence is not flagged;
+# the finding appears only when two or more candidate collocations occur.
 STAMP_COLLOCATIONS = {
     "bright-show": re.compile(
         r"\bярк\w*\s+(?:показ\w*|раскры\w*|отраж\w*|образ\w*)\b", re.I
@@ -91,9 +107,10 @@ STAMP_COLLOCATIONS = {
 
 ABSTRACT_COLLISIONS = [
     ("наличие отсутствия", re.compile(r"\bналичи\w*\s+отсутстви\w*\b", re.I)),
-    ("возникновение исчезновения", re.compile(
-        r"\bвозникновени\w*\s+исчезновени\w*\b", re.I
-    )),
+    (
+        "возникновение исчезновения",
+        re.compile(r"\bвозникновени\w*\s+исчезновени\w*\b", re.I),
+    ),
     ("сила слабости", re.compile(r"\bсил\w*\s+слабост\w*\b", re.I)),
 ]
 
@@ -111,7 +128,9 @@ NOMINAL_ENDING = re.compile(
 )
 
 LONG_CYRILLIC = re.compile(r"\b[А-Яа-яЁё-]{25,}\b")
-ACRONYM = re.compile(r"(?<![A-Za-zА-Яа-яЁё])(?:[A-ZА-ЯЁ]{4,})(?![A-Za-zА-Яа-яЁё])")
+ACRONYM = re.compile(
+    r"(?<![A-Za-zА-Яа-яЁё])(?:[A-ZА-ЯЁ]{4,})(?![A-Za-zА-Яа-яЁё])"
+)
 
 
 def _add(findings: list[dict], rule: str, excerpt: str, note: str) -> None:
@@ -129,21 +148,26 @@ def _words(text: str) -> list[str]:
 
 
 def _nominalizations(sentence: str) -> list[str]:
-    return [w for w in _words(sentence) if NOMINAL_ENDING.search(w)]
+    return [word for word in _words(sentence) if NOMINAL_ENDING.search(word)]
+
+
+def _phrase_hits(text_low: str, phrase: str) -> list[str]:
+    """Count phrase occurrences, not merely distinct phrase types."""
+    rx = re.compile(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", re.I)
+    return [match.group(0) for match in rx.finditer(text_low)]
 
 
 def _suffix_echo(sentence: str) -> tuple[str, list[str]] | None:
     """Return a dense repeated 4-letter ending, if any.
 
-    This is intentionally conservative: at least four long words in one
-    sentence must share the same four final letters.
+    Four long words in one sentence must share the same four final letters.
+    This is intentionally only a read-aloud candidate, not a quality score.
     """
-    words = [w.lower() for w in _words(sentence) if len(w) >= 7]
+    words = [word.lower() for word in _words(sentence) if len(word) >= 7]
     groups: dict[str, list[str]] = {}
     for word in words:
-        suffix = word[-4:]
-        groups.setdefault(suffix, []).append(word)
-    for suffix, items in sorted(groups.items(), key=lambda x: (-len(x[1]), x[0])):
+        groups.setdefault(word[-4:], []).append(word)
+    for suffix, items in sorted(groups.items(), key=lambda item: (-len(item[1]), item[0])):
         if len(items) >= 4:
             return suffix, items
     return None
@@ -154,12 +178,14 @@ def check_chukovsky(prose: str, sentences: Iterable[str]) -> tuple[list[dict], d
     sents = list(sentences)
     low = prose.lower()
 
-    meta_hits = [phrase for phrase in METADISCOURSE if phrase in low]
+    meta_hits: list[str] = []
+    for phrase in METADISCOURSE:
+        meta_hits.extend(_phrase_hits(low, phrase))
     if meta_hits:
         _add(
             findings,
             "chukovsky: metadiscourse deletion test",
-            "; ".join(meta_hits),
+            "; ".join(meta_hits[:8]),
             (
                 "test a version without the announcing phrase; keep it only if it "
                 "adds real modality, navigation or contrast rather than merely "
@@ -169,11 +195,11 @@ def check_chukovsky(prose: str, sentences: Iterable[str]) -> tuple[list[dict], d
 
     bureau_hits: dict[str, list[str]] = {}
     for family, rx in BUREAUCRATIC_FAMILIES.items():
-        matches = [m.group(0) for m in rx.finditer(prose)]
+        matches = [match.group(0) for match in rx.finditer(prose)]
         if matches:
             bureau_hits[family] = matches
 
-    bureau_total = sum(len(v) for v in bureau_hits.values())
+    bureau_total = sum(len(items) for items in bureau_hits.values())
     if bureau_total >= 3 and len(bureau_hits) >= 2:
         excerpt = "; ".join(
             f"{family}: {', '.join(items[:3])}"
@@ -190,7 +216,7 @@ def check_chukovsky(prose: str, sentences: Iterable[str]) -> tuple[list[dict], d
             ),
         )
 
-    light_hits = [m.group(0) for m in LIGHT_VERB_NOMINAL.finditer(prose)]
+    light_hits = [match.group(0) for match in LIGHT_VERB_NOMINAL.finditer(prose)]
     if light_hits:
         _add(
             findings,
@@ -220,26 +246,24 @@ def check_chukovsky(prose: str, sentences: Iterable[str]) -> tuple[list[dict], d
                 ),
             )
 
-    redundant_hits = []
+    redundant_hits: list[str] = []
     for _, rx in REDUNDANT_QUALIFIERS:
-        for m in rx.finditer(prose):
-            redundant_hits.append(m.group(0))
+        redundant_hits.extend(match.group(0) for match in rx.finditer(prose))
     if redundant_hits:
         _add(
             findings,
-            "chukovsky: redundant qualifier candidate",
+            "chukovsky: modifier subtraction candidate",
             "; ".join(redundant_hits[:6]),
             (
-                "delete the qualifier in a comparison copy; keep it only if it "
-                "changes scope, contrast, chronology or another real meaning"
+                "delete the modifier in a comparison copy; keep it if it changes "
+                "scope, contrast, chronology, terminology, rhythm or another real "
+                "meaning/function"
             ),
         )
 
     stamp_hits: list[str] = []
-    for _, rx in STAMP_COLLOCATIONS.items():
-        matches = [m.group(0) for m in rx.finditer(prose)]
-        if matches:
-            stamp_hits.extend(matches)
+    for rx in STAMP_COLLOCATIONS.values():
+        stamp_hits.extend(match.group(0) for match in rx.finditer(prose))
     if len(stamp_hits) >= 2:
         _add(
             findings,
@@ -252,9 +276,9 @@ def check_chukovsky(prose: str, sentences: Iterable[str]) -> tuple[list[dict], d
             ),
         )
 
-    collision_hits = []
+    collision_hits: list[str] = []
     for _, rx in ABSTRACT_COLLISIONS:
-        collision_hits.extend(m.group(0) for m in rx.finditer(prose))
+        collision_hits.extend(match.group(0) for match in rx.finditer(prose))
     if collision_hits:
         _add(
             findings,
@@ -262,11 +286,12 @@ def check_chukovsky(prose: str, sentences: Iterable[str]) -> tuple[list[dict], d
             "; ".join(collision_hits[:5]),
             (
                 "unpack the abstractions and state the event directly; verify the "
-                "result against SEMANTICS because the original may be ironic"
+                "result against SEMANTICS because the original may be ironic, quoted "
+                "or deliberately paradoxical"
             ),
         )
 
-    qpack = [m.group(0) for m in QUESTION_PACKAGING.finditer(prose)]
+    qpack = [match.group(0) for match in QUESTION_PACKAGING.finditer(prose)]
     if len(qpack) >= 2:
         _add(
             findings,
@@ -287,7 +312,8 @@ def check_chukovsky(prose: str, sentences: Iterable[str]) -> tuple[list[dict], d
             "; ".join(long_tokens[:5]),
             (
                 "check pronunciation, audience recognition and whether the form "
-                "actually saves effort; a technical term may still be fully justified"
+                "actually saves reader effort; a technical term may still be fully "
+                "justified"
             ),
         )
 
@@ -317,7 +343,7 @@ def check_chukovsky(prose: str, sentences: Iterable[str]) -> tuple[list[dict], d
                 (
                     f"four or more long words end in «{suffix}»; read the sentence "
                     "aloud and revise only if the echo is accidental rather than "
-                    "rhythmic/technical"
+                    "rhythmic, terminological or authorial"
                 ),
             )
 
@@ -344,18 +370,42 @@ def self_test() -> None:
         "Автор ярко показывает конфликт, а затем ярко раскрывает тему. "
         "Мы получили достигнутые успехи."
     )
-    sents = [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
+    sents = [sent.strip() for sent in re.split(r"(?<=[.!?])\s+", text) if sent.strip()]
     findings, metrics = check_chukovsky(text, sents)
     rules = {item["rule"] for item in findings}
     assert "chukovsky: metadiscourse deletion test" in rules, findings
     assert "chukovsky: bureaucratic-register cluster" in rules, findings
+    assert "chukovsky: light verb + nominalization" in rules, findings
     assert "chukovsky: nominalization cluster" in rules, findings
     assert "chukovsky: evaluative stamp cluster" in rules, findings
-    assert "chukovsky: redundant qualifier candidate" in rules, findings
+    assert "chukovsky: modifier subtraction candidate" in rules, findings
     assert metrics["chukovsky_nominalizations"] >= 3, metrics
 
+    # Do not confuse a nominalization noun with the light-verb construction.
+    noun_phrase = "Осуществление проекта завершено. Обеспечение проекта профинансировано."
+    sents = [sent.strip() for sent in re.split(r"(?<=[.!?])\s+", noun_phrase) if sent.strip()]
+    findings, _ = check_chukovsky(noun_phrase, sents)
+    assert not [
+        item for item in findings
+        if item["rule"] == "chukovsky: light verb + nominalization"
+    ], findings
+
+    # A single formal marker must not be enough to claim register leakage.
+    official_single = "В рамках проекта исправили ошибку."
+    findings, _ = check_chukovsky(official_single, [official_single])
+    assert not [
+        item for item in findings
+        if item["rule"] == "chukovsky: bureaucratic-register cluster"
+    ], findings
+
+    # Count repeated metadiscourse occurrences, not only unique phrase types.
+    repeated_meta = "Важно отметить одно. Важно отметить и второе."
+    sents = [sent.strip() for sent in re.split(r"(?<=[.!?])\s+", repeated_meta) if sent.strip()]
+    _, metrics = check_chukovsky(repeated_meta, sents)
+    assert metrics["chukovsky_metadiscourse_hits"] == 2, metrics
+
     clean = "Вышел релиз. Исправили поиск и добавили фильтры."
-    sents = [s.strip() for s in re.split(r"(?<=[.!?])\s+", clean) if s.strip()]
+    sents = [sent.strip() for sent in re.split(r"(?<=[.!?])\s+", clean) if sent.strip()]
     findings, _ = check_chukovsky(clean, sents)
     assert not findings, findings
 
