@@ -49,6 +49,8 @@ The EPUB also contains front matter before chapter 1. It is included in sequenti
 
 Primary locator for this study: rendered source line range in the uploaded file, whose current parsed representation contains 4530 lines.
 
+Full locator span: `SRC:L1-L4530`.
+
 Format:
 
 `SRC:L<start>-L<end>`
