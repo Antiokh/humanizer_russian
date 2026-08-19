@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ilyakhov
       - agent/**
   pull_request:
 
@@ -25,6 +26,9 @@ jobs:
 
       - name: Linter self-test
         run: python scripts/lint.py --self-test
+
+      - name: Ilyakhov linter self-test
+        run: python scripts/lint_ilyakhov.py --self-test
 
       - name: Smoke-test and validate author profiler
         run: |
