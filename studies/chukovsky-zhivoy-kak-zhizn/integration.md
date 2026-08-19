@@ -1,209 +1,225 @@
-# Integration pass — independent Chukovsky study → current humanizer_russian
+# Integration pass — independent Chukovsky study → current `humanizer_russian`
 
-Status: `INTEGRATION_APPLIED_PENDING_REVIEW`.
+Status: `OPERATIONAL_FOR_INTEGRATION`.
 
-This file was created **after** `audit.md` marked the independent study complete. The branch was then merged forward to the current mechanical-first `main`, and the production integration was rebuilt on top of that architecture instead of preserving an older runtime snapshot.
+This file is the current integration record for the independent study of Корней Чуковский, «Живой как жизнь». The deep research history remains in the other files in this directory; this document intentionally describes the **current** runtime architecture rather than preserving stale implementation snapshots.
 
-## Current architecture constraint
+## Architecture
 
-The current project is mechanical-first:
+The source is integrated as one knowledge library consumed by both product modes:
 
-1. `scripts/check.py` default mode exposes only high-precision mechanical findings;
-2. `scripts/check.py --extended` exposes softer contextual/style/AI findings;
-3. contextual rules live primarily in reference/model layers;
-4. a new regex does not become default runtime merely because it can be written.
+```text
+BOOK / supplied source
+  → audited study
+  → libraries/chukovsky/rules.json
+  → scripts/chukovsky_checks.py
+  → scripts/lint_chukovsky.py (review_v1)
+  → scripts/check.py              # compact
+  → scripts/review.py             # editorial board
+```
 
-Chukovsky integration therefore **does not expand `MECHANICAL_RULES`**. Its surface checks are `EDITING_SUGGESTION` visible in extended/linter output only.
+There is no second Chukovsky humanizer and no separate copy of the rules for board mode.
 
-## Integration principles
+Current `main` remains the architecture authority. Chukovsky contributes source knowledge and source-specific mechanics without replacing core `SKILL.md`, library runtime, board runtime or current Russian guardrails.
 
-1. `USER_INTENT`, `SEMANTICS` and current `NORM` remain hard constraints.
-2. A historical book does not become a 2026 normative authority merely by being influential.
-3. Chukovsky contributes chiefly:
-   - register/audience diagnostics;
-   - positive editing operations;
-   - anti-purist boundary conditions;
-   - rhythm/read-aloud diagnostics;
-   - lexicalization/idiom boundaries;
-   - evidence discipline for historical prescriptions.
-4. Surface regex may emit only soft candidates for these phenomena. It must not infer final register fit, idiom status, sincerity, personality, semantic roles or current norm.
-5. Independent rule/eval IDs remain in `studies/...`; production-facing rules are expressed as semantic/editorial operations.
+## Source/study gate
 
-## Mapping of all 38 independent rules
+The source study was completed before runtime integration and then re-audited rather than trusting previous regexes or prompt rules.
 
-| Independent rule | Coverage before integration | Integration decision | Production destination |
-|---|---|---|---|
-| CHK-R01 generational taste ≠ current norm | partial | `REFINE` | historical/current-norm gate in `SKILL.md`, `russian-language.md`, `chukovsky.md` |
-| CHK-R02 classify innovation before judging | not explicit | `ADD_REFERENCE` | classification step in `chukovsky.md`; current-norm workflow in SKILL |
-| CHK-R03 current meaning ≠ etymology | missing | `ADD_REFERENCE` | lexicalization boundary in Russian/Chukovsky references |
-| CHK-R04 recoverable ellipsis | strong | `REFINE` | explicit `recoverable ≠ must delete` |
-| CHK-R05 ellipsis vs lexical reanalysis | partial | `REFINE` | `russian-language.md` + SKILL |
-| CHK-R06 borrowing by semantic work | partial | `REFINE` | term/audience test |
-| CHK-R07 terminology by audience | partial | `REFINE` | scene/register stage |
-| CHK-R08 lexical fit by scene | partial | `REFINE` | scene/register stage |
-| CHK-R09 abbreviation by reader effort | missing | `ADD` | Chukovsky reference + extended linter candidate |
-| CHK-R10 no class-wide formation bans | implicit | `REFINE` | Chukovsky reference |
-| CHK-R11 character/professional voice | strong | `REFINE` | speaker-role-scene wording |
-| CHK-R12 no person diagnosis from one slang marker | partial | `ADD_BOUNDARY` | Chukovsky reference + SKILL final control |
-| CHK-R13 symptom ≠ cause | strong semantic guardrail | `REFINE` | Chukovsky inference boundary |
-| CHK-R14 preserve functional official formulas | missing | `ADD` | register stage |
-| CHK-R15 official-register leakage | partial | `ADD + EXTENDED_SOFT` | `EDITING_SUGGESTION` bureaucratic cluster |
-| CHK-R16 direct noun vs prestige classifier | missing | `ADD_MODEL` | direct-name A/B test |
-| CHK-R17 recover action from nominal packaging | warning only | `ADD + EXTENDED_SOFT` | action recovery + nominalization candidates |
-| CHK-R18 semantic subtraction for modifiers | missing | `ADD + EXTENDED_SOFT` | modifier A/B test |
-| CHK-R19 stamps by repeated function | AI clustering partially | `REFINE + EXTENDED_SOFT` | editing cluster before provenance inference |
-| CHK-R20 cliché ≠ insincerity | missing | `ADD_BOUNDARY` | model/reference only |
-| CHK-R21 proposition before evaluation | Nora partly | `REFINE` | proposition-first/no-invention |
-| CHK-R22 read aloud after semantics | missing | `ADD + EXTENDED_SOFT` | prosody pass + ending-echo candidate |
-| CHK-R23 dependency/case ambiguity, not counts | already warns against counts | `REFINE_MODEL` | role reconstruction; no regex case-count gate |
-| CHK-R24 metadiscourse deletion test | previously AI-family heuristic | `CORRECT + EXTENDED_SOFT` | remove single announcement from AI attribution; emit A/B suggestion |
-| CHK-R25 `вопрос` packaging | missing | `EXTENDED_SOFT` | repeated procedural-shell candidate |
-| CHK-R26 preserve subject individuality | author layer partial | `ADD_REFERENCE` | document-level template/function test |
-| CHK-R27 ground interpretation before boilerplate | Nora partial | `REFINE` | proposition/inference boundary |
-| CHK-R28 correctness not sufficient | architectural premise | `REFINE` | explicitly reject synonym/richness score |
-| CHK-R29 conventional expression vs literal logic | missing | `ADD_REFERENCE` | lexicalization check |
-| CHK-R30 expressive redundancy | native repetition already | `REFINE` | prosody/idiom function before deletion |
-| CHK-R31 sound/rhythm as comparison, not formula | missing | `ADD_MODEL` | post-semantic read-aloud, no score |
-| CHK-R32 idiom as lexical whole | missing in Nora layer | `ADD_NORA_BOUNDARY` | `SEM-IDIOM-BOUNDARY` |
-| CHK-R33 deliberate idiom deformation | general humor exception only | `REFINE_NORA` | preserve recoverable deliberate modification |
-| CHK-R34 play vs contamination | weak | `REFINE_NORA` | two-hypothesis diagnostic, unresolved allowed |
-| CHK-R35 historical prescription → current verification | evidence policy partial | `ADD_NORM_POLICY` | SKILL + Russian reference |
-| CHK-R36 professional variant scoped | jargon only, not norm variant | `ADD_NORM_POLICY` | current-authority + professional scope |
-| CHK-R37 familiar/home register | author layer partial | `REFINE` | scene layer; source's absolute exemption weakened |
-| CHK-R38 evidence-based norm vs taste | strong | `REFINE` | explicit historical-source provenance |
+Current inventory:
 
-## Production rule families after integration
+- full source coverage: `SRC:L1-L4530`;
+- 14/14 source units `VERIFIED`;
+- 22 concepts;
+- 38 atomic rules;
+- 33 counterexample boundary families;
+- 20 interaction groups;
+- 30 externally auditable claim groups;
+- 58 independent source-study evals: 38 direct + 20 compound;
+- loss audit complete;
+- overgeneralization audit complete.
 
-### `NORM-HISTORICAL-VERIFY`
+Primary-source identity and fingerprint are recorded in `source.md` and `libraries/chukovsky/library.json`. The original copyrighted book is not stored in the public repository.
 
-Historical prescription → classify phenomenon → verify current authoritative norm → check recognized variant/register → decide.
+## Rule identity
 
-### `NORM-PROFESSIONAL-VARIANT`
+The deep study historically used `CHK-R01` … `CHK-R38`. Those IDs remain stable inside the research artifacts so links and research history are not destroyed.
 
-A current professional variant is preserved only inside the relevant professional scope and only after current verification.
+The knowledge-library runtime uses canonical source IDs `CHUK-R01` … `CHUK-R38`, matching `source_namespace=CHUK`.
 
-### `NATIVE-ELLIPSIS-REANALYSIS`
+The complete mapping is machine-readable in:
 
-Before restoring a missing complement, distinguish contextual ellipsis from a construction with its own current lexical/syntactic valency.
+`libraries/chukovsky/rules.json`
 
-### `EDIT-REGISTER-FIT`
+Each canonical rule has a source-neutral `phenomenon_id`. `rule_id` preserves Chukovsky provenance; `phenomenon_id` is reused across libraries only when the underlying mechanism is genuinely the same.
 
-Determine speaker, addressee, genre and purpose before lexical simplification. Preserve functional official/professional/familiar forms; flag leakage only where function is absent.
+## Classification of all 38 rules
 
-### `EDIT-DIRECT-NAME`
+Automation:
 
-Compare prestige/abstract classifier with the exact ordinary noun. Prefer direct naming only when no technical/legal/taxonomic distinction disappears.
+- `HARD_GATE`: **0**;
+- `DEFAULT_MECHANICAL`: **0**;
+- `EXTENDED_SOFT`: **7**;
+- `METRIC_ONLY`: **2**;
+- `MODEL_ONLY`: **29**.
 
-### `EDIT-ACTION-RECOVERY`
+Project classes:
 
-For dense nominal packaging, reconstruct `actor → action → object/result` before stylistic polishing. Do not invent an unknown actor.
+- `NORM`: 4;
+- `NATIVE_USAGE`: 7;
+- `EDITING`: 23;
+- `AUTHOR`: 4;
+- `AI_CALQUE`: 0;
+- `ARTIFACT`: 0.
 
-### `EDIT-MODIFIER-SUBTRACTION`
+The complete contextual classification — source locator, scope, semantic invariant, trigger, required context, false-positive risk, positive case, natural negative/boundary, overlaps and NATIVE_USAGE conflict risk — remains canonical in `integration-matrix.md` and the atomic cards in `rules.md`.
 
-A/B without the modifier; keep scope, contrast, degree, time, stance, terminology and expressive function.
+## Mechanical feasibility result
 
-### `EDIT-METADISCOURSE-DELETE-TEST`
+Every rule was considered in the required order:
 
-A/B with/without the announcing frame; retain real modality, warning hierarchy, navigation and contrast.
+`exact/string → regex → tokenizer → morphology → dependency/statistical → metric → MODEL_ONLY`.
 
-### `EDIT-PROPOSITION-FIRST`
+The audit deliberately rejected pseudo-linguistic shortcuts where semantics or context are required. In particular, the runtime does **not** treat the following as automatic errors:
 
-Replace generic evaluative shell with the source-supported proposition/observation when it exists. Never fabricate specificity.
+- genitive/case counts;
+- `наличие/отсутствие` or another abstract antonym pair as a semantic collision by itself;
+- one formal marker as cancelearite;
+- a bare `-ение/-ание/-ция` count as bad style;
+- one cliché as a dead stamp;
+- suffix echo as bad style;
+- slang as evidence about personality/intellect;
+- a foreign token as a defect;
+- a historical dictionary pair as a current automatic correction.
 
-### `EDIT-TEMPLATE-CLUSTER`
+## Accepted `EXTENDED_SOFT` mechanics
 
-Diagnose repetition of phrase/function/document operation plus absent semantic gain, not one token. Fix the operation rather than rotating synonyms.
+Exactly seven canonical source rules have mechanical candidates:
 
-### `EDIT-ABBREVIATION-EFFORT`
+1. `CHUK-R09` — `editing.abbreviation_reader_effort`;
+2. `CHUK-R15` — `editing.register_leakage_bureaucratic`;
+3. `CHUK-R17` — `editing.action_hidden_in_nominalization`;
+4. `CHUK-R18` — `editing.modifier_semantic_subtraction`;
+5. `CHUK-R19` — `editing.template_without_semantic_gain`;
+6. `CHUK-R24` — `editing.metadiscourse_announcement`;
+7. `CHUK-R25` — `editing.procedural_question_packaging`.
 
-Judge abbreviation by reader effort and audience, not character count alone.
+They are implemented once in `scripts/chukovsky_checks.py` and normalized by `scripts/lint_chukovsky.py`.
 
-### `EDIT-PROSODY-PASS`
+All seven remain suggestions/candidates. They do not become language errors, AI attribution or publication gates solely because a surface trigger fired.
 
-After semantic reconstruction, compare aloud for accidental echo, clumsy cadence or lost emphasis. Prosody is not a numeric gate.
+## `METRIC_ONLY`
 
-### `SEM-IDIOM-BOUNDARY`
+Two rules remain descriptive metrics rather than findings:
 
-Before metaphor/collocation repair, determine whether the expression is lexicalized. Potukhshaya internal metaphor is not a fresh metaphor conflict.
+- `CHUK-R22` — `editing.read_aloud_after_semantics`;
+- `CHUK-R31` — `editing.prosody_comparison`.
 
-### `SEM-IDIOM-MUTATION`
+Ending/suffix echo is measured only to support a later read-aloud comparison. It is **not** emitted as `EDITING_SUGGESTION` and has no “bad Russian” threshold.
 
-Compare intentional reactivation with accidental contamination. Preserve motivated, recoverable play; correct/request context when no effect is recoverable.
+## `MODEL_ONLY` residue
 
-## Actual code/runtime integration
+The remaining 29 rules are explicitly listed in `libraries/chukovsky/rules.json:model_only_rule_ids`.
 
-### Default mechanical mode
+They require one or more of:
 
-Unchanged in principle. `scripts/check.py` still filters to the existing `MECHANICAL_RULES` and does not expose Chukovsky soft candidates by default.
+- current norm evidence;
+- semantics or semantic roles;
+- discourse/coreference;
+- register/scene/audience;
+- idiom/lexicalization status;
+- authorial intention;
+- functional repetition/prosody;
+- independent evidence for claims about a speaker/person.
 
-### Extended/linter mode
+A contextual board pass should load only the relevant rule cards/operational reference. It must not read the whole book or whole study on every request, and it must not repeat analysis already supplied by a mechanical finding.
 
-`scripts/chukovsky_checks.py` is imported by `scripts/lint.py` and emits only `EDITING_SUGGESTION` for:
+## NATIVE_USAGE compatibility
 
-- metadiscourse deletion test;
-- bureaucratic-register cluster;
-- light verb + nominalization;
-- nominalization cluster;
-- modifier subtraction candidate;
-- evaluative-template cluster;
-- fresh abstract collision candidate;
-- repeated `вопрос` packaging;
-- abbreviation-density candidate;
-- ending-echo read-aloud test.
+No Chukovsky `EDITING` recommendation may override the project’s higher-priority constraints and native layer.
 
-False-positive tightening applied during integration:
+Preserve where functional:
 
-- a single `важно отметить` is no longer attributed to AI; it gets an editing A/B suggestion;
-- one ordinary connector such as `кроме того` is not enough for an AI-family finding;
-- softer AI phrase families require family-specific clustering;
-- a bare process noun such as `осуществление проекта` does not satisfy light-verb + nominalization;
-- one formal marker is insufficient for register-leak candidate;
-- no case-count, idiom, current-norm, sincerity or personality verdict is done by regex.
+- recoverable ellipsis and context economy;
+- natural information structure and Russian word order;
+- functional/expressive repetition;
+- pragmatic particles;
+- intentional parcellation;
+- Russian contrast structures;
+- professional/familiar/author register;
+- author profile.
 
-### Tests
+Historical taste is not current `NORM`. Any mandatory normative correction derived from the historical source requires separate current verification.
 
-- `scripts/lint.py --self-test` covers Chukovsky integration and negative controls;
-- `scripts/benchmark_lint.py` still checks the unchanged mechanical-default benchmark;
-- `scripts/validate_book_study.py` structurally checks 100% coverage, unique IDs, rule-card fields, source locators, direct rule eval coverage and compound interaction eval coverage;
-- `evals/chukovsky.json` contains 30 production integration scenarios;
-- independent `studies/.../evals.json` contains 58 scenarios and remains provenance/evaluation material rather than runtime payload.
+## Compact mode
 
-## What the linter is explicitly forbidden to decide
+Default compact mode:
 
-- current norm of a historical dictionary pair;
-- whether a professional variant is current;
-- final register fit;
-- semantic roles in an ambiguous dependency chain;
-- whether an idiom is conventional or deliberately modified without context/resource support;
-- sincerity, intelligence, morality or psychological traits;
-- aesthetic quality of prosody;
-- audience comprehension without audience metadata.
+```bash
+python scripts/check.py text.md
+```
 
-## Claims deliberately rejected/downgraded during integration
+shows no Chukovsky finding because this library currently has `0 DEFAULT_MECHANICAL` rules.
 
-Not transferred as production facts:
+Extended compact mode:
 
-- slang → moral/intellectual impoverishment;
-- isolated slang → person diagnosis;
-- aesthetic taste as sole/primary explanation of suffix/allomorph selection;
-- absolute idiom invariability;
-- numerical nominalization/euphony/richness/humanity thresholds;
-- whole historical `Словарь` as 2026 rewrite map.
+```bash
+python scripts/check.py --extended text.md
+```
 
-## Integration completion conditions
+may show the seven `EXTENDED_SOFT` findings from the same `review_v1` library used by the board.
 
-- [x] independent study completed before integration;
-- [x] current `main` architecture inspected after independent audit;
-- [x] branch merged forward to current mechanical-first `main` before final runtime edits;
-- [x] all 38 independent rules mapped;
-- [x] production reference added;
-- [x] Russian norm/native boundary refined;
-- [x] Nora Gal idiom boundary refined;
-- [x] SKILL updated without expanding default mechanical mode;
-- [x] extended linter integration added;
-- [x] production eval suite added;
-- [x] structural study validator added to CI;
-- [ ] PR-level external review complete;
-- [ ] final corpus false-positive calibration complete.
+If several libraries emit the same compatible `phenomenon_id` for the same local surface, compact may collapse them into one row while preserving source provenance in machine output. A directional CHANGE/KEEP conflict is never collapsed into fake agreement.
 
-Therefore integration is applied and testable, but the PR intentionally remains draft until the two unchecked review/calibration gates are satisfied.
+## Editorial-board mode
+
+```bash
+python scripts/review.py text.md --style neutral
+```
+
+receives the same normalized findings and preserves:
+
+- `library_id=chukovsky`;
+- `reviewer_id=chukovsky`;
+- canonical `rule_id=CHUK-Rxx`;
+- source-neutral `phenomenon_id`.
+
+The reviewer label means «По системе Корнея Чуковского», not that the historical author personally reviewed the current text.
+
+Cross-author disagreement is data. `CHANGE` vs `KEEP` becomes `SOURCE_CONFLICT`; style policy may choose how a concrete publication reacts, but it does not erase reviewer verdicts.
+
+## Existing-library overlap audit
+
+Before this Chukovsky library is merged, current `main` has only the enabled `native` library. No Chukovsky phenomenon is an exact duplicate of an already-registered native mechanical `phenomenon_id`, so this migration does not invent consensus by renaming unrelated signals.
+
+Conceptual overlap is documented in `library-routing.md` for later operational libraries, especially:
+
+- `editing.action_hidden_in_nominalization` — likely Gal/Ilyakhov overlap;
+- `editing.register_leakage_bureaucratic` — likely Gal/Ilyakhov overlap;
+- `editing.modifier_semantic_subtraction` — likely information-style overlap;
+- `editing.template_without_semantic_gain` — likely template/cliché overlap;
+- `native.recoverable_ellipsis` — overlaps native-Russian preservation principles;
+- `native.expressive_redundancy` — overlaps functional-repetition preservation;
+- `native.idiom_as_lexical_unit` — likely Nora Gal idiom/metaphor boundary.
+
+Reuse a `phenomenon_id` later only when mechanism and local editorial decision match.
+
+## Tests and preservation controls
+
+Deterministic source-specific tests live in `tests/chukovsky_cases.json`. They include positive triggers plus natural negatives/boundaries for warning hierarchy, ordinary project language, official formulas, functional nominalization, restrictive modifiers, evidence-backed phrasing, genuine `вопрос`, expert abbreviations, normal `наличие или отсутствие`, intentional repetition, familiar register, expert terminology and metric-only prosody.
+
+Board regression tests separately cover Chukovsky provenance, natural negatives, shared-phenomenon consensus contract, source-conflict contract and guardrail behavior.
+
+`evals/chukovsky.json` contains contextual/model scenarios. They are fixtures, not a passed deterministic benchmark until a real model/judge run occurs.
+
+## Remaining work after this migration cycle
+
+The next useful work is empirical rather than adding broad regexes:
+
+- run the seven extended checks on a larger native corpus and measure false positives;
+- experiment with dependency assistance for `CHUK-R23` without promoting it prematurely;
+- evaluate a current phraseology/idiom resource for `CHUK-R32`–`CHUK-R34`;
+- run the contextual/model eval suite through an actual judge harness;
+- perform item-level current normative verification only when a historical dictionary prescription is needed for a real decision.
+
+The long-lived branch `chukovsky` must remain after merge for the next research cycle.
