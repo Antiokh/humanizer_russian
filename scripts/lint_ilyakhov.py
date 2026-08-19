@@ -28,13 +28,15 @@ WORD_RE = re.compile(r"[A-Za-zА-Яа-яЁё0-9]+(?:-[A-Za-zА-Яа-яЁё0-9]+)
 # ILY-M01: intentionally tiny. These are explicit light-verb + nominalization
 # duplications, not a general ban on nominalizations or official register.
 BUREAUCRATIC_TAUTOLOGY_RE = re.compile(
-    r"\b(?:"
-    r"осуществ(?:ить|лять|ляет|ляют|лял|ляла|ляли|лено|лена|лены|ляется|ляются)\s+"
-    r"(?:проведен(?:ие|ия)|выполнен(?:ие|ия)|осуществлен(?:ие|ия))"
-    r"|произвест(?:и|и)|производ(?:ить|ит|ят|ил|ила|или)|произвед(?:ено|ена|ены)"
-    r")\s+(?:выполнен(?:ие|ия)|проведен(?:ие|ия))"
-    r"|\b(?:провести|проводить|проводит|проводят|провёл|провела|провели)\s+"
-    r"осуществлен(?:ие|ия)\b",
+    r"(?:"
+    r"\bосуществ(?:ить|лять|ляет|ляют|лял|ляла|ляли|лено|лена|лены|ляется|ляются)\s+"
+    r"(?:проведен(?:ие|ия)|выполнен(?:ие|ия)|осуществлен(?:ие|ия))\b"
+    r"|\b(?:произвести|производить|производит|производят|производил|производила|производили|"
+    r"произведено|произведена|произведены)\s+"
+    r"(?:выполнен(?:ие|ия)|проведен(?:ие|ия))\b"
+    r"|\b(?:провести|проводить|проводит|проводят|провёл|провел|провела|провели)\s+"
+    r"осуществлен(?:ие|ия)\b"
+    r")",
     re.I,
 )
 
@@ -317,8 +319,6 @@ def lint(text: str) -> tuple[list[dict], dict]:
     correlative_count = 0
     for _label, rx in CORRELATIVE_PATTERNS:
         for m in rx.finditer(prose):
-            # Do not let a match bridge paragraph boundaries: it stops being a useful
-            # surface span metric there.
             body = m.group("body")
             if "\n\n" in body:
                 continue
@@ -366,20 +366,16 @@ def self_test() -> None:
     ]:
         assert "ilyakhov: bureaucratic tautology" not in rules(safe), (safe, lint(safe))
 
-    # Common-knowledge wrapper is extended, but real attribution must not be
-    # confused with the lexical wrapper family.
     assert "ilyakhov: common-knowledge wrapper" in rules("Как известно, этот способ используют давно.")
     assert "ilyakhov: common-knowledge wrapper" not in rules(
         "По данным отчёта за июль, этот способ используют 12 команд."
     )
 
-    # Verbal numbering: cluster only, not a single transition.
     assert "ilyakhov: verbal-numbering cluster" in rules(
         "Во-первых, проверим данные. Во-вторых, сравним версии."
     )
     assert "ilyakhov: verbal-numbering cluster" not in rules("Во-первых, это только один аргумент.")
 
-    # Politeness: cluster only; ordinary request stays clean.
     assert "ilyakhov: ceremonial-politeness cluster" in rules(
         "Обращаем ваше внимание на срок. Просим вас прислать файл. С уважением, отдел."
     )
@@ -387,13 +383,11 @@ def self_test() -> None:
         "Пожалуйста, пришлите файл до пятницы."
     )
 
-    # Intensifier cluster only.
     assert "ilyakhov: intensifier cluster" in rules(
         "Это абсолютно, невероятно и действительно важный результат."
     )
     assert "ilyakhov: intensifier cluster" not in rules("Это очень важный для меня результат.")
 
-    # Time marker with explicit contrast is a negative control.
     assert "ilyakhov: present-time wrapper" in rules(
         "В настоящее время компания выпускает три модели."
     )
@@ -401,7 +395,7 @@ def self_test() -> None:
         "Раньше выпускали одну модель, а в настоящее время выпускаем три."
     )
 
-    # Do not revive the old harmful cognitive-frame check.
+    # Do not revive the old harmful cognitive-frame/state/passive checks.
     for safe in [
         "Я считаю, что решение рискованное.",
         "Мне кажется, данных пока недостаточно.",
@@ -413,7 +407,6 @@ def self_test() -> None:
         bad = [r for r in rules(safe) if "cognitive" in r or "state" in r or "passive" in r]
         assert not bad, (safe, bad)
 
-    # Metrics describe, they do not emit defects.
     long_clear = (
         "Если договор уже подписан и оплата поступила на счёт после проверки реквизитов, "
         "то заказ отправим в понедельник, когда откроется склад."
@@ -423,7 +416,6 @@ def self_test() -> None:
     assert metrics["ilyakhov_comma_count"] >= 2
     assert not [f for f in findings if "correlative" in f["rule"] or "comma" in f["rule"]]
 
-    # Code, URL and quoted examples are excluded from source heuristics.
     protected = "> Как известно, это цитата.\n\n`осуществить проведение` https://example.com/как-известно"
     protected_rules = rules(protected)
     assert "ilyakhov: bureaucratic tautology" not in protected_rules
