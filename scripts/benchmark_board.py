@@ -6,6 +6,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from jsonschema import Draft202012Validator
+
 from review import run_review
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,9 +15,18 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main() -> None:
     cases = json.loads((ROOT / "tests/editorial_board_cases.json").read_text(encoding="utf-8"))
+    schema = json.loads((ROOT / "schemas/review-report.schema.json").read_text(encoding="utf-8"))
+    Draft202012Validator.check_schema(schema)
+    validator = Draft202012Validator(schema)
+
     failures = []
     for case in cases:
         report = run_review(case["text"], style_id="neutral")
+        try:
+            validator.validate(report)
+        except Exception as exc:
+            failures.append(f"{case['id']}: report schema failed: {exc}")
+            continue
         phenomena = {g["phenomenon_id"] for g in report["board"]["groups"]}
         guardrails = len(report["board"]["guardrails"])
         for expected in case.get("expect_phenomena", []):
