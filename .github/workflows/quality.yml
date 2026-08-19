@@ -45,6 +45,11 @@ jobs:
       - name: Validate Ilyakhov integration matrix
         run: python scripts/validate_ilyakhov_integration.py
 
+      # One-off development calibration. This step will be removed after the
+      # snapshot is recorded so normal quality CI remains deterministic/offline.
+      - name: Calibrate Ilyakhov checks on natural Russian corpus
+        run: python scripts/calibrate_ilyakhov_corpus.py --network --samples-per-rule 8
+
       - name: Smoke-test and validate author profiler
         run: |
           tmpdir="$(mktemp -d)"
