@@ -4,7 +4,7 @@ This file records source claims that must not silently become runtime rules. Whe
 
 | ID | Source locator | Claim / source position | Classification | Verification status | Runtime consequence |
 |---|---|---|---|---|---|
-| `GAL-CLAIM-01` | «Откуда что берется?» | Канцелярит широко распространяется из официальной речи в журналистику, быт and other registers. | historical/empirical + rhetorical | `NEEDS_HISTORICAL_CORPUS_IF_ASSERTED` | We can diagnose a concrete chancery construction without asserting prevalence. |
+| `GAL-CLAIM-01` | «Откуда что берется?» | Канцелярит широко распространяется из официальной речи в журналистику, быт и другие регистры. | historical/empirical + rhetorical | `NEEDS_HISTORICAL_CORPUS_IF_ASSERTED` | We can diagnose a concrete chancery construction without asserting prevalence. |
 | `GAL-CLAIM-02` | «Куда же идет язык?» | Очень сильная уверенность, что почти всегда можно обойтись без иностранного слова. | historical/editorial preference | `EXTERNAL_CONTESTED_BY_MODERN_DOMAIN_USAGE` | Never turn into foreign-word stop-list; use contextual borrowing/audience rule only. |
 | `GAL-CLAIM-03` | «Жечь или сушить?» | Some participial/gerund constructions are treated as alien to ordinary living speech and as a source of dryness. | historical/corpus tendency | `NEEDS_MODERN_GENRE_CORPUS` | Runtime may review overload/clarity, not ban the grammatical forms. |
 | `GAL-CLAIM-04` | «… Или Дух?» | Russian logical/emotional stress is said to fall very often near the end. | linguistic/editorial tendency | `PROJECT_REFINED` | Current NATIVE_USAGE controls actual information structure; strong sentence-initial focus remains possible. |
