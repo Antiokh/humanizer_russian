@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Validate the source-first Ilyakhov integration contract.
 
-This validator checks classification completeness and the source-specific
-mechanical module. It does not claim that source heuristics are language norms.
+This validator checks the completed source study, classification completeness
+and the source-specific mechanical module. It does not claim that source
+heuristics are language norms.
 """
 
 from __future__ import annotations
@@ -21,6 +22,7 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 import lint_ilyakhov  # noqa: E402
+import validate_pishi_study  # noqa: E402
 
 EXPECTED_AUTOMATION = {
     "HARD_GATE": 0,
@@ -38,6 +40,9 @@ AUTO_CODE = {
 
 
 def main() -> None:
+    # Gate A must stay green before any runtime classification is accepted.
+    validate_pishi_study.main()
+
     manifest = json.loads((STUDY / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["counts"]["rules"] == 102
     assert manifest["source"]["leaf_sections"] == 177
