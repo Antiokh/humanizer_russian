@@ -7,6 +7,7 @@ on:
       - agent/**
       - feature/**
       - context/**
+      - docs/**
   pull_request:
 
 jobs:
@@ -24,6 +25,9 @@ jobs:
 
       - name: Compile Python
         run: python -m compileall -q scripts
+
+      - name: Validate architecture contract
+        run: python scripts/validate_architecture.py
 
       - name: Linter self-test
         run: python scripts/lint.py --self-test
