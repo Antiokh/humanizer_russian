@@ -74,6 +74,12 @@ jobs:
       - name: NKRЯ query replay offline self-test
         run: python scripts/run_ruscorpora_query.py --self-test
 
+      - name: Philologist blind-packet export self-test
+        run: python scripts/export_philologist_packet.py --self-test
+
+      - name: Philologist review contract self-test
+        run: python scripts/validate_philologist_review.py --self-test
+
       - name: Deterministic mechanical linter benchmark
         run: python scripts/benchmark_lint.py
 
