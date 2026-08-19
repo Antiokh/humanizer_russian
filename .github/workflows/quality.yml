@@ -69,3 +69,50 @@ jobs:
                   json.load(f)
               print(path)
           PY
+
+      - name: Validate Nora Gal eval traceability
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          suite = json.loads(Path('evals/nora-gal.json').read_text(encoding='utf-8'))
+          mapping = json.loads(Path('evals/nora-gal-map.json').read_text(encoding='utf-8'))
+          reference = Path('references/nora-gal.md').read_text(encoding='utf-8')
+          rule_index = Path('references/nora-gal-rule-index.md').read_text(encoding='utf-8')
+
+          assert suite['version'] == 2
+          assert mapping['version'] == 1
+
+          eval_ids = [item['id'] for item in suite['evals']]
+          map_ids = [item['id'] for item in mapping['cases']]
+
+          assert len(eval_ids) == 42, len(eval_ids)
+          assert len(eval_ids) == len(set(eval_ids)), 'duplicate Nora Gal eval ids'
+          assert map_ids == eval_ids, 'traceability map must cover evals in the same order'
+          assert eval_ids == [f'gal-{i:02d}' for i in range(1, 43)]
+
+          for item in suite['evals']:
+              assert item['prompt'].strip()
+              assert len(item['expectations']) >= 3
+              assert all(x.strip() for x in item['expectations'])
+
+          all_mapped_rules = set()
+          counterexamples = 0
+          for item in mapping['cases']:
+              assert item['rules']
+              assert item['chapters']
+              if item['counterexample']:
+                  counterexamples += 1
+              for rule in item['rules']:
+                  assert re.fullmatch(r'GAL-[A-Z0-9-]+', rule), rule
+                  assert f'`{rule}`' in reference, f'{rule} missing from nora-gal.md'
+                  assert f'`{rule}`' in rule_index, f'{rule} missing from rule index'
+                  all_mapped_rules.add(rule)
+
+          declared_rules = set(re.findall(r'`(GAL-[A-Z0-9-]+)`', rule_index))
+          assert len(declared_rules) == 42, len(declared_rules)
+          assert all_mapped_rules <= declared_rules
+          assert counterexamples >= 8, counterexamples
+          PY
