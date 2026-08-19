@@ -16,6 +16,11 @@ ROOT = Path(__file__).resolve().parents[1]
 STUDY = ROOT / "studies" / "pishi-sokrashchay"
 
 
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
 def ids(pattern: str, text: str) -> set[int]:
     return {int(x) for x in re.findall(pattern, text, flags=re.M)}
 
@@ -24,7 +29,7 @@ def expect_range(found: set[int], last: int, label: str) -> None:
     expected = set(range(1, last + 1))
     missing = sorted(expected - found)
     extra = sorted(found - expected)
-    assert not missing and not extra, f"{label}: missing={missing}, extra={extra}"
+    require(not missing and not extra, f"{label}: missing={missing}, extra={extra}")
 
 
 def main() -> None:
@@ -32,10 +37,10 @@ def main() -> None:
     counts = manifest["counts"]
     source = manifest["source"]
 
-    assert source["toc_nodes"] == 211
-    assert source["leaf_sections"] == 177
-    assert source["unread_sections"] == 0
-    assert counts == {
+    require(source["toc_nodes"] == 211, f"toc_nodes: expected 211, got {source['toc_nodes']!r}")
+    require(source["leaf_sections"] == 177, f"leaf_sections: expected 177, got {source['leaf_sections']!r}")
+    require(source["unread_sections"] == 0, f"unread_sections: expected 0, got {source['unread_sections']!r}")
+    expected_counts = {
         "concepts": 26,
         "rules": 102,
         "counterexample_classes": 30,
@@ -43,13 +48,18 @@ def main() -> None:
         "interactions": 17,
         "evals": 67,
     }
+    require(counts == expected_counts, f"manifest counts mismatch: expected {expected_counts}, got {counts}")
 
     coverage = (STUDY / "coverage.md").read_text(encoding="utf-8")
     coverage_rows = re.findall(r"^\|\s*(\d+)\s*\|", coverage, flags=re.M)
-    assert [int(x) for x in coverage_rows] == list(range(1, 212)), (
-        "coverage.md must contain exactly the 211 ordered NCX rows"
+    require(
+        [int(x) for x in coverage_rows] == list(range(1, 212)),
+        "coverage.md must contain exactly the 211 ordered NCX rows",
     )
-    assert "unread/inaccessible sections: **0**" in coverage.lower()
+    require(
+        "unread/inaccessible sections: **0**" in coverage.lower(),
+        "coverage.md must explicitly record zero unread/inaccessible sections",
+    )
 
     concepts = (STUDY / "concepts.md").read_text(encoding="utf-8")
     concept_ids = ids(r"^## PS-C(\d+)\b", concepts)
@@ -63,6 +73,7 @@ def main() -> None:
     expect_range(rule_ids, 102, "rules")
 
     ce_claims = (STUDY / "counterexamples-claims.md").read_text(encoding="utf-8")
+    require("# Claims audit" in ce_claims, "counterexamples-claims.md is missing '# Claims audit'")
     ce_part, claims_part = ce_claims.split("# Claims audit", 1)
     ce_ids = ids(r"\*\*PS-CE(\d+)\*\*", ce_part)
     claim_ids = ids(r"\*\*PS-CL(\d+)\*\*", claims_part)
@@ -84,8 +95,8 @@ def main() -> None:
     # counterexample class. This prevents one-way "always fix" extraction.
     for n in range(1, 103):
         rid = f"PS-R{n:02d}"
-        assert rid in eval_text, f"{rid}: missing eval coverage"
-        assert rid in ce_part, f"{rid}: missing counterexample coverage"
+        require(rid in eval_text, f"{rid}: missing eval coverage")
+        require(rid in ce_part, f"{rid}: missing counterexample coverage")
 
     forbidden_ext = {".epub", ".pdf", ".fb2", ".mobi", ".azw", ".azw3"}
     forbidden = [
@@ -93,7 +104,7 @@ def main() -> None:
         for path in ROOT.rglob("*")
         if path.is_file() and path.suffix.lower() in forbidden_ext
     ]
-    assert not forbidden, f"raw book-like files committed: {forbidden}"
+    require(not forbidden, f"raw book-like files committed: {forbidden}")
 
     print(
         "OK: 211 NCX nodes / 177 leaf sections; "
