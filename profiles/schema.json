@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Antiokh/humanizer_russian/blob/main/profiles/schema.json",
-  "title": "humanizer+ru author profile v1",
+  "title": "humanizer_russian author profile v1",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -24,7 +24,8 @@
       "properties": {
         "documents": {"type": "integer", "minimum": 0},
         "words": {"type": "integer", "minimum": 0},
-        "sentences": {"type": "integer", "minimum": 0}
+        "sentences": {"type": "integer", "minimum": 0},
+        "paragraphs": {"type": "integer", "minimum": 0}
       }
     },
     "lexicon": {
@@ -52,6 +53,14 @@
               "items": {"$ref": "#/$defs/countItem"}
             }
           }
+        },
+        "top_content_tokens": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/countItem"}
+        },
+        "sentence_starts": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/countItem"}
         },
         "ngrams": {
           "type": "object",
@@ -81,26 +90,39 @@
         "proxy_warning"
       ],
       "properties": {
-        "sentence_length": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["p25", "median", "p75", "p90"],
-          "properties": {
-            "p25": {"type": "number", "minimum": 0},
-            "median": {"type": "number", "minimum": 0},
-            "p75": {"type": "number", "minimum": 0},
-            "p90": {"type": "number", "minimum": 0}
-          }
-        },
+        "sentence_length": {"$ref": "#/$defs/distribution"},
+        "paragraph_length_sentences": {"$ref": "#/$defs/distribution"},
         "short_le_4_rate": {"type": "number", "minimum": 0, "maximum": 1},
         "sentences_without_verb_proxy_rate": {"type": "number", "minimum": 0, "maximum": 1},
         "first_person_sentence_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "question_sentence_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "conjunction_start_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "repeated_first_token_rate": {"type": "number", "minimum": 0, "maximum": 1},
         "proxy_warning": {"type": "string"}
       }
     },
     "punctuation": {
       "type": "object",
       "additionalProperties": {"$ref": "#/$defs/metricItem"}
+    },
+    "rhetoric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contrast_markers",
+        "question_answer_proxy_count",
+        "question_answer_proxy_per_100_sentences",
+        "proxy_warning"
+      ],
+      "properties": {
+        "contrast_markers": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/rateItem"}
+        },
+        "question_answer_proxy_count": {"type": "integer", "minimum": 0},
+        "question_answer_proxy_per_100_sentences": {"type": "number", "minimum": 0},
+        "proxy_warning": {"type": "string"}
+      }
     },
     "stance": {
       "type": "object",
@@ -109,6 +131,18 @@
       "properties": {
         "hedges": {"type": "array", "items": {"$ref": "#/$defs/rateItem"}},
         "certainty": {"type": "array", "items": {"$ref": "#/$defs/rateItem"}}
+      }
+    },
+    "annotations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "local_terms": {"$ref": "#/$defs/stringList"},
+        "generation_terms": {"$ref": "#/$defs/stringList"},
+        "professional_terms": {"$ref": "#/$defs/stringList"},
+        "preferred": {"$ref": "#/$defs/stringList"},
+        "avoid": {"$ref": "#/$defs/stringList"},
+        "notes": {"$ref": "#/$defs/stringList"}
       }
     },
     "observed_errors": {
@@ -153,6 +187,21 @@
         "count": {"type": "integer", "minimum": 0},
         "per_10k_words": {"type": "number", "minimum": 0}
       }
+    },
+    "distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["p25", "median", "p75", "p90"],
+      "properties": {
+        "p25": {"type": "number", "minimum": 0},
+        "median": {"type": "number", "minimum": 0},
+        "p75": {"type": "number", "minimum": 0},
+        "p90": {"type": "number", "minimum": 0}
+      }
+    },
+    "stringList": {
+      "type": "array",
+      "items": {"type": "string"}
     }
   }
 }

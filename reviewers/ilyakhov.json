@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "ilyakhov",
+  "display_name": "Максим Ильяхов и Людмила Сарычева",
+  "short_label": "Ильяхов",
+  "review_label": "По принципам Ильяхова и Сарычевой",
+  "kind": "book_author",
+  "avatar": null,
+  "domains": ["information_density", "clarity", "evidence", "information_editing"],
+  "disclaimer": "Автоматическая оценка по формализованным принципам из работ Максима Ильяхова и Людмилы Сарычевой, а не реальная рецензия, цитата или endorsement авторов."
+}

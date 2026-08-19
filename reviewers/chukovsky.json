@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "chukovsky",
+  "display_name": "Корней Чуковский",
+  "short_label": "Чуковский",
+  "review_label": "По системе Корнея Чуковского",
+  "kind": "book_author",
+  "avatar": null,
+  "domains": ["living_language", "register", "rhythm", "bureaucratese", "idiom"],
+  "disclaimer": "Автоматическая оценка по формализованным принципам из работ Корнея Чуковского, а не реальная рецензия, цитата или endorsement автора."
+}

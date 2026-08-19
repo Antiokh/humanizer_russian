@@ -2,14 +2,14 @@
 
 ## 2026-08-19 — independent repository initialized
 
-The active development base is now `Antiokh/humanizer_russian` (project name: **humanizer+ru**).
+The active development base is `Antiokh/humanizer_russian`. The project name is **humanizer_russian**.
 
-Migrated/consolidated from the old `Antiokh/humanizer--ru` development lines:
+The repository consolidates:
 
 - Nora Gal semantic editing layer;
 - Russian norm layer;
 - native-speaker usage layer;
-- audit of the inherited 34 humanizer rules;
+- audit of inherited humanizer rules;
 - evidence audit for AI-writing claims;
 - author-profile framework and JSON Schema;
 - deterministic surface linter;
@@ -18,115 +18,126 @@ Migrated/consolidated from the old `Antiokh/humanizer--ru` development lines:
 - owner feedback log;
 - CI checks.
 
-## Architecture at migration
+## Unified architecture
 
 Hard constraints:
 
-`SEMANTICS + NORM`
+`USER_INTENT + SEMANTICS + NORM`
 
 Selection among valid variants:
 
 `AUTHOR > NATIVE_USAGE > EDITING > AI_CALQUE > detector score`
 
-## Review fixes incorporated
+## Native-Russian redesign
 
-- preserve document boundaries in author profiling;
-- do not emit corpus filesystem paths;
-- use one canonical profile v1 schema;
-- validate generated profiles in CI;
-- keep `NATIVE_WARNING` non-gating;
-- support repeated-common-material candidates with both `а` and `но`;
-- document current `ru-01` — `ru-21` eval coverage;
-- correct source mapping for zero-subject/ellipsis claims.
+- paragraph/context-first editing rather than isolated-sentence rewriting;
+- context economy and safe ellipsis;
+- repeated common material factored before synonym substitution;
+- Russian morphology allowed to carry relations instead of restoring English-like SVO;
+- word order chosen by information structure and strong initial/final positions;
+- contrast Russified instead of mechanically split into `Это не X. Это Y.`;
+- parcellation judged by function, not sentence length;
+- pragmatic particles and conversational register preserved by function;
+- anglo-American slogan/Q&A rhetoric treated as a cluster, not a hard ban;
+- good human Russian is a negative eval: no rewrite is a valid result.
 
-## 2026-08-19 — deep Nora Gal audit
+## Mechanical-first runtime
 
-The owner supplied an electronic text of Nora Gal's *Slovo zhivoe i mertvoe*. The source has now been analyzed as an editorial work rather than reduced to the original six coarse `SEM-*` patterns.
+The runtime is now explicitly split into two passes.
 
-### Source-grounded structure
+Default:
 
-Completed:
+```bash
+python scripts/check.py text.md
+```
 
-- `references/nora-gal-source-map.md` — chapter-level provenance and transferability map;
-- `references/nora-gal-source-labels.md` — exact internal ebook chapter labels, separate from typographically normalized display names;
-- `references/nora-gal-rule-index.md` — 42 atomic `GAL-*` rules with source chapter, scope and derivation status;
-- `references/nora-gal.md` — operational deep-editing rules;
-- `evals/nora-gal.json` v2 — 45 functional scenarios;
-- `evals/nora-gal-map.json` v2 — explicit `eval → rule → source chapter` mapping;
-- complete eval coverage for all 42 atomic rules;
-- more than ten explicit counterexamples protecting contextual rules from becoming stop-lists;
-- `scripts/validate_nora_gal.py` — deterministic structural/traceability validator;
-- deep Nora behavior integrated into `SKILL.md`, Custom GPT instructions/setup, evidence policy and manual smoke tests.
+This exposes only cheap/high-precision surface checks plus technical artifacts.
 
-### Automated validation
+Optional deep audit:
 
-The draft deep-Nora PR has passed GitHub Actions with:
+```bash
+python scripts/check.py --extended text.md
+```
 
-- Python compilation;
-- linter self-test;
-- author-profiler/schema smoke test;
-- repository JSON validation;
-- Nora Gal rule/eval/source traceability validation.
+This adds lower-confidence native/style/AI heuristics such as repeated explicit context, undercompression, possessive overexplication and rhetorical clusters.
 
-The validator checks ordered `gal-01` — `gal-45`, 42 atomic rules, complete rule coverage, counterexample minimums and mapped chapter names against the exact ebook-label inventory. This is a structural contract, **not** a model-judge benchmark.
+Reference files are source material for disputed cases and rule development, not mandatory runtime payload.
 
-### What the deeper layer now covers
+## Deterministic regression testing
 
-Beyond the original six coarse patterns:
+Primary linter benchmark:
 
-- action hidden by nominalization;
-- noun chains and agent visibility;
-- event order;
-- pseudoformal register and empty stamps;
-- lexical precision, collocation and concrete wording without invention;
-- borrowings and terms by audience rather than blacklist;
-- persona, situation, age, era/culture and emotional tact;
-- idiom contamination, literalization, polysemy and accidental sound effects;
-- physical plausibility and speakability;
-- Russian syntax, explicitness, focus, sentence boundaries and pace;
-- subtext restraint;
-- whole-before-detail, character continuity and POV;
-- verification of doubtful references instead of guessing;
-- editor-not-dictator, third-solution and self-edit behavior;
-- compound failures where several problems must be solved jointly.
+```bash
+python scripts/benchmark_lint.py
+```
 
-### Source policy
+Corpus: `tests/lint_cases.json`.
 
-The electronic source does not provide a sufficiently trustworthy basis to assert an exact print-edition identity. Repository references therefore use **section/chapter titles**, not unstable ebook page numbers or an unverified print year.
+The benchmark uses positive cases, clean native-language controls and explicit must-not-find checks. No LLM judge, web request or reference-file retrieval is involved.
 
-No long passages from the book are copied into the repository. Project rules, explanations and eval prompts are original formulations; the source is used for method and provenance.
+Policy for a new mechanical rule:
 
-### Important non-rules preserved
+- positive example;
+- natural negative control;
+- boundary example when needed;
+- deterministic regression case.
 
-The deep audit explicitly rejects these possible overgeneralizations:
+Rules that cannot meet that bar stay in extended/context layers.
 
-- foreign word = error;
-- passive = error;
-- participle/gerund = error;
-- long sentence = error;
-- important information must always be sentence-final;
-- unusual idiom = error;
-- editor's preferred replacement = mandatory.
+## Linter status
 
-Most `GAL-*` findings remain contextual. They are not new regex gates.
+`scripts/lint.py` remains the complete surface engine. `scripts/check.py` is the runtime filter.
 
-## Deliberately not migrated as active architecture
+Only `ARTIFACT` is an automatic publication gate. Other findings remain review candidates.
 
-- old sequential `patterns.md` as an authoritative rule set;
+Current heuristic families include:
+
+- repeated common material in contrasts;
+- possessive overexplication;
+- repeated explicit context / SVO-lock proxies;
+- adjacent context undercompression;
+- mechanically parcellated enumerations;
+- serial short Q/A punchlines;
+- calque phrase families and repeated rhetorical formulas.
+
+## Author profile status
+
+Author adaptation is an internal layer of `humanizer_russian`.
+
+The profiler tracks:
+
+- discourse and self-repair markers;
+- content tokens, n-grams and sentence starts;
+- code-switching;
+- sentence/paragraph distributions;
+- punctuation habits;
+- contrast and Q/A surface metrics;
+- hedge/certainty markers;
+- manual annotations for confirmed local, generational, professional, preferred and avoided vocabulary.
+
+Errors remain separate from voice and are not imitated by default.
+
+## Evals
+
+Model/context evals remain useful for genuinely semantic questions, but they are no longer the primary test of linter correctness.
+
+The primary regression signal is the deterministic linter corpus. Model evals cover the residual context-dependent behavior.
+
+## Deliberately not active architecture
+
 - detector-driven hard bans;
 - pseudo `AI score` thresholds;
-- old fork-specific changelog/history;
-- decorative binary assets from the old repository.
-
-The old materials remain available in the historical repository/PRs. If any old rule is reintroduced, it should first be reclassified under the new taxonomy and supported by an appropriate source or corpus test.
+- old sequential pattern lists as authoritative grammar;
+- separate product names for Russian/native/author layers;
+- deliberate grammatical degradation to look human;
+- mandatory loading of all context/reference files;
+- model-judge evals as the primary correctness signal.
 
 ## Next work
 
-- finish and triage CodeRabbit review on the source-grounded layer;
-- expand compound/paragraph-level Gal evals beyond single sentences;
-- build/run a model-judge harness for `gal-01` — `gal-45` instead of relying only on fixture validation;
-- add corpus-backed `NATIVE_USAGE` tests;
+- expand the deterministic corpus before promoting more rules to mechanical mode;
+- measure false positives on real native-speaker corpora;
 - incorporate philologist feedback;
-- analyze additional Russian-language references and the user's licensed editing materials;
-- evolve `humanizer+ru+user` beyond regex proxies toward morphological/corpus analysis;
-- if needed, later map ebook chapter locators to a verified physical edition without changing rule IDs.
+- analyze additional Russian-language references and licensed editing materials;
+- add morphology/coreference tooling where regex is too weak;
+- keep model-judge evals only for genuinely semantic/contextual behavior.

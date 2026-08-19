@@ -5,6 +5,12 @@ on:
     branches:
       - main
       - agent/**
+      - feature/**
+      - context/**
+      - docs/**
+      - gal
+      - ilyakhov
+      - chukovsky
   pull_request:
 
 jobs:
@@ -23,8 +29,23 @@ jobs:
       - name: Compile Python
         run: python -m compileall -q scripts
 
+      - name: Validate architecture contract
+        run: python scripts/validate_architecture.py
+
+      - name: Validate knowledge libraries
+        run: python scripts/validate_libraries.py
+
       - name: Linter self-test
         run: python scripts/lint.py --self-test
+
+      - name: Deterministic mechanical linter benchmark
+        run: python scripts/benchmark_lint.py
+
+      - name: Deterministic editorial board benchmark
+        run: python scripts/benchmark_board.py
+
+      - name: Smoke-test board JSON output
+        run: printf '%s' 'Это не ошибка в расчёте, а ошибка в исходных данных.' | python scripts/review.py --format json >/tmp/board.json
 
       - name: Smoke-test and validate author profiler
         run: |
@@ -69,6 +90,3 @@ jobs:
                   json.load(f)
               print(path)
           PY
-
-      - name: Validate Nora Gal rules and eval traceability
-        run: python scripts/validate_nora_gal.py
