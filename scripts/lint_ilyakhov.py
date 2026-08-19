@@ -69,8 +69,6 @@ TIME_WRAPPERS = [
     re.compile(r"\bв\s+наши\s+дни\b", re.I),
 ]
 
-# High-precision-ish surface hints for positive operations. These do not mean
-# the full ILY pattern is automatable; they merely expose places worth comparing.
 BUREAUCRATIC_ACTION_SHELLS = [
     re.compile(
         r"\bв\s+рамках\s+(?:проведения|осуществления|реализации|выполнения|мероприятий|работ)\b",
@@ -109,6 +107,50 @@ META_LEADS = [
     re.compile(r"^\s*теперь\s+(?:мы\s+)?(?:рассмотрим|разбер[её]м|перейд[её]м)\b", re.I),
     re.compile(r"^\s*перейд[её]м\s+к\b", re.I),
     re.compile(r"^\s*(?:для\s+начала|прежде\s+всего)\s+(?:рассмотрим|отметим|разбер[её]м)\b", re.I),
+]
+
+GENERIC_PRAISE = [
+    re.compile(r"\bвысок(?:ое|ого)\s+качеств[оа]\b", re.I),
+    re.compile(r"\bиндивидуальн(?:ый|ого)\s+подход\b", re.I),
+    re.compile(r"\bбогат(?:ый|ого)\s+опыт\b", re.I),
+    re.compile(r"\bширок(?:ий|ого)\s+спектр\s+(?:услуг|решений|возможностей)\b", re.I),
+    re.compile(r"\bпрофессиональн(?:ая|ой)\s+команд[аы]\b", re.I),
+    re.compile(r"\bэффективн(?:ое|ые|ых)\s+решени[еяй]\b", re.I),
+    re.compile(r"\bпередов(?:ые|ых)\s+технологи[ияй]\b", re.I),
+    re.compile(r"\bнад[её]жн(?:ый|ого)\s+партн[её]р\b", re.I),
+]
+
+SUSPICIOUS_GENERIC_STATS = [
+    re.compile(
+        r"\b(?:99|100)\s*%\s+(?:всех\s+)?(?:людей|пользователей|клиентов|"
+        r"сотрудников|покупателей|россиян|компаний)\b",
+        re.I,
+    ),
+    re.compile(
+        r"\b(?:каждый|все)\s+(?:пользователь|клиент|покупатель|сотрудник)"
+        r"(?:и|ы|а|ов)?\b[^.!?\n]{0,80}\b(?:экономит|получает|выбирает|доволен|"
+        r"рекомендует|увеличивает|снижает)\b",
+        re.I,
+    ),
+]
+
+GENERIC_CONCLUSIONS = [
+    re.compile(r"^\s*подводя\s+итог\b", re.I),
+    re.compile(r"^\s*в\s+заключение\b", re.I),
+    re.compile(r"^\s*резюмируя\b", re.I),
+]
+
+SELF_PRESENTATION_SHELLS = [
+    re.compile(r"\bмы\s+(?:являемся\s+)?команд(?:а|ой)\s+(?:опытных|профессиональных|высококлассных)\b", re.I),
+    re.compile(r"\bмы\s+(?:успешно\s+)?работаем\s+на\s+рынке\s+(?:более\s+)?\d+\s+лет\b", re.I),
+    re.compile(r"\bнаша\s+компания\s+(?:успешно\s+)?(?:работает|существует)\s+(?:более\s+)?\d+\s+лет\b", re.I),
+]
+
+STATE_PREDICATES = [
+    re.compile(r"\bявля(?:ется|ются)\b", re.I),
+    re.compile(r"\bпредставля(?:ет|ют)\s+собой\b", re.I),
+    re.compile(r"\bхарактеризу(?:ется|ются)\b", re.I),
+    re.compile(r"\bоблада(?:ет|ют)\b", re.I),
 ]
 
 # These thresholds are implementation triage heuristics, not claims from the book
@@ -241,6 +283,7 @@ def lint(text: str) -> tuple[list[dict], dict]:
         for s in re.split(r"(?<=[.!?])\s+|\n+", prose)
         if s.strip()
     ]
+
     intensifier_clusters = 0
     for sentence in sentence_list:
         hits = all_matches(sentence, INTENSIFIERS)
@@ -268,10 +311,10 @@ def lint(text: str) -> tuple[list[dict], dict]:
             kind="STYLE_WARNING",
             rule="present-time wrapper",
             pattern_id="ILY-12",
-            recommendation_id="ILY-R04",
+            recommendation_id="ILY-R21",
             text=excerpt(prose, hit.start(), hit.end()),
             diagnostic="The time phrase may be an empty shell rather than real temporal information.",
-            recommendation="Compare a direct version that begins with the actual current fact.",
+            recommendation="Compare a direct opening with the actual current fact or reader task.",
             guard="Keep the marker when past/present/future contrast or dating depends on it.",
         )
 
@@ -345,8 +388,80 @@ def lint(text: str) -> tuple[list[dict], dict]:
             guard="Do not strip real uncertainty; 'мне кажется' and self-correction are not automatic findings.",
         )
 
-    meta_lead_hits = 0
+    generic_praise_hits = all_matches(prose, GENERIC_PRAISE)
+    for hit in generic_praise_hits:
+        add(
+            findings,
+            kind="EDITING_OPPORTUNITY",
+            rule="generic-praise",
+            pattern_id="ILY-09",
+            recommendation_id="ILY-R18",
+            text=excerpt(prose, hit.start(), hit.end()),
+            diagnostic="A generic positive evaluation may be weaker than an available use case or detail.",
+            recommendation=(
+                "If the source already contains a real scenario, result, working detail or limitation, "
+                "move that evidence next to or ahead of the praise."
+            ),
+            guard="Do not invent a scenario or erase an intentional subjective voice.",
+        )
+
+    suspicious_stat_hits = all_matches(prose, SUSPICIOUS_GENERIC_STATS)
+    for hit in suspicious_stat_hits:
+        add(
+            findings,
+            kind="EDITING_OPPORTUNITY",
+            rule="generic-precision-claim",
+            pattern_id="ILY-20",
+            recommendation_id="ILY-R20",
+            text=excerpt(prose, hit.start(), hit.end()),
+            diagnostic="A broad claim uses unusually strong precision without visible source context.",
+            recommendation=(
+                "Verify source, sample, period and measurement. Keep the number if it is sourced; "
+                "otherwise narrow or attribute the claim."
+            ),
+            guard="This is a verification prompt, not an accusation that the number is false.",
+        )
+
+    self_presentation_hits = all_matches(prose, SELF_PRESENTATION_SHELLS)
+    for hit in self_presentation_hits:
+        add(
+            findings,
+            kind="EDITING_OPPORTUNITY",
+            rule="self-presentation-shell",
+            pattern_id="ILY-35",
+            recommendation_id="ILY-R24",
+            text=excerpt(prose, hit.start(), hit.end()),
+            diagnostic="The self-description may lead with status instead of reader-relevant usefulness.",
+            recommendation=(
+                "Compare a lead that says plainly who you are/what you do, then surfaces useful details, "
+                "scenarios, evidence and relevant limitations already present in the source."
+            ),
+            guard="Do not erase real credentials when they are relevant evidence.",
+        )
+
+    state_clusters = 0
     for paragraph in paragraphs(prose):
+        state_hits = all_matches(paragraph, STATE_PREDICATES)
+        if len(state_hits) >= 3:
+            state_clusters += 1
+            add(
+                findings,
+                kind="EDITING_OPPORTUNITY",
+                rule="state-predicate-cluster",
+                pattern_id="ILY-22",
+                recommendation_id="ILY-R03",
+                text=re.sub(r"\s+", " ", paragraph)[:180],
+                diagnostic="Several state predicates may make an informational paragraph static.",
+                recommendation=(
+                    "Check whether any sentence hides an action, change, decision or consequence that "
+                    "can be stated directly."
+                ),
+                guard="Definitions and stable properties legitimately use state predicates; do not force action.",
+            )
+
+    meta_lead_hits = 0
+    paragraph_list = paragraphs(prose)
+    for paragraph in paragraph_list:
         first_sentence = re.split(r"(?<=[.!?])\s+", paragraph, maxsplit=1)[0]
         hits = all_matches(first_sentence, META_LEADS)
         for hit in hits:
@@ -366,6 +481,28 @@ def lint(text: str) -> tuple[list[dict], dict]:
                 guard="Do not force a business lead onto narrative, dialogue or an intentional hook.",
             )
 
+    generic_conclusion_hits = 0
+    if paragraph_list:
+        last_paragraph = paragraph_list[-1]
+        first_sentence = re.split(r"(?<=[.!?])\s+", last_paragraph, maxsplit=1)[0]
+        hits = all_matches(first_sentence, GENERIC_CONCLUSIONS)
+        for hit in hits:
+            generic_conclusion_hits += 1
+            add(
+                findings,
+                kind="EDITING_OPPORTUNITY",
+                rule="generic-conclusion-lead",
+                pattern_id="ILY-30",
+                recommendation_id="ILY-R22",
+                text=re.sub(r"\s+", " ", first_sentence)[:180],
+                diagnostic="The conclusion announces summarizing instead of helping the reader retain or act.",
+                recommendation=(
+                    "Compare a useful ending: a compact system, checklist, rule, limitation or next step "
+                    "already supported by the text."
+                ),
+                guard="Do not manufacture a conclusion when the text already ends naturally.",
+            )
+
     metrics = {
         "style_warnings": sum(x["kind"] == "STYLE_WARNING" for x in findings),
         "editing_opportunities": sum(x["kind"] == "EDITING_OPPORTUNITY" for x in findings),
@@ -378,7 +515,12 @@ def lint(text: str) -> tuple[list[dict], dict]:
         "bureaucratic_action_shells": len(bureaucracy_hits),
         "nominalization_shells": len(nominalization_hits),
         "cognitive_frames": len(frame_hits),
+        "generic_praise": len(generic_praise_hits),
+        "generic_precision_claims": len(suspicious_stat_hits),
+        "self_presentation_shells": len(self_presentation_hits),
+        "state_predicate_clusters": state_clusters,
         "meta_paragraph_leads": meta_lead_hits,
+        "generic_conclusion_leads": generic_conclusion_hits,
     }
     return findings, metrics
 
@@ -422,6 +564,27 @@ def self_test() -> None:
         "В данной статье мы рассмотрим резервное копирование. Бэкап запускается каждую ночь."
     )
     assert any(x["recommendation_id"] == "ILY-R08" for x in findings), findings
+
+    findings, _ = lint("Мы предлагаем высокий уровень качества и индивидуальный подход.")
+    assert any(x["recommendation_id"] == "ILY-R18" for x in findings), findings
+
+    findings, _ = lint("99% пользователей экономят два часа каждый день.")
+    assert any(x["recommendation_id"] == "ILY-R20" for x in findings), findings
+
+    findings, _ = lint("Мы команда профессиональных инженеров. Настраиваем PostgreSQL.")
+    assert any(x["recommendation_id"] == "ILY-R24" for x in findings), findings
+
+    findings, _ = lint(
+        "Система является облачной. Решение представляет собой платформу. "
+        "Архитектура характеризуется модульностью."
+    )
+    assert any(x["rule"] == "state-predicate-cluster" for x in findings), findings
+
+    findings, _ = lint(
+        "Основные правила перечислены выше.\n\n"
+        "Подводя итог, резервное копирование является важной частью работы."
+    )
+    assert any(x["recommendation_id"] == "ILY-R22" for x in findings), findings
 
     safe = (
         "Мне кажется, срок изменится. "
