@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "id": "ilyakhov",
+  "display_name": "Максим Ильяхов и Людмила Сарычева — Пиши, сокращай",
+  "source_namespace": "ILY",
+  "source_type": "book",
+  "source_branch": "ilyakhov",
+  "reviewer_id": "ilyakhov",
+  "adapter": "review_v1",
+  "linter_path": "scripts/lint_ilyakhov.py",
+  "enabled_by_default": true,
+  "status": "OPERATIONAL",
+  "references": [
+    "libraries/ilyakhov/README.md",
+    "libraries/ilyakhov/rules.json",
+    "references/ilyakhov.md",
+    "studies/pishi-sokrashchay/README.md",
+    "studies/pishi-sokrashchay/integration-matrix.md",
+    "studies/pishi-sokrashchay/mechanical-feasibility.md",
+    "studies/pishi-sokrashchay/audit.md"
+  ],
+  "source_status": "OPERATIONAL_FOR_INTEGRATION",
+  "source_version": "User-provided EPUB; exact publisher/publication date/print-equivalent edition not established from EPUB metadata",
+  "source_fingerprint_sha256": "21eae50b5dfd29adfe60f9f52130494673b2e4231fab4d0f29827a392bacb38d",
+  "rules_path": "libraries/ilyakhov/rules.json",
+  "model_only_reference": "references/ilyakhov.md",
+  "notes": "102 audited source rules: 0 HARD_GATE, 0 source DEFAULT_MECHANICAL, 9 EXTENDED_SOFT, 4 METRIC_ONLY, 89 MODEL_ONLY after natural-corpus calibration. ILY-M01 is one PROJECT_DERIVED DEFAULT_MECHANICAL subset of PS-R22 + PS-R29 and is not attributed as a direct rule of the authors. Public repository stores derived knowledge only; the source EPUB is not committed."
+}
