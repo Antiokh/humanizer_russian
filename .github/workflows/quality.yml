@@ -47,6 +47,9 @@ jobs:
       - name: Validate Ilyakhov dual-runtime library routing
         run: python scripts/validate_ilyakhov_library.py
 
+      - name: Validate Nora Gal study and library routing
+        run: python scripts/validate_nora_gal.py
+
       - name: Linter self-test
         run: python scripts/lint.py --self-test
 
@@ -59,8 +62,14 @@ jobs:
       - name: Ilyakhov normalized adapter self-test
         run: python scripts/lint_ilyakhov.py
 
+      - name: Nora Gal normalized adapter self-test
+        run: python scripts/lint_gal.py --self-test
+
       - name: Deterministic mechanical linter benchmark
         run: python scripts/benchmark_lint.py
+
+      - name: Nora Gal compact integration benchmark
+        run: python scripts/benchmark_lint.py tests/gal_compact_cases.json
 
       - name: Chukovsky source-linter self-test
         run: python scripts/chukovsky_checks.py
@@ -71,8 +80,14 @@ jobs:
       - name: Ilyakhov deterministic source benchmark
         run: python scripts/benchmark_ilyakhov.py
 
+      - name: Nora Gal deterministic source and dual-runtime benchmark
+        run: python scripts/benchmark_gal.py
+
       - name: Deterministic editorial board benchmark
         run: python scripts/benchmark_board.py
+
+      - name: Nora Gal editorial-board integration benchmark
+        run: python scripts/benchmark_board.py tests/gal_board_cases.json
 
       - name: Smoke-test board JSON output
         run: |

@@ -1,0 +1,127 @@
+[
+  {
+    "id": "gal_runtime_nominalization",
+    "type": "runtime",
+    "libraries": ["gal"],
+    "text": "Команда осуществила проведение проверки сервиса.",
+    "expect_phenomena": ["editing.action_hidden_in_nominalization"],
+    "expect_rule_ids": ["GAL-KANZ-VERB"],
+    "expect_reviewers": ["gal"],
+    "expect_status_by_phenomenon": {
+      "editing.action_hidden_in_nominalization": "SINGLE_REVIEW"
+    },
+    "expect_guardrails": 0
+  },
+  {
+    "id": "gal_chukovsky_runtime_shared_phenomenon",
+    "type": "runtime",
+    "libraries": ["gal", "chukovsky"],
+    "text": "Осуществляется проведение проверки сервиса.",
+    "expect_phenomena": ["editing.action_hidden_in_nominalization"],
+    "expect_rule_ids": ["GAL-KANZ-VERB", "CHUK-R17"],
+    "expect_reviewers": ["gal", "chukovsky"],
+    "expect_status_by_phenomenon": {
+      "editing.action_hidden_in_nominalization": "REVIEW"
+    },
+    "expect_guardrails": 0
+  },
+  {
+    "id": "gal_chukovsky_consensus_contract",
+    "type": "board_unit",
+    "findings": [
+      {
+        "rule_id": "GAL-KANZ-VERB",
+        "phenomenon_id": "editing.action_hidden_in_nominalization",
+        "library_id": "gal",
+        "source_namespace": "GAL",
+        "reviewer_id": "gal",
+        "project_class": "EDITING",
+        "automation_level": "EXTENDED_SOFT",
+        "verdict": "CHANGE",
+        "excerpt": "Осуществляется проведение проверки",
+        "reason": "synthetic directional fixture for the Gal system"
+      },
+      {
+        "rule_id": "CHUK-R17",
+        "phenomenon_id": "editing.action_hidden_in_nominalization",
+        "library_id": "chukovsky",
+        "source_namespace": "CHUK",
+        "reviewer_id": "chukovsky",
+        "project_class": "EDITING",
+        "automation_level": "EXTENDED_SOFT",
+        "verdict": "CHANGE",
+        "excerpt": "Осуществляется проведение проверки",
+        "reason": "synthetic directional fixture for the Chukovsky system"
+      }
+    ],
+    "expect_status": "CONSENSUS",
+    "expect_recommendation": "CHANGE"
+  },
+  {
+    "id": "gal_source_conflict_contract",
+    "type": "board_unit",
+    "findings": [
+      {
+        "rule_id": "GAL-IDIOM-CONTAMINATION",
+        "phenomenon_id": "editing.idiom_play_vs_contamination",
+        "library_id": "gal",
+        "source_namespace": "GAL",
+        "reviewer_id": "gal",
+        "project_class": "EDITING",
+        "automation_level": "MODEL_ONLY",
+        "verdict": "KEEP",
+        "excerpt": "намеренная смесь двух оборотов",
+        "reason": "synthetic fixture: wordplay is intentional"
+      },
+      {
+        "rule_id": "CHUK-R34",
+        "phenomenon_id": "editing.idiom_play_vs_contamination",
+        "library_id": "chukovsky",
+        "source_namespace": "CHUK",
+        "reviewer_id": "chukovsky",
+        "project_class": "EDITING",
+        "automation_level": "MODEL_ONLY",
+        "verdict": "CHANGE",
+        "excerpt": "намеренная смесь двух оборотов",
+        "reason": "synthetic fixture: contamination judged accidental"
+      }
+    ],
+    "expect_status": "SOURCE_CONFLICT",
+    "expect_recommendation": "SHOW_ALTERNATIVES"
+  },
+  {
+    "id": "gal_runtime_natural_negative",
+    "type": "runtime",
+    "libraries": ["gal"],
+    "text": "Команда провела проверку сервиса и записала результат.",
+    "must_not_have_phenomena": [
+      "editing.action_hidden_in_nominalization",
+      "editing.register_pseudoformality",
+      "editing.excessive_explicitness"
+    ],
+    "must_not_have_rule_ids": ["GAL-KANZ-VERB", "GAL-KANZ-PSEUDOFORMAL", "GAL-EXPLICITNESS"],
+    "expect_guardrails": 0
+  },
+  {
+    "id": "gal_guardrail_stays_outside_vote",
+    "type": "runtime",
+    "libraries": ["native", "gal"],
+    "text": "Черновик с oaicite внутри.",
+    "expect_guardrails_min": 1,
+    "must_not_have_rule_ids": ["GAL-KANZ-VERB", "GAL-KANZ-PSEUDOFORMAL", "GAL-EXPLICITNESS"]
+  },
+  {
+    "id": "gal_rslive_style_compatibility",
+    "type": "runtime",
+    "libraries": ["gal"],
+    "style": "rslive_content",
+    "text": "Прошу осуществить предоставление информации о задаче.",
+    "expect_phenomena": ["editing.register_pseudoformality"],
+    "expect_rule_ids": ["GAL-KANZ-PSEUDOFORMAL"],
+    "expect_reviewers": ["gal"],
+    "expect_status_by_phenomenon": {
+      "editing.register_pseudoformality": "SINGLE_REVIEW"
+    },
+    "expect_guardrails": 0
+  }
+]

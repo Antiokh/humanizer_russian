@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "cases": [
+    {"id":"gal-verb-tp","text":"Команда осуществила проведение проверки сервиса.","must_find":["GAL-KANZ-VERB"],"verdict":"REVIEW"},
+    {"id":"gal-verb-shared-route","text":"Осуществляется проведение проверки сервиса.","must_find":["GAL-KANZ-VERB"],"verdict":"REVIEW","note":"shared surface route with CHUK-R17; same phenomenon_id, independent provenance"},
+    {"id":"gal-verb-natural-negative","text":"Команда провела проверку сервиса.","must_not_find":["GAL-KANZ-VERB"]},
+    {"id":"gal-verb-boundary","text":"Проверка сервиса заняла два часа.","must_not_find":["GAL-KANZ-VERB"]},
+    {"id":"gal-verb-intentional-counterexample","text":"В юридическом шаблоне закреплена формула «осуществить проведение экспертизы».","must_find":["GAL-KANZ-VERB"],"verdict":"REVIEW","note":"surface hit is allowed, but it must stay REVIEW because the formal phrase may be intentional"},
+
+    {"id":"gal-pseudoformal-tp","text":"Прошу осуществить предоставление информации о задаче.","must_find":["GAL-KANZ-PSEUDOFORMAL"],"verdict":"REVIEW"},
+    {"id":"gal-pseudoformal-natural-negative","text":"Прошу предоставить информацию о задаче.","must_not_find":["GAL-KANZ-PSEUDOFORMAL"]},
+    {"id":"gal-pseudoformal-boundary","text":"В целях проверки мы собрали журнал событий.","must_not_find":["GAL-KANZ-PSEUDOFORMAL"]},
+    {"id":"gal-pseudoformal-intentional-counterexample","text":"В официальном шаблоне требуется: «Просим вас осуществить предоставление сведений».","must_find":["GAL-KANZ-PSEUDOFORMAL"],"verdict":"REVIEW"},
+
+    {"id":"gal-explicitness-tp","text":"Он положил свою руку в свой карман.","must_find":["GAL-EXPLICITNESS"],"verdict":"REVIEW"},
+    {"id":"gal-explicitness-natural-negative","text":"Я положил свою книгу рядом с его книгой.","must_not_find":["GAL-EXPLICITNESS"]},
+    {"id":"gal-explicitness-boundary","text":"Он поднял свою руку, а затем взял её за руку.","must_not_find":["GAL-EXPLICITNESS"]},
+    {"id":"gal-explicitness-intentional-counterexample","text":"В статье разбирается дословная фраза «свою руку в свой карман».","must_find":["GAL-EXPLICITNESS"],"verdict":"REVIEW"},
+
+    {"id":"gal-markup-exclusion","text":"# Заголовок\n\n```text\nКоманда осуществила проведение проверки.\nПрошу осуществить предоставление информации.\nОн положил свою руку в свой карман.\n```","must_not_find":["GAL-KANZ-VERB","GAL-KANZ-PSEUDOFORMAL","GAL-EXPLICITNESS"]},
+
+    {"id":"gal-participle-metric-tp","text":"Пользователь, получивший отправленное системой уведомление, открыл форму.","metric_min":{"participle_like_tokens":2},"must_find":[]},
+    {"id":"gal-participle-metric-natural-negative","text":"Пользователь открыл форму.","metric_max":{"participle_like_tokens":0}},
+    {"id":"gal-participle-metric-boundary","text":"Документ, подписанный директором, отправили утром.","metric_min":{"participle_like_tokens":1},"metric_max":{"participle_like_tokens":1}},
+    {"id":"gal-participle-metric-intentional-counterexample","text":"В научном описании используются связанные, проверенные и нормализованные наборы данных.","metric_min":{"participle_like_tokens":2},"must_find":[]},
+
+    {"id":"gal-long-sentence-metric-tp","text":"Это очень длинное предложение содержит много отдельных слов и уточнений, потому что нам важно проверить не запрет длины, а только то, что лингвистическая библиотека умеет честно вернуть описательную длину предложения без автоматического редакторского вердикта и без попытки механически разделить его на несколько коротких фраз ради самой метрики.","metric_min":{"sentence_word_max":35},"must_find":[]},
+    {"id":"gal-long-sentence-metric-natural-negative","text":"Короткое ясное предложение.","metric_max":{"sentence_word_max":5}},
+    {"id":"gal-long-sentence-metric-boundary","text":"Это предложение средней длины нужно только затем, чтобы метрика честно показала его фактический размер и не назвала размер ошибкой.","metric_min":{"sentence_word_max":12},"must_find":[]},
+    {"id":"gal-long-sentence-metric-intentional-counterexample","text":"Он говорил долго, спокойно, без остановки, возвращаясь к одному и тому же воспоминанию, добавляя деталь за деталью, снова отступая назад, снова продолжая мысль, и весь этот длинный период был нужен именно затем, чтобы читатель прожил вместе с ним медленное, почти бесконечное возвращение к прошлому, а не получил удобный набор коротких тезисов.","metric_min":{"sentence_word_max":35},"must_find":[]},
+
+    {"id":"gal-sound-metric-tp","text":"Решение, отражение прежней идеи, осталось в черновике.","metric_min":{"sound_echo_adjacent_pairs":1},"must_find":[]},
+    {"id":"gal-sound-metric-natural-negative","text":"Решение осталось в черновике.","metric_max":{"sound_echo_adjacent_pairs":0}},
+    {"id":"gal-sound-metric-boundary","text":"Проверка проверена и закрыта.","metric_min":{"sound_echo_adjacent_pairs":1},"must_find":[]},
+    {"id":"gal-sound-metric-intentional-counterexample","text":"Движение, отражение — намеренная рифма в учебном примере.","metric_min":{"sound_echo_adjacent_pairs":1},"must_find":[]}
+  ]
+}
