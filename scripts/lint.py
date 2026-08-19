@@ -5,10 +5,11 @@ The linter does not decide what is grammatical, human, or author-written by
 regex. It finds surface candidates for contextual review.
 
 Kinds:
-  ARTIFACT       technical chatbot/citation traces; the only automatic gate
-  AI_PATTERN     repeated formulae or calque-like patterns
-  NATIVE_WARNING formally possible but potentially synthetic/native-unfriendly
-  STYLE_WARNING  rhythm/format patterns that may be intentional
+  ARTIFACT           technical chatbot/citation traces; the only automatic gate
+  AI_PATTERN         repeated formulae or calque-like patterns
+  NATIVE_WARNING     formally possible but potentially synthetic/native-unfriendly
+  STYLE_WARNING      rhythm/format patterns that may be intentional
+  EDITING_SUGGESTION explicit comparison/editing test; never a blocker
 
 Descriptive metrics are returned separately. Exit status is non-zero only when
 ARTIFACT findings remain.
@@ -22,6 +23,15 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
+
+try:
+    from chukovsky_checks import check_chukovsky, self_test as chukovsky_self_test
+except ImportError:  # package/import context
+    from scripts.chukovsky_checks import (
+        check_chukovsky,
+        self_test as chukovsky_self_test,
+    )
+
 
 ARTIFACT_PATTERNS = [
     ("openai citation marker", re.compile(r"\boaicite\b", re.I)),
@@ -42,6 +52,8 @@ ARTIFACT_PATTERNS = [
     ),
 ]
 
+# These families are provenance/AI hypotheses, not Russian-language errors.
+# Ordinary discourse phrases require clustering rather than one token hit.
 AI_PHRASE_FAMILIES = {
     "assistant-wrapper": [
         "надеюсь, это поможет",
@@ -49,13 +61,6 @@ AI_PHRASE_FAMILIES = {
         "дайте знать, если",
         "буду рад помочь",
         "вот краткий обзор",
-    ],
-    "importance-announcement": [
-        "важно отметить",
-        "следует подчеркнуть",
-        "стоит обратить внимание",
-        "нельзя не упомянуть",
-        "необходимо учитывать",
     ],
     "pseudo-depth": [
         "если копнуть глубже",
@@ -85,6 +90,14 @@ AI_PHRASE_FAMILIES = {
         "ещё один аспект",
         "ещё одним аспектом",
     ],
+}
+
+AI_FAMILY_THRESHOLDS = {
+    "assistant-wrapper": 1,
+    "pseudo-depth": 2,
+    "video-script": 2,
+    "generic-conclusion": 2,
+    "stack-connector": 2,
 }
 
 CALQUE_PATTERNS = [
@@ -309,13 +322,17 @@ def lint(text: str) -> tuple[list[dict], dict]:
 
     for family, phrases in AI_PHRASE_FAMILIES.items():
         hits = [phrase for phrase in phrases if phrase in low]
-        if hits:
+        threshold = AI_FAMILY_THRESHOLDS[family]
+        if len(hits) >= threshold:
             add(
                 findings,
                 "AI_PATTERN",
                 family,
                 "; ".join(hits),
-                note="soft signal; judge by function and clustering",
+                note=(
+                    f"soft provenance signal; family threshold={threshold}; "
+                    "judge by discourse function and clustering"
+                ),
             )
 
     for rule, rx in CALQUE_PATTERNS:
@@ -482,6 +499,11 @@ def lint(text: str) -> tuple[list[dict], dict]:
             note="check typography; do not replace normative dash for anti-detection",
         )
 
+    # Chukovsky pass is deliberately extended/contextual. scripts/check.py's
+    # default MECHANICAL_RULES does not include these rule names.
+    chuk_findings, chuk_metrics = check_chukovsky(prose, sents)
+    findings.extend(chuk_findings)
+
     dash_count = len(re.findall(r"[—–]", prose))
     words_total = sum(lengths)
     metrics = {
@@ -503,6 +525,7 @@ def lint(text: str) -> tuple[list[dict], dict]:
         "repeated_sentence_start_flag": repeated_start_flag,
         "repeated_explicit_context_runs": len(repeated_subject_runs),
         "undercompression_pairs": undercompression_pairs,
+        **chuk_metrics,
     }
 
     if len(sents) >= 6 and dash_count >= 5 and dash_count > len(sents) / 2:
@@ -602,6 +625,24 @@ def self_test() -> None:
         for item in findings
         if item["rule"] == "anglo-rhetorical question/answer cluster"
     ], findings
+
+    # One ordinary connector is not enough for a provenance/AI-family hit.
+    findings, _ = lint("Кроме того, проект продолжается.")
+    assert not [
+        item
+        for item in findings
+        if item["kind"] == "AI_PATTERN" and item["rule"] == "stack-connector"
+    ], findings
+
+    # Announcing metadiscourse belongs to an editing A/B test, not AI attribution.
+    findings, _ = lint("Важно отметить, что сервер работает.")
+    assert any(
+        item["kind"] == "EDITING_SUGGESTION"
+        and item["rule"] == "chukovsky: metadiscourse deletion test"
+        for item in findings
+    ), findings
+
+    chukovsky_self_test()
 
     print("self-test: OK")
 
