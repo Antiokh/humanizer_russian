@@ -21,11 +21,12 @@ RULE_INDEX_PATH = ROOT / "references" / "nora-gal-rule-index.md"
 SOURCE_LABELS_PATH = ROOT / "references" / "nora-gal-source-labels.md"
 
 RULE_RX = re.compile(r"GAL-[A-Z0-9-]+")
+SOURCE_LABEL_RX = re.compile(r"^\d+\.\s+`([^`]+)`\s*$", re.MULTILINE)
 EXPECTED_EVAL_IDS = [f"gal-{i:02d}" for i in range(1, 46)]
 EXPECTED_RULE_COUNT = 42
 MIN_COUNTEREXAMPLES = 10
 
-# Exact labels that are easy to accidentally normalize away in documentation.
+# Exact labels that are especially easy to accidentally normalize away in docs.
 REQUIRED_EXACT_SOURCE_LABELS = {
     "Откуда что берется?",
     "Куда же идет язык?",
@@ -45,6 +46,14 @@ def load_json(path: Path) -> dict:
 def declared_rules(rule_index: str) -> set[str]:
     """Extract unique atomic GAL rule IDs from the rule-index table."""
     return set(RULE_RX.findall(rule_index))
+
+
+def normalize_chapter_label(label: str) -> str:
+    """Normalize only documented ebook/display typography differences."""
+    value = label.casefold().replace("ё", "е").replace("\u00a0", " ")
+    value = re.sub(r"\s+", " ", value).strip()
+    value = re.sub(r"…\s+", "…", value)
+    return value
 
 
 def validate() -> None:
@@ -85,7 +94,16 @@ def validate() -> None:
         f"expected {EXPECTED_RULE_COUNT} atomic GAL rules, found {len(index_rules)}"
     )
 
+    exact_source_labels = SOURCE_LABEL_RX.findall(source_labels)
+    assert len(exact_source_labels) == 34, (
+        f"expected 34 ordered ebook labels, found {len(exact_source_labels)}"
+    )
+    normalized_source_labels = {
+        normalize_chapter_label(label) for label in exact_source_labels
+    }
+
     mapped_rules: set[str] = set()
+    mapped_chapters: set[str] = set()
     counterexamples = 0
 
     for item in cases:
@@ -104,6 +122,15 @@ def validate() -> None:
             assert f"`{rule}`" in reference, f"{rule} missing from nora-gal.md"
             mapped_rules.add(rule)
 
+        for chapter in chapters:
+            assert isinstance(chapter, str) and chapter.strip(), item["id"]
+            normalized = normalize_chapter_label(chapter)
+            assert normalized in normalized_source_labels, (
+                f"{item['id']}: unknown source chapter {chapter!r}; "
+                "add/correct it in nora-gal-source-labels.md first"
+            )
+            mapped_chapters.add(normalized)
+
     assert mapped_rules == index_rules, (
         "every atomic GAL rule must have eval coverage; "
         f"missing={sorted(index_rules - mapped_rules)}, "
@@ -112,7 +139,7 @@ def validate() -> None:
     assert counterexamples >= MIN_COUNTEREXAMPLES, counterexamples
 
     for label in REQUIRED_EXACT_SOURCE_LABELS:
-        assert f"`{label}`" in source_labels, f"exact ebook label missing: {label}"
+        assert label in exact_source_labels, f"exact ebook label missing: {label}"
 
     # The active suite should use the new namespace, not the legacy six SEM IDs.
     suite_text = SUITE_PATH.read_text(encoding="utf-8")
@@ -121,7 +148,7 @@ def validate() -> None:
     print(
         "Nora Gal validation: OK "
         f"({len(eval_ids)} evals, {len(index_rules)} rules, "
-        f"{counterexamples} counterexamples)"
+        f"{counterexamples} counterexamples, {len(mapped_chapters)} mapped chapters)"
     )
 
 
