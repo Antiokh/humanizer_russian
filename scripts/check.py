@@ -41,9 +41,12 @@ def select_normalized(findings: list[dict], extended: bool = False) -> list[dict
     ]
 
 
-def _compact_key(item: dict) -> tuple[str, int, str]:
-    excerpt = re.sub(r"\s+", " ", str(item.get("excerpt", "")).strip().lower())[:180]
-    return (str(item.get("phenomenon_id", "")), int(item.get("line", 0) or 0), excerpt)
+def _normalized_excerpt(item: dict) -> str:
+    return re.sub(r"\s+", " ", str(item.get("excerpt", "")).strip().lower())[:180]
+
+
+def _line_no(item: dict) -> int:
+    return int(item.get("line", 0) or 0)
 
 
 def _provenance(item: dict) -> dict:
@@ -57,29 +60,67 @@ def _provenance(item: dict) -> dict:
     }
 
 
+def _group_compatible_surface(findings: list[dict]) -> list[list[dict]]:
+    """Group the same phenomenon/surface without merging separate occurrences.
+
+    Some source adapters can locate a finding to a line while older/mechanical
+    adapters only know line ``0``. An unknown line may join a single compatible
+    surface group; it must not arbitrarily join when the same excerpt occurs on
+    multiple known lines. This lets cross-library deduplication work without
+    throwing away occurrence information.
+    """
+    groups: list[dict] = []
+    for index, item in enumerate(findings):
+        phenomenon = str(item.get("phenomenon_id", "")) or f"__unmapped__:{index}"
+        excerpt = _normalized_excerpt(item)
+        line = _line_no(item)
+        candidates = [
+            group
+            for group in groups
+            if group["phenomenon_id"] == phenomenon and group["excerpt"] == excerpt
+        ]
+
+        target = None
+        if line > 0:
+            exact = [group for group in candidates if line in group["known_lines"]]
+            if len(exact) == 1:
+                target = exact[0]
+            elif not exact:
+                unknown_only = [group for group in candidates if not group["known_lines"]]
+                if len(unknown_only) == 1:
+                    target = unknown_only[0]
+        elif len(candidates) == 1:
+            target = candidates[0]
+
+        if target is None:
+            target = {
+                "phenomenon_id": phenomenon,
+                "excerpt": excerpt,
+                "known_lines": set(),
+                "items": [],
+            }
+            groups.append(target)
+        if line > 0:
+            target["known_lines"].add(line)
+        target["items"].append(item)
+
+    return [group["items"] for group in groups]
+
+
 def compact_rows(findings: list[dict]) -> list[dict]:
     """Deduplicate compatible findings without erasing source provenance.
 
-    Grouping is deliberately local: same phenomenon, line and normalized
-    excerpt. Directional CHANGE/KEEP conflicts are *not* collapsed; those rows
-    stay separate so compact mode never manufactures consensus. Editorial board
-    remains the place where reviewer disagreement is interpreted explicitly.
+    Directional CHANGE/KEEP conflicts are never collapsed; those rows stay
+    separate so compact mode cannot manufacture consensus. Editorial Board is
+    the place where reviewer disagreement is interpreted explicitly.
     """
-    grouped: dict[tuple[str, int, str], list[dict]] = {}
-    order: list[tuple[str, int, str]] = []
-    for index, item in enumerate(findings):
-        key = _compact_key(item)
-        if not key[0]:
-            key = (f"__unmapped__:{index}", key[1], key[2])
-        if key not in grouped:
-            grouped[key] = []
-            order.append(key)
-        grouped[key].append(item)
-
     out: list[dict] = []
-    for key in order:
-        items = grouped[key]
-        directional = {item.get("verdict") for item in items if item.get("verdict") in {"CHANGE", "KEEP"}}
+    for items in _group_compatible_surface(findings):
+        directional = {
+            item.get("verdict")
+            for item in items
+            if item.get("verdict") in {"CHANGE", "KEEP"}
+        }
         if len(directional) > 1:
             out.extend(compact_shape(item) for item in items)
             continue
@@ -136,7 +177,7 @@ def main() -> None:
             loc = f":{item['line']}" if item["line"] else ""
             note = f" — {item['note']}" if item["note"] else ""
             source = f" · {item['library_id']}" if item.get("library_id") else ""
-            print(f"{item['kind']}{loc} [{item['rule']}]{source}: {item['excerpt']}{note}")
+            print(f"{item['kind']}{loc} [{item['rule']}] {source}: {item['excerpt']}{note}")
         print(json.dumps(metrics, ensure_ascii=False))
 
     if any(item["kind"] in {"ARTIFACT", "LANGUAGE_ERROR"} for item in findings):
