@@ -46,31 +46,46 @@ ARTIFACT_PATTERNS = [
     ("chatgpt/openai utm", re.compile(r"utm_source=(?:chatgpt(?:\.com)?|openai)", re.I)),
 ]
 
+# AI associations are weaker than language/editing evidence. A family therefore
+# has its own minimum cluster threshold. Generic Russian discourse markers such
+# as «важно отметить» are intentionally NOT classified as AI here; they are
+# handled by the Chukovsky editing pass as a deletion/A-B test.
 AI_PHRASE_FAMILIES = {
-    "assistant-wrapper": [
-        "надеюсь, это поможет", "надеюсь, было полезно", "дайте знать, если",
-        "буду рад помочь", "вот краткий обзор",
-    ],
-    "importance-announcement": [
-        "важно отметить", "следует подчеркнуть", "стоит обратить внимание",
-        "нельзя не упомянуть", "необходимо учитывать",
-    ],
-    "pseudo-depth": [
-        "если копнуть глубже", "глубинная проблема", "настоящий вопрос в том",
-        "в конечном счёте", "вот в чём штука",
-    ],
-    "video-script": [
-        "давайте разберёмся", "погрузимся в", "вот что нужно знать",
-        "перейдём к главному", "без лишних слов",
-    ],
-    "generic-conclusion": [
-        "подводя итог", "в заключение", "резюмируя",
-        "будущее выглядит ярким", "впереди захватывающие времена",
-    ],
-    "stack-connector": [
-        "кроме того", "более того", "также стоит", "ещё один аспект",
-        "ещё одним аспектом",
-    ],
+    "assistant-wrapper": (
+        1,
+        [
+            "надеюсь, это поможет", "надеюсь, было полезно", "дайте знать, если",
+            "буду рад помочь", "вот краткий обзор",
+        ],
+    ),
+    "pseudo-depth": (
+        2,
+        [
+            "если копнуть глубже", "глубинная проблема", "настоящий вопрос в том",
+            "в конечном счёте", "вот в чём штука",
+        ],
+    ),
+    "video-script": (
+        2,
+        [
+            "давайте разберёмся", "погрузимся в", "вот что нужно знать",
+            "перейдём к главному", "без лишних слов",
+        ],
+    ),
+    "generic-conclusion": (
+        2,
+        [
+            "подводя итог", "в заключение", "резюмируя",
+            "будущее выглядит ярким", "впереди захватывающие времена",
+        ],
+    ),
+    "stack-connector": (
+        3,
+        [
+            "кроме того", "более того", "также стоит", "ещё один аспект",
+            "ещё одним аспектом",
+        ],
+    ),
 }
 
 CALQUE_PATTERNS = [
@@ -190,6 +205,14 @@ def add(
     })
 
 
+def _phrase_occurrences(text_low: str, phrases: list[str]) -> list[str]:
+    hits: list[str] = []
+    for phrase in phrases:
+        count = text_low.count(phrase)
+        hits.extend([phrase] * count)
+    return hits
+
+
 def lint(text: str) -> tuple[list[dict], dict]:
     findings: list[dict] = []
 
@@ -210,15 +233,18 @@ def lint(text: str) -> tuple[list[dict], dict]:
     lengths = [word_count(s) for s in sents]
     low = prose.lower()
 
-    for family, phrases in AI_PHRASE_FAMILIES.items():
-        hits = [phrase for phrase in phrases if phrase in low]
-        if hits:
+    for family, (minimum_hits, phrases) in AI_PHRASE_FAMILIES.items():
+        hits = _phrase_occurrences(low, phrases)
+        if len(hits) >= minimum_hits:
             add(
                 findings,
                 "AI_PATTERN",
                 family,
-                "; ".join(hits),
-                note="soft signal; judge by function and clustering",
+                "; ".join(hits[:8]),
+                note=(
+                    f"soft cluster signal ({len(hits)} hits; threshold {minimum_hits}); "
+                    "judge by function, genre and author"
+                ),
             )
 
     for rule, rx in CALQUE_PATTERNS:
@@ -426,6 +452,19 @@ def self_test() -> None:
     )
     findings, _ = lint(calque)
     assert any(item["rule"].startswith("calque:") for item in findings), findings
+
+    # A generic Russian metadiscourse phrase is an editing test, not evidence of AI.
+    single_meta = "Важно отметить, что сервер перезапустили в 14:03."
+    findings, _ = lint(single_meta)
+    assert any(
+        item["rule"] == "chukovsky: metadiscourse deletion test"
+        for item in findings
+    ), findings
+    assert not [item for item in findings if item["kind"] == "AI_PATTERN"], findings
+
+    # One ordinary connector must not be enough to label prose AI-like.
+    findings, _ = lint("Кроме того, исправили поиск.")
+    assert not [item for item in findings if item["kind"] == "AI_PATTERN"], findings
 
     chukovsky_self_test()
     chuk_text = (
