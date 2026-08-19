@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - agent/**
+      - feature/**
+      - context/**
   pull_request:
 
 jobs:
@@ -25,6 +27,9 @@ jobs:
 
       - name: Linter self-test
         run: python scripts/lint.py --self-test
+
+      - name: Deterministic mechanical linter benchmark
+        run: python scripts/benchmark_lint.py
 
       - name: Smoke-test and validate author profiler
         run: |

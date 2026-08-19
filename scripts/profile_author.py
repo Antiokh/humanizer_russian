@@ -4,8 +4,9 @@
 The profiler is deliberately descriptive:
 - it does not diagnose personality;
 - it does not decide what is "good" Russian;
-- it preserves document boundaries for sentence and n-gram statistics;
-- it does not emit source paths into the profile.
+- it preserves document boundaries for sentence, paragraph and n-gram stats;
+- it does not emit source paths into the profile;
+- it separates observed frequency from manual cultural/author annotations.
 
 The output follows profiles/schema.json (v1).
 """
@@ -21,6 +22,7 @@ from pathlib import Path
 
 WORD_RE = re.compile(r"[A-Za-zА-Яа-яЁё]+(?:-[A-Za-zА-Яа-яЁё]+)?")
 SENT_SPLIT = re.compile(r"(?<=[.!?])\s+")
+PARA_SPLIT = re.compile(r"\n\s*\n+")
 
 DISCOURSE_MARKERS = [
     "ну", "вот", "то есть", "короче", "в общем", "кстати", "просто",
@@ -43,9 +45,23 @@ CERTAINTY_MARKERS = [
     "точно", "очевидно", "безусловно", "однозначно", "реально", "точно не",
 ]
 
+CONTRAST_MARKERS = [
+    "не просто", "не только", "а не", "но", "зато", "хотя", "вместо",
+]
+
+CONJUNCTION_STARTS = {
+    "и", "а", "но", "или", "зато", "хотя", "если", "когда", "потому",
+}
+
+STOP_TOKENS = {
+    "и", "в", "во", "на", "с", "со", "а", "но", "или", "что", "это", "как",
+    "к", "ко", "у", "за", "по", "из", "от", "до", "для", "не", "ни", "же",
+    "бы", "то", "он", "она", "они", "мы", "вы", "я", "ты",
+}
+
 VERB_PROXY = re.compile(
     r"\b[а-яё]{3,}(?:ть|ться|ет|ёт|ют|ут|ит|ат|ят|ешь|ишь|ем|им|ете|ите|"
-    r"ал|ала|али|ял|яла|яли|ил|ила|или|лся|лась|лись|ем|ен|ена|ены)\b",
+    r"ал|ала|али|ял|яла|яли|ил|ила|или|лся|лась|лись|ен|ена|ены)\b",
     re.I,
 )
 
@@ -82,6 +98,10 @@ def sentences(text: str) -> list[str]:
     return [s.strip() for s in SENT_SPLIT.split(flat) if s.strip()]
 
 
+def paragraphs(text: str) -> list[str]:
+    return [p.strip() for p in PARA_SPLIT.split(text.strip()) if p.strip()]
+
+
 def percentile(values: list[int], q: float) -> float:
     if not values:
         return 0
@@ -91,6 +111,15 @@ def percentile(values: list[int], q: float) -> float:
     hi = min(lo + 1, len(v) - 1)
     frac = pos - lo
     return round(v[lo] * (1 - frac) + v[hi] * frac, 2)
+
+
+def distribution(values: list[int]) -> dict:
+    return {
+        "p25": percentile(values, 0.25),
+        "median": percentile(values, 0.50),
+        "p75": percentile(values, 0.75),
+        "p90": percentile(values, 0.90),
+    }
 
 
 def count_phrases(text_low: str, phrases: list[str]) -> dict[str, int]:
@@ -133,28 +162,70 @@ def rate_item(text: str, count: int, total_words: int) -> dict:
     }
 
 
+def first_token(sentence: str) -> str:
+    ws = words(sentence)
+    return ws[0] if ws else ""
+
+
+def question_answer_proxy(doc: str) -> int:
+    sents = sentences(doc)
+    hits = 0
+    for left, right in zip(sents, sents[1:]):
+        if left.endswith("?") and len(words(left)) <= 8 and len(words(right)) <= 6:
+            hits += 1
+    return hits
+
+
+def repeated_first_token_rate(all_sentences: list[str]) -> float:
+    if len(all_sentences) < 2:
+        return 0
+    pairs = 0
+    total = 0
+    for left, right in zip(all_sentences, all_sentences[1:]):
+        a, b = first_token(left), first_token(right)
+        if not a or not b:
+            continue
+        total += 1
+        if a == b:
+            pairs += 1
+    return round(pairs / total, 4) if total else 0
+
+
 def analyse(docs: list[str]) -> dict:
     all_text = "\n\n".join(docs)
     all_tokens = [token for doc in docs for token in words(doc)]
     all_sentences = [sent for doc in docs for sent in sentences(doc)]
+    all_paragraphs = [para for doc in docs for para in paragraphs(doc)]
     sent_lengths = [len(words(s)) for s in all_sentences]
+    para_sentence_lengths = [len(sentences(p)) for p in all_paragraphs]
     total_words = len(all_tokens)
 
     markers = merge_phrase_counts(docs, DISCOURSE_MARKERS)
     repairs = merge_phrase_counts(docs, SELF_REPAIR_MARKERS)
     hedges = merge_phrase_counts(docs, STANCE_HEDGES)
     certainty = merge_phrase_counts(docs, CERTAINTY_MARKERS)
+    contrasts = merge_phrase_counts(docs, CONTRAST_MARKERS)
 
-    no_verb_proxy = [
-        s for s in all_sentences
-        if words(s) and not VERB_PROXY.search(s)
-    ]
+    no_verb_proxy = [s for s in all_sentences if words(s) and not VERB_PROXY.search(s)]
     first_person_sents = [s for s in all_sentences if FIRST_PERSON.search(s)]
+    question_sents = [s for s in all_sentences if s.endswith("?")]
 
     latin_tokens = [
-        token for token in all_tokens
+        token
+        for token in all_tokens
         if re.fullmatch(r"[a-z]+(?:-[a-z]+)?", token)
     ]
+
+    content_tokens = [
+        token for token in all_tokens if len(token) >= 3 and token not in STOP_TOKENS
+    ]
+    sentence_starts = Counter(
+        token for token in (first_token(s) for s in all_sentences) if token
+    )
+
+    conjunction_starts = sum(
+        1 for s in all_sentences if first_token(s) in CONJUNCTION_STARTS
+    )
 
     punctuation_counts = {
         "em_dash": all_text.count("—"),
@@ -168,12 +239,15 @@ def analyse(docs: list[str]) -> dict:
         "parentheses_open": all_text.count("("),
     }
 
+    qa_count = sum(question_answer_proxy(doc) for doc in docs)
+
     return {
         "version": 1,
         "corpus": {
             "documents": len(docs),
             "words": total_words,
             "sentences": len(all_sentences),
+            "paragraphs": len(all_paragraphs),
         },
         "lexicon": {
             "discourse_markers": [
@@ -189,42 +263,84 @@ def analyse(docs: list[str]) -> dict:
             "code_switching": {
                 "latin_token_count": len(latin_tokens),
                 "latin_token_rate": round(len(latin_tokens) / total_words, 4)
-                if total_words else 0,
+                if total_words
+                else 0,
                 "top_latin_tokens": [
                     {"text": token, "count": count}
                     for token, count in Counter(latin_tokens).most_common(30)
                 ],
             },
+            "top_content_tokens": [
+                {"text": token, "count": count}
+                for token, count in Counter(content_tokens).most_common(40)
+            ],
+            "sentence_starts": [
+                {"text": token, "count": count}
+                for token, count in sentence_starts.most_common(30)
+            ],
             "ngrams": {
                 "bigrams": top_ngrams_by_document(docs, 2),
                 "trigrams": top_ngrams_by_document(docs, 3),
             },
         },
         "syntax": {
-            "sentence_length": {
-                "p25": percentile(sent_lengths, 0.25),
-                "median": percentile(sent_lengths, 0.50),
-                "p75": percentile(sent_lengths, 0.75),
-                "p90": percentile(sent_lengths, 0.90),
-            },
+            "sentence_length": distribution(sent_lengths),
+            "paragraph_length_sentences": distribution(para_sentence_lengths),
             "short_le_4_rate": round(
                 sum(x <= 4 for x in sent_lengths) / len(all_sentences), 4
-            ) if all_sentences else 0,
+            )
+            if all_sentences
+            else 0,
             "sentences_without_verb_proxy_rate": round(
                 len(no_verb_proxy) / len(all_sentences), 4
-            ) if all_sentences else 0,
+            )
+            if all_sentences
+            else 0,
             "first_person_sentence_rate": round(
                 len(first_person_sents) / len(all_sentences), 4
-            ) if all_sentences else 0,
-            "proxy_warning": "Regex proxies are descriptive, not morphological analysis.",
+            )
+            if all_sentences
+            else 0,
+            "question_sentence_rate": round(
+                len(question_sents) / len(all_sentences), 4
+            )
+            if all_sentences
+            else 0,
+            "conjunction_start_rate": round(
+                conjunction_starts / len(all_sentences), 4
+            )
+            if all_sentences
+            else 0,
+            "repeated_first_token_rate": repeated_first_token_rate(all_sentences),
+            "proxy_warning": (
+                "Regex proxies are descriptive, not morphological/coreference analysis."
+            ),
         },
         "punctuation": {
             key: {
                 "count": value,
                 "per_10k_words": round(value * 10000 / total_words, 2)
-                if total_words else 0,
+                if total_words
+                else 0,
             }
             for key, value in punctuation_counts.items()
+        },
+        "rhetoric": {
+            "contrast_markers": [
+                rate_item(k, v, total_words)
+                for k, v in sorted(contrasts.items(), key=lambda x: (-x[1], x[0]))
+                if v
+            ],
+            "question_answer_proxy_count": qa_count,
+            "question_answer_proxy_per_100_sentences": round(
+                qa_count * 100 / len(all_sentences), 2
+            )
+            if all_sentences
+            else 0,
+            "proxy_warning": (
+                "Question-answer and contrast metrics describe surface form only; "
+                "they do not infer rhetorical intent."
+            ),
         },
         "stance": {
             "hedges": [
@@ -237,6 +353,14 @@ def analyse(docs: list[str]) -> dict:
                 for k, v in sorted(certainty.items(), key=lambda x: (-x[1], x[0]))
                 if v
             ],
+        },
+        "annotations": {
+            "local_terms": [],
+            "generation_terms": [],
+            "professional_terms": [],
+            "preferred": [],
+            "avoid": [],
+            "notes": [],
         },
         "observed_errors": [],
         "settings": {
