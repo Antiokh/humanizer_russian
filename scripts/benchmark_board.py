@@ -8,6 +8,8 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
+from editorial_board import build_board
+from library_runtime import load_style
 from review import run_review
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,9 +20,24 @@ def main() -> None:
     schema = json.loads((ROOT / "schemas/review-report.schema.json").read_text(encoding="utf-8"))
     Draft202012Validator.check_schema(schema)
     validator = Draft202012Validator(schema)
+    style = load_style("neutral")
 
     failures = []
     for case in cases:
+        if case.get("type", "runtime") == "board_unit":
+            board = build_board(case["findings"], style)
+            if len(board["groups"]) != 1:
+                failures.append(f"{case['id']}: expected one board group, got {len(board['groups'])}")
+                continue
+            group = board["groups"][0]
+            if group["status"] != case["expect_status"]:
+                failures.append(f"{case['id']}: status {group['status']} != {case['expect_status']}")
+            if group["recommendation"] != case["expect_recommendation"]:
+                failures.append(
+                    f"{case['id']}: recommendation {group['recommendation']} != {case['expect_recommendation']}"
+                )
+            continue
+
         report = run_review(case["text"], style_id="neutral")
         try:
             validator.validate(report)
