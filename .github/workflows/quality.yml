@@ -1,5 +1,8 @@
 name: quality
 
+# Network corpus calibration is a manual development step. Normal quality CI
+# stays deterministic and offline apart from installing its validation package.
+
 on:
   push:
     branches:
