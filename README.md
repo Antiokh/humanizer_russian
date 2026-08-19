@@ -1,6 +1,6 @@
-# humanizer+ru
+# humanizer_russian
 
-`humanizer+ru` — русский редактор и humanizer, который ставит естественный русский язык выше detector-driven трюков.
+`humanizer_russian` — русский редактор и humanizer, который ставит естественный русский язык выше detector-driven трюков.
 
 Техническое имя репозитория: `humanizer_russian`.
 
@@ -10,7 +10,7 @@
 
 Обычный humanizer в первую очередь пытается удалить признаки, по которым текст может казаться машинным. Для русского это быстро приводит к плохой целевой функции: нормативное тире, `не X, а Y`, двоеточия, эллипсис или профессиональная лексика начинают удаляться только потому, что они коррелировали с каким-то detector score.
 
-`humanizer+ru` разделяет четыре задачи:
+`humanizer_russian` разделяет четыре задачи:
 
 1. **SEMANTICS** — сохранить факты, тезис, референты, причинность и степень уверенности.
 2. **NORM** — не ломать русский язык.
@@ -171,7 +171,7 @@ Humanizer должен сначала понять общий материал �
 
 ### `references/author-profile.md`
 
-Спецификация `humanizer+ru+user`:
+Спецификация `humanizer_russian`:
 
 - частицы и дискурсивные маркеры;
 - профессиональная и поколенческая лексика;
@@ -263,7 +263,7 @@ python3 scripts/lint.py --self-test
 
 ## Происхождение проекта
 
-`humanizer+ru` вырос из двух линий работы в `Antiokh/humanizer--ru`:
+`humanizer_russian` вырос из двух линий работы в `Antiokh/humanizer--ru`:
 
 1. семантического слоя Норы Галь — PR `Add Nora Gal semantic language checks`;
 2. русскоязычной переработки humanizer — `NORM / NATIVE_USAGE / AUTHOR`, нового линтера, evals и author profile.
