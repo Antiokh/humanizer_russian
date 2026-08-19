@@ -38,20 +38,45 @@ def main() -> None:
                 )
             continue
 
-        report = run_review(case["text"], style_id="neutral")
+        report = run_review(
+            case["text"],
+            style_id=case.get("style", "neutral"),
+            library_ids=case.get("libraries"),
+        )
         try:
             validator.validate(report)
         except Exception as exc:
             failures.append(f"{case['id']}: report schema failed: {exc}")
             continue
-        phenomena = {g["phenomenon_id"] for g in report["board"]["groups"]}
+
+        groups = report["board"]["groups"]
+        phenomena = {g["phenomenon_id"] for g in groups}
+        statuses = {g["phenomenon_id"]: g["status"] for g in groups}
         guardrails = len(report["board"]["guardrails"])
+        rule_ids = {item["rule_id"] for item in report["findings"]}
+        reviewers = {item.get("reviewer_id") for item in report["findings"] if item.get("reviewer_id")}
+
         for expected in case.get("expect_phenomena", []):
             if expected not in phenomena:
                 failures.append(f"{case['id']}: missing phenomenon {expected}")
         for forbidden in case.get("must_not_have_phenomena", []):
             if forbidden in phenomena:
                 failures.append(f"{case['id']}: forbidden phenomenon {forbidden}")
+        for expected in case.get("expect_rule_ids", []):
+            if expected not in rule_ids:
+                failures.append(f"{case['id']}: missing rule_id {expected}")
+        for forbidden in case.get("must_not_have_rule_ids", []):
+            if forbidden in rule_ids:
+                failures.append(f"{case['id']}: forbidden rule_id {forbidden}")
+        for expected in case.get("expect_reviewers", []):
+            if expected not in reviewers:
+                failures.append(f"{case['id']}: missing reviewer {expected}")
+        for phenomenon_id, expected_status in case.get("expect_status_by_phenomenon", {}).items():
+            actual = statuses.get(phenomenon_id)
+            if actual != expected_status:
+                failures.append(
+                    f"{case['id']}: status for {phenomenon_id} {actual} != {expected_status}"
+                )
         if "expect_guardrails" in case and guardrails != case["expect_guardrails"]:
             failures.append(f"{case['id']}: guardrails {guardrails} != {case['expect_guardrails']}")
         if "expect_guardrails_min" in case and guardrails < case["expect_guardrails_min"]:
