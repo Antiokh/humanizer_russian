@@ -43,14 +43,41 @@ Selection among valid variants:
 
 The owner supplied an electronic text of Nora Gal's *Slovo zhivoe i mertvoe*. The source has now been analyzed as an editorial work rather than reduced to the original six coarse `SEM-*` patterns.
 
-### Added
+### Source-grounded structure
+
+Completed:
 
 - `references/nora-gal-source-map.md` — chapter-level provenance and transferability map;
-- expanded `references/nora-gal.md` with atomic `GAL-*` checks;
-- explicit separation of general, contextual, translation-specific and historically situated recommendations;
-- explicit `editor not dictator` / third-solution behavior;
-- checks for whole-image consistency, character drift, POV, subtext, physical plausibility, emotional tact, idiom contamination, sound, rhythm, event order and reference verification;
-- deeper manual smoke coverage and expanded Nora Gal eval design.
+- `references/nora-gal-source-labels.md` — exact internal ebook chapter labels, separate from typographically normalized display names;
+- `references/nora-gal-rule-index.md` — 42 atomic `GAL-*` rules with source chapter, scope and derivation status;
+- `references/nora-gal.md` — operational deep-editing rules;
+- `evals/nora-gal.json` v2 — 45 functional scenarios;
+- `evals/nora-gal-map.json` v2 — explicit `eval → rule → source chapter` mapping;
+- complete eval coverage for all 42 atomic rules;
+- more than ten explicit counterexamples protecting contextual rules from becoming stop-lists;
+- `scripts/validate_nora_gal.py` — deterministic structural/traceability validator;
+- CI invocation for the validator;
+- deep Nora behavior integrated into `SKILL.md`, Custom GPT instructions/setup, evidence policy and manual smoke tests.
+
+### What the deeper layer now covers
+
+Beyond the original six coarse patterns:
+
+- action hidden by nominalization;
+- noun chains and agent visibility;
+- event order;
+- pseudoformal register and empty stamps;
+- lexical precision, collocation and concrete wording without invention;
+- borrowings and terms by audience rather than blacklist;
+- persona, situation, age, era/culture and emotional tact;
+- idiom contamination, literalization, polysemy and accidental sound effects;
+- physical plausibility and speakability;
+- Russian syntax, explicitness, focus, sentence boundaries and pace;
+- subtext restraint;
+- whole-before-detail, character continuity and POV;
+- verification of doubtful references instead of guessing;
+- editor-not-dictator, third-solution and self-edit behavior;
+- compound failures where several problems must be solved jointly.
 
 ### Source policy
 
@@ -84,13 +111,12 @@ The old materials remain available in the historical repository/PRs. If any old 
 
 ## Next work
 
-- finish and validate `evals/nora-gal.json` v2 with positive cases and counterexamples;
 - validate CI on the deep Nora Gal pull request;
 - review CodeRabbit feedback on the new source-grounded layer;
 - expand compound/paragraph-level Gal evals beyond single sentences;
+- build/run a model-judge harness for `gal-01` — `gal-45` instead of relying only on fixture validation;
 - add corpus-backed `NATIVE_USAGE` tests;
 - incorporate philologist feedback;
 - analyze additional Russian-language references and the user's licensed editing materials;
-- build a model-judge eval harness;
 - evolve `humanizer+ru+user` beyond regex proxies toward morphological/corpus analysis;
 - if needed, later map ebook chapter locators to a verified physical edition without changing rule IDs.
