@@ -74,7 +74,7 @@ jobs:
           compact = json.load(open('/tmp/chuk-compact.json', encoding='utf-8'))
           board = json.load(open('/tmp/chuk-board.json', encoding='utf-8'))
           assert any(item.get('library_id') == 'chukovsky' and item.get('phenomenon_id') == 'editing.metadiscourse_announcement' for item in compact['findings']), compact
-          assert any(item.get('library_id') == 'chukovsky' and item.get('rule_id') == 'CHK-R24' for item in board['findings']), board
+          assert any(item.get('library_id') == 'chukovsky' and item.get('rule_id') == 'CHUK-R24' for item in board['findings']), board
           assert not any(item.get('library_id') == 'native' and str(item.get('rule_id', '')).startswith('CHUK-') for item in board['findings']), board
           PY
 
