@@ -20,6 +20,20 @@ Study status: `OPERATIONAL_FOR_INTEGRATION`; sequential reading and independent 
 - FB2 document version: `1.03`
 - EPUB conversion metadata: FB2EPUB 0.5.0; conversion date 2026-08-15
 
+## Current-chat primary-source revalidation
+
+Before the integration pass on `2026-08-19`, the EPUB available in the current conversation was reopened directly rather than trusting the previous study artifacts alone.
+
+Revalidation results:
+
+- recomputed SHA-256 exactly matched the recorded fingerprint above;
+- EPUB ZIP structure opened successfully;
+- OPF metadata was reread directly and matched author/title/publisher/year/ISBN recorded here;
+- NCX was reread directly and contained the same 12 top-level TOC entries listed below;
+- spine/source sampling confirmed the front matter, ten chapters, appendix, dictionary and notes structure used by `coverage.md`.
+
+This check confirms that the integration is grounded in the same supplied primary source that the independent study claims to cover. It does not replace the sequential-reading evidence in `coverage.md`.
+
 ## Bibliographic confidence
 
 High confidence for author/title/publisher/year/ISBN because they are embedded in the supplied EPUB metadata. The text itself identifies the edition only as the second, corrected and expanded edition; this study does not infer a full publication-history stemma from that note.
