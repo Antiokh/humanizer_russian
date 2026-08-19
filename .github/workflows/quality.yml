@@ -71,6 +71,9 @@ jobs:
       - name: Nora Gal live-model harness offline self-test
         run: python scripts/run_model_evals.py --self-test
 
+      - name: NKRЯ query replay offline self-test
+        run: python scripts/run_ruscorpora_query.py --self-test
+
       - name: Deterministic mechanical linter benchmark
         run: python scripts/benchmark_lint.py
 
