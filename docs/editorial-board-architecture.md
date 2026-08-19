@@ -2,84 +2,31 @@
 
 `humanizer_russian` has one codebase and two product modes.
 
-## 1. Compact humanizer
+## Compact
 
-Entry point: `scripts/check.py`.
+`scripts/check.py` is the cheap mechanical-first path. **Compact never invokes evidence providers**, so corpus/API availability cannot slow or break the normal skill.
 
-Purpose: cheap mechanical-first verification and a short unified verdict. It is the default for CI, quick checks and projects that do not need reviewer provenance.
+## Editorial board
 
-It consumes the same underlying rule engine but exposes only calibrated default mechanical findings unless `--extended` is requested.
+`scripts/review.py` preserves source opinions, disagreement and style policy. Evidence providers are optional and off by default.
 
-## 2. Editorial board
+## Four independent axes
 
-Entry point: `scripts/review.py`.
+1. **Source libraries** — native Russian, Gal, Ilyakhov/Sarycheva, Chukovsky, future books. They produce reviewer findings.
+2. **Evidence providers** — corpora, spoken Russian, discourse lexicons, current normative references, parsed data. They produce evidence, not votes.
+3. **Product mode** — compact or editorial board.
+4. **Editorial style** — neutral, `rslive_content`, future business/literary/social profiles.
 
-Purpose: detailed review where provenance matters. It preserves separate opinions from source libraries, detects agreement/conflict, applies a style policy and can later hand only unresolved `MODEL_ONLY` cases to a model.
+Both findings and evidence use source-neutral `phenomenon_id`, while provenance remains separate.
 
-The board does not duplicate rule implementations from compact mode.
+## Availability boundary
 
-## Three independent axes
+Normal `check.py` and normal `review.py` perform no external evidence queries. Evidence is explicit via `--evidence ...`. Provider calls are hard-timed; the whole evidence phase has a global budget; failures are skipped by default; `HUMANIZER_EVIDENCE=off` disables everything immediately.
 
-### Source libraries
+## Voting boundary
 
-Examples: native Russian, Nora Gal, Ilyakhov/Sarycheva, Chukovsky, future books or house-style corpora.
+Reviewer disagreement remains `CONSENSUS`, `MAJORITY`, `SOURCE_CONFLICT`, `SINGLE_REVIEW`, `REVIEW`, or `NO_ACTION`. Evidence is attached after grouping and does not modify reviewer verdicts or style score automatically.
 
-Each source has a manifest under `libraries/<id>/library.json`, an optional mechanical linter module, references/evals, and a reviewer profile.
+Hard constraints remain outside voting: `USER_INTENT + SEMANTICS + NORM`.
 
-### Product mode
-
-- compact;
-- editorial board.
-
-### Editorial style
-
-Examples: neutral, `rslive_content`, business, literary, social, academic.
-
-A style decides how to resolve editorial disagreement; it does not rewrite the source rules themselves.
-
-## Shared normalized finding
-
-Every source library eventually produces a finding with at least:
-
-- `rule_id`;
-- `phenomenon_id`;
-- `project_class`;
-- `automation_level`;
-- `verdict`;
-- `reviewer_id`;
-- `excerpt`/location;
-- `reason`;
-- optional `operation`.
-
-`phenomenon_id` is deliberately source-neutral. If Gal and Ilyakhov detect the same underlying phenomenon, they should use the same phenomenon id while retaining different source rule ids.
-
-## Why reviewer disagreement is preserved
-
-Editorial sources are not a single hierarchy of truth. One source may value compression while another protects rhythm, colloquiality or imagery. A source conflict is therefore an expected result, not an integration failure.
-
-Hard constraints remain outside voting:
-
-`USER_INTENT + SEMANTICS + NORM`.
-
-No style or majority vote may authorize a semantic regression or a real language error.
-
-## Adding books as libraries
-
-The long-lived branch named for the author remains the research line. It periodically merges current `main`, evolves the study, and opens PRs back to `main`.
-
-The integration target is a library contract, not a monolithic prompt:
-
-`book → audited study → rules → mechanical feasibility → source linter/tests → library manifest → reviewer → board`.
-
-Original copyrighted books should live outside this public repository (for example in a private source repository). The public repo stores derived rules, locators, tests and provenance, not book dumps.
-
-## Consumer contract
-
-External repositories should prefer stable CLIs/JSON over importing internal linters:
-
-```bash
-python scripts/check.py page.md --json
-python scripts/review.py page.md --style rslive_content --format json
-```
-
-This lets a consumer switch between compact and board mode without learning the internals of Gal/Ilyakhov/Chukovsky modules.
+See `docs/evidence-provider-architecture.md` for the evidence contract.

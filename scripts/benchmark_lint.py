@@ -18,9 +18,49 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 
-from check import check_text  # noqa: E402
+from check import check_text, compact_rows  # noqa: E402
 
 DEFAULT_CASES = ROOT / "tests" / "lint_cases.json"
+
+
+def test_compact_deduplication() -> None:
+    common = {
+        "phenomenon_id": "editing.action_hidden_in_nominalization",
+        "project_class": "EDITING",
+        "automation_level": "EXTENDED_SOFT",
+        "line": 4,
+        "excerpt": "Осуществляется проведение проверки",
+        "reason": "candidate",
+        "operation": "recover_actor_action_object",
+        "confidence": None,
+    }
+    compatible = [
+        {
+            **common,
+            "rule_id": "GAL-X",
+            "library_id": "gal",
+            "source_namespace": "GAL",
+            "reviewer_id": "gal",
+            "verdict": "REVIEW",
+        },
+        {
+            **common,
+            "rule_id": "CHUK-R17",
+            "library_id": "chukovsky",
+            "source_namespace": "CHUK",
+            "reviewer_id": "chukovsky",
+            "verdict": "REVIEW",
+        },
+    ]
+    rows = compact_rows(compatible)
+    assert len(rows) == 1, rows
+    assert rows[0]["deduplicated_sources"] == 2, rows
+    assert {item["library_id"] for item in rows[0]["provenance"]} == {"gal", "chukovsky"}, rows
+
+    conflict = [dict(compatible[0], verdict="CHANGE"), dict(compatible[1], verdict="KEEP")]
+    rows = compact_rows(conflict)
+    assert len(rows) == 2, rows
+    assert not any("deduplicated_sources" in row for row in rows), rows
 
 
 def run_case(case: dict) -> dict:
@@ -82,6 +122,7 @@ def main() -> None:
     parser.add_argument("--json", action="store_true", dest="as_json")
     args = parser.parse_args()
 
+    test_compact_deduplication()
     report = run_suite(Path(args.cases))
 
     if args.as_json:
@@ -89,7 +130,7 @@ def main() -> None:
     else:
         print(
             f"linter benchmark: {report['passed']}/{report['cases']} passed "
-            f"({report['by_mode']})"
+            f"({report['by_mode']}); compact dedupe OK"
         )
         for result in report["results"]:
             if result["ok"]:
