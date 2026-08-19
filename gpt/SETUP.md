@@ -6,53 +6,87 @@
 
 ## Описание
 
-Редактор русского текста: сохраняет смысл и норму, затем восстанавливает живую русскую связность — контекстное сжатие, отсутствие лишних повторов, естественный порядок слов и уместную разговорность — и только после этого чистит англоязычные/машинные кальки. При наличии корпуса учитывает идиолект автора.
+Русский редактор с mechanical-first проверкой: сначала дешёвые детерминированные surface checks, затем при необходимости контекстный слой нормы, живой речи и идиолекта автора.
 
 ## Instructions
 
-Скопируй целиком `gpt/INSTRUCTIONS.md` в поле Instructions.
+Скопируй `gpt/INSTRUCTIONS.md` в поле Instructions.
 
-## Knowledge
+## Runtime-файлы: минимальный набор
 
-Загрузи:
+Для обычной работы не нужно превращать Knowledge в свалку всех reference-файлов.
+
+Минимум:
 
 1. `SKILL.md`;
-2. `references/russian-language.md` — нормативный слой;
-3. `references/native-russian.md` — систематизированный живой русский;
-4. `references/native-russian-user-context.md` — исходные наблюдения носителя;
-5. `references/nora-gal.md`;
-6. `references/rule-audit.md`;
-7. `references/evidence-audit.md`;
-8. `references/author-profile.md`;
-9. `knowledge/corrections.md`;
-10. `scripts/lint.py`.
+2. `scripts/check.py`;
+3. `scripts/lint.py`.
 
-Не загружай `evals/*.json` как Knowledge: это тестовые сценарии.
+Если доступен Code Interpreter, `scripts/check.py` — первый runtime-pass.
 
-`profile_author.py` запускается отдельно для построения `profile.json`. Профиль автора — опциональный вход того же `humanizer_russian`, а не отдельный продукт.
+## Source pack: подключать по задаче
+
+Дополнительные файлы нужны не всегда:
+
+- `references/russian-language.md` — когда спорим о норме;
+- `references/native-russian.md` — когда нужен глубокий разбор естественности;
+- `references/nora-gal.md` — семантическая/литературная редактура;
+- `references/rule-audit.md` и `references/evidence-audit.md` — аудит правил;
+- `references/author-profile.md` — персонализация;
+- `knowledge/corrections.md` — работа над регрессиями.
+
+`references/native-russian-user-context.md` — исходный материал для разработки правил. Его не нужно тащить в каждый runtime-сеанс.
+
+Не загружай `evals/*.json` как Knowledge: это тесты.
+
+## Проверка проекта
+
+Deterministic regression test:
+
+```bash
+python3 scripts/benchmark_lint.py
+```
+
+Корпус: `tests/lint_cases.json`.
+
+Он не использует модель, web или reference-файлы.
+
+Полный surface linter можно проверить отдельно:
+
+```bash
+python3 scripts/lint.py --self-test
+```
+
+Author profiler:
+
+```bash
+python3 scripts/profile_author.py corpus/ -o profile.json
+```
+
+Профиль валидируется по `profiles/schema.json`.
 
 ## Возможности
 
-Для работы с локальными скриптами нужен инструмент исполнения кода. Web Search имеет смысл только когда сама задача редактуры требует проверки текущих или спорных фактов.
+Для mechanical runtime нужен инструмент исполнения кода. Web Search включай только если сама задача редактуры требует проверки текущих или спорных фактов.
 
 ## Подсказки для начала разговора
 
-1. `Отредактируй текст. Сохрани мой голос и сделай по-русски естественно.`
-2. `Проведи аудит: отдельно ошибки нормы, отдельно синтетические конструкции живой речи.`
-3. `Убери ненужные повторы, проверь тему/рему, эллипсис и порядок слов.`
-4. `Подстрой текст под мой идиолект по profile.json, но не копируй мои ошибки.`
+1. `Отредактируй текст. Сначала прогони mechanical check, потом правь только найденное и очевидные контекстные проблемы.`
+2. `Проведи глубокий аудит: mechanical + extended, но не считай warnings ошибками автоматически.`
+3. `Сделай по-русски естественно, не разворачивай контекст в полные учебниковые предложения.`
+4. `Подстрой текст под profile.json, но не копируй ошибки автора.`
 
 ## Перед публикацией конфигурации
 
 Прогони:
 
-- `gpt/TESTS.md`;
-- `evals/nora-gal.json`;
-- `evals/russian-language.json`;
+- `python3 scripts/benchmark_lint.py`;
 - `python3 scripts/lint.py --self-test`;
-- `python3 scripts/profile_author.py` на небольшом тестовом корпусе с валидацией по `profiles/schema.json`.
+- `gpt/TESTS.md`;
+- `evals/russian-language.json` и `evals/nora-gal.json` как отдельные model-evals, а не замену mechanical tests;
+- `profile_author.py` на небольшом корпусе с schema-validation.
 
-### Автоматические блокеры результата
+## Автоматические блокеры результата
 
 Не публикуй результат редактуры, если:
 
@@ -61,29 +95,8 @@
 - остался надёжный технический `ARTIFACT`;
 - модель заявляет о проверке, которой не было.
 
-### Ручная проверка естественности
-
-Это кандидаты, а не автоматические ошибки:
-
-- повтор общей части в противопоставлении;
-- повтор глагола, который можно вынести;
-- SVO-lock;
-- повтор уже известного субъекта/объекта;
-- избыточные притяжательные местоимения;
-- учебниковая полнота там, где контекст допускает эллипсис;
-- механическая парцелляция;
-- серийные question-answer punchlines;
-- непривычный порядок слов;
-- `NATIVE_WARNING`, `AI_PATTERN`, `STYLE_WARNING`, `AUTHOR_MISMATCH`.
-
-Если конструкция намеренна, уместна или подтверждена голосом автора, её можно сохранить.
+`NATIVE_WARNING`, `AI_PATTERN`, `STYLE_WARNING`, `AUTHOR_MISMATCH` — не автоматические ошибки.
 
 ## Обновление
 
-После изменений:
-
-- обнови Instructions;
-- замени Knowledge-файлы;
-- повтори evals;
-- проверь линтер и author profiler;
-- проверь, что публичное описание соответствует текущей архитектуре `humanizer_russian`.
+После изменения mechanical rule сначала добавь positive/negative regression cases в `tests/lint_cases.json`, затем меняй runtime-поведение. Reference-файл без теста не должен сам по себе превращаться в обязательное правило.
