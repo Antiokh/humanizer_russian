@@ -30,9 +30,12 @@ The book study remains under `studies/chukovsky-zhivoy-kak-zhizn/` and is the pr
 - `counterexamples.md` — boundary families;
 - `interactions.md` — rule interactions;
 - `evals.json` + `eval-map.json` — source-study preservation/compound cases;
+- `external-provenance-gap.md` — explicit open gap in reproducibility metadata for the secondary external-source registry;
 - `references/chukovsky.md` — compact operational reference for contextual use.
 
 The runtime registry deliberately does not copy that prose into every JSON row.
+
+The primary book provenance is reproducible from its fingerprint and `SRC:L…` locators. The secondary external-claims pass is intentionally weaker until `EXT-01` … `EXT-14` receive stable bibliographic/URL/section/access metadata. That gap cannot be used to promote a historical prescription into current `NORM`.
 
 ## Automation split
 
