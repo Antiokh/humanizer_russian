@@ -241,18 +241,16 @@ def lint(text: str) -> tuple[list[dict], dict]:
                 "PS-R18: clustered intensification may be substituting for evidence; one intensifier or deliberate hyperbole is normal",
             )
 
-    for m in PRESENT_TIME_RE.finditer(prose):
+    # PS-R21 was initially EXTENDED_SOFT. A 30-article / 218k-word natural-
+    # Russian calibration produced 51 hits, overwhelmingly from ordinary
+    # encyclopedic temporal coordinates. The surface phrase therefore remains
+    # measurable but no longer emits a finding.
+    present_time_hits = list(PRESENT_TIME_RE.finditer(prose))
+    present_time_without_local_contrast = 0
+    for m in present_time_hits:
         window = prose[max(0, m.start() - 120) : min(len(prose), m.end() + 160)]
-        if TEMPORAL_CONTRAST_RE.search(window):
-            continue
-        add(
-            findings,
-            text,
-            "ilyakhov: present-time wrapper",
-            m.group(0),
-            m.start(),
-            "PS-R21: check whether the present-time marker creates an actual temporal contrast or date coordinate",
-        )
+        if not TEMPORAL_CONTRAST_RE.search(window):
+            present_time_without_local_contrast += 1
 
     bureaucratic_shell_hits = 0
     for rx in BUREAUCRATIC_SHELL_PATTERNS:
@@ -336,6 +334,8 @@ def lint(text: str) -> tuple[list[dict], dict]:
         "ilyakhov_state_predicate_sentences": state_predicate_sentences,
         "ilyakhov_comma_count": comma_count,
         "ilyakhov_multi_comma_sentences_ge_3": multi_comma_sentences,
+        "ilyakhov_present_time_wrappers": len(present_time_hits),
+        "ilyakhov_present_time_wrappers_without_local_contrast": present_time_without_local_contrast,
         "ilyakhov_intensifier_clusters": intensifier_clusters,
         "ilyakhov_bureaucratic_shell_candidates": bureaucratic_shell_hits,
         "ilyakhov_generic_benefit_clusters": generic_benefit_clusters,
@@ -388,12 +388,18 @@ def self_test() -> None:
     )
     assert "ilyakhov: intensifier cluster" not in rules("Это очень важный для меня результат.")
 
-    assert "ilyakhov: present-time wrapper" in rules(
-        "В настоящее время компания выпускает три модели."
-    )
-    assert "ilyakhov: present-time wrapper" not in rules(
+    # PS-R21 is metric-only after natural-corpus calibration.
+    findings, metrics = lint("В настоящее время компания выпускает три модели.")
+    assert metrics["ilyakhov_present_time_wrappers"] == 1, metrics
+    assert metrics["ilyakhov_present_time_wrappers_without_local_contrast"] == 1, metrics
+    assert not [item for item in findings if item["rule"] == "ilyakhov: present-time wrapper"]
+
+    findings, metrics = lint(
         "Раньше выпускали одну модель, а в настоящее время выпускаем три."
     )
+    assert metrics["ilyakhov_present_time_wrappers"] == 1, metrics
+    assert metrics["ilyakhov_present_time_wrappers_without_local_contrast"] == 0, metrics
+    assert not [item for item in findings if item["rule"] == "ilyakhov: present-time wrapper"]
 
     # Do not revive the old harmful cognitive-frame/state/passive checks.
     for safe in [
