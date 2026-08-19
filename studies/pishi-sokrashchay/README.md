@@ -20,7 +20,7 @@ Independent source study performed under `docs/book-study-framework.md`.
 ## Independence
 
 Extraction was completed from the supplied source before comparison with the existing `ilyakhov` project branch.  
-Project integration is isolated in `integration.md`.
+Project integration is isolated in `integration.md` and `integration-map.md`.
 
 ## Public-source policy
 
@@ -36,4 +36,5 @@ Files:
 - `interactions.md` — rule graph;
 - `evals-*.md` — original synthetic eval suite;
 - `audit.md` — loss and overgeneralization audits;
-- `integration.md` — separate post-study mapping to `humanizer_russian`.
+- `integration.md` — separate post-study mapping to `humanizer_russian`;
+- `integration-map.md` — proposed source-study → runtime adapter, created only after the independent pass.
