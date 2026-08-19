@@ -17,7 +17,20 @@ import re
 
 WORD_RE = re.compile(r"[A-Za-zА-Яа-яЁё]+(?:-[A-Za-zА-Яа-яЁё]+)?")
 
-# CHK-R24. A surface occurrence is only a request to compare with/without
+# Stable structured identity for the accepted mechanical routes. Human-readable
+# labels remain for standalone compatibility; consumers must prefer rule_id.
+RULE_IDS = {
+    "chukovsky: metadiscourse deletion test": "CHUK-R24",
+    "chukovsky: bureaucratic-register cluster": "CHUK-R15",
+    "chukovsky: light verb + nominalization": "CHUK-R17",
+    "chukovsky: nominalization cluster": "CHUK-R17",
+    "chukovsky: modifier subtraction candidate": "CHUK-R18",
+    "chukovsky: evaluative-template cluster": "CHUK-R19",
+    "chukovsky: repeated 'question' packaging": "CHUK-R25",
+    "chukovsky: abbreviation-density candidate": "CHUK-R09",
+}
+
+# CHUK-R24. A surface occurrence is only a request to compare with/without
 # the frame. It is not an AI attribution and not an automatic deletion.
 METADISCOURSE = [
     "важно отметить",
@@ -34,7 +47,7 @@ METADISCOURSE = [
     "нельзя не признать",
 ]
 
-# CHK-R15. A single formal-looking token is insufficient. The final rule below
+# CHUK-R15. A single formal-looking token is insufficient. The final rule below
 # requires at least three hits spanning at least two marker families.
 # Generic verbs such as «проводится» and «реализуется» are intentionally absent:
 # in ordinary business/technical Russian they create too many false positives.
@@ -59,7 +72,7 @@ BUREAUCRATIC_FAMILIES = {
     ),
 }
 
-# CHK-R17. Require a finite/infinitive light verb followed by a deverbal noun.
+# CHUK-R17. Require a finite/infinitive light verb followed by a deverbal noun.
 # A bare noun such as «осуществление проекта» must not satisfy this rule.
 LIGHT_VERB_NOMINAL = re.compile(
     r"\b(?:осуществля(?:ется|ются|л(?:ся|ась|ись)?|ть)|"
@@ -81,7 +94,7 @@ NOMINAL_ENDING = re.compile(
     re.I,
 )
 
-# CHK-R18. These are deliberately A/B candidates, not a pleonasm dictionary.
+# CHUK-R18. These are deliberately A/B candidates, not a pleonasm dictionary.
 MODIFIER_CANDIDATES = [
     re.compile(r"\bимеющ\w*\s+ошиб\w*\b", re.I),
     re.compile(r"\bдостигнут\w*\s+успех\w*\b", re.I),
@@ -90,7 +103,7 @@ MODIFIER_CANDIDATES = [
     re.compile(r"\bконечн\w*\s+итог\w*\b", re.I),
 ]
 
-# CHK-R19. One occurrence is not enough: the source rule is about a repeated
+# CHUK-R19. One occurrence is not enough: the source rule is about a repeated
 # formula/discourse function, not a forbidden collocation.
 STAMP_COLLOCATIONS = [
     re.compile(r"\bярк\w*\s+(?:показ\w*|раскры\w*|отраж\w*|образ\w*)\b", re.I),
@@ -100,7 +113,7 @@ STAMP_COLLOCATIONS = [
     re.compile(r"\bважн\w*\s+роль\b", re.I),
 ]
 
-# CHK-R25. A single genuine «вопрос» can be exact. Require repetition.
+# CHUK-R25. A single genuine «вопрос» can be exact. Require repetition.
 # The small stem alternatives cover common inflection without pretending to be
 # a morphological parser.
 QUESTION_PACKAGING = re.compile(
@@ -109,7 +122,7 @@ QUESTION_PACKAGING = re.compile(
     re.I,
 )
 
-# CHK-R09. Density is only a reader-effort candidate; audience decides.
+# CHUK-R09. Density is only a reader-effort candidate; audience decides.
 ACRONYM = re.compile(
     r"(?<![A-Za-zА-Яа-яЁё])(?:[A-ZА-ЯЁ]{4,})(?![A-Za-zА-Яа-яЁё])"
 )
@@ -124,10 +137,15 @@ def _nominalizations(sentence: str) -> list[str]:
 
 
 def _add(findings: list[dict], rule: str, excerpt: str, note: str) -> None:
+    rule_id = RULE_IDS.get(rule)
+    if rule_id is None:
+        raise ValueError(f"unregistered Chukovsky mechanical rule label: {rule}")
     findings.append(
         {
             "kind": "EDITING_SUGGESTION",
             "line": 0,
+            "source": "chukovsky",
+            "rule_id": rule_id,
             "rule": rule,
             "excerpt": excerpt[:180],
             "note": note,
@@ -135,16 +153,17 @@ def _add(findings: list[dict], rule: str, excerpt: str, note: str) -> None:
     )
 
 
-def _suffix_echo(sentence: str) -> tuple[str, list[str]] | None:
-    """Return a repeated ending candidate for metrics, never a style verdict."""
+def _suffix_echo(sentence: str) -> list[tuple[str, list[str]]]:
+    """Return all repeated ending groups for metrics, never a style verdict."""
     words = [word.lower() for word in _words(sentence) if len(word) >= 7]
     groups: dict[str, list[str]] = {}
     for word in words:
         groups.setdefault(word[-4:], []).append(word)
-    for suffix, items in sorted(groups.items(), key=lambda item: (-len(item[1]), item[0])):
-        if len(items) >= 4:
-            return suffix, items
-    return None
+    return [
+        (suffix, items)
+        for suffix, items in sorted(groups.items(), key=lambda item: (-len(item[1]), item[0]))
+        if len(items) >= 4
+    ]
 
 
 def check_chukovsky(
@@ -282,9 +301,10 @@ def check_chukovsky(
     echo_sentences = 0
     echo_groups = 0
     for sentence in sents:
-        if _suffix_echo(sentence):
+        echoes = _suffix_echo(sentence)
+        if echoes:
             echo_sentences += 1
-            echo_groups += 1
+            echo_groups += len(echoes)
 
     words_total = max(1, len(_words(prose)))
     metrics = {
@@ -320,6 +340,8 @@ def self_test() -> None:
     assert "chukovsky: light verb + nominalization" in rules, findings
     assert "chukovsky: evaluative-template cluster" in rules, findings
     assert "chukovsky: modifier subtraction candidate" in rules, findings
+    assert all(item["source"] == "chukovsky" for item in findings), findings
+    assert all(item["rule_id"].startswith("CHUK-") for item in findings), findings
     assert metrics["chukovsky_metadiscourse_occurrences"] == 1, metrics
 
     text = "Осуществление проекта началось."
@@ -336,12 +358,13 @@ def self_test() -> None:
 
     text = "Проверяем наличие или отсутствие симптомов."
     findings, _ = check_chukovsky(text, _split(text))
-    assert not [item for item in findings if "collision" in item["rule"]], findings
+    assert not findings, findings
 
     text = "Проверили согласование, финансирование, планирование и тестирование."
     findings, metrics = check_chukovsky(text, _split(text))
-    assert not [item for item in findings if "echo" in item["rule"]], findings
+    assert not findings, findings
     assert metrics["chukovsky_ending_echo_sentences"] >= 1, metrics
+    assert metrics["chukovsky_ending_echo_groups"] >= metrics["chukovsky_ending_echo_sentences"], metrics
 
 
 if __name__ == "__main__":
