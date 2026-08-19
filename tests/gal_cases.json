@@ -2,6 +2,7 @@
   "version": 1,
   "cases": [
     {"id":"gal-verb-tp","text":"Команда осуществила проведение проверки сервиса.","must_find":["GAL-KANZ-VERB"],"verdict":"REVIEW"},
+    {"id":"gal-verb-shared-route","text":"Осуществляется проведение проверки сервиса.","must_find":["GAL-KANZ-VERB"],"verdict":"REVIEW","note":"shared surface route with CHUK-R17; same phenomenon_id, independent provenance"},
     {"id":"gal-verb-natural-negative","text":"Команда провела проверку сервиса.","must_not_find":["GAL-KANZ-VERB"]},
     {"id":"gal-verb-boundary","text":"Проверка сервиса заняла два часа.","must_not_find":["GAL-KANZ-VERB"]},
     {"id":"gal-verb-intentional-counterexample","text":"В юридическом шаблоне закреплена формула «осуществить проведение экспертизы».","must_find":["GAL-KANZ-VERB"],"verdict":"REVIEW","note":"surface hit is allowed, but it must stay REVIEW because the formal phrase may be intentional"},
@@ -15,6 +16,8 @@
     {"id":"gal-explicitness-natural-negative","text":"Я положил свою книгу рядом с его книгой.","must_not_find":["GAL-EXPLICITNESS"]},
     {"id":"gal-explicitness-boundary","text":"Он поднял свою руку, а затем взял её за руку.","must_not_find":["GAL-EXPLICITNESS"]},
     {"id":"gal-explicitness-intentional-counterexample","text":"В статье разбирается дословная фраза «свою руку в свой карман».","must_find":["GAL-EXPLICITNESS"],"verdict":"REVIEW"},
+
+    {"id":"gal-markup-exclusion","text":"# Заголовок\n\n```text\nКоманда осуществила проведение проверки.\nПрошу осуществить предоставление информации.\nОн положил свою руку в свой карман.\n```","must_not_find":["GAL-KANZ-VERB","GAL-KANZ-PSEUDOFORMAL","GAL-EXPLICITNESS"]},
 
     {"id":"gal-participle-metric-tp","text":"Пользователь, получивший отправленное системой уведомление, открыл форму.","metric_min":{"participle_like_tokens":2},"must_find":[]},
     {"id":"gal-participle-metric-natural-negative","text":"Пользователь открыл форму.","metric_max":{"participle_like_tokens":0}},
