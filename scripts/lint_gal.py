@@ -20,6 +20,8 @@ try:
 except ImportError:  # package/import context
     from scripts.lint import URL_OR_CODE, strip_frontmatter
 
+ROOT = Path(__file__).resolve().parents[1]
+
 SERVICE_NOMINALIZATION = re.compile(
     r"\b(?:осуществ(?:ить|ил(?:а|и)?|ляет|лять|ляют|ляется|ляются|лял(?:ся|ась|ось|ись)|ляться)|"
     r"произв(?:ести|ёл|ела|ели|одит|одить|одят))\s+"
@@ -48,6 +50,23 @@ PARTICIPLE_LIKE = re.compile(
     re.I,
 )
 MARKDOWN_NON_PROSE_LINE = re.compile(r"^\s*(#|\||[-*+]\s|\d+\.\s|>)")
+
+
+def _load_metric_rule_ids() -> list[str]:
+    """Read METRIC_ONLY rule IDs from the canonical Gal rule registry."""
+    index = json.loads((ROOT / "libraries/gal/rules.json").read_text(encoding="utf-8"))
+    rule_ids: list[str] = []
+    for relative in index["groups"]:
+        payload = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+        rule_ids.extend(
+            rule["rule_id"]
+            for rule in payload["rules"]
+            if rule["automation_level"] == "METRIC_ONLY"
+        )
+    return rule_ids
+
+
+METRIC_RULE_IDS = _load_metric_rule_ids()
 
 
 def _line(text: str, pos: int) -> int:
@@ -172,11 +191,7 @@ def review(text: str) -> dict:
         "sentence_word_median": statistics.median(lengths) if lengths else 0,
         "participle_like_tokens": len(PARTICIPLE_LIKE.findall(prose)),
         "sound_echo_adjacent_pairs": _sound_echo_pairs(words),
-        "metric_rule_ids": [
-            "GAL-KANZ-PARTICIPLE",
-            "GAL-SOUND-COLLISION",
-            "GAL-LONG-SENTENCE-CLARITY",
-        ],
+        "metric_rule_ids": METRIC_RULE_IDS,
         "metrics_are_descriptive": True,
     }
     return {"findings": findings, "metrics": metrics}
@@ -184,6 +199,12 @@ def review(text: str) -> dict:
 
 def self_test() -> None:
     """Run deterministic positive, negative, markup, metric, and line-map checks."""
+    assert set(METRIC_RULE_IDS) == {
+        "GAL-KANZ-PARTICIPLE",
+        "GAL-SOUND-COLLISION",
+        "GAL-LONG-SENTENCE-CLARITY",
+    }, METRIC_RULE_IDS
+
     result = review("Команда осуществила проведение проверки доступности сервиса.")
     assert any(x["rule_id"] == "GAL-KANZ-VERB" for x in result["findings"]), result
     result = review("Осуществляется проведение проверки доступности сервиса.")
