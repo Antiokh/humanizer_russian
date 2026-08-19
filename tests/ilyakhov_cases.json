@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "description": "Deterministic precision-first cases for the Ilyakhov/Sarycheva mechanical library. Intentional-use cases may still emit EXTENDED_SOFT REVIEW findings; they must never become automatic CHANGE unless the rule is ILY-M01.",
+  "cases": [
+    {"id":"m01-tp","text":"Было осуществлено проведение проверки.","must_find":["ILY-M01"]},
+    {"id":"m01-natural-negative","text":"Было проведено исследование условий труда.","must_not_find":["ILY-M01"]},
+    {"id":"m01-boundary","text":"Нужно осуществить переход на новый тариф до пятницы.","must_not_find":["ILY-M01"]},
+    {"id":"m01-intentional-quoted-block","text":"> В справочнике разбирается выражение осуществить проведение.","must_not_find":["ILY-M01"]},
+
+    {"id":"r09-tp","text":"Как известно, этот способ используют давно.","must_find":["ILY-R09"]},
+    {"id":"r09-natural-negative","text":"Как известно из отчёта комиссии, этот способ используют давно.","must_not_find":["ILY-R09"]},
+    {"id":"r09-boundary","text":"По данным отчёта комиссии, этот способ используют давно.","must_not_find":["ILY-R09"]},
+    {"id":"r09-intentional-quote","text":"> Как известно, это цитируемая реплика.","must_not_find":["ILY-R09"]},
+
+    {"id":"r11-tp","text":"Во-первых, цена. Во-вторых, срок. В-третьих, гарантия.","must_find":["ILY-R11"]},
+    {"id":"r11-natural-negative","text":"Во-первых, это один аргумент. Во-вторых, это второй.","must_not_find":["ILY-R11"]},
+    {"id":"r11-boundary","text":"Во-первых, проверим входные данные.","must_not_find":["ILY-R11"]},
+    {"id":"r11-intentional-algorithm","text":"Во-первых, откройте файл. Во-вторых, проверьте подпись. В-третьих, отправьте документ.","must_find":["ILY-R11"],"expect_review":["ILY-R11"]},
+
+    {"id":"r13-tp","text":"Обращаем ваше внимание на срок. Просим вас прислать файл. С уважением, отдел.","must_find":["ILY-R13"]},
+    {"id":"r13-natural-negative","text":"Пожалуйста, пришлите файл до пятницы.","must_not_find":["ILY-R13"]},
+    {"id":"r13-boundary","text":"Просим вас прислать файл. С уважением, отдел.","must_not_find":["ILY-R13"]},
+    {"id":"r13-intentional-formal","text":"Обращаем ваше внимание на пункт 4 договора. Просим вас подписать приложение. С уважением, юридический отдел.","must_find":["ILY-R13"],"expect_review":["ILY-R13"]},
+
+    {"id":"r18-tp","text":"Это абсолютно, невероятно и действительно важный результат.","must_find":["ILY-R18"]},
+    {"id":"r18-natural-negative","text":"Это очень важный для меня результат.","must_not_find":["ILY-R18"]},
+    {"id":"r18-boundary","text":"Это действительно очень важный результат.","must_not_find":["ILY-R18"]},
+    {"id":"r18-intentional-hyperbole","text":"Это абсолютно, невероятно, по-настоящему прекрасный абсурд!","must_find":["ILY-R18"],"expect_review":["ILY-R18"]},
+
+    {"id":"r22-tp","text":"В целях осуществления проекта подготовлен план работ.","must_find":["ILY-R22"]},
+    {"id":"r22-natural-negative","text":"Для проекта подготовлен план работ.","must_not_find":["ILY-R22"]},
+    {"id":"r22-boundary","text":"Решение принято в рамках закона.","must_not_find":["ILY-R22"]},
+    {"id":"r22-intentional-legal","text":"В рамках проведения процедуры уведомление направляется заявителю.","must_find":["ILY-R22"],"expect_review":["ILY-R22"]},
+
+    {"id":"r62-tp","text":"В данной статье мы рассмотрим три способа резервного копирования.","must_find":["ILY-R62"]},
+    {"id":"r62-natural-negative","text":"Статья сравнивает три способа резервного копирования.","must_not_find":["ILY-R62"]},
+    {"id":"r62-boundary","text":"В этой статье три способа резервного копирования.","must_not_find":["ILY-R62"]},
+    {"id":"r62-intentional-academic","text":"В данной статье мы рассмотрим ограничения метода и докажем теорему.","must_find":["ILY-R62"],"expect_review":["ILY-R62"]},
+
+    {"id":"r63-tp","text":"Подводя итог, можно повторить сказанное выше.","must_find":["ILY-R63"]},
+    {"id":"r63-natural-negative","text":"Итак, резервная копия готова; следующий шаг — восстановление.","must_not_find":["ILY-R63"]},
+    {"id":"r63-boundary","text":"В заключении комиссии перечислены три нарушения.","must_not_find":["ILY-R63"]},
+    {"id":"r63-intentional-formal","text":"В заключение следует указать ограничения проведённого исследования.","must_find":["ILY-R63"],"expect_review":["ILY-R63"]},
+
+    {"id":"r76-tp","text":"99% всех людей выбирают этот вариант.","must_find":["ILY-R76"]},
+    {"id":"r76-natural-negative","text":"99% испытанных образцов выдержали нагрузку.","must_not_find":["ILY-R76"]},
+    {"id":"r76-boundary","text":"90% всех участников выбрали первый вариант.","must_not_find":["ILY-R76"]},
+    {"id":"r76-intentional-sourced","text":"По данным опубликованной переписи, 99% всех пользователей выборки подтвердили настройку.","must_find":["ILY-R76"],"expect_review":["ILY-R76"]},
+
+    {"id":"r85-tp","text":"Предлагаем эффективные решения, индивидуальный подход и высокое качество.","must_find":["ILY-R85"]},
+    {"id":"r85-natural-negative","text":"Предлагаем индивидуальный подход к миграции базы.","must_not_find":["ILY-R85"]},
+    {"id":"r85-boundary","text":"Мигрируем PostgreSQL без остановки сервиса и фиксируем план отката.","must_not_find":["ILY-R85"]},
+    {"id":"r85-intentional-slogan","text":"Высокое качество и индивидуальный подход — наш слоган на выставочном стенде.","must_find":["ILY-R85"],"expect_review":["ILY-R85"]},
+
+    {"id":"r21-metric-only","text":"В настоящее время компания выпускает три модели.","must_not_find":["ILY-R21"],"metric_exact":{"ilyakhov_present_time_wrappers":1}},
+    {"id":"r48-metric-only","text":"Если договор подписан и оплата поступила после проверки реквизитов, то заказ отправим в понедельник.","must_not_find":["ILY-R48"],"metric_min":{"ilyakhov_correlative_pairs":1}},
+    {"id":"r50-metric-only","text":"Контроллер является частью системы. Модуль представляет собой адаптер.","must_not_find":["ILY-R50"],"metric_min":{"ilyakhov_state_predicate_sentences":2}},
+    {"id":"r101-metric-only","text":"Если договор подписан, реквизиты проверены, оплата поступила, склад открыт, заказ отправим сегодня.","must_not_find":["ILY-R101"],"metric_min":{"ilyakhov_multi_comma_sentences_ge_3":1}},
+
+    {"id":"native-attribution-preserved","text":"Я считаю, что решение рискованное.","clean":true},
+    {"id":"native-uncertainty-preserved","text":"Мне кажется, данных пока недостаточно.","clean":true},
+    {"id":"native-result-state-preserved","text":"Платёж отклонён банком.","clean":true},
+    {"id":"native-ellipsis-preserved","text":"Кого пригласили? Машу.","clean":true},
+    {"id":"native-functional-repeat-preserved","text":"Никогда. Никогда больше.","clean":true},
+    {"id":"markup-protected","text":"# Как известно\n\n> Как известно, это цитата.\n\n```text\nосуществить проведение\n```\n\nhttps://example.test/как-известно","clean":true}
+  ]
+}
