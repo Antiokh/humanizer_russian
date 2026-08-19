@@ -2,26 +2,50 @@
 
 This file tracks **sequential reading of the supplied EPUB**, not semantic-search coverage.
 
-Allowed terminal statuses: `READ`, `EXTRACTED`, `VERIFIED`, `NO_OPERATIONAL_CONTENT`. A section is not complete while only partially read.
+The source was read contiguously from `SRC:L1` through `SRC:L4530`. A previously truncated reader window around the middle of chapter 3 was explicitly re-read from `SRC:L840`, so the final sequence has no unlisted gap.
 
-| # | Source section | Status | Sequential coverage | Operational notes | Unresolved |
+Allowed statuses: `READ`, `EXTRACTED`, `VERIFIED`, `NO_OPERATIONAL_CONTENT`. `READ` means the entire range was read sequentially; `VERIFIED` is reserved for the later completeness audit.
+
+| # | Source section | Status | Exact source range | Operational content captured for extraction | Unavailable material |
 |---|---|---|---|---|---|
-| 0 | Front matter | READ | `SRC:L1-L47` | edition/title framing | none yet |
-| 1 | Гл. 1 «Старое и новое» | READ | contiguous read completed | language change; norm vs age/cohort; adoption; usage; ellipsis; innovation vs stability | locators to pin after full read |
-| 2 | Гл. 2 «Мнимые болезни и подлинные» | READ | contiguous read completed | semantic drift; dynamic language + stable current norm; diagnosis before prohibition; source/social bias in lexical judgments | locators to pin after full read |
-| 3 | Гл. 3 «Иноплеменные слова» | READ | contiguous read completed | borrowing by need/precision/audience/register; assimilation; anti-category judgment | locators to pin after full read |
-| 4 | Гл. 4 «Умслопогасы» | READ | contiguous read completed | abbreviation/splinter words; economy; pronounceability; uptake; official invention vs organic adoption; genre fit | locators to pin after full read |
-| 5 | Гл. 5 «Вульгаризмы» | READ | contiguous read completed | character voice vs author voice; slang as register; causes vs surface; temporary group vocabulary; expressive exceptions | claims about morality/psychology require audit |
-| 6 | Гл. 6 «Канцелярит» | UNREAD | partial only: sequential read has entered chapter and reached `SRC:L1619`; chapter not yet complete | official forms can be functional; register leakage identified | continue from L1620 |
-| 7 | Гл. 7 «Школьная словесность» | UNREAD | not yet reached sequentially | — | — |
-| 8 | Гл. 8 «Наперекор стихиям» | UNREAD | not yet reached sequentially | — | — |
-| 9 | Гл. 9 «О складе и ладе» | UNREAD | not yet reached sequentially | — | — |
-| 10 | Гл. 10 «О пользе невнимания и забвения» | UNREAD | not yet reached sequentially | — | — |
-| 11 | Приложение «Новый русский язык» | UNREAD | not yet reached sequentially | — | — |
-| 12 | «Словарь» | UNREAD | not yet reached sequentially | — | — |
+| 0 | Front matter | READ | `SRC:L1-L36` | title/edition/source framing | none |
+| 1 | Гл. 1 «Старое и новое» | READ | `SRC:L37-L439` | language change vs present norm; generational bias; adoption/usage; semantic shift; contextual ellipsis; innovation + continuity | none |
+| 2 | Гл. 2 «Мнимые болезни и подлинные» | READ | `SRC:L440-L664` | diagnosis before prohibition; multiple alleged “diseases”; social/personal bias in judgments; dynamic language but nonzero norm | none |
+| 3 | Гл. 3 «Иноплеменные слова» | READ | `SRC:L665-L1000` | borrowing by need/precision; assimilation; audience; register; context; anti-category judgments | none |
+| 4 | Гл. 4 «Умслопогасы» | READ | `SRC:L1001-L1342` | abbreviations/splinters; economy; pronounceability; uptake; organic vs bureaucratic formation; register; authorial innovation | none |
+| 5 | Гл. 5 «Вульгаризмы» | READ | `SRC:L1343-L1529` | character voice vs author voice; slang as group/register phenomenon; time-bounded vocabulary; expressive migration; cause vs surface | none |
+| 6 | Гл. 6 «Канцелярит» | READ | `SRC:L1530-L2008` | functional official style vs register leakage; prestige inflation; nominalization; redundant modifiers; semantic opacity; stock frames; sound/read-aloud diagnostics | none |
+| 7 | Гл. 7 «Школьная словесность» | READ | `SRC:L2009-L2159` | template clusters; generic judgment replacing observation; individuality vs schema; concrete vs abstract; own judgment; intonational literacy | none |
+| 8 | Гл. 8 «Наперекор стихиям» | READ | `SRC:L2160-L2275` | current norm and explicit correction; possibility/limits of deliberate normalization; collective language policy; broad cultural claims | none |
+| 9 | Гл. 9 «О складе и ладе» | READ | `SRC:L2276-L2472` | normative conservatism + change; nonliteral language; logic vs established usage; expressive redundancy; rhythm/phonetics; economy is not mere word deletion | none |
+| 10 | Гл. 10 «О пользе невнимания и забвения» | READ | `SRC:L2473-L2677` | lexicalization; semantic bleaching; idiom holism; etymology vs current meaning; deliberate idiom deformation vs accidental contamination | none |
+| 11 | Приложение «Новый русский язык» | READ | `SRC:L2678-L2758` | historical snapshot of accelerated lexical compression/change; descriptive collection over blanket condemnation | none |
+| 12 | «Словарь» | READ | `SRC:L2759-L4146` | historical prescriptive pairs; explicit professional and familiar-register caveats; mixed phenomena requiring current verification | none |
+| 13 | Примечания | READ | `SRC:L4147-L4530` | provenance for examples/claims; qualifications and later comments, including the warning that even expressive formulas can become bureaucratic templates | none |
+
+## Sequential-read log
+
+Contiguous windows used in the final pass:
+
+- `SRC:L1-L500`
+- `SRC:L501-L839` plus explicit recovery read beginning at `SRC:L840`
+- `SRC:L840-L1099`
+- `SRC:L1100-L1359`
+- `SRC:L1360-L1619`
+- `SRC:L1620-L1879`
+- `SRC:L1880-L2139`
+- `SRC:L2140-L2399`
+- `SRC:L2400-L2659`
+- `SRC:L2660-L2919`
+- `SRC:L2920-L3419`
+- `SRC:L3420-L3919`
+- `SRC:L3920-L4419`
+- `SRC:L4420-L4530`
+
+No source section is unavailable in the supplied EPUB.
 
 ## Coverage gate
 
-Current book-level status: `READ_IN_PROGRESS`.
+Book-level sequential-reading status: `READ_COMPLETE`.
 
-The study must **not** be called complete until every row above is either `VERIFIED` or explicitly `NO_OPERATIONAL_CONTENT`, and the contiguous read reaches `SRC:L4530` with no unlisted gaps.
+This is **not yet the final study-complete status**. Rows become `VERIFIED` only after concepts, atomic extraction, counterexamples, interactions, claims, eval mapping, loss audit and overgeneralization audit are finished.
