@@ -58,9 +58,28 @@ def runtime_failures() -> list[str]:
     failures: list[str] = []
     shared = "Осуществляется проведение проверки сервиса."
 
+    # Ilyakhov now owns a DEFAULT_MECHANICAL route for this shared phenomenon.
+    # Gal and Chukovsky remain EXTENDED_SOFT and therefore must not leak into
+    # the default compact row merely because the phenomenon identifier matches.
     default_rows, _ = check_text(shared, extended=False)
-    if any(row.get("phenomenon_id") == "editing.action_hidden_in_nominalization" for row in default_rows):
-        failures.append("compact default exposed an EXTENDED_SOFT Gal/Chukovsky finding")
+    default_overlap = [
+        row
+        for row in default_rows
+        if row.get("phenomenon_id") == "editing.action_hidden_in_nominalization"
+    ]
+    if len(default_overlap) != 1:
+        failures.append(
+            f"compact default expected one Ilyakhov shared-phenomenon row: {default_overlap}"
+        )
+    else:
+        row = default_overlap[0]
+        if row.get("rule_id") != "ILY-M01" or row.get("library_id") != "ilyakhov":
+            failures.append(f"compact default shared row is not ILY-M01: {row}")
+        default_provenance = row.get("provenance", [])
+        if any(item.get("library_id") in {"gal", "chukovsky"} for item in default_provenance):
+            failures.append(
+                f"EXTENDED_SOFT Gal/Chukovsky provenance leaked into default compact row: {row}"
+            )
 
     extended_rows, _ = check_text(shared, extended=True)
     overlap = [
@@ -75,17 +94,19 @@ def runtime_failures() -> list[str]:
         provenance_ids = {
             item.get("rule_id") for item in row.get("provenance", []) if item.get("rule_id")
         }
-        required = {"GAL-KANZ-VERB", "CHUK-R17"}
+        required = {"GAL-KANZ-VERB", "CHUK-R17", "ILY-M01"}
         if not required <= provenance_ids:
             failures.append(
                 f"compact shared phenomenon lost provenance: required {sorted(required)}, "
                 f"got {sorted(provenance_ids)}"
             )
-        if row.get("deduplicated_sources") != 2:
+        if row.get("deduplicated_sources") != 3:
             failures.append(
-                f"compact shared phenomenon expected 2 sources, got {row.get('deduplicated_sources')}"
+                f"compact shared phenomenon expected 3 sources, got {row.get('deduplicated_sources')}"
             )
 
+    # Board scope is explicit here: this test is about Gal/Chukovsky grouping,
+    # not about the separate Ilyakhov majority behavior covered by base tests.
     board = run_review(shared, style_id="neutral", library_ids=["gal", "chukovsky"])
     groups = [
         group
