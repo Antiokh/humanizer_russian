@@ -59,6 +59,12 @@ def test_compact_deduplication() -> None:
     assert rows[0]["deduplicated_sources"] == 2, rows
     assert {item["library_id"] for item in rows[0]["provenance"]} == {"gal", "chukovsky"}, rows
 
+    same_line = [compatible[0], dict(compatible[1], line=4)]
+    rows = compact_rows(same_line)
+    assert len(rows) == 1, rows
+    assert rows[0]["deduplicated_sources"] == 2, rows
+    assert {item["library_id"] for item in rows[0]["provenance"]} == {"gal", "chukovsky"}, rows
+
     conflict = [dict(compatible[0], verdict="CHANGE"), dict(compatible[1], verdict="KEEP")]
     rows = compact_rows(conflict)
     assert len(rows) == 2, rows
