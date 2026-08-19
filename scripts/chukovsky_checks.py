@@ -101,9 +101,11 @@ STAMP_COLLOCATIONS = [
 ]
 
 # CHK-R25. A single genuine «вопрос» can be exact. Require repetition.
+# The small stem alternatives cover common inflection without pretending to be
+# a morphological parser.
 QUESTION_PACKAGING = re.compile(
-    r"\b(?:освет\w*|увяз\w*|проработ\w*|продвин\w*|поднять\w*|"
-    r"постав\w*)\s+вопрос\w*\b",
+    r"\b(?:освет\w*|увя(?:з|ж)\w*|проработ\w*|продвин\w*|"
+    r"подн(?:им|я)\w*|постав\w*)\s+вопрос\w*\b",
     re.I,
 )
 
@@ -320,26 +322,22 @@ def self_test() -> None:
     assert "chukovsky: modifier subtraction candidate" in rules, findings
     assert metrics["chukovsky_metadiscourse_occurrences"] == 1, metrics
 
-    # Bare process noun: not a light-verb construction.
     text = "Осуществление проекта началось."
     findings, _ = check_chukovsky(text, _split(text))
     assert "chukovsky: light verb + nominalization" not in {
         item["rule"] for item in findings
     }, findings
 
-    # Ordinary project language: one procedural frame is not register leakage.
     text = "В рамках проекта проводится проверка."
     findings, _ = check_chukovsky(text, _split(text))
     assert "chukovsky: bureaucratic-register cluster" not in {
         item["rule"] for item in findings
     }, findings
 
-    # Antonymic abstract pair is not a mechanical semantic-collision verdict.
     text = "Проверяем наличие или отсутствие симптомов."
     findings, _ = check_chukovsky(text, _split(text))
     assert not [item for item in findings if "collision" in item["rule"]], findings
 
-    # Ending echo is descriptive only.
     text = "Проверили согласование, финансирование, планирование и тестирование."
     findings, metrics = check_chukovsky(text, _split(text))
     assert not [item for item in findings if "echo" in item["rule"]], findings
