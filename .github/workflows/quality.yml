@@ -1,0 +1,71 @@
+name: quality
+
+on:
+  push:
+    branches:
+      - main
+      - agent/**
+  pull_request:
+
+jobs:
+  python-and-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install validation dependency
+        run: python -m pip install --disable-pip-version-check jsonschema
+
+      - name: Compile Python
+        run: python -m compileall -q scripts
+
+      - name: Linter self-test
+        run: python scripts/lint.py --self-test
+
+      - name: Smoke-test and validate author profiler
+        run: |
+          tmpdir="$(mktemp -d)"
+          printf '%s' 'Документ без точки' > "$tmpdir/one.txt"
+          printf '%s\n' 'Новый документ начинается здесь. Ну вот, ещё фраза.' > "$tmpdir/two.txt"
+          python scripts/profile_author.py "$tmpdir" -o "$tmpdir/profile.json"
+          python - "$tmpdir/profile.json" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          from jsonschema import Draft202012Validator
+
+          profile_path = Path(sys.argv[1])
+          profile = json.loads(profile_path.read_text(encoding="utf-8"))
+          schema = json.loads(Path("profiles/schema.json").read_text(encoding="utf-8"))
+
+          Draft202012Validator.check_schema(schema)
+          Draft202012Validator(schema).validate(profile)
+
+          assert profile["version"] == 1
+          assert profile["settings"]["imitate_errors"] is False
+          assert profile["corpus"]["documents"] == 2
+          assert "files" not in profile["corpus"]
+
+          ngrams = {
+              item["text"]
+              for group in profile["lexicon"]["ngrams"].values()
+              for item in group
+          }
+          assert "точки новый" not in ngrams
+          PY
+
+      - name: Validate JSON fixtures
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          for path in sorted(Path('.').rglob('*.json')):
+              with path.open(encoding='utf-8') as f:
+                  json.load(f)
+              print(path)
+          PY
