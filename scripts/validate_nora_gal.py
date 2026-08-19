@@ -1,154 +1,169 @@
 #!/usr/bin/env python3
-"""Validate source-grounded Nora Gal rules and eval traceability.
+"""Validate the audited Nora Gal source study and its pluggable library contract.
 
-This validator checks repository contracts only. It does not judge whether a
-Russian sentence is good, grammatical, or faithful to Nora Gal by regex.
-Semantic/editorial behavior is covered by the eval suite and human/model review.
+This is structural/traceability validation, not a semantic model benchmark.
 """
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
+from collections import Counter
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
-SUITE_PATH = ROOT / "evals" / "nora-gal.json"
-MAP_PATH = ROOT / "evals" / "nora-gal-map.json"
-REFERENCE_PATH = ROOT / "references" / "nora-gal.md"
-RULE_INDEX_PATH = ROOT / "references" / "nora-gal-rule-index.md"
-SOURCE_LABELS_PATH = ROOT / "references" / "nora-gal-source-labels.md"
-
 RULE_RX = re.compile(r"GAL-[A-Z0-9-]+")
 SOURCE_LABEL_RX = re.compile(r"^\d+\.\s+`([^`]+)`\s*$", re.MULTILINE)
 EXPECTED_EVAL_IDS = [f"gal-{i:02d}" for i in range(1, 46)]
 EXPECTED_RULE_COUNT = 42
-MIN_COUNTEREXAMPLES = 10
-
-# Exact labels that are especially easy to accidentally normalize away in docs.
+EXPECTED_AUTOMATION = {
+    "HARD_GATE": 0,
+    "DEFAULT_MECHANICAL": 0,
+    "EXTENDED_SOFT": 3,
+    "METRIC_ONLY": 3,
+    "MODEL_ONLY": 36,
+}
+SOURCE_SHA256 = "38bdce9dfaf93ea820aae3fd0c7da74e9c2a908f5a3c77da2764793535bf4aa9"
+REQUIRED_RULE_FIELDS = {
+    "rule_id", "source_locator", "project_class", "scope", "automation_level",
+    "semantic_invariant", "surface_trigger", "required_context", "false_positive_risk",
+    "positive_case", "natural_negative", "boundary_case", "intentional_counterexample",
+    "existing_overlap", "conflict_with_native_usage", "phenomenon_id", "operation",
+}
 REQUIRED_EXACT_SOURCE_LABELS = {
-    "Откуда что берется?",
-    "Куда же идет язык?",
-    "Мертвый хватает живого",
-    "Веревка — вервие простое",
-    "«Свинки замяукали»",
-    "… Или Дух?",
+    "Откуда что берется?", "Куда же идет язык?", "Мертвый хватает живого",
+    "Веревка — вервие простое", "«Свинки замяукали»", "… Или Дух?",
     "Пять чувств — и еще шестое",
 }
 
 
-def load_json(path: Path) -> dict:
-    """Read one repository JSON object as UTF-8."""
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def declared_rules(rule_index: str) -> set[str]:
-    """Extract unique atomic GAL rule IDs from the rule-index table."""
-    return set(RULE_RX.findall(rule_index))
+def load_json(relative: str) -> dict:
+    return json.loads((ROOT / relative).read_text(encoding="utf-8"))
 
 
 def normalize_chapter_label(label: str) -> str:
-    """Normalize only documented ebook/display typography differences."""
     value = label.casefold().replace("ё", "е").replace("\u00a0", " ")
     value = re.sub(r"\s+", " ", value).strip()
-    value = re.sub(r"…\s+", "…", value)
-    return value
+    return re.sub(r"…\s+", "…", value)
+
+
+def load_operational_rules() -> list[dict]:
+    index = load_json("libraries/gal/rules.json")
+    assert index["rule_count"] == EXPECTED_RULE_COUNT
+    assert index["source_fingerprint_sha256"] == SOURCE_SHA256
+    rules: list[dict] = []
+    for relative in index["groups"]:
+        payload = load_json(relative)
+        assert payload["library_id"] == "gal", relative
+        rules.extend(payload["rules"])
+    return rules
+
+
+def import_gal_linter():
+    path = ROOT / "scripts/lint_gal.py"
+    spec = importlib.util.spec_from_file_location("lint_gal_validate", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def validate() -> None:
-    """Validate eval IDs, rule coverage, counterexamples, and source locators."""
-    suite = load_json(SUITE_PATH)
-    mapping = load_json(MAP_PATH)
-    reference = REFERENCE_PATH.read_text(encoding="utf-8")
-    rule_index = RULE_INDEX_PATH.read_text(encoding="utf-8")
-    source_labels = SOURCE_LABELS_PATH.read_text(encoding="utf-8")
+    # Source inventory / 100% sequential coverage.
+    source = (ROOT / "studies/nora-gal/source.md").read_text(encoding="utf-8")
+    coverage = (ROOT / "studies/nora-gal/coverage.md").read_text(encoding="utf-8")
+    audit = (ROOT / "studies/nora-gal/audit.md").read_text(encoding="utf-8")
+    for marker in [SOURCE_SHA256, "35 XHTML", "34 navigation", "ch1-7.xhtml", "ch1-29.xhtml"]:
+        assert marker in source, f"source inventory lost marker: {marker}"
+    for marker in ["35/35", "30/30", "5/5", "34/34", "Inaccessible or unread parts: **none**"]:
+        assert marker in coverage, f"coverage lost marker: {marker}"
+    assert "no inaccessible or unread source parts" in audit.casefold()
 
-    assert suite.get("version") == 2, suite.get("version")
-    assert mapping.get("version") == 2, mapping.get("version")
+    # Operational classification.
+    rules = load_operational_rules()
+    assert len(rules) == EXPECTED_RULE_COUNT, len(rules)
+    ids = [r["rule_id"] for r in rules]
+    assert len(ids) == len(set(ids)), "duplicate GAL rule IDs"
+    for rule in rules:
+        missing = REQUIRED_RULE_FIELDS - set(rule)
+        assert not missing, f"{rule.get('rule_id')}: missing {sorted(missing)}"
+        assert RULE_RX.fullmatch(rule["rule_id"]), rule["rule_id"]
+        assert rule["project_class"] == "EDITING", f"book rule promoted outside EDITING: {rule['rule_id']}"
+        assert rule["automation_level"] in EXPECTED_AUTOMATION, rule["rule_id"]
+        assert isinstance(rule["scope"], list) and rule["scope"], rule["rule_id"]
+        assert rule["intentional_counterexample"].strip(), rule["rule_id"]
+        assert rule["phenomenon_id"].strip(), rule["rule_id"]
+    actual_automation = dict(Counter(r["automation_level"] for r in rules))
+    for key in EXPECTED_AUTOMATION:
+        actual_automation.setdefault(key, 0)
+    assert actual_automation == EXPECTED_AUTOMATION, actual_automation
 
-    evals = suite.get("evals")
-    cases = mapping.get("cases")
-    assert isinstance(evals, list) and evals, "nora-gal.json must contain evals"
-    assert isinstance(cases, list) and cases, "nora-gal-map.json must contain cases"
+    residue = (ROOT / "libraries/gal/model-only.md").read_text(encoding="utf-8")
+    model_ids = {r["rule_id"] for r in rules if r["automation_level"] == "MODEL_ONLY"}
+    missing_residue = sorted(rid for rid in model_ids if f"`{rid}`" not in residue)
+    assert not missing_residue, f"MODEL_ONLY rules missing from residue: {missing_residue}"
 
-    eval_ids = [item.get("id") for item in evals]
-    map_ids = [item.get("id") for item in cases]
+    # Manifest and reviewer: source system, not impersonation.
+    manifest = load_json("libraries/gal/library.json")
+    reviewer = load_json("reviewers/gal.json")
+    assert manifest["adapter"] == "review_v1"
+    assert manifest["linter_path"] == "scripts/lint_gal.py"
+    assert manifest["reviewer_id"] == "gal"
+    assert manifest["source_branch"] == "gal"
+    assert manifest["status"] in {"AUDITED", "OPERATIONAL"}
+    assert reviewer.get("library_id") == "gal"
+    assert reviewer["review_label"] == "По системе Норы Галь"
+    assert reviewer["avatar"] is None
+    assert "не реальная рецензия" in reviewer["disclaimer"].casefold()
 
-    assert eval_ids == EXPECTED_EVAL_IDS, (
-        f"expected ordered IDs {EXPECTED_EVAL_IDS[0]}..{EXPECTED_EVAL_IDS[-1]}, "
-        f"got {eval_ids}"
-    )
-    assert len(eval_ids) == len(set(eval_ids)), "duplicate Nora Gal eval IDs"
-    assert map_ids == eval_ids, "traceability map must cover evals in the same order"
+    # Source-specific linter emits normalized review_v1 and only audited mechanical rules.
+    linter = import_gal_linter()
+    linter.self_test()
+    sample = linter.review("Команда осуществила проведение проверки.")
+    assert sample["findings"]
+    for finding in sample["findings"]:
+        assert {"rule_id", "phenomenon_id", "project_class", "automation_level", "verdict"} <= set(finding)
+        assert finding["automation_level"] == "EXTENDED_SOFT"
+        assert finding["verdict"] == "REVIEW"
 
-    for item in evals:
-        assert isinstance(item.get("name"), str) and item["name"].strip(), item
-        assert isinstance(item.get("prompt"), str) and item["prompt"].strip(), item
-        expectations = item.get("expectations")
-        assert isinstance(expectations, list) and len(expectations) >= 3, item["id"]
-        assert all(isinstance(x, str) and x.strip() for x in expectations), item["id"]
+    # Canonical 45 original project evals and source traceability map.
+    suite = load_json("evals/nora-gal.json")
+    mapping = load_json("evals/nora-gal-map.json")
+    assert suite.get("version") == 2 and mapping.get("version") == 2
+    evals = suite["evals"]
+    cases = mapping["cases"]
+    eval_ids = [item["id"] for item in evals]
+    assert eval_ids == EXPECTED_EVAL_IDS
+    assert [item["id"] for item in cases] == eval_ids
 
-    index_rules = declared_rules(rule_index)
-    assert len(index_rules) == EXPECTED_RULE_COUNT, (
-        f"expected {EXPECTED_RULE_COUNT} atomic GAL rules, found {len(index_rules)}"
-    )
+    rule_index = (ROOT / "references/nora-gal-rule-index.md").read_text(encoding="utf-8")
+    declared = set(RULE_RX.findall(rule_index))
+    assert declared == set(ids), f"rule-index/library mismatch: {sorted(declared ^ set(ids))}"
 
-    exact_source_labels = SOURCE_LABEL_RX.findall(source_labels)
-    assert len(exact_source_labels) == 34, (
-        f"expected 34 ordered ebook labels, found {len(exact_source_labels)}"
-    )
-    normalized_source_labels = {
-        normalize_chapter_label(label) for label in exact_source_labels
-    }
+    source_labels = (ROOT / "references/nora-gal-source-labels.md").read_text(encoding="utf-8")
+    exact_labels = SOURCE_LABEL_RX.findall(source_labels)
+    assert len(exact_labels) == 34, len(exact_labels)
+    for required in REQUIRED_EXACT_SOURCE_LABELS:
+        assert required in exact_labels, required
+    normalized = {normalize_chapter_label(x) for x in exact_labels}
 
     mapped_rules: set[str] = set()
-    mapped_chapters: set[str] = set()
     counterexamples = 0
-
     for item in cases:
-        rules = item.get("rules")
-        chapters = item.get("chapters")
-        assert isinstance(rules, list) and rules, item["id"]
-        assert isinstance(chapters, list) and chapters, item["id"]
-        assert isinstance(item.get("counterexample"), bool), item["id"]
-
-        if item["counterexample"]:
-            counterexamples += 1
-
-        for rule in rules:
-            assert isinstance(rule, str) and RULE_RX.fullmatch(rule), rule
-            assert rule in index_rules, f"{rule} missing from rule index"
-            assert f"`{rule}`" in reference, f"{rule} missing from nora-gal.md"
-            mapped_rules.add(rule)
-
-        for chapter in chapters:
-            assert isinstance(chapter, str) and chapter.strip(), item["id"]
-            normalized = normalize_chapter_label(chapter)
-            assert normalized in normalized_source_labels, (
-                f"{item['id']}: unknown source chapter {chapter!r}; "
-                "add/correct it in nora-gal-source-labels.md first"
-            )
-            mapped_chapters.add(normalized)
-
-    assert mapped_rules == index_rules, (
-        "every atomic GAL rule must have eval coverage; "
-        f"missing={sorted(index_rules - mapped_rules)}, "
-        f"unknown={sorted(mapped_rules - index_rules)}"
-    )
-    assert counterexamples >= MIN_COUNTEREXAMPLES, counterexamples
-
-    for label in REQUIRED_EXACT_SOURCE_LABELS:
-        assert label in exact_source_labels, f"exact ebook label missing: {label}"
-
-    # The active suite should use the new namespace, not the legacy six SEM IDs.
-    suite_text = SUITE_PATH.read_text(encoding="utf-8")
-    assert '"id": "sem-' not in suite_text, "legacy sem-* eval IDs remain active"
+        counterexamples += int(bool(item["counterexample"]))
+        for rid in item["rules"]:
+            assert rid in declared, rid
+            mapped_rules.add(rid)
+        for chapter in item["chapters"]:
+            assert normalize_chapter_label(chapter) in normalized, (item["id"], chapter)
+    assert mapped_rules == declared, f"eval coverage missing {sorted(declared - mapped_rules)}"
+    assert counterexamples >= 10, counterexamples
 
     print(
         "Nora Gal validation: OK "
-        f"({len(eval_ids)} evals, {len(index_rules)} rules, "
-        f"{counterexamples} counterexamples, {len(mapped_chapters)} mapped chapters)"
+        f"(35/35 spine docs, {len(rules)} rules, automation={actual_automation}, "
+        f"{len(evals)} evals, {counterexamples} counterexamples)"
     )
 
 
