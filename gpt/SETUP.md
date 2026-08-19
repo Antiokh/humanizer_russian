@@ -28,12 +28,15 @@
 2. `references/native-russian.md` — как из допустимых вариантов естественнее говорит носитель;
 3. `references/nora-gal.md` — атомарные литературно-семантические `GAL-*` проверки;
 4. `references/nora-gal-source-map.md` — привязка правил Галь к главам и ограничения general/contextual/translation/historical;
-5. `references/rule-audit.md` — аудит старых humanizer-правил;
-6. `references/evidence-audit.md` — уровень доказательства и границы редакторских источников;
-7. `references/author-profile.md` — author layer;
-8. `knowledge/corrections.md` — подтверждённый фидбек;
-9. `scripts/lint.py` — surface linter;
-10. `SKILL.md` — полная архитектура и workflow.
+5. `references/nora-gal-rule-index.md` — компактный индекс всех 42 `GAL-*`, source/scope и быстрый контроль provenance;
+6. `references/rule-audit.md` — аудит старых humanizer-правил;
+7. `references/evidence-audit.md` — уровень доказательства и границы редакторских источников;
+8. `references/author-profile.md` — author layer;
+9. `knowledge/corrections.md` — подтверждённый фидбек;
+10. `scripts/lint.py` — surface linter;
+11. `SKILL.md` — полная архитектура и workflow.
+
+`references/nora-gal-source-labels.md` нужен прежде всего разработчикам для воспроизводимого поиска по предоставленному EPUB; в runtime Knowledge его можно не загружать.
 
 Не загружай `evals/*.json` как Knowledge: это тесты.
 
@@ -78,7 +81,10 @@ Image generation, Apps и Actions базовому редактору не ну�
 - `gpt/TESTS.md`;
 - `evals/nora-gal.json`;
 - `evals/russian-language.json`;
-- `python3 scripts/lint.py --self-test`.
+- `python3 scripts/lint.py --self-test`;
+- `python3 scripts/validate_nora_gal.py`.
+
+`validate_nora_gal.py` проверяет структуру набора: `gal-01` — `gal-45`, карту `eval → rule → chapter`, покрытие 42/42 атомарных правил и наличие контрпримеров. Он **не** является model judge и не оценивает качество русской редакторской правки.
 
 ### Автоматические блокеры
 
