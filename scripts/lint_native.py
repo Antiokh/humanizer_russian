@@ -18,11 +18,7 @@ except ImportError:  # package/import context
 
 def lint(text: str) -> tuple[list[dict], dict]:
     findings, metrics = aggregate_lint(text)
-    findings = [
-        item
-        for item in findings
-        if not str(item.get("rule", "")).startswith("chukovsky:")
-    ]
+    findings = [item for item in findings if item.get("source") != "chukovsky"]
     metrics = {
         key: value
         for key, value in metrics.items()
@@ -33,7 +29,7 @@ def lint(text: str) -> tuple[list[dict], dict]:
 
 def self_test() -> None:
     findings, metrics = lint("Следует отметить, что резервная копия завершилась в 03:10.")
-    assert not [item for item in findings if str(item.get("rule", "")).startswith("chukovsky:")]
+    assert not [item for item in findings if item.get("source") == "chukovsky"]
     assert not [key for key in metrics if key.startswith("chukovsky_")]
 
 
