@@ -11,12 +11,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-import re
 
 try:
     from chukovsky_checks import check_chukovsky
+    from lint import prose_text, sentences
 except ImportError:  # package/import context
     from scripts.chukovsky_checks import check_chukovsky
+    from scripts.lint import prose_text, sentences
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,20 +51,21 @@ def _load_registry() -> dict[str, dict]:
 RULES = _load_registry()
 
 
-def _sentences(text: str) -> list[str]:
-    prose = re.sub(r"\s*\n+\s*", " ", text).strip()
-    if not prose:
-        return []
-    return [s.strip() for s in re.split(r"(?<=[.!?])\s+", prose) if s.strip()]
-
-
 def review(text: str) -> dict:
-    findings, metrics = check_chukovsky(text, _sentences(text))
+    # Use exactly the same Markdown/code/URL normalization as the core surface
+    # linter so compact and board cannot disagree merely because one inspected
+    # prose and the other inspected raw markup.
+    prose = prose_text(text)
+    findings, metrics = check_chukovsky(prose, sentences(text))
     normalized = []
     for item in findings:
         detector_label = item["rule"]
-        rule_id = DETECTOR_RULE_IDS[detector_label]
-        rule = RULES[rule_id]
+        rule_id = DETECTOR_RULE_IDS.get(detector_label)
+        if rule_id is None:
+            raise ValueError(f"unmapped Chukovsky detector label: {detector_label}")
+        rule = RULES.get(rule_id)
+        if rule is None:
+            raise ValueError(f"Chukovsky detector references missing registry rule: {rule_id}")
         operation = OPERATION_OVERRIDES.get(detector_label, rule.get("operation"))
         normalized.append(
             {
@@ -98,6 +100,18 @@ def self_test() -> None:
         item["phenomenon_id"] == RULES[item["rule_id"]]["phenomenon_id"]
         for item in result["findings"]
     )
+
+    # Code fences/headings/URLs are not prose candidates in either runtime.
+    markup = """# Заголовок
+
+```text
+Следует отметить, что в рамках данного документа осуществляется обеспечение качества.
+```
+
+Ссылка: https://example.test/Следует-отметить
+"""
+    result = review(markup)
+    assert not result["findings"], result
 
 
 if __name__ == "__main__":
