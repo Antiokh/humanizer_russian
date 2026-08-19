@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RULE_RX = re.compile(r"GAL-[A-Z0-9-]+")
 SOURCE_LABEL_RX = re.compile(r"^\d+\.\s+`([^`]+)`\s*$", re.MULTILINE)
 EXPECTED_EVAL_IDS = [f"gal-{i:02d}" for i in range(1, 46)]
+EXPECTED_CLAIM_IDS = [f"GAL-CLAIM-{i:02d}" for i in range(1, 16)]
 EXPECTED_RULE_COUNT = 42
 EXPECTED_AUTOMATION = {
     "HARD_GATE": 0,
@@ -58,6 +59,20 @@ REQUIRED_EXACT_SOURCE_LABELS = {
     "«Свинки замяукали»",
     "… Или Дух?",
     "Пять чувств — и еще шестое",
+}
+EXTERNAL_EVIDENCE_PATH = "studies/nora-gal/external-evidence-2026.md"
+EXTERNAL_EVIDENCE_MARKERS = {
+    "https://ruscorpora.ru/page/corpora-structure/",
+    "https://rusgram.ru/new/chapter/clauseintro/information_structure/",
+    "https://rusgram.ru/new/chapter/verbpar/converb/",
+    "https://gramota.ru/biblioteka/spravochniki/ofitsialno-o-russkom-yazyke/normativnye-slovari",
+    "https://aclanthology.org/2023.wmt-1.41/",
+    "https://aclanthology.org/2025.naacl-long.548/",
+    "https://pubmed.ncbi.nlm.nih.gov/22716950/",
+    "https://pubmed.ncbi.nlm.nih.gov/33521953/",
+    "TESTABLE_NOT_YET_MEASURED",
+    "OBSOLETE_AS_ABSOLUTE",
+    "NOT_ESTABLISHED_CAUSALLY",
 }
 
 
@@ -114,6 +129,8 @@ def validate() -> None:
     coverage = (ROOT / "studies/nora-gal/coverage.md").read_text(encoding="utf-8")
     audit = (ROOT / "studies/nora-gal/audit.md").read_text(encoding="utf-8")
     integration = (ROOT / "studies/nora-gal/integration-matrix.md").read_text(encoding="utf-8")
+    claims = (ROOT / "studies/nora-gal/claims.md").read_text(encoding="utf-8")
+    external_evidence = (ROOT / EXTERNAL_EVIDENCE_PATH).read_text(encoding="utf-8")
     for marker in [SOURCE_SHA256, "35 XHTML", "34 navigation", "ch1-7.xhtml", "ch1-29.xhtml"]:
         check(marker in source, f"source inventory lost marker: {marker}")
     for marker in ["35/35", "30/30", "5/5", "34/34", "Inaccessible or unread parts: **none**"]:
@@ -121,6 +138,20 @@ def validate() -> None:
     check("no inaccessible or unread source parts" in audit.casefold(), "audit lost no-inaccessible-parts conclusion")
     for marker in ["42", "HARD_GATE", "DEFAULT_MECHANICAL", "EXTENDED_SOFT", "MODEL_ONLY"]:
         check(marker in integration, f"integration matrix lost marker: {marker}")
+
+    # Historical claims must remain source-facing, while the 2026 evidence pass
+    # covers every claim and explicitly preserves the no-result boundary for
+    # corpus work that has not been performed.
+    for claim_id in EXPECTED_CLAIM_IDS:
+        check(f"`{claim_id}`" in claims, f"claims audit missing {claim_id}")
+        check(f"`{claim_id}`" in external_evidence, f"external evidence audit missing {claim_id}")
+    for marker in EXTERNAL_EVIDENCE_MARKERS:
+        check(marker in external_evidence, f"external evidence audit lost marker: {marker}")
+    for empirical_claim in ["GAL-CLAIM-01", "GAL-CLAIM-03", "GAL-CLAIM-14"]:
+        check(
+            empirical_claim in external_evidence and "NOT_YET_MEASURED" in external_evidence,
+            f"external evidence must retain unmeasured boundary for {empirical_claim}",
+        )
 
     # Operational classification.
     rules = load_operational_rules()
@@ -166,6 +197,7 @@ def validate() -> None:
     check(manifest.get("rules_path") == "libraries/gal/rules.json", "manifest rules_path")
     check(manifest.get("model_only_reference") == "libraries/gal/model-only.md", "manifest model_only_reference")
     check("studies/nora-gal/integration-matrix.md" in manifest.get("references", []), "manifest integration reference")
+    check(EXTERNAL_EVIDENCE_PATH in manifest.get("references", []), "manifest external evidence reference")
     check(reviewer.get("library_id") == "gal", "reviewer library_id")
     check(reviewer.get("review_label") == "По системе Норы Галь", "reviewer label")
     check(reviewer.get("avatar") is None, "reviewer avatar must remain null")
@@ -243,6 +275,7 @@ def validate() -> None:
         "Nora Gal validation: OK "
         f"(35/35 spine docs, {len(rules)} rules, automation={actual_automation}, "
         f"{len(evals)} evals, {counterexamples} counterexamples, "
+        f"{len(EXPECTED_CLAIM_IDS)} externally audited claims, "
         f"shared phenomena={len(EXPECTED_SHARED_PHENOMENA)})"
     )
 

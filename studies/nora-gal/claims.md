@@ -2,6 +2,8 @@
 
 This file records source claims that must not silently become runtime rules. Where contemporary verification would be needed, the study says so instead of filling the gap from general knowledge.
 
+The source classifications below are intentionally historical/source-facing. The separate modern evidence pass is `studies/nora-gal/external-evidence-2026.md`; it may narrow or mark a claim testable/obsolete without rewriting what the book itself says.
+
 | ID | Source locator | Claim / source position | Classification | Verification status | Runtime consequence |
 |---|---|---|---|---|---|
 | `GAL-CLAIM-01` | «Откуда что берется?» | Канцелярит широко распространяется из официальной речи в журналистику, быт и другие регистры. | historical/empirical + rhetorical | `NEEDS_HISTORICAL_CORPUS_IF_ASSERTED` | We can diagnose a concrete chancery construction without asserting prevalence. |
@@ -19,6 +21,30 @@ This file records source claims that must not silently become runtime rules. Whe
 | `GAL-CLAIM-13` | «Предки Адама» | A translator/editor must consult reference sources when a factual/cultural detail is doubtful. | professional method | `SOURCE_DIRECT` | Becomes a verification workflow, not proof that a suspicious phrase is wrong. |
 | `GAL-CLAIM-14` | «Мертвый хватает живого», «Куда же идет язык?» | The book contains broad judgments about vocabulary impoverishment and the direction of contemporary language. | historical sociolinguistic judgment | `NEEDS_PERIOD_CORPUS_AND_MODERN_COMPARISON` | Keep out of universal current-language rules. |
 | `GAL-CLAIM-15` | «Пять чувств — и еще шестое» | «Truth/humanity/tact» are treated as an essential extra faculty of a writer/editor. | normative-aesthetic meta claim | `SOURCE_VALUE` | Treat as a limit on mechanical certainty, not as a machine-detectable property. |
+
+## 2026 external-evidence disposition
+
+The current external review does **not** overwrite the source-status column above. Its disposition is:
+
+| Claim | 2026 disposition |
+|---|---|
+| `GAL-CLAIM-01` | `TESTABLE_NOT_YET_MEASURED` |
+| `GAL-CLAIM-02` | `REFINED_BY_CURRENT_USAGE/NORM` |
+| `GAL-CLAIM-03` | `REFINED_BY_CURRENT_LINGUISTICS` + `TESTABLE_NOT_YET_MEASURED` |
+| `GAL-CLAIM-04` | `REFINED_BY_CURRENT_LINGUISTICS` |
+| `GAL-CLAIM-05` | `NOT_ESTABLISHED_CAUSALLY` |
+| `GAL-CLAIM-06` | `OBSOLETE_AS_ABSOLUTE` |
+| `GAL-CLAIM-07` | `VALUE_JUDGMENT` |
+| `GAL-CLAIM-08` | `SUPPORTED_NARROWLY` |
+| `GAL-CLAIM-09` | `SOURCE_METHOD` |
+| `GAL-CLAIM-10` | `SOURCE_METHOD` |
+| `GAL-CLAIM-11` | `SUPPORTED_NARROWLY` |
+| `GAL-CLAIM-12` | `SUPPORTED_NARROWLY` |
+| `GAL-CLAIM-13` | `SOURCE_METHOD` |
+| `GAL-CLAIM-14` | `TESTABLE_NOT_YET_MEASURED` |
+| `GAL-CLAIM-15` | `VALUE_JUDGMENT` |
+
+See `studies/nora-gal/external-evidence-2026.md` for evidence, limits and URLs. In particular, **the corpus-dependent claims 01/03/14 have not been measured by this project yet**; availability of NKRЯ makes them testable but is not itself a result.
 
 ## Claims deliberately not upgraded to NORM
 
