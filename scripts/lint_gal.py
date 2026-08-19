@@ -15,8 +15,13 @@ import statistics
 import sys
 from pathlib import Path
 
+try:
+    from lint import prose_text
+except ImportError:  # package/import context
+    from scripts.lint import prose_text
+
 SERVICE_NOMINALIZATION = re.compile(
-    r"\b(?:осуществ(?:ить|ил(?:а|и)?|ляет|лять|ляют)|"
+    r"\b(?:осуществ(?:ить|ил(?:а|и)?|ляет|лять|ляют|ляется|ляются|лял(?:ся|ась|ось|ись)|ляться)|"
     r"произв(?:ести|ёл|ела|ели|одит|одить|одят))\s+"
     r"(?:проведени(?:е|я)|предоставлени(?:е|я)|выполнени(?:е|я)|"
     r"фиксаци(?:ю|и)|регистраци(?:ю|и))\b",
@@ -64,8 +69,7 @@ def _finding(*, rule_id: str, phenomenon_id: str, excerpt: str, line: int, reaso
 
 
 def _sentences(text: str) -> list[str]:
-    clean = re.sub(r"```.*?```|`[^`\n]+`|https?://\S+", " ", text, flags=re.S)
-    return [x.strip() for x in re.split(r"(?<=[.!?])\s+", clean) if x.strip()]
+    return [x.strip() for x in re.split(r"(?<=[.!?])\s+", text) if x.strip()]
 
 
 def _sound_echo_pairs(words: list[str]) -> int:
@@ -82,49 +86,50 @@ def _sound_echo_pairs(words: list[str]) -> int:
 def review(text: str) -> dict:
     """Return normalized review_v1 findings plus non-normative metrics."""
     findings: list[dict] = []
+    prose = prose_text(text)
 
-    for match in SERVICE_NOMINALIZATION.finditer(text):
+    for match in SERVICE_NOMINALIZATION.finditer(prose):
         findings.append(_finding(
             rule_id="GAL-KANZ-VERB",
             phenomenon_id="editing.action_hidden_in_nominalization",
             excerpt=match.group(0),
-            line=_line(text, match.start()),
+            line=_line(prose, match.start()),
             reason=("По системе Норы Галь это кандидат на проверку: действие может быть спрятано "
                     "в служебном глаголе и отглагольном существительном. Не менять механически "
                     "в юридическом/терминологическом контексте."),
             operation="compare_direct_finite_verb",
         ))
 
-    for match in PSEUDOFORMAL_SHELL.finditer(text):
+    for match in PSEUDOFORMAL_SHELL.finditer(prose):
         findings.append(_finding(
             rule_id="GAL-KANZ-PSEUDOFORMAL",
             phenomenon_id="editing.register_pseudoformality",
             excerpt=match.group(0),
-            line=_line(text, match.start()),
+            line=_line(prose, match.start()),
             reason="Узкая многословная служебная оболочка: проверить, нужна ли такая степень официальности адресату и жанру.",
             operation="replace_service_shell_with_direct_action",
         ))
 
-    for match in REDUNDANT_POSSESSIVE_BODY.finditer(text):
+    for match in REDUNDANT_POSSESSIVE_BODY.finditer(prose):
         findings.append(_finding(
             rule_id="GAL-EXPLICITNESS",
             phenomenon_id="editing.excessive_explicitness",
             excerpt=match.group(0),
-            line=_line(text, match.start()),
+            line=_line(prose, match.start()),
             reason=("Surface-кандидат на лишнюю эксплицитность. Удалять только если владение и "
                     "референты однозначно восстанавливаются; функциональный повтор сохранять."),
             operation="remove_only_recoverable_explicit_material",
         ))
 
-    sentences = _sentences(text)
+    sentences = _sentences(prose)
     lengths = [len(WORD.findall(s)) for s in sentences]
-    words = [w.lower() for w in WORD.findall(text)]
+    words = [w.lower() for w in WORD.findall(prose)]
     metrics = {
         "sentences": len(sentences),
         "sentence_word_counts": lengths,
         "sentence_word_max": max(lengths, default=0),
         "sentence_word_median": statistics.median(lengths) if lengths else 0,
-        "participle_like_tokens": len(PARTICIPLE_LIKE.findall(text)),
+        "participle_like_tokens": len(PARTICIPLE_LIKE.findall(prose)),
         "sound_echo_adjacent_pairs": _sound_echo_pairs(words),
         "metric_rule_ids": ["GAL-KANZ-PARTICIPLE", "GAL-SOUND-COLLISION", "GAL-LONG-SENTENCE-CLARITY"],
         "metrics_are_descriptive": True,
@@ -134,6 +139,8 @@ def review(text: str) -> dict:
 
 def self_test() -> None:
     result = review("Команда осуществила проведение проверки доступности сервиса.")
+    assert any(x["rule_id"] == "GAL-KANZ-VERB" for x in result["findings"]), result
+    result = review("Осуществляется проведение проверки доступности сервиса.")
     assert any(x["rule_id"] == "GAL-KANZ-VERB" for x in result["findings"]), result
     result = review("Команда провела проверку доступности сервиса.")
     assert not any(x["rule_id"] == "GAL-KANZ-VERB" for x in result["findings"]), result
@@ -147,6 +154,17 @@ def self_test() -> None:
     assert any(x["rule_id"] == "GAL-EXPLICITNESS" for x in result["findings"]), result
     result = review("Я положил свою книгу рядом с его книгой.")
     assert not any(x["rule_id"] == "GAL-EXPLICITNESS" for x in result["findings"]), result
+
+    markup = """# Заголовок
+
+```text
+Команда осуществила проведение проверки доступности сервиса.
+Прошу осуществить предоставление информации о задаче.
+Он положил свою руку в свой карман.
+```
+"""
+    result = review(markup)
+    assert not result["findings"], result
 
     result = review("Документ, подписанный директором, отправили утром.")
     assert result["metrics"]["participle_like_tokens"] >= 1, result
