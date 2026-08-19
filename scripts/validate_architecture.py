@@ -3,10 +3,14 @@
 
 This validator is intentionally small. It does not freeze implementation details;
 it protects only the invariants that future source-layer integrations must retain.
+When a source integration validator is installed, the architecture gate runs it
+as an additional contract rather than silently trusting the source branch.
 """
 
 from __future__ import annotations
 
+import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,6 +59,27 @@ def require(condition: bool, message: str, failures: list[str]) -> None:
         failures.append(message)
 
 
+def run_source_integration_validators(failures: list[str]) -> None:
+    """Run installed source validators without hard-coding a particular author."""
+    scripts = ROOT / "scripts"
+    validators = sorted(scripts.glob("validate_*_integration.py"))
+    for path in validators:
+        proc = subprocess.run(
+            [sys.executable, str(path)],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if proc.returncode:
+            detail = (proc.stdout + "\n" + proc.stderr).strip()
+            failures.append(f"source integration validator failed: {path.name}: {detail}")
+        else:
+            output = proc.stdout.strip()
+            if output:
+                print(output)
+
+
 def main() -> None:
     failures: list[str] = []
 
@@ -81,6 +106,8 @@ def main() -> None:
             "CONTRIBUTING.md reintroduced deprecated project name humanizer+ru",
             failures,
         )
+
+        run_source_integration_validators(failures)
 
     if failures:
         print("ARCHITECTURE CONTRACT FAILED")
