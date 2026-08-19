@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Mechanical-first checker for humanizer_russian.
+"""Compact mechanical-first checker for humanizer_russian.
 
-Default mode intentionally exposes only deterministic/high-precision surface
-checks. The full heuristic linter remains available through --extended.
+The compact product consumes all enabled knowledge libraries but only exposes
+HARD_GATE / DEFAULT_MECHANICAL findings by default. Lower-confidence mechanical
+heuristics are available through --extended.
 
-The point is to make the normal workflow a cheap check, not a model-vs-context
-prompt battle. Contextual interpretation is reserved for cases the mechanical
-layer cannot settle.
+The point is to keep quick checks cheap and unified while sharing the same
+source libraries with editorial-board mode.
 """
 
 from __future__ import annotations
@@ -16,10 +16,11 @@ import json
 import sys
 from pathlib import Path
 
-from lint import lint
+from library_runtime import compact_shape, run_libraries
 
-# Findings from lint.py that are useful enough to show in the default,
-# mechanical-first pass. ARTIFACT is always included by kind.
+# Retained as an explicit architectural marker and for compatibility with
+# existing deterministic tests. New review_v1 libraries declare automation
+# level directly in their normalized findings.
 MECHANICAL_RULES = {
     "repeated common element in contrast",
     "parcellated enumeration",
@@ -27,31 +28,29 @@ MECHANICAL_RULES = {
 }
 
 
-def select_findings(findings: list[dict], extended: bool = False) -> list[dict]:
+def select_normalized(findings: list[dict], extended: bool = False) -> list[dict]:
     if extended:
-        return findings
+        return [item for item in findings if item.get("automation_level") != "MODEL_ONLY"]
     return [
         item
         for item in findings
-        if item["kind"] == "ARTIFACT" or item["rule"] in MECHANICAL_RULES
+        if item.get("automation_level") in {"HARD_GATE", "DEFAULT_MECHANICAL"}
     ]
 
 
 def check_text(text: str, extended: bool = False) -> tuple[list[dict], dict]:
-    findings, metrics = lint(text)
-    selected = select_findings(findings, extended=extended)
-    return selected, metrics
+    normalized, metrics = run_libraries(text)
+    selected = select_normalized(normalized, extended=extended)
+    return [compact_shape(item) for item in selected], metrics
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Mechanical-first checker for humanizer_russian"
-    )
+    parser = argparse.ArgumentParser(description="Compact mechanical-first checker for humanizer_russian")
     parser.add_argument("file", nargs="?")
     parser.add_argument(
         "--extended",
         action="store_true",
-        help="include lower-confidence contextual/AI/style heuristics",
+        help="include lower-confidence mechanical/style/AI heuristics from enabled libraries",
     )
     parser.add_argument("--json", action="store_true", dest="as_json")
     parser.add_argument(
@@ -82,10 +81,11 @@ def main() -> None:
         for item in findings:
             loc = f":{item['line']}" if item["line"] else ""
             note = f" — {item['note']}" if item["note"] else ""
-            print(f"{item['kind']}{loc} [{item['rule']}]: {item['excerpt']}{note}")
+            source = f" · {item['library_id']}" if item.get("library_id") else ""
+            print(f"{item['kind']}{loc} [{item['rule']}]{source}: {item['excerpt']}{note}")
         print(json.dumps(metrics, ensure_ascii=False))
 
-    if any(item["kind"] == "ARTIFACT" for item in findings):
+    if any(item["kind"] in {"ARTIFACT", "LANGUAGE_ERROR"} for item in findings):
         raise SystemExit(1)
     if args.fail_on_findings and findings:
         raise SystemExit(2)

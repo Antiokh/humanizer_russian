@@ -1,0 +1,92 @@
+[
+  {
+    "id": "native_redundant_contrast",
+    "type": "runtime",
+    "text": "Это не ошибка в расчёте, а ошибка в исходных данных.",
+    "expect_phenomena": ["native.redundant_shared_material"],
+    "expect_guardrails": 0
+  },
+  {
+    "id": "native_compressed_clean",
+    "type": "runtime",
+    "text": "Это ошибка не в расчёте, а в исходных данных.",
+    "must_not_have_phenomena": ["native.redundant_shared_material"],
+    "expect_guardrails": 0
+  },
+  {
+    "id": "artifact_is_guardrail",
+    "type": "runtime",
+    "text": "Черновик с oaicite внутри.",
+    "expect_guardrails_min": 1
+  },
+  {
+    "id": "intentional_repeat_not_contrast",
+    "type": "runtime",
+    "text": "Никогда. Никогда больше.",
+    "must_not_have_phenomena": ["native.redundant_shared_material"]
+  },
+  {
+    "id": "two_reviewers_consensus",
+    "type": "board_unit",
+    "findings": [
+      {
+        "rule_id": "GAL-1",
+        "phenomenon_id": "editing.action_hidden_in_nominalization",
+        "library_id": "gal",
+        "source_namespace": "GAL",
+        "reviewer_id": "gal",
+        "project_class": "EDITING",
+        "automation_level": "EXTENDED_SOFT",
+        "verdict": "CHANGE",
+        "excerpt": "В целях осуществления проверки",
+        "reason": "канцелярская оболочка"
+      },
+      {
+        "rule_id": "ILY-1",
+        "phenomenon_id": "editing.action_hidden_in_nominalization",
+        "library_id": "ilyakhov",
+        "source_namespace": "ILY",
+        "reviewer_id": "ilyakhov",
+        "project_class": "EDITING",
+        "automation_level": "EXTENDED_SOFT",
+        "verdict": "CHANGE",
+        "excerpt": "В целях осуществления проверки",
+        "reason": "действие спрятано в существительном"
+      }
+    ],
+    "expect_status": "CONSENSUS",
+    "expect_recommendation": "CHANGE"
+  },
+  {
+    "id": "source_conflict_is_preserved",
+    "type": "board_unit",
+    "findings": [
+      {
+        "rule_id": "GAL-2",
+        "phenomenon_id": "style.intentional_imagery",
+        "library_id": "gal",
+        "source_namespace": "GAL",
+        "reviewer_id": "gal",
+        "project_class": "EDITING",
+        "automation_level": "MODEL_ONLY",
+        "verdict": "KEEP",
+        "excerpt": "образная фраза",
+        "reason": "образ работает"
+      },
+      {
+        "rule_id": "ILY-2",
+        "phenomenon_id": "style.intentional_imagery",
+        "library_id": "ilyakhov",
+        "source_namespace": "ILY",
+        "reviewer_id": "ilyakhov",
+        "project_class": "EDITING",
+        "automation_level": "MODEL_ONLY",
+        "verdict": "CHANGE",
+        "excerpt": "образная фраза",
+        "reason": "образ не помогает задаче"
+      }
+    ],
+    "expect_status": "SOURCE_CONFLICT",
+    "expect_recommendation": "SHOW_ALTERNATIVES"
+  }
+]

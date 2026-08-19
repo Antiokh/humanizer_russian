@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "native",
+  "display_name": "Живой русский / core",
+  "source_namespace": "NATIVE",
+  "source_type": "project_core",
+  "source_branch": "main",
+  "reviewer_id": "native",
+  "adapter": "legacy_lint_v1",
+  "linter_path": "scripts/lint.py",
+  "enabled_by_default": true,
+  "status": "OPERATIONAL",
+  "references": [
+    "references/native-russian.md",
+    "references/russian-language.md"
+  ],
+  "notes": "Temporary adapter for the existing core linter. New book layers should prefer review_v1."
+}

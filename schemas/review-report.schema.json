@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "review-report.schema.json",
+  "type": "object",
+  "required": ["schema_version", "mode", "style", "reviewers", "findings", "metrics", "board"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "mode": {"const": "editorial_board"},
+    "style": {"type": "object", "required": ["id", "display_name"]},
+    "reviewers": {"type": "object"},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "phenomenon_id", "library_id", "project_class", "automation_level", "verdict"]
+      }
+    },
+    "metrics": {"type": "object"},
+    "board": {
+      "type": "object",
+      "required": ["guardrails", "groups", "summary"],
+      "properties": {
+        "guardrails": {"type": "array"},
+        "groups": {"type": "array"},
+        "summary": {"type": "object"}
+      }
+    }
+  },
+  "additionalProperties": true
+}
