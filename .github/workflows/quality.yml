@@ -65,6 +65,9 @@ jobs:
       - name: Nora Gal normalized adapter self-test
         run: python scripts/lint_gal.py --self-test
 
+      - name: Nora Gal live-model harness offline self-test
+        run: python scripts/run_model_evals.py --self-test
+
       - name: Deterministic mechanical linter benchmark
         run: python scripts/benchmark_lint.py
 
