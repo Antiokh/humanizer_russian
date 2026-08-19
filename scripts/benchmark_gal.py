@@ -73,7 +73,9 @@ def runtime_failures() -> list[str]:
         )
     else:
         row = default_overlap[0]
-        if row.get("rule_id") != "ILY-M01" or row.get("library_id") != "ilyakhov":
+        # compact_shape exposes canonical source rule_id as the public `rule`
+        # field; provenance entries retain their own `rule_id` keys.
+        if row.get("rule") != "ILY-M01" or row.get("library_id") != "ilyakhov":
             failures.append(f"compact default shared row is not ILY-M01: {row}")
         default_provenance = row.get("provenance", [])
         if any(item.get("library_id") in {"gal", "chukovsky"} for item in default_provenance):
