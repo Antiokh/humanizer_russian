@@ -14,12 +14,24 @@ from pathlib import Path
 from typing import Any
 
 from editorial_board import build_board
-from library_runtime import load_style, reviewer_profiles, run_libraries
+from library_runtime import library_manifests, load_style, reviewer_profiles, run_libraries
+
+
+def default_libraries_for_style(style: dict[str, Any]) -> list[str]:
+    """Select existing enabled libraries whose reviewer is enabled by the style."""
+    allowed_reviewers = set(style.get("default_reviewers", []))
+    selected: list[str] = []
+    for manifest in library_manifests():
+        reviewer_id = manifest.get("reviewer_id")
+        if reviewer_id is None or reviewer_id in allowed_reviewers:
+            selected.append(manifest["id"])
+    return selected
 
 
 def run_review(text: str, style_id: str = "neutral", library_ids: list[str] | None = None) -> dict[str, Any]:
     style = load_style(style_id)
-    findings, metrics = run_libraries(text, library_ids=library_ids)
+    selected_libraries = library_ids if library_ids is not None else default_libraries_for_style(style)
+    findings, metrics = run_libraries(text, library_ids=selected_libraries)
     board = build_board(findings, style)
     profiles = reviewer_profiles()
     used = sorted({f["reviewer_id"] for f in findings if f.get("reviewer_id")})
@@ -27,7 +39,7 @@ def run_review(text: str, style_id: str = "neutral", library_ids: list[str] | No
         "schema_version": 1,
         "mode": "editorial_board",
         "style": style,
-        "libraries": library_ids or "default",
+        "libraries": selected_libraries,
         "reviewers": {key: profiles.get(key, {"id": key, "display_name": key}) for key in used},
         "findings": findings,
         "metrics": metrics,
@@ -62,12 +74,12 @@ def render_markdown(report: dict[str, Any]) -> str:
             by_reviewer.setdefault(finding["reviewer_id"], []).append(finding)
         for reviewer_id, findings in by_reviewer.items():
             profile = report["reviewers"].get(reviewer_id, {})
-            name = profile.get("display_name", reviewer_id)
+            label = profile.get("review_label") or profile.get("display_name", reviewer_id)
             verdict = group["reviewer_verdicts"][reviewer_id]
-            lines.append(f"- **{name}: {verdict}**")
+            lines.append(f"- **{label}: {verdict}**")
             for finding in findings:
                 reason = finding.get("reason") or finding["rule_id"]
-                lines.append(f"  - {reason}")
+                lines.append(f"  - `{finding['rule_id']}` — {reason}")
         lines.append("")
 
     if not guardrails and not report["board"]["groups"]:
@@ -83,7 +95,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Editorial-board review for humanizer_russian")
     parser.add_argument("file", nargs="?")
     parser.add_argument("--style", default="neutral")
-    parser.add_argument("--libraries", help="comma-separated library ids; default = enabled libraries")
+    parser.add_argument("--libraries", help="comma-separated library ids; default = libraries enabled by the selected style")
     parser.add_argument("--format", choices=["json", "markdown"], default="markdown")
     args = parser.parse_args()
 
