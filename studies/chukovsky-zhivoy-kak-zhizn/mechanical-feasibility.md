@@ -37,7 +37,7 @@ A cheap signal is accepted only when it can surface a useful candidate without p
 | R20 | cliché dictionary | MODEL_ONLY | cliché does not mechanically establish sincerity/insincerity |
 | R21 | generic evaluative lexicon | MODEL_ONLY | recovery of source-supported proposition requires source/input semantics; mechanical rewrite risks invented specificity |
 | R22 | token endings / repetition statistics | METRIC_ONLY | read-aloud quality is contextual; emit descriptive echo metrics only, never a verdict/finding |
-| R23 | morphology/dependency parser | MODEL_ONLY now | dependency tooling could later surface alternative attachments; regex case counts explicitly rejected |
+| R23 | morphology/dependency parser | MODEL_ONLY | dependency tooling could later surface alternative attachments; regex case counts explicitly rejected |
 | R24 | exact announcing-frame phrase list | EXTENDED_SOFT | cheap candidate for with/without A/B; preserve warning hierarchy, modality, navigation, contrast |
 | R25 | procedural-verb + `вопрос` regex + repetition threshold | EXTENDED_SOFT | repeated shell can be surfaced; a genuine issue/topic/question remains valid |
 | R26 | sentence-template statistics | MODEL_ONLY | similar skeleton may be deliberate comparison; subject individuality requires semantic evidence |
