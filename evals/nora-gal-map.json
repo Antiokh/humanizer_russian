@@ -1,7 +1,7 @@
 {
   "suite": "humanizer-plus-ru-nora-gal-map",
-  "version": 1,
-  "description": "Traceability map from gal-01..gal-42 to GAL rules and source chapters. Chapter names point to the provided ebook text; they do not assert a print page or edition year.",
+  "version": 2,
+  "description": "Traceability map from gal evals to GAL rules and source chapters. Display chapter names may normalize Russian typography; exact ebook labels are recorded in references/nora-gal-source-labels.md.",
   "cases": [
     {"id":"gal-01","rules":["GAL-KANZ-VERB"],"chapters":["Откуда что берётся?","Жечь или сушить?"],"counterexample":false},
     {"id":"gal-02","rules":["GAL-KANZ-NOUN-CHAIN"],"chapters":["Откуда что берётся?","Жечь или сушить?","Туманы…"],"counterexample":false},
@@ -23,10 +23,10 @@
     {"id":"gal-18","rules":["GAL-REGISTER-ERA-CULTURE"],"chapters":["Мистер с аршином"],"counterexample":false},
     {"id":"gal-19","rules":["GAL-EMOTIONAL-TACT"],"chapters":["Когда глохнет душа"],"counterexample":false},
     {"id":"gal-20","rules":["GAL-EMOTIONAL-TACT","GAL-VOICE-PERSONA"],"chapters":["Когда глохнет душа","Не своим голосом"],"counterexample":true},
-    {"id":"gal-21","rules":["GAL-IDIOM-CONTAMINATION"],"chapters":["Свинки замяукали"],"counterexample":false},
-    {"id":"gal-22","rules":["GAL-IDIOM-FUNCTION","GAL-IMAGE-LITERALIZATION"],"chapters":["Свинки замяукали"],"counterexample":true},
+    {"id":"gal-21","rules":["GAL-IDIOM-CONTAMINATION"],"chapters":["«Свинки замяукали»"],"counterexample":false},
+    {"id":"gal-22","rules":["GAL-IDIOM-FUNCTION","GAL-IMAGE-LITERALIZATION"],"chapters":["«Свинки замяукали»"],"counterexample":true},
     {"id":"gal-23","rules":["GAL-IMAGE-COLLISION"],"chapters":["На ножах","Сотри случайные черты…"],"counterexample":false},
-    {"id":"gal-24","rules":["GAL-IMAGE-LITERALIZATION","GAL-IDIOM-FUNCTION"],"chapters":["На ножах","Свинки замяукали"],"counterexample":false},
+    {"id":"gal-24","rules":["GAL-IMAGE-LITERALIZATION","GAL-IDIOM-FUNCTION"],"chapters":["На ножах","«Свинки замяукали»"],"counterexample":false},
     {"id":"gal-25","rules":["GAL-POLYSEMY-COLLISION","GAL-SOUND-COLLISION"],"chapters":["На ножах"],"counterexample":false},
     {"id":"gal-26","rules":["GAL-PHYSICAL-PLAUSIBILITY"],"chapters":["На ножах","Сотри случайные черты…"],"counterexample":false},
     {"id":"gal-27","rules":["GAL-SOUND-COLLISION","GAL-RHYTHM-PACE"],"chapters":["На ножах","От миссис Уоррен до Маугли"],"counterexample":false},
@@ -44,6 +44,9 @@
     {"id":"gal-39","rules":["GAL-EDITOR-NOT-DICTATOR","GAL-LEX-RARE-FIT"],"chapters":["Кто мы и зачем мы?"],"counterexample":true},
     {"id":"gal-40","rules":["GAL-EDITOR-THIRD-SOLUTION","GAL-EDITOR-NOT-DICTATOR"],"chapters":["Кто мы и зачем мы?"],"counterexample":false},
     {"id":"gal-41","rules":["GAL-COMPOUND-FAILURE","GAL-KANZ-VERB","GAL-KANZ-PASSIVE","GAL-EXPLICITNESS"],"chapters":["SOS!","Откуда что берётся?","…Или Дух?"],"counterexample":false},
-    {"id":"gal-42","rules":["GAL-SOUND-COLLISION","GAL-VOICE-SITUATION","GAL-RHYTHM-PACE"],"chapters":["От миссис Уоррен до Маугли","Музыка перевода"],"counterexample":false}
+    {"id":"gal-42","rules":["GAL-SOUND-COLLISION","GAL-VOICE-SITUATION","GAL-RHYTHM-PACE"],"chapters":["От миссис Уоррен до Маугли","Музыка перевода"],"counterexample":false},
+    {"id":"gal-43","rules":["GAL-KANZ-STAMP","GAL-KANZ-PSEUDOFORMAL"],"chapters":["Откуда что берётся?","Мёртвый хватает живого"],"counterexample":false},
+    {"id":"gal-44","rules":["GAL-LEX-COLLOCATION","GAL-LEX-PRECISION"],"chapters":["На ножах","Мёртвый хватает живого"],"counterexample":false},
+    {"id":"gal-45","rules":["GAL-SELF-EDIT"],"chapters":["Кто мы и зачем мы?"],"counterexample":false}
   ]
 }
