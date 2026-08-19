@@ -11,6 +11,7 @@
   "enabled_by_default": true,
   "status": "OPERATIONAL",
   "references": [
+    "libraries/chukovsky/README.md",
     "libraries/chukovsky/rules.json",
     "references/chukovsky.md",
     "studies/chukovsky-zhivoy-kak-zhizn/integration-matrix.md",
