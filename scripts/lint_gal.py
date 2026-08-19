@@ -16,9 +16,9 @@ import sys
 from pathlib import Path
 
 try:
-    from lint import prose_text
+    from lint import URL_OR_CODE, strip_frontmatter
 except ImportError:  # package/import context
-    from scripts.lint import prose_text
+    from scripts.lint import URL_OR_CODE, strip_frontmatter
 
 SERVICE_NOMINALIZATION = re.compile(
     r"\b(?:осуществ(?:ить|ил(?:а|и)?|ляет|лять|ляют|ляется|ляются|лял(?:ся|ась|ось|ись)|ляться)|"
@@ -47,13 +47,43 @@ PARTICIPLE_LIKE = re.compile(
     r"анн(?:ый|ая|ое|ые|ого|ому|ым|ых|ыми))\b",
     re.I,
 )
+MARKDOWN_NON_PROSE_LINE = re.compile(r"^\s*(#|\||[-*+]\s|\d+\.\s|>)")
 
 
 def _line(text: str, pos: int) -> int:
+    """Convert a character offset in line-preserving prose to a 1-based line."""
     return text.count("\n", 0, pos) + 1
 
 
-def _finding(*, rule_id: str, phenomenon_id: str, excerpt: str, line: int, reason: str, operation: str) -> dict:
+def _line_preserving_prose(text: str) -> str:
+    """Mirror core prose normalization while retaining source line positions.
+
+    The core linter intentionally removes Markdown-only lines from prose. Gal
+    findings, however, expose source line numbers, so filtered headings, lists,
+    tables, and blockquotes are represented by blank placeholders instead of
+    being dropped. URL/code and frontmatter handling reuse the core primitives.
+    """
+    clean = URL_OR_CODE.sub(lambda match: "\n" * match.group(0).count("\n"), text)
+    lines = strip_frontmatter(clean.splitlines())
+    kept: list[str] = []
+    for line in lines:
+        if not line.strip() or MARKDOWN_NON_PROSE_LINE.match(line):
+            kept.append("")
+            continue
+        kept.append(re.sub(r"\*\*|«|»", "", line))
+    return "\n".join(kept)
+
+
+def _finding(
+    *,
+    rule_id: str,
+    phenomenon_id: str,
+    excerpt: str,
+    line: int,
+    reason: str,
+    operation: str,
+) -> dict:
+    """Build one normalized review_v1 Gal finding."""
     return {
         "rule_id": rule_id,
         "phenomenon_id": phenomenon_id,
@@ -69,6 +99,7 @@ def _finding(*, rule_id: str, phenomenon_id: str, excerpt: str, line: int, reaso
 
 
 def _sentences(text: str) -> list[str]:
+    """Split normalized prose into lightweight sentence candidates."""
     return [x.strip() for x in re.split(r"(?<=[.!?])\s+", text) if x.strip()]
 
 
@@ -86,44 +117,54 @@ def _sound_echo_pairs(words: list[str]) -> int:
 def review(text: str) -> dict:
     """Return normalized review_v1 findings plus non-normative metrics."""
     findings: list[dict] = []
-    prose = prose_text(text)
+    prose = _line_preserving_prose(text)
 
     for match in SERVICE_NOMINALIZATION.finditer(prose):
-        findings.append(_finding(
-            rule_id="GAL-KANZ-VERB",
-            phenomenon_id="editing.action_hidden_in_nominalization",
-            excerpt=match.group(0),
-            line=_line(prose, match.start()),
-            reason=("По системе Норы Галь это кандидат на проверку: действие может быть спрятано "
+        findings.append(
+            _finding(
+                rule_id="GAL-KANZ-VERB",
+                phenomenon_id="editing.action_hidden_in_nominalization",
+                excerpt=match.group(0),
+                line=_line(prose, match.start()),
+                reason=(
+                    "По системе Норы Галь это кандидат на проверку: действие может быть спрятано "
                     "в служебном глаголе и отглагольном существительном. Не менять механически "
-                    "в юридическом/терминологическом контексте."),
-            operation="compare_direct_finite_verb",
-        ))
+                    "в юридическом/терминологическом контексте."
+                ),
+                operation="compare_direct_finite_verb",
+            )
+        )
 
     for match in PSEUDOFORMAL_SHELL.finditer(prose):
-        findings.append(_finding(
-            rule_id="GAL-KANZ-PSEUDOFORMAL",
-            phenomenon_id="editing.register_pseudoformality",
-            excerpt=match.group(0),
-            line=_line(prose, match.start()),
-            reason="Узкая многословная служебная оболочка: проверить, нужна ли такая степень официальности адресату и жанру.",
-            operation="replace_service_shell_with_direct_action",
-        ))
+        findings.append(
+            _finding(
+                rule_id="GAL-KANZ-PSEUDOFORMAL",
+                phenomenon_id="editing.register_pseudoformality",
+                excerpt=match.group(0),
+                line=_line(prose, match.start()),
+                reason="Узкая многословная служебная оболочка: проверить, нужна ли такая степень официальности адресату и жанру.",
+                operation="replace_service_shell_with_direct_action",
+            )
+        )
 
     for match in REDUNDANT_POSSESSIVE_BODY.finditer(prose):
-        findings.append(_finding(
-            rule_id="GAL-EXPLICITNESS",
-            phenomenon_id="editing.excessive_explicitness",
-            excerpt=match.group(0),
-            line=_line(prose, match.start()),
-            reason=("Surface-кандидат на лишнюю эксплицитность. Удалять только если владение и "
-                    "референты однозначно восстанавливаются; функциональный повтор сохранять."),
-            operation="remove_only_recoverable_explicit_material",
-        ))
+        findings.append(
+            _finding(
+                rule_id="GAL-EXPLICITNESS",
+                phenomenon_id="editing.excessive_explicitness",
+                excerpt=match.group(0),
+                line=_line(prose, match.start()),
+                reason=(
+                    "Surface-кандидат на лишнюю эксплицитность. Удалять только если владение и "
+                    "референты однозначно восстанавливаются; функциональный повтор сохранять."
+                ),
+                operation="remove_only_recoverable_explicit_material",
+            )
+        )
 
     sentences = _sentences(prose)
-    lengths = [len(WORD.findall(s)) for s in sentences]
-    words = [w.lower() for w in WORD.findall(prose)]
+    lengths = [len(WORD.findall(sentence)) for sentence in sentences]
+    words = [word.lower() for word in WORD.findall(prose)]
     metrics = {
         "sentences": len(sentences),
         "sentence_word_counts": lengths,
@@ -131,13 +172,18 @@ def review(text: str) -> dict:
         "sentence_word_median": statistics.median(lengths) if lengths else 0,
         "participle_like_tokens": len(PARTICIPLE_LIKE.findall(prose)),
         "sound_echo_adjacent_pairs": _sound_echo_pairs(words),
-        "metric_rule_ids": ["GAL-KANZ-PARTICIPLE", "GAL-SOUND-COLLISION", "GAL-LONG-SENTENCE-CLARITY"],
+        "metric_rule_ids": [
+            "GAL-KANZ-PARTICIPLE",
+            "GAL-SOUND-COLLISION",
+            "GAL-LONG-SENTENCE-CLARITY",
+        ],
         "metrics_are_descriptive": True,
     }
     return {"findings": findings, "metrics": metrics}
 
 
 def self_test() -> None:
+    """Run deterministic positive, negative, markup, metric, and line-map checks."""
     result = review("Команда осуществила проведение проверки доступности сервиса.")
     assert any(x["rule_id"] == "GAL-KANZ-VERB" for x in result["findings"]), result
     result = review("Осуществляется проведение проверки доступности сервиса.")
@@ -166,6 +212,16 @@ def self_test() -> None:
     result = review(markup)
     assert not result["findings"], result
 
+    positioned = """# Заголовок
+
+- служебный пункт
+> цитата
+Команда осуществила проведение проверки доступности сервиса.
+"""
+    result = review(positioned)
+    verb = next(x for x in result["findings"] if x["rule_id"] == "GAL-KANZ-VERB")
+    assert verb["line"] == 5, result
+
     result = review("Документ, подписанный директором, отправили утром.")
     assert result["metrics"]["participle_like_tokens"] >= 1, result
     assert not result["findings"], result
@@ -175,6 +231,7 @@ def self_test() -> None:
 
 
 def main() -> None:
+    """Run the standalone Gal reviewer CLI."""
     parser = argparse.ArgumentParser(description="Nora Gal source-specific surface reviewer")
     parser.add_argument("file", nargs="?")
     parser.add_argument("--json", action="store_true", dest="as_json")
