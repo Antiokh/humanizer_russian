@@ -12,6 +12,9 @@
   "status": "AUDITED",
   "source_status": "full sequential EPUB study; 35/35 spine documents covered",
   "source_version": "epub-sha256:38bdce9dfaf93ea820aae3fd0c7da74e9c2a908f5a3c77da2764793535bf4aa9",
+  "rules_path": "libraries/gal/rules.json",
+  "model_only_reference": "libraries/gal/model-only.md",
+  "model_eval_path": "evals/nora-gal.json",
   "references": [
     "studies/nora-gal/source.md",
     "studies/nora-gal/coverage.md",
@@ -20,10 +23,11 @@
     "studies/nora-gal/interactions.md",
     "studies/nora-gal/claims.md",
     "studies/nora-gal/audit.md",
+    "studies/nora-gal/integration-matrix.md",
     "references/nora-gal-source-map.md",
     "references/nora-gal-rule-index.md",
     "libraries/gal/rules.json",
     "libraries/gal/model-only.md"
   ],
-  "notes": "Book-derived EDITING library. No Gal rule is a HARD_GATE or NORM merely because it appears in the source. Compact default consumes this library but exposes no Gal findings until a rule is calibrated as DEFAULT_MECHANICAL; current Gal surface findings are EXTENDED_SOFT."
+  "notes": "42 audited book-derived EDITING rules: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 3 METRIC_ONLY, 36 MODEL_ONLY. Compact default consumes the library but remains silent for Gal; --extended exposes only the calibrated surface candidates. Editorial Board uses the same review_v1 output and preserves Gal provenance."
 }
