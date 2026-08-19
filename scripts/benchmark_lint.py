@@ -45,6 +45,7 @@ def test_compact_deduplication() -> None:
         },
         {
             **common,
+            "line": 0,
             "rule_id": "CHUK-R17",
             "library_id": "chukovsky",
             "source_namespace": "CHUK",
