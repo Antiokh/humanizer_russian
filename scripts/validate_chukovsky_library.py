@@ -13,7 +13,11 @@ MANIFEST = ROOT / "libraries" / "chukovsky" / "library.json"
 REVIEWER = ROOT / "reviewers" / "chukovsky.json"
 ADAPTER = ROOT / "scripts" / "lint_chukovsky.py"
 
-ROW_RE = re.compile(r"^\|\s*(R\d{2})\s*\|\s*`([^`]+)`\s*\|.*?\|\s*`([^`]+)(?::[^`]*)?`\s*\|", re.M)
+ROW_RE = re.compile(
+    r"^\|\s*(R\d{2})\s*\|\s*`([^`]+)`\s*\|.*?\|\s*`"
+    r"(EXTENDED_SOFT|METRIC_ONLY|MODEL_ONLY)(?:[^`]*)`\s*\|",
+    re.M,
+)
 
 EXPECTED_SOFT = {"R09", "R15", "R17", "R18", "R19", "R24", "R25"}
 EXPECTED_METRIC = {"R22", "R31"}
