@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-08-19",
+  "scope": "modern_external_evidence_calibration",
+  "source_claims_path": "studies/nora-gal/claims.md",
+  "narrative_audit_path": "studies/nora-gal/external-evidence-2026.md",
+  "claims": [
+    {
+      "claim_id": "GAL-CLAIM-01",
+      "disposition": "TESTABLE_NOT_YET_MEASURED",
+      "measured_by_project": false,
+      "evidence_kind": "corpus_infrastructure",
+      "evidence_urls": [
+        "https://ruscorpora.ru/page/corpora-structure/",
+        "https://ruscorpora.ru/page/corpora-about/"
+      ],
+      "runtime_boundary": "Concrete bureaucratic constructions may be diagnosed; prevalence or diffusion must not be asserted until a defined corpus measurement is run."
+    },
+    {
+      "claim_id": "GAL-CLAIM-02",
+      "disposition": "REFINED_BY_CURRENT_USAGE/NORM",
+      "measured_by_project": false,
+      "evidence_kind": "normative_lexicography",
+      "evidence_urls": [
+        "https://gramota.ru/biblioteka/spravochniki/ofitsialno-o-russkom-yazyke/normativnye-slovari",
+        "https://gramota.ru/spravka/vopros/329949"
+      ],
+      "runtime_boundary": "Foreign origin is not a defect criterion; borrowing fit remains contextual by meaning, audience, domain, register and established usage."
+    },
+    {
+      "claim_id": "GAL-CLAIM-03",
+      "disposition": "REFINED_BY_CURRENT_LINGUISTICS+TESTABLE_NOT_YET_MEASURED",
+      "measured_by_project": false,
+      "evidence_kind": "descriptive_grammar_plus_corpus_plan",
+      "evidence_urls": [
+        "https://rusgram.ru/new/chapter/verbpar/converb/",
+        "https://ruscorpora.github.io/public-api/about-api/search/formula-rule.html"
+      ],
+      "runtime_boundary": "Participles and gerunds are not banned as classes; any modern register-frequency claim requires an explicit corpus measurement."
+    },
+    {
+      "claim_id": "GAL-CLAIM-04",
+      "disposition": "REFINED_BY_CURRENT_LINGUISTICS",
+      "measured_by_project": false,
+      "evidence_kind": "descriptive_grammar",
+      "evidence_urls": [
+        "https://rusgram.ru/new/chapter/clauseintro/information_structure/"
+      ],
+      "runtime_boundary": "Information structure is contextual; strong focus can be initial or final, so no universal final-position rule is allowed."
+    },
+    {
+      "claim_id": "GAL-CLAIM-05",
+      "disposition": "NOT_ESTABLISHED_CAUSALLY",
+      "measured_by_project": false,
+      "evidence_kind": "negative_evidence_boundary",
+      "evidence_urls": [],
+      "runtime_boundary": "Diagnose textual clarity only; never infer the author's cognition, intelligence, honesty or personality from a style pattern."
+    },
+    {
+      "claim_id": "GAL-CLAIM-06",
+      "disposition": "OBSOLETE_AS_ABSOLUTE",
+      "measured_by_project": false,
+      "evidence_kind": "translation_research",
+      "evidence_urls": [
+        "https://aclanthology.org/2023.wmt-1.41/",
+        "https://aclanthology.org/2025.naacl-long.548/"
+      ],
+      "runtime_boundary": "Do not claim machines cannot use literary document context; also do not claim literary translation quality or authorial voice is solved."
+    },
+    {
+      "claim_id": "GAL-CLAIM-07",
+      "disposition": "VALUE_JUDGMENT",
+      "measured_by_project": false,
+      "evidence_kind": "aesthetic_value",
+      "evidence_urls": [],
+      "runtime_boundary": "No runtime metric or quality score follows from the claim about how great translations age."
+    },
+    {
+      "claim_id": "GAL-CLAIM-08",
+      "disposition": "SUPPORTED_NARROWLY",
+      "measured_by_project": false,
+      "evidence_kind": "developmental_research",
+      "evidence_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/22716950/",
+        "https://pubmed.ncbi.nlm.nih.gov/33521953/"
+      ],
+      "runtime_boundary": "Caregiver input can be discussed narrowly as related to child language development, not as proof of language-wide historical outcomes."
+    },
+    {
+      "claim_id": "GAL-CLAIM-09",
+      "disposition": "SOURCE_METHOD",
+      "measured_by_project": false,
+      "evidence_kind": "source_method",
+      "evidence_urls": [],
+      "runtime_boundary": "Supports A/B comparison and counterexample design; does not define current norm."
+    },
+    {
+      "claim_id": "GAL-CLAIM-10",
+      "disposition": "SOURCE_METHOD",
+      "measured_by_project": false,
+      "evidence_kind": "source_method",
+      "evidence_urls": [],
+      "runtime_boundary": "Keep diagnosis separate from the first proposed replacement and preserve the third-solution workflow."
+    },
+    {
+      "claim_id": "GAL-CLAIM-11",
+      "disposition": "SUPPORTED_NARROWLY",
+      "measured_by_project": false,
+      "evidence_kind": "translation_style_research",
+      "evidence_urls": [
+        "https://aclanthology.org/C14-1037/",
+        "https://aclanthology.org/2023.eamt-1.40/"
+      ],
+      "runtime_boundary": "Authorial/translator style is a distinct translation dimension; do not force one source-editor surface manner across authors."
+    },
+    {
+      "claim_id": "GAL-CLAIM-12",
+      "disposition": "SUPPORTED_NARROWLY",
+      "measured_by_project": false,
+      "evidence_kind": "translation_strategy_research",
+      "evidence_urls": [
+        "https://aclanthology.org/2025.ctt-1.1/",
+        "https://aclanthology.org/2020.lrec-1.496/"
+      ],
+      "runtime_boundary": "Word count and source syntax are not optimization targets by themselves; restructuring remains constrained by semantics and function."
+    },
+    {
+      "claim_id": "GAL-CLAIM-13",
+      "disposition": "SOURCE_METHOD",
+      "measured_by_project": false,
+      "evidence_kind": "verification_workflow",
+      "evidence_urls": [],
+      "runtime_boundary": "Unfamiliar or doubtful references require verification when possible; NEEDS_VERIFICATION is not CHANGE."
+    },
+    {
+      "claim_id": "GAL-CLAIM-14",
+      "disposition": "TESTABLE_NOT_YET_MEASURED",
+      "measured_by_project": false,
+      "evidence_kind": "corpus_infrastructure",
+      "evidence_urls": [
+        "https://ruscorpora.ru/page/corpora-structure/",
+        "https://ruscorpora.ru/page/corpora-about/"
+      ],
+      "runtime_boundary": "No vocabulary-decline claim is allowed until an observable, matched corpus design and reproducible measurement exist."
+    },
+    {
+      "claim_id": "GAL-CLAIM-15",
+      "disposition": "VALUE_JUDGMENT",
+      "measured_by_project": false,
+      "evidence_kind": "aesthetic_ethical_value",
+      "evidence_urls": [],
+      "runtime_boundary": "Truth, humanity and tact may act as humility/intent guards but are not machine-detectable linguistic scores."
+    }
+  ]
+}
