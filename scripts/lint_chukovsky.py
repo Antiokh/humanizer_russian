@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """Normalized Chukovsky knowledge-library adapter.
 
-Mechanical detection stays in chukovsky_checks.py. This module only maps the
-seven accepted EXTENDED_SOFT candidates into the shared review_v1 contract so
-compact and editorial-board modes consume exactly the same source output.
+Mechanical detection stays in chukovsky_checks.py. This module maps the seven
+accepted EXTENDED_SOFT candidates through the canonical CHUK rule registry so
+compact and editorial-board modes consume the same source output without
+copying phenomenon/class/automation metadata into two runtimes.
 """
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
 import re
 
 try:
@@ -16,48 +19,35 @@ except ImportError:  # package/import context
     from scripts.chukovsky_checks import check_chukovsky
 
 
-RULE_MAP = {
-    "chukovsky: metadiscourse deletion test": (
-        "CHK-R24",
-        "editing.metadiscourse_announcement",
-        "compare_without_announcing_frame",
-    ),
-    "chukovsky: bureaucratic-register cluster": (
-        "CHK-R15",
-        "editing.register_leakage_bureaucratic",
-        "check_register_fit",
-    ),
-    "chukovsky: light verb + nominalization": (
-        "CHK-R17",
-        "editing.action_hidden_in_nominalization",
-        "recover_actor_action_object",
-    ),
-    "chukovsky: nominalization cluster": (
-        "CHK-R17",
-        "editing.action_hidden_in_nominalization",
-        "reconstruct_events_and_roles",
-    ),
-    "chukovsky: modifier subtraction candidate": (
-        "CHK-R18",
-        "editing.modifier_semantic_subtraction",
-        "compare_without_modifier",
-    ),
-    "chukovsky: evaluative-template cluster": (
-        "CHK-R19",
-        "editing.template_without_semantic_gain",
-        "replace_template_function_with_supported_content",
-    ),
-    "chukovsky: repeated 'question' packaging": (
-        "CHK-R25",
-        "editing.procedural_question_packaging",
-        "name_actual_speech_act",
-    ),
-    "chukovsky: abbreviation-density candidate": (
-        "CHK-R09",
-        "editing.abbreviation_reader_effort",
-        "check_first_use_and_audience_effort",
-    ),
+ROOT = Path(__file__).resolve().parents[1]
+REGISTRY_PATH = ROOT / "libraries" / "chukovsky" / "rules.json"
+
+# Detector labels are implementation details. Canonical public/runtime identity
+# is CHUK-Rxx and is defined in libraries/chukovsky/rules.json.
+DETECTOR_RULE_IDS = {
+    "chukovsky: metadiscourse deletion test": "CHUK-R24",
+    "chukovsky: bureaucratic-register cluster": "CHUK-R15",
+    "chukovsky: light verb + nominalization": "CHUK-R17",
+    "chukovsky: nominalization cluster": "CHUK-R17",
+    "chukovsky: modifier subtraction candidate": "CHUK-R18",
+    "chukovsky: evaluative-template cluster": "CHUK-R19",
+    "chukovsky: repeated 'question' packaging": "CHUK-R25",
+    "chukovsky: abbreviation-density candidate": "CHUK-R09",
 }
+
+# R17 has two surface routes to the same underlying phenomenon. The registry
+# stores the general operation; the cluster route benefits from a narrower hint.
+OPERATION_OVERRIDES = {
+    "chukovsky: nominalization cluster": "reconstruct_events_and_roles",
+}
+
+
+def _load_registry() -> dict[str, dict]:
+    payload = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+    return {item["rule_id"]: item for item in payload["rules"]}
+
+
+RULES = _load_registry()
 
 
 def _sentences(text: str) -> list[str]:
@@ -71,13 +61,16 @@ def review(text: str) -> dict:
     findings, metrics = check_chukovsky(text, _sentences(text))
     normalized = []
     for item in findings:
-        rule_id, phenomenon_id, operation = RULE_MAP[item["rule"]]
+        detector_label = item["rule"]
+        rule_id = DETECTOR_RULE_IDS[detector_label]
+        rule = RULES[rule_id]
+        operation = OPERATION_OVERRIDES.get(detector_label, rule.get("operation"))
         normalized.append(
             {
                 "rule_id": rule_id,
-                "phenomenon_id": phenomenon_id,
-                "project_class": "EDITING",
-                "automation_level": "EXTENDED_SOFT",
+                "phenomenon_id": rule["phenomenon_id"],
+                "project_class": rule["project_class"],
+                "automation_level": rule["automation_level"],
                 "verdict": "REVIEW",
                 "line": item.get("line", 0),
                 "excerpt": item.get("excerpt", ""),
@@ -95,11 +88,16 @@ def self_test() -> None:
         "обеспечение повышения качества обслуживания."
     )
     ids = {item["rule_id"] for item in result["findings"]}
-    assert "CHK-R24" in ids, result
-    assert "CHK-R15" in ids, result
-    assert "CHK-R17" in ids, result
+    assert "CHUK-R24" in ids, result
+    assert "CHUK-R15" in ids, result
+    assert "CHUK-R17" in ids, result
+    assert all(item["rule_id"].startswith("CHUK-") for item in result["findings"])
     assert all(item["automation_level"] == "EXTENDED_SOFT" for item in result["findings"])
     assert all(item["project_class"] == "EDITING" for item in result["findings"])
+    assert all(
+        item["phenomenon_id"] == RULES[item["rule_id"]]["phenomenon_id"]
+        for item in result["findings"]
+    )
 
 
 if __name__ == "__main__":
