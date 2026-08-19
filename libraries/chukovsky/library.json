@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "chukovsky",
+  "display_name": "Корней Чуковский — Живой как жизнь",
+  "source_namespace": "CHUK",
+  "source_type": "book",
+  "source_branch": "chukovsky",
+  "reviewer_id": "chukovsky",
+  "adapter": "review_v1",
+  "linter_path": "scripts/lint_chukovsky.py",
+  "enabled_by_default": true,
+  "status": "OPERATIONAL",
+  "references": [
+    "references/chukovsky.md",
+    "studies/chukovsky-zhivoy-kak-zhizn/integration-matrix.md"
+  ],
+  "notes": "38 audited rules: 0 default mechanical, 7 EXTENDED_SOFT, 2 METRIC_ONLY, 29 MODEL_ONLY. Public repository contains derived knowledge only; the source EPUB is not stored here."
+}
