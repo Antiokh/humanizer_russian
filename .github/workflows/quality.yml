@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - chukovsky
       - agent/**
       - feature/**
       - context/**
@@ -29,11 +30,20 @@ jobs:
       - name: Validate architecture contract
         run: python scripts/validate_architecture.py
 
+      - name: Validate Chukovsky study and integration matrix
+        run: python scripts/validate_chukovsky_study.py
+
       - name: Linter self-test
         run: python scripts/lint.py --self-test
 
       - name: Deterministic mechanical linter benchmark
         run: python scripts/benchmark_lint.py
+
+      - name: Chukovsky source-linter self-test
+        run: python scripts/chukovsky_checks.py
+
+      - name: Chukovsky deterministic extended benchmark
+        run: python scripts/benchmark_chukovsky.py
 
       - name: Smoke-test and validate author profiler
         run: |
