@@ -41,6 +41,9 @@ jobs:
       - name: Validate Chukovsky dual-runtime library routing
         run: python scripts/validate_chukovsky_library.py
 
+      - name: Validate Nora Gal study and library routing
+        run: python scripts/validate_nora_gal.py
+
       - name: Linter self-test
         run: python scripts/lint.py --self-test
 
@@ -50,8 +53,14 @@ jobs:
       - name: Chukovsky normalized adapter self-test
         run: python scripts/lint_chukovsky.py
 
+      - name: Nora Gal normalized adapter self-test
+        run: python scripts/lint_gal.py --self-test
+
       - name: Deterministic mechanical linter benchmark
         run: python scripts/benchmark_lint.py
+
+      - name: Nora Gal compact integration benchmark
+        run: python scripts/benchmark_lint.py tests/gal_compact_cases.json
 
       - name: Chukovsky source-linter self-test
         run: python scripts/chukovsky_checks.py
@@ -59,8 +68,14 @@ jobs:
       - name: Chukovsky deterministic extended benchmark
         run: python scripts/benchmark_chukovsky.py
 
+      - name: Nora Gal deterministic source and dual-runtime benchmark
+        run: python scripts/benchmark_gal.py
+
       - name: Deterministic editorial board benchmark
         run: python scripts/benchmark_board.py
+
+      - name: Nora Gal editorial-board integration benchmark
+        run: python scripts/benchmark_board.py tests/gal_board_cases.json
 
       - name: Smoke-test board JSON output
         run: |
@@ -89,6 +104,24 @@ jobs:
           assert not any(str(key).startswith('chukovsky_') for key in board['metrics'].get('native', {})), board
           assert rslive['style']['id'] == 'rslive_content', rslive
           assert any(item.get('rule_id') == 'CHUK-R24' for item in rslive['findings']), rslive
+          PY
+
+      - name: Smoke-test Nora Gal shared phenomenon routing
+        run: |
+          printf '%s' 'Осуществляется проведение проверки сервиса.' | python scripts/check.py --extended --json >/tmp/gal-compact.json
+          printf '%s' 'Осуществляется проведение проверки сервиса.' | python scripts/review.py --libraries gal,chukovsky --format json >/tmp/gal-board.json
+          python - <<'PY'
+          import json
+          compact = json.load(open('/tmp/gal-compact.json', encoding='utf-8'))
+          board = json.load(open('/tmp/gal-board.json', encoding='utf-8'))
+          rows = [x for x in compact['findings'] if x.get('phenomenon_id') == 'editing.action_hidden_in_nominalization']
+          assert len(rows) == 1, compact
+          assert rows[0].get('deduplicated_sources') == 2, rows[0]
+          provenance = {x.get('rule_id') for x in rows[0].get('provenance', [])}
+          assert {'GAL-KANZ-VERB', 'CHUK-R17'} <= provenance, provenance
+          groups = [g for g in board['board']['groups'] if g.get('phenomenon_id') == 'editing.action_hidden_in_nominalization']
+          assert len(groups) == 1, board
+          assert set(groups[0]['reviewer_verdicts']) == {'gal', 'chukovsky'}, groups[0]
           PY
 
       - name: Smoke-test and validate author profiler
