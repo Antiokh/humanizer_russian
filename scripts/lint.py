@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Conservative surface linter for humanizer+ru.
+"""Conservative surface linter for humanizer_russian.
 
-The linter does not decide what is grammatical or "human" by regex. It only
-finds surface candidates for contextual review.
+The linter does not decide what is grammatical, human, or author-written by
+regex. It finds surface candidates for contextual review.
 
 Kinds:
   ARTIFACT       technical chatbot/citation traces; the only automatic gate
   AI_PATTERN     repeated formulae or calque-like patterns
   NATIVE_WARNING formally possible but potentially synthetic/native-unfriendly
-  STYLE_WARNING rhythm/format patterns that may be intentional
+  STYLE_WARNING  rhythm/format patterns that may be intentional
 
 Descriptive metrics are returned separately. Exit status is non-zero only when
 ARTIFACT findings remain.
@@ -20,58 +20,94 @@ import argparse
 import json
 import re
 import sys
+from collections import Counter
 from pathlib import Path
-
 
 ARTIFACT_PATTERNS = [
     ("openai citation marker", re.compile(r"\boaicite\b", re.I)),
-    ("tool turn marker", re.compile(
-        r"\bturn\d+(?:search|news|fetch|view|file|image|product|business)\d+\b",
-        re.I,
-    )),
-    ("bracket citation placeholder", re.compile(
-        r"\[(?:cite|citation)\s*:\s*\d+[^\]]*\]",
-        re.I,
-    )),
-    ("chatgpt/openai utm", re.compile(r"utm_source=(?:chatgpt(?:\.com)?|openai)", re.I)),
+    (
+        "tool turn marker",
+        re.compile(
+            r"\bturn\d+(?:search|news|fetch|view|file|image|product|business)\d+\b",
+            re.I,
+        ),
+    ),
+    (
+        "bracket citation placeholder",
+        re.compile(r"\[(?:cite|citation)\s*:\s*\d+[^\]]*\]", re.I),
+    ),
+    (
+        "chatgpt/openai utm",
+        re.compile(r"utm_source=(?:chatgpt(?:\.com)?|openai)", re.I),
+    ),
 ]
 
 AI_PHRASE_FAMILIES = {
     "assistant-wrapper": [
-        "надеюсь, это поможет", "надеюсь, было полезно", "дайте знать, если",
-        "буду рад помочь", "вот краткий обзор",
+        "надеюсь, это поможет",
+        "надеюсь, было полезно",
+        "дайте знать, если",
+        "буду рад помочь",
+        "вот краткий обзор",
     ],
     "importance-announcement": [
-        "важно отметить", "следует подчеркнуть", "стоит обратить внимание",
-        "нельзя не упомянуть", "необходимо учитывать",
+        "важно отметить",
+        "следует подчеркнуть",
+        "стоит обратить внимание",
+        "нельзя не упомянуть",
+        "необходимо учитывать",
     ],
     "pseudo-depth": [
-        "если копнуть глубже", "глубинная проблема", "настоящий вопрос в том",
-        "в конечном счёте", "вот в чём штука",
+        "если копнуть глубже",
+        "глубинная проблема",
+        "настоящий вопрос в том",
+        "в конечном счёте",
+        "вот в чём штука",
     ],
     "video-script": [
-        "давайте разберёмся", "погрузимся в", "вот что нужно знать",
-        "перейдём к главному", "без лишних слов",
+        "давайте разберёмся",
+        "погрузимся в",
+        "вот что нужно знать",
+        "перейдём к главному",
+        "без лишних слов",
     ],
     "generic-conclusion": [
-        "подводя итог", "в заключение", "резюмируя",
-        "будущее выглядит ярким", "впереди захватывающие времена",
+        "подводя итог",
+        "в заключение",
+        "резюмируя",
+        "будущее выглядит ярким",
+        "впереди захватывающие времена",
     ],
     "stack-connector": [
-        "кроме того", "более того", "также стоит", "ещё один аспект",
+        "кроме того",
+        "более того",
+        "также стоит",
+        "ещё один аспект",
         "ещё одним аспектом",
     ],
 }
 
 CALQUE_PATTERNS = [
-    ("literal possessives", re.compile(
-        r"\b(?:свою\s+руку\s+в\s+свой\s+карман|мой\s+ответ|мою\s+встречу|свою\s+руку)\b",
-        re.I,
-    )),
-    ("address a problem", re.compile(r"\bадрес(?:овать|ует|уем|уют|ация)\s+(?:проблем|вопрос)", re.I)),
-    ("deliver value", re.compile(r"\bдостав(?:лять|ить|ляет|ляем|ляют)\s+ценност", re.I)),
+    (
+        "literal possessives",
+        re.compile(
+            r"\b(?:свою\s+руку\s+в\s+свой\s+карман|мой\s+ответ|мою\s+встречу|свою\s+руку)\b",
+            re.I,
+        ),
+    ),
+    (
+        "address a problem",
+        re.compile(r"\bадрес(?:овать|ует|уем|уют|ация)\s+(?:проблем|вопрос)", re.I),
+    ),
+    (
+        "deliver value",
+        re.compile(r"\bдостав(?:лять|ить|ляет|ляем|ляют)\s+ценност", re.I),
+    ),
     ("have influence", re.compile(r"\bиме(?:ть|ет|ют|ем)\s+влияни", re.I)),
-    ("be ready by", re.compile(r"\bмогу\s+быть\s+готов(?:ым|ой|ы)?\s+к\b", re.I)),
+    (
+        "be ready by",
+        re.compile(r"\bмогу\s+быть\s+готов(?:ым|ой|ы)?\s+к\b", re.I),
+    ),
 ]
 
 SLOGAN_PATTERNS = [
@@ -81,6 +117,7 @@ SLOGAN_PATTERNS = [
     re.compile(r"\bвот почему это важно\b", re.I),
     re.compile(r"\bодин вопрос\.?\s+один ответ\b", re.I),
     re.compile(r"\bне теория\.?\s+практика\b", re.I),
+    re.compile(r"\bвот (?:тут|здесь) становится интересно\b", re.I),
 ]
 
 CONTRAST_PATTERNS = [
@@ -90,7 +127,7 @@ CONTRAST_PATTERNS = [
 ]
 
 # Candidates for factoring repeated common material out of a contrast.
-# The regex only raises NATIVE_WARNING; the model still checks meaning.
+# These regexes only raise NATIVE_WARNING; the model still checks meaning.
 REPEATED_COMMON_PATTERNS = [
     re.compile(
         r"\bне\s+(?P<head>[а-яё]{4,})\b(?P<left>[^.!?\n]{0,90}?),\s*а\s+(?P=head)\b",
@@ -103,8 +140,24 @@ REPEATED_COMMON_PATTERNS = [
 ]
 REPEATED_CONTRAST_STOP = {"только", "просто", "очень", "столько", "сколько"}
 
-PARCELLATED_ENUM = re.compile(
-    r"\b(?:две|три|четыре|пять)\s+[а-яё-]{2,}\s*[.!]\s*(?:либо|или)\b",
+PARCELLATED_ENUM_PATTERNS = [
+    re.compile(
+        r"\b(?:две|три|четыре|пять)\s+[а-яё-]{2,}\s*[.!]\s*(?:либо|или)\b",
+        re.I,
+    ),
+    re.compile(
+        r"\b(?:нужн[аоы]?|есть|выделю|назову)\s+"
+        r"(?:две|три|четыре|пять)\s+[а-яё-]{2,}\s*[.!]\s*"
+        r"(?:перв(?:ое|ая|ый)|во-первых)\b",
+        re.I,
+    ),
+]
+
+POSSESSIVE_RE = re.compile(
+    r"\b(?:мой|моя|моё|мои|моего|моей|мою|моим|моими|"
+    r"твой|твоя|твоё|твои|твоего|твоей|твою|"
+    r"свой|своя|своё|свои|своего|своей|свою|своим|своими|"
+    r"наш|наша|наше|наши|ваш|ваша|ваше|ваши)\b",
     re.I,
 )
 
@@ -112,13 +165,29 @@ ASCII_DASH_IN_PROSE = re.compile(r"(?<=[А-Яа-яЁё0-9»)])\s-\s(?=[А-Яа-�
 EMOJI = re.compile(r"[\U0001F300-\U0001FAFF☀-➿]")
 BOLD_SPAN = re.compile(r"\*\*[^*\n]+\*\*")
 URL_OR_CODE = re.compile(r"```.*?```|`[^`\n]+`|https?://\S+", re.S)
+WORD_RE = re.compile(r"[A-Za-zА-Яа-яЁё0-9]+")
+
+COMMON_SENTENCE_STARTS = {
+    "и",
+    "а",
+    "но",
+    "или",
+    "если",
+    "когда",
+    "что",
+    "это",
+    "так",
+    "тут",
+    "здесь",
+    "вот",
+}
 
 
 def strip_frontmatter(lines: list[str]) -> list[str]:
     if lines and lines[0].strip() == "---":
         for i in range(1, min(len(lines), 50)):
             if lines[i].strip() == "---":
-                return [""] * (i + 1) + lines[i + 1:]
+                return [""] * (i + 1) + lines[i + 1 :]
     return lines
 
 
@@ -144,12 +213,23 @@ def sentences(text: str) -> list[str]:
 
 
 def word_count(s: str) -> int:
-    return len(re.findall(r"[A-Za-zА-Яа-яЁё0-9]+", s))
+    return len(WORD_RE.findall(s))
+
+
+def words(s: str) -> list[str]:
+    return [x.lower() for x in re.findall(r"[A-Za-zА-Яа-яЁё]+", s)]
 
 
 def first_words(s: str, n: int = 2) -> tuple[str, ...]:
-    items = re.findall(r"[A-Za-zА-Яа-яЁё]+", s.lower())
-    return tuple(items[:n])
+    return tuple(words(s)[:n])
+
+
+def first_content_word(s: str) -> str:
+    for token in words(s):
+        if token not in COMMON_SENTENCE_STARTS:
+            return token
+    toks = words(s)
+    return toks[0] if toks else ""
 
 
 def add(
@@ -160,13 +240,51 @@ def add(
     line: int = 0,
     note: str = "",
 ) -> None:
-    findings.append({
-        "kind": kind,
-        "line": line,
-        "rule": rule,
-        "excerpt": excerpt[:180],
-        "note": note,
-    })
+    findings.append(
+        {
+            "kind": kind,
+            "line": line,
+            "rule": rule,
+            "excerpt": excerpt[:180],
+            "note": note,
+        }
+    )
+
+
+def repeated_subject_candidates(sents: list[str]) -> list[tuple[str, list[str]]]:
+    """Find 3+ consecutive sentences with the same first content token.
+
+    This is only a proxy for repeated explicit context / SVO-lock. It does not
+    claim that the token is morphologically the subject.
+    """
+    out: list[tuple[str, list[str]]] = []
+    i = 0
+    while i < len(sents):
+        token = first_content_word(sents[i])
+        if not token or len(token) < 3:
+            i += 1
+            continue
+        run = [sents[i]]
+        j = i + 1
+        while j < len(sents) and first_content_word(sents[j]) == token:
+            run.append(sents[j])
+            j += 1
+        if len(run) >= 3:
+            out.append((token, run))
+        i = max(j, i + 1)
+    return out
+
+
+def question_answer_cluster(sents: list[str]) -> int:
+    count = 0
+    for i in range(len(sents) - 1):
+        if (
+            sents[i].endswith("?")
+            and word_count(sents[i]) <= 8
+            and word_count(sents[i + 1]) <= 6
+        ):
+            count += 1
+    return count
 
 
 def lint(text: str) -> tuple[list[dict], dict]:
@@ -210,6 +328,22 @@ def lint(text: str) -> tuple[list[dict], dict]:
                 note="candidate only; verify idiom, audience and context",
             )
 
+    possessive_dense = 0
+    for sent in sents:
+        hits = POSSESSIVE_RE.findall(sent)
+        if len(hits) >= 2:
+            possessive_dense += 1
+            add(
+                findings,
+                "NATIVE_WARNING",
+                "possessive overexplication candidate",
+                sent,
+                note=(
+                    "Russian often leaves obvious ownership implicit; check whether "
+                    "one or more possessives can disappear without ambiguity"
+                ),
+            )
+
     seen_spans: set[tuple[int, int]] = set()
     for rx in REPEATED_COMMON_PATTERNS:
         for match in rx.finditer(prose):
@@ -225,8 +359,8 @@ def lint(text: str) -> tuple[list[dict], dict]:
                 "repeated common element in contrast",
                 match.group(0),
                 note=(
-                    f"common «{head}» may be factorable: compare a version where "
-                    "it is said once; then re-check word order and information focus"
+                    f"common «{head}» may be factorable: say it once, then re-check "
+                    "word order, contrast and information focus"
                 ),
             )
 
@@ -241,68 +375,103 @@ def lint(text: str) -> tuple[list[dict], dict]:
         )
 
     slogan_hits = sum(len(rx.findall(prose)) for rx in SLOGAN_PATTERNS)
-    if slogan_hits >= 2:
+    qa_hits = question_answer_cluster(sents)
+    if slogan_hits >= 2 or qa_hits >= 3:
         add(
             findings,
             "AI_PATTERN",
-            "slogan question/answer cluster",
-            f"{slogan_hits} slogan-like constructions",
-            note="one emphatic construction may be intentional",
+            "anglo-rhetorical question/answer cluster",
+            f"{slogan_hits} slogan markers; {qa_hits} short question-answer pairs",
+            note=(
+                "short Q/A is normal in real dialogue; review only serial punchline "
+                "use in expository/marketing prose"
+            ),
         )
 
-    for match in PARCELLATED_ENUM.finditer(prose):
-        add(
-            findings,
-            "NATIVE_WARNING",
-            "parcellated enumeration",
-            match.group(0),
-            note="check whether a colon and one syntactic enumeration are more natural",
-        )
+    parcellated_enum_hits = 0
+    for rx in PARCELLATED_ENUM_PATTERNS:
+        for match in rx.finditer(prose):
+            parcellated_enum_hits += 1
+            add(
+                findings,
+                "NATIVE_WARNING",
+                "parcellated enumeration",
+                match.group(0),
+                note=(
+                    "check whether the first clause introduces a list that is more "
+                    "natural as one construction with a colon"
+                ),
+            )
 
+    short_fragment_clusters = 0
     run: list[str] = []
     for sent in sents + ["SENTINEL LONG ENOUGH TO FLUSH"]:
         if word_count(sent) <= 4:
             run.append(sent)
         else:
             if len(run) >= 3:
+                short_fragment_clusters += 1
                 add(
                     findings,
                     "STYLE_WARNING",
                     "short-fragment cluster",
                     " | ".join(run[:5]),
-                    note="parcellation may be intentional; verify that it adds an accent",
+                    note=(
+                        "parcellation may be intentional; verify that each break adds "
+                        "an accent instead of hiding one syntactic construction"
+                    ),
                 )
             run = []
 
     starts = [first_words(sent, 2) for sent in sents]
+    repeated_start_flag = 0
     for i in range(len(starts) - 2):
-        tri = starts[i:i + 3]
+        tri = starts[i : i + 3]
         if tri[0] and tri[0] == tri[1] == tri[2]:
+            repeated_start_flag = 1
             add(
                 findings,
                 "NATIVE_WARNING",
                 "repeated sentence start",
                 " / ".join(" ".join(item) for item in tri),
-                note="candidate for repeated explicit context/SVO-lock; do not vary words blindly",
+                note=(
+                    "candidate for repeated explicit context/SVO-lock; compress or "
+                    "reorder only if the context stays unambiguous"
+                ),
             )
             break
 
-    first_tokens = [first_words(sent, 1) for sent in sents]
-    for i in range(len(first_tokens) - 2):
-        tri = first_tokens[i:i + 3]
-        if (
-            tri[0]
-            and tri[0] == tri[1] == tri[2]
-            and all(lengths[j] >= 5 for j in range(i, i + 3))
-        ):
+    repeated_subject_runs = repeated_subject_candidates(sents)
+    for token, run_sents in repeated_subject_runs[:2]:
+        add(
+            findings,
+            "NATIVE_WARNING",
+            "repeated explicit context candidate",
+            " | ".join(run_sents[:4]),
+            note=(
+                f"«{token}» opens {len(run_sents)} consecutive sentences; check "
+                "pronoun, zero subject, ellipsis or a different theme-rheme order"
+            ),
+        )
+
+    undercompression_pairs = 0
+    for left, right in zip(sents, sents[1:]):
+        lw = [w for w in words(left) if len(w) >= 5]
+        rw = [w for w in words(right) if len(w) >= 5]
+        shared = sorted(set(lw) & set(rw))
+        if len(shared) >= 3 and word_count(left) >= 7 and word_count(right) >= 7:
+            undercompression_pairs += 1
             add(
                 findings,
                 "NATIVE_WARNING",
-                "repeated explicit subject candidate",
-                tri[0][0],
-                note="check pronoun, zero subject, ellipsis or different information structure",
+                "context undercompression candidate",
+                f"{left} | {right}",
+                note=(
+                    "adjacent sentences repeat several content words; check whether "
+                    "the second can trust the first sentence's context instead of "
+                    "renaming the same material"
+                ),
             )
-            break
 
     if ASCII_DASH_IN_PROSE.search(prose):
         add(
@@ -310,7 +479,7 @@ def lint(text: str) -> tuple[list[dict], dict]:
             "STYLE_WARNING",
             "ascii hyphen used as dash",
             " - ",
-            note="check typography; do not replace normative em dash for anti-detection",
+            note="check typography; do not replace normative dash for anti-detection",
         )
 
     dash_count = len(re.findall(r"[—–]", prose))
@@ -325,6 +494,15 @@ def lint(text: str) -> tuple[list[dict], dict]:
         "questions": prose.count("?"),
         "emoji": len(EMOJI.findall(prose)),
         "bold_spans": len(BOLD_SPAN.findall(text)),
+        "contrast_formulae": contrast_hits,
+        "slogan_markers": slogan_hits,
+        "short_question_answer_pairs": qa_hits,
+        "possessive_dense_sentences": possessive_dense,
+        "parcellated_enumerations": parcellated_enum_hits,
+        "short_fragment_clusters": short_fragment_clusters,
+        "repeated_sentence_start_flag": repeated_start_flag,
+        "repeated_explicit_context_runs": len(repeated_subject_runs),
+        "undercompression_pairs": undercompression_pairs,
     }
 
     if len(sents) >= 6 and dash_count >= 5 and dash_count > len(sents) / 2:
@@ -354,23 +532,20 @@ def self_test() -> None:
     )
     findings, _ = lint(compressed)
     assert not [
-        item for item in findings
-        if item["rule"] == "repeated common element in contrast"
+        item for item in findings if item["rule"] == "repeated common element in contrast"
     ], findings
 
     verb_repeat = "Мы не меняем цену, а меняем условия."
     findings, _ = lint(verb_repeat)
     assert any(
-        item["rule"] == "repeated common element in contrast"
-        for item in findings
+        item["rule"] == "repeated common element in contrast" for item in findings
     ), findings
 
-    but_repeat = "Это ошибка в расчёте, но ошибка не критическая."
-    findings, _ = lint(but_repeat)
-    assert any(
-        item["rule"] == "repeated common element in contrast"
-        for item in findings
-    ), findings
+    intentional_repeat = "Никогда. Никогда больше."
+    findings, _ = lint(intentional_repeat)
+    assert not [
+        item for item in findings if item["rule"] == "repeated common element in contrast"
+    ], findings
 
     enum = (
         "С такими курсами обычно две беды. "
@@ -395,8 +570,38 @@ def self_test() -> None:
         "Он положил свою руку в свой карман. "
         "Я дал ему мой ответ после того, как закончил мою встречу."
     )
-    findings, _ = lint(calque)
+    findings, metrics = lint(calque)
     assert any(item["rule"].startswith("calque:") for item in findings), findings
+    assert metrics["possessive_dense_sentences"] >= 1, metrics
+
+    subject_lock = (
+        "Компания выпустила новую версию продукта. "
+        "Компания добавила новые фильтры для поиска. "
+        "Компания изменила старую страницу настроек."
+    )
+    findings, _ = lint(subject_lock)
+    assert any(
+        item["rule"] in {"repeated sentence start", "repeated explicit context candidate"}
+        for item in findings
+    ), findings
+
+    qa = (
+        "Главное? Начать. Хорошая новость? Это решаемо. "
+        "Почему это важно? Потому что рынок изменился."
+    )
+    findings, metrics = lint(qa)
+    assert any(
+        item["rule"] == "anglo-rhetorical question/answer cluster" for item in findings
+    ), findings
+    assert metrics["short_question_answer_pairs"] >= 2, metrics
+
+    dialogue = "Кого любит Паша? Машу."
+    findings, _ = lint(dialogue)
+    assert not [
+        item
+        for item in findings
+        if item["rule"] == "anglo-rhetorical question/answer cluster"
+    ], findings
 
     print("self-test: OK")
 
@@ -416,34 +621,19 @@ def main() -> None:
     findings, metrics = lint(text)
 
     if args.as_json:
-        print(json.dumps(
-            {"findings": findings, "metrics": metrics},
-            ensure_ascii=False,
-            indent=2,
-        ))
+        print(
+            json.dumps(
+                {"findings": findings, "metrics": metrics},
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
     else:
-        if findings:
-            for finding in findings:
-                loc = f"line {finding['line']}" if finding["line"] else "text"
-                print(
-                    f"{finding['kind']:14} {loc:10} "
-                    f"{finding['rule']}: {finding['excerpt']}"
-                )
-                if finding["note"]:
-                    print(f"  {finding['note']}")
-        else:
-            print("no deterministic surface findings")
-
-        print("\nmetrics:")
-        for key, value in metrics.items():
-            print(f"  {key}: {value}")
-
-        artifacts = [item for item in findings if item["kind"] == "ARTIFACT"]
-        if artifacts:
-            print("\ngate failed: technical chatbot artifacts remain")
-        else:
-            print("\ngate passed: no technical chatbot artifacts")
-            print("soft/native findings still require contextual Russian-language review")
+        for item in findings:
+            loc = f":{item['line']}" if item["line"] else ""
+            note = f" — {item['note']}" if item["note"] else ""
+            print(f"{item['kind']}{loc} [{item['rule']}]: {item['excerpt']}{note}")
+        print(json.dumps(metrics, ensure_ascii=False))
 
     if any(item["kind"] == "ARTIFACT" for item in findings):
         raise SystemExit(1)

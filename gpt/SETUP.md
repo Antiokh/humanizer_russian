@@ -1,110 +1,102 @@
 # Настройка Custom GPT
 
-## Доступность
+## Название
 
-Создание и редактирование GPT доступно платным пользователям ChatGPT в веб-интерфейсе. В managed workspace доступ дополнительно зависит от настроек пространства и роли пользователя. Перед публикацией проверяй актуальную справку OpenAI: условия могут меняться.
+`humanizer_russian · Русский редактор`
 
-Официальная справка: https://help.openai.com/en/articles/8554397-
+## Описание
 
-## Поля GPT Builder
+Русский редактор с mechanical-first проверкой: сначала дешёвые детерминированные surface checks, затем при необходимости контекстный слой нормы, живой речи и идиолекта автора.
 
-### Название
+## Instructions
 
-`humanizer+ru · Русский редактор`
+Скопируй `gpt/INSTRUCTIONS.md` в поле Instructions.
 
-### Описание
+## Runtime-файлы: минимальный набор
 
-Редактор русского текста: отделяет академическую норму от живой речи носителя. Сначала сохраняет смысл и исправляет реальные ошибки, затем убирает ненужные повторы, восстанавливает естественный русский порядок слов и контекстное сжатие, после этого чистит кальки и AI-шаблоны.
+Для обычной работы не нужно превращать Knowledge в свалку всех reference-файлов.
 
-### Instructions
+Минимум:
 
-Скопируй целиком `gpt/INSTRUCTIONS.md` в поле **Instructions**.
+1. `SKILL.md`;
+2. `scripts/check.py`;
+3. `scripts/lint.py`.
 
-## Knowledge
+Если доступен Code Interpreter, `scripts/check.py` — первый runtime-pass.
 
-Загрузи:
+## Source pack: подключать по задаче
 
-1. `references/russian-language.md` — что допустимо и грамотно;
-2. `references/native-russian.md` — как из допустимых вариантов естественнее говорит носитель;
-3. `references/rule-audit.md`;
-4. `references/nora-gal.md`;
-5. `references/author-profile.md`;
-6. `knowledge/corrections.md`;
-7. `scripts/lint.py`;
-8. `SKILL.md`.
+Дополнительные файлы нужны не всегда:
+
+- `references/russian-language.md` — когда спорим о норме;
+- `references/native-russian.md` — когда нужен глубокий разбор естественности;
+- `references/nora-gal.md` — семантическая/литературная редактура;
+- `references/rule-audit.md` и `references/evidence-audit.md` — аудит правил;
+- `references/author-profile.md` — персонализация;
+- `knowledge/corrections.md` — работа над регрессиями.
+
+`references/native-russian-user-context.md` — исходный материал для разработки правил. Его не нужно тащить в каждый runtime-сеанс.
 
 Не загружай `evals/*.json` как Knowledge: это тесты.
 
-`profile_author.py` запускается отдельно для построения `profile.json`; сам профиль можно загрузить при работе с конкретным автором.
+## Проверка проекта
+
+Deterministic regression test:
+
+```bash
+python3 scripts/benchmark_lint.py
+```
+
+Корпус: `tests/lint_cases.json`.
+
+Он не использует модель, web или reference-файлы.
+
+Полный surface linter можно проверить отдельно:
+
+```bash
+python3 scripts/lint.py --self-test
+```
+
+Author profiler:
+
+```bash
+python3 scripts/profile_author.py corpus/ -o profile.json
+```
+
+Профиль валидируется по `profiles/schema.json`.
 
 ## Возможности
 
-Включить по необходимости:
-
-- **Web Search** — для текущих и спорных фактов;
-- **Code Interpreter & Data Analysis** — для `lint.py` и author profile.
-
-Image generation, Apps и Actions базовому редактору не нужны.
-
-### Рекомендуемая модель
-
-Выбери наиболее сильную доступную модель с нужными capabilities. Не закрепляй документацию за конкретным номером модели.
+Для mechanical runtime нужен инструмент исполнения кода. Web Search включай только если сама задача редактуры требует проверки текущих или спорных фактов.
 
 ## Подсказки для начала разговора
 
-1. `Отредактируй текст. Сохрани мой голос и сделай по-русски естественно.`
-2. `Проведи аудит: отдельно ошибки нормы, отдельно синтетические конструкции живой речи.`
-3. `Убери повторы, проверь тему/рему, эллипсис и порядок слов.`
-4. `Подстрой текст под мой идиолект по profile.json.`
+1. `Отредактируй текст. Сначала прогони mechanical check, потом правь только найденное и очевидные контекстные проблемы.`
+2. `Проведи глубокий аудит: mechanical + extended, но не считай warnings ошибками автоматически.`
+3. `Сделай по-русски естественно, не разворачивай контекст в полные учебниковые предложения.`
+4. `Подстрой текст под profile.json, но не копируй ошибки автора.`
 
-## Перед публикацией
+## Перед публикацией конфигурации
 
 Прогони:
 
+- `python3 scripts/benchmark_lint.py`;
+- `python3 scripts/lint.py --self-test`;
 - `gpt/TESTS.md`;
-- `evals/nora-gal.json`;
-- `evals/russian-language.json`;
-- `python3 scripts/lint.py --self-test`.
+- `evals/russian-language.json` и `evals/nora-gal.json` как отдельные model-evals, а не замену mechanical tests;
+- `profile_author.py` на небольшом корпусе с schema-validation.
 
-### Автоматические блокеры
+## Автоматические блокеры результата
 
-Не публикуй результат, если:
+Не публикуй результат редактуры, если:
 
 - изменён факт, причинность или степень уверенности;
 - создана реальная языковая ошибка;
 - остался надёжный технический `ARTIFACT`;
 - модель заявляет о проверке, которой не было.
 
-### Ручная проверка естественности
-
-Это не блокеры сами по себе:
-
-- повтор общей части в `не ошибка..., а ошибка...`;
-- повтор глагола, который потенциально можно вынести;
-- SVO-lock;
-- избыточно полная фраза там, где контекст допускает эллипсис;
-- непривычный порядок слов;
-- `NATIVE_WARNING`, `AI_PATTERN`, `STYLE_WARNING`, `AUTHOR_MISMATCH`.
-
-Если конструкция намеренна, уместна или соответствует автору, её можно сохранить.
-
-## Сборка в интерфейсе
-
-1. Открой GPT editor в веб-версии ChatGPT.
-2. Заполни Name, Description и Conversation starters.
-3. Вставь `gpt/INSTRUCTIONS.md` в Instructions.
-4. Загрузи Knowledge-файлы выше.
-5. Включи нужные capabilities.
-6. Проверь GPT в Preview.
-7. Прогони smoke/eval-сценарии.
-8. Сохрани и настрой sharing согласно текущему плану и workspace permissions.
+`NATIVE_WARNING`, `AI_PATTERN`, `STYLE_WARNING`, `AUTHOR_MISMATCH` — не автоматические ошибки.
 
 ## Обновление
 
-После изменений:
-
-- обнови Instructions;
-- замени Knowledge-файлы;
-- повтори evals;
-- проверь, что публичное описание соответствует текущей конфигурации;
-- перепроверь актуальные ограничения GPT Builder в официальной справке OpenAI.
+После изменения mechanical rule сначала добавь positive/negative regression cases в `tests/lint_cases.json`, затем меняй runtime-поведение. Reference-файл без теста не должен сам по себе превращаться в обязательное правило.
