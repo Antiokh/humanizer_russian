@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Normalized Chukovsky knowledge-library adapter.
 
-Mechanical detection stays in chukovsky_checks.py. This module maps the seven
-accepted EXTENDED_SOFT candidates through the canonical CHUK rule registry so
-compact and editorial-board modes consume the same source output without
-copying phenomenon/class/automation metadata into two runtimes.
+Mechanical detection stays in chukovsky_checks.py. This module normalizes the
+seven accepted EXTENDED_SOFT candidates through the canonical CHUK rule
+registry so compact and editorial-board modes consume one source output.
 """
 
 from __future__ import annotations
@@ -23,21 +22,9 @@ except ImportError:  # package/import context
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = ROOT / "libraries" / "chukovsky" / "rules.json"
 
-# Detector labels are implementation details. Canonical public/runtime identity
-# is CHUK-Rxx and is defined in libraries/chukovsky/rules.json.
-DETECTOR_RULE_IDS = {
-    "chukovsky: metadiscourse deletion test": "CHUK-R24",
-    "chukovsky: bureaucratic-register cluster": "CHUK-R15",
-    "chukovsky: light verb + nominalization": "CHUK-R17",
-    "chukovsky: nominalization cluster": "CHUK-R17",
-    "chukovsky: modifier subtraction candidate": "CHUK-R18",
-    "chukovsky: evaluative-template cluster": "CHUK-R19",
-    "chukovsky: repeated 'question' packaging": "CHUK-R25",
-    "chukovsky: abbreviation-density candidate": "CHUK-R09",
-}
-
 # R17 has two surface routes to the same underlying phenomenon. The registry
-# stores the general operation; the cluster route benefits from a narrower hint.
+# stores the general operation; the dense-cluster route benefits from a narrower
+# follow-up hint. Rule identity itself comes from chukovsky_checks.py.
 OPERATION_OVERRIDES = {
     "chukovsky: nominalization cluster": "reconstruct_events_and_roles",
 }
@@ -59,13 +46,15 @@ def review(text: str) -> dict:
     findings, metrics = check_chukovsky(prose, sentences(text))
     normalized = []
     for item in findings:
-        detector_label = item["rule"]
-        rule_id = DETECTOR_RULE_IDS.get(detector_label)
-        if rule_id is None:
-            raise ValueError(f"unmapped Chukovsky detector label: {detector_label}")
+        if item.get("source") != "chukovsky":
+            raise ValueError(f"unexpected source in Chukovsky adapter: {item.get('source')!r}")
+        rule_id = item.get("rule_id")
+        if not rule_id:
+            raise ValueError(f"Chukovsky detector omitted structured rule_id: {item}")
         rule = RULES.get(rule_id)
         if rule is None:
             raise ValueError(f"Chukovsky detector references missing registry rule: {rule_id}")
+        detector_label = item.get("rule", "")
         operation = OPERATION_OVERRIDES.get(detector_label, rule.get("operation"))
         normalized.append(
             {
