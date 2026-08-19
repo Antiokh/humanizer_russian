@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Guard the repository's mechanical-first architecture against accidental regressions.
-
-This validator is intentionally small. It does not freeze implementation details;
-it protects only the invariants that future source-layer integrations must retain.
-"""
+"""Guard mechanical-first, dual-runtime architecture against regressions."""
 
 from __future__ import annotations
 
@@ -15,10 +11,22 @@ REQUIRED_FILES = [
     "AGENTS.md",
     "CONTRIBUTING.md",
     "SKILL.md",
+    "BOARD_SKILL.md",
+    "docs/editorial-board-architecture.md",
+    "libraries/README.md",
+    "libraries/native/library.json",
+    "reviewers/native.json",
+    "styles/neutral.json",
     "scripts/check.py",
     "scripts/lint.py",
+    "scripts/library_runtime.py",
+    "scripts/editorial_board.py",
+    "scripts/review.py",
+    "scripts/validate_libraries.py",
     "scripts/benchmark_lint.py",
+    "scripts/benchmark_board.py",
     "tests/lint_cases.json",
+    "tests/editorial_board_cases.json",
     ".github/workflows/quality.yml",
 ]
 
@@ -38,11 +46,20 @@ CHECK_MARKERS = [
     "from lint import lint",
 ]
 
+BOARD_MARKERS = [
+    "Editorial Board mode",
+    "scripts/review.py",
+    "CONSENSUS",
+    "SOURCE_CONFLICT",
+]
+
 QUALITY_MARKERS = [
     "python -m compileall -q scripts",
     "python scripts/lint.py --self-test",
     "python scripts/benchmark_lint.py",
     "python scripts/validate_architecture.py",
+    "python scripts/validate_libraries.py",
+    "python scripts/benchmark_board.py",
 ]
 
 
@@ -64,15 +81,16 @@ def main() -> None:
     if not failures:
         agents = read("AGENTS.md")
         check = read("scripts/check.py")
+        board = read("BOARD_SKILL.md")
         quality = read(".github/workflows/quality.yml")
         contributing = read("CONTRIBUTING.md")
 
         for marker in AGENT_MARKERS:
             require(marker in agents, f"AGENTS.md lost required marker: {marker}", failures)
-
         for marker in CHECK_MARKERS:
             require(marker in check, f"scripts/check.py lost mechanical-first marker: {marker}", failures)
-
+        for marker in BOARD_MARKERS:
+            require(marker in board, f"BOARD_SKILL.md lost required marker: {marker}", failures)
         for marker in QUALITY_MARKERS:
             require(marker in quality, f"quality workflow lost required check: {marker}", failures)
 
