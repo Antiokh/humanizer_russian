@@ -30,6 +30,9 @@ jobs:
       - name: Ilyakhov linter self-test
         run: python scripts/lint_ilyakhov.py --self-test
 
+      - name: Validate Ilyakhov registry and eval coverage
+        run: python scripts/validate_ilyakhov.py
+
       - name: Smoke-test and validate author profiler
         run: |
           tmpdir="$(mktemp -d)"
