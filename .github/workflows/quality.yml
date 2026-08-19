@@ -41,6 +41,12 @@ jobs:
       - name: Linter self-test
         run: python scripts/lint.py --self-test
 
+      - name: Native library provenance self-test
+        run: python scripts/lint_native.py
+
+      - name: Chukovsky normalized adapter self-test
+        run: python scripts/lint_chukovsky.py
+
       - name: Deterministic mechanical linter benchmark
         run: python scripts/benchmark_lint.py
 
@@ -55,6 +61,19 @@ jobs:
 
       - name: Smoke-test board JSON output
         run: printf '%s' 'Это не ошибка в расчёте, а ошибка в исходных данных.' | python scripts/review.py --format json >/tmp/board.json
+
+      - name: Smoke-test Chukovsky in compact and board runtimes
+        run: |
+          printf '%s' 'Следует отметить, что резервная копия завершилась в 03:10.' | python scripts/check.py --extended --json >/tmp/chuk-compact.json
+          printf '%s' 'Следует отметить, что резервная копия завершилась в 03:10.' | python scripts/review.py --libraries native,chukovsky --format json >/tmp/chuk-board.json
+          python - <<'PY'
+          import json
+          compact = json.load(open('/tmp/chuk-compact.json', encoding='utf-8'))
+          board = json.load(open('/tmp/chuk-board.json', encoding='utf-8'))
+          assert any(item.get('library_id') == 'chukovsky' and item.get('phenomenon_id') == 'editing.metadiscourse_announcement' for item in compact['findings']), compact
+          assert any(item.get('library_id') == 'chukovsky' and item.get('rule_id') == 'CHK-R24' for item in board['findings']), board
+          assert not any(item.get('library_id') == 'native' and str(item.get('rule_id', '')).startswith('CHUK-') for item in board['findings']), board
+          PY
 
       - name: Smoke-test and validate author profiler
         run: |
