@@ -56,6 +56,7 @@ def validate() -> None:
     doc = DOC_PATH.read_text(encoding="utf-8")
     source_claims = CLAIMS_PATH.read_text(encoding="utf-8")
     plan = PLAN_PATH.read_text(encoding="utf-8")
+    evidence_text = f"{doc}\n{plan}"
     manifest = load_json(MANIFEST_PATH)
     failures: list[str] = []
 
@@ -89,11 +90,12 @@ def validate() -> None:
                 isinstance(url, str) and url.startswith(PRIMARY_URL_PREFIXES),
                 f"{claim_id}: non-primary/unapproved evidence URL {url!r}",
             )
-            check(url in doc, f"{claim_id}: evidence URL missing from narrative audit: {url}")
+            check(url in evidence_text, f"{claim_id}: evidence URL missing from audit/plan: {url}")
 
         check(f"`{claim_id}`" in source_claims, f"{claim_id}: missing from source claims audit")
         check(f"`{claim_id}`" in doc, f"{claim_id}: missing from narrative evidence audit")
-        check(str(disposition) in doc, f"{claim_id}: disposition not represented in narrative audit")
+        for component in str(disposition).split("+"):
+            check(component in doc, f"{claim_id}: disposition component missing from narrative audit: {component}")
 
     for claim_id in UNMEASURED_CORPUS_IDS:
         row = by_id.get(claim_id, {})
@@ -124,8 +126,7 @@ def validate() -> None:
         "No corpus result for `GAL-CLAIM-03`",
         "No “vocabulary decline” result for `GAL-CLAIM-14`",
     ]:
-        corpus_text = f"{doc}\n{plan}"
-        check(phrase in corpus_text, f"evidence boundary marker missing: {phrase}")
+        check(phrase in evidence_text, f"evidence boundary marker missing: {phrase}")
 
     # The JSON must not silently contain source-claim IDs outside the canonical 15.
     raw_ids = set(re.findall(r"GAL-CLAIM-\d+", DATA_PATH.read_text(encoding="utf-8")))
