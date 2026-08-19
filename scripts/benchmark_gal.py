@@ -20,6 +20,7 @@ CASES = ROOT / "tests" / "gal_cases.json"
 
 
 def direct_source_failures() -> tuple[list[str], int]:
+    """Run Gal source-specific deterministic cases and return failures plus count."""
     payload = json.loads(CASES.read_text(encoding="utf-8"))
     failures: list[str] = []
     for case in payload["cases"]:
@@ -53,6 +54,7 @@ def direct_source_failures() -> tuple[list[str], int]:
 
 
 def runtime_failures() -> list[str]:
+    """Validate shared compact/board routing, provenance, negatives, and guardrails."""
     failures: list[str] = []
     shared = "Осуществляется проведение проверки сервиса."
 
@@ -126,6 +128,7 @@ def runtime_failures() -> list[str]:
 
 
 def main() -> None:
+    """Run source and runtime regressions and exit nonzero on any failure."""
     failures, direct_count = direct_source_failures()
     failures.extend(runtime_failures())
     if failures:
