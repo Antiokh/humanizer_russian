@@ -171,9 +171,11 @@ python scripts/check.py --extended text.md
 
 При интеграции Галь, Ильяхова, Чуковского или нового источника **текущий `main` является архитектурной базой**.
 
+Для новых циклов работы используй долгоживущую ветку по фамилии автора (`gal`, `ilyakhov`, `chukovsky`, ...). Ветка сохраняется после merge и периодически подтягивает свежий `main`. Не создавай одноразовую `integration/<source>` ветку, если уже существует каноническая author branch.
+
 Если source-ветка была создана до последних изменений `main`:
 
-1. сначала синхронизируй её с текущим `main` или создай новую integration-ветку от `main`;
+1. сначала синхронизируй её с текущим `main`;
 2. не разрешай конфликт простым выбором «theirs» для core-файлов;
 3. переноси source-specific знания и проверки поверх текущей архитектуры;
 4. сохраняй mechanical-first runtime, benchmark и selective context loading;
@@ -183,9 +185,11 @@ python scripts/check.py --extended text.md
 
 - `AGENTS.md`;
 - `SKILL.md`;
+- `BOARD_SKILL.md`;
 - `scripts/check.py`;
 - `scripts/lint.py`;
 - `scripts/benchmark_lint.py`;
+- `scripts/benchmark_board.py`;
 - `tests/lint_cases.json`;
 - `.github/workflows/quality.yml`;
 - `CONTRIBUTING.md`;
@@ -197,13 +201,16 @@ python scripts/check.py --extended text.md
 
 Предпочтительная схема для крупных источников:
 
-- отдельный модуль: например `scripts/lint_ilyakhov.py`, `scripts/chukovsky_checks.py`;
-- главный `scripts/lint.py` агрегирует результаты;
+- отдельный модуль: например `scripts/lint_gal.py`, `scripts/lint_ilyakhov.py`, `scripts/lint_chukovsky.py`;
+- manifest `libraries/<author>/library.json`;
+- reviewer profile `reviewers/<author>.json`;
 - source-specific finding остаётся неблокирующим, пока не доказана другая severity;
 - default checker показывает его только после отдельной калибровки;
 - source-specific structural validator можно добавить в CI, но он дополняет, а не заменяет базовый benchmark.
 
 Не раздувай один огромный regex-файл, если источник естественно выделяется в модуль.
+
+Для новых book libraries предпочитай normalized adapter `review_v1` из `libraries/README.md`.
 
 ## 12. Книги дают EDITING, не NORM автоматически
 
@@ -258,8 +265,11 @@ Model evals нужны для того, что нельзя честно про�
 
 ```bash
 python -m compileall -q scripts
+python scripts/validate_architecture.py
+python scripts/validate_libraries.py
 python scripts/lint.py --self-test
 python scripts/benchmark_lint.py
+python scripts/benchmark_board.py
 ```
 
 Если менялся author profiler — проверь schema validation.
@@ -283,6 +293,8 @@ PR, который добавляет языковой/редакторский 
 7. Какие изменения runtime-контекста нужны? По умолчанию ответ должен быть «минимальные/адресные».
 8. Не конфликтует ли слой с `NATIVE_USAGE`?
 9. Что сознательно **не** автоматизировано?
+10. Какой `phenomenon_id` используется для пересечения с другими libraries?
+11. Как слой ведёт себя в compact и editorial-board mode?
 
 ## 17. Главное правило при сомнении
 
@@ -296,3 +308,47 @@ PR, который добавляет языковой/редакторский 
 Если механическая проверка врёт без контекста — не усложняй regex до псевдолингвистики; оставь её model-only.
 
 Цель проекта — **проверяемый русский редактор**, а не система, которая выигрывает за счёт объёма контекста.
+
+## 18. Два продуктовых режима — один движок
+
+Проект обязан поддерживать два режима из одного `main` и одного набора libraries.
+
+### Compact humanizer
+
+`SKILL.md` + `scripts/check.py`.
+
+Используется для быстрых проверок, CI и проектов, которым не нужна редакционная коллегия. Выдаёт короткий объединённый результат и не обязан показывать все source opinions.
+
+### Editorial board
+
+`BOARD_SKILL.md` + `scripts/review.py`.
+
+Используется для глубокой редактуры. Сохраняет reviewer provenance, disagreement, consensus и style policy. Нельзя реализовывать правила повторно специально для board: он потребляет тот же library output.
+
+Compact и board — **не отдельные ветки продукта**. Это два entrypoint общего движка.
+
+## 19. Книги — подключаемые библиотеки знаний
+
+Каждый новый автор/источник интегрируется как независимая library:
+
+```text
+libraries/<id>/library.json
+reviewers/<id>.json
+source-specific linter/evals/references
+```
+
+Source-specific `rule_id` сохраняет provenance. Source-neutral `phenomenon_id` позволяет понять, что разные авторы обсуждают одно и то же явление.
+
+Если авторы не согласны — сохранить `SOURCE_CONFLICT`, а не выбирать одного во время merge.
+
+Стили под `styles/*.json` разрешают конфликты на уровне конкретного проекта/жанра, но не меняют сами source rules.
+
+## 20. Оригиналы книг и приватные source repos
+
+Публичный repo не должен содержать book dumps и большие защищённые фрагменты. Если оригинал книги нужен агенту после потери chat context, допускается читать его из подключённого приватного source repo.
+
+В публичный `humanizer_russian` переносить производное знание: rules, concepts, locators, provenance, tests, audits и собственные примеры.
+
+## 21. Reviewer UI и аватары
+
+Профиль reviewer может содержать лицензионно допустимый avatar. В интерфейсе имя автора означает «оценка по формализованной системе автора», а не реальную рецензию, цитату или endorsement этого человека.
