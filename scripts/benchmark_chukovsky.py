@@ -20,6 +20,7 @@ except ImportError:  # package/import context
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASES = ROOT / "tests" / "chukovsky_cases.json"
+EXPECTATION_KEYS = {"must_find", "must_not_find", "clean", "metric_min", "metric_max"}
 
 
 def split_sentences(text: str) -> list[str]:
@@ -30,6 +31,11 @@ def run_case(case: dict) -> list[str]:
     findings, metrics = check_chukovsky(case["text"], split_sentences(case["text"]))
     rules = [item["rule"] for item in findings]
     errors: list[str] = []
+
+    if not any(key in case for key in EXPECTATION_KEYS):
+        errors.append(
+            "fixture declares no expectation; add must_find/must_not_find/clean/metric_min/metric_max"
+        )
 
     for expected in case.get("must_find", []):
         if expected not in rules:
