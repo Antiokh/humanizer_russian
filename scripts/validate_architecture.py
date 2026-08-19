@@ -38,12 +38,14 @@ AGENT_MARKERS = [
     "EXTENDED_SOFT",
     "MODEL_ONLY",
     "tests/lint_cases.json",
+    "Два продуктовых режима",
+    "Книги — подключаемые библиотеки знаний",
 ]
 
 CHECK_MARKERS = [
     "MECHANICAL_RULES",
     "--extended",
-    "from lint import lint",
+    "from library_runtime import compact_shape, run_libraries",
 ]
 
 BOARD_MARKERS = [
@@ -88,7 +90,7 @@ def main() -> None:
         for marker in AGENT_MARKERS:
             require(marker in agents, f"AGENTS.md lost required marker: {marker}", failures)
         for marker in CHECK_MARKERS:
-            require(marker in check, f"scripts/check.py lost mechanical-first marker: {marker}", failures)
+            require(marker in check, f"scripts/check.py lost compact-library marker: {marker}", failures)
         for marker in BOARD_MARKERS:
             require(marker in board, f"BOARD_SKILL.md lost required marker: {marker}", failures)
         for marker in QUALITY_MARKERS:
