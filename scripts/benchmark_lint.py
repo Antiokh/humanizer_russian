@@ -24,6 +24,7 @@ DEFAULT_CASES = ROOT / "tests" / "lint_cases.json"
 
 
 def test_compact_deduplication() -> None:
+    """Exercise compatible, conflicting, and unmapped compact grouping cases."""
     common = {
         "phenomenon_id": "editing.action_hidden_in_nominalization",
         "project_class": "EDITING",
@@ -63,8 +64,31 @@ def test_compact_deduplication() -> None:
     assert len(rows) == 2, rows
     assert not any("deduplicated_sources" in row for row in rows), rows
 
+    unmapped = [
+        dict(
+            compatible[0],
+            phenomenon_id=None,
+            rule_id="TEST-A",
+            library_id="a",
+            source_namespace="A",
+            reviewer_id="a",
+        ),
+        dict(
+            compatible[0],
+            phenomenon_id=None,
+            rule_id="TEST-B",
+            library_id="b",
+            source_namespace="B",
+            reviewer_id="b",
+        ),
+    ]
+    rows = compact_rows(unmapped)
+    assert len(rows) == 2, rows
+    assert not any("deduplicated_sources" in row for row in rows), rows
+
 
 def run_case(case: dict) -> dict:
+    """Run one deterministic corpus case and return a structured result."""
     extended = case.get("mode", "mechanical") == "extended"
     findings, metrics = check_text(case["text"], extended=extended)
     rules = [item["rule"] for item in findings]
@@ -90,6 +114,7 @@ def run_case(case: dict) -> dict:
 
 
 def run_suite(path: Path) -> dict:
+    """Run a JSON corpus and summarize pass/fail counts by mode."""
     payload = json.loads(path.read_text(encoding="utf-8"))
     cases = payload["cases"]
 
@@ -113,6 +138,7 @@ def run_suite(path: Path) -> dict:
 
 
 def main() -> None:
+    """Run the requested benchmark corpus and print a human or JSON report."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "cases",
