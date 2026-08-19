@@ -57,18 +57,6 @@
       "must_find": ["ascii hyphen used as dash"]
     },
     {
-      "id": "ilyakhov-default-bureaucratic-tautology",
-      "mode": "mechanical",
-      "text": "Подрядчик должен произвести выполнение работ до пятницы.",
-      "must_find": ["ilyakhov: bureaucratic tautology"]
-    },
-    {
-      "id": "ilyakhov-default-bureaucratic-tautology-passive",
-      "mode": "mechanical",
-      "text": "В рамках проекта было осуществлено проведение проверки.",
-      "must_find": ["ilyakhov: bureaucratic tautology"]
-    },
-    {
       "id": "clean-compressed-contrast",
       "mode": "mechanical",
       "text": "Это ошибка не в расчёте, а в исходных данных.",
@@ -132,36 +120,6 @@
       "id": "clean-repeated-subject-hidden-by-default",
       "mode": "mechanical",
       "text": "Компания выпустила новую версию. Компания добавила фильтры. Компания изменила поиск.",
-      "clean": true
-    },
-    {
-      "id": "clean-ilyakhov-normal-nominalization",
-      "mode": "mechanical",
-      "text": "Мы провели исследование и отправили отчёт.",
-      "clean": true
-    },
-    {
-      "id": "clean-ilyakhov-passive-result",
-      "mode": "mechanical",
-      "text": "Было проведено исследование условий труда.",
-      "clean": true
-    },
-    {
-      "id": "clean-ilyakhov-transition",
-      "mode": "mechanical",
-      "text": "Нужно осуществить переход на новый тариф до пятницы.",
-      "clean": true
-    },
-    {
-      "id": "clean-ilyakhov-cognitive-frame",
-      "mode": "mechanical",
-      "text": "Мне кажется, данных пока недостаточно.",
-      "clean": true
-    },
-    {
-      "id": "clean-ilyakhov-state-definition",
-      "mode": "mechanical",
-      "text": "Контроллер является частью системы.",
       "clean": true
     },
     {
@@ -231,60 +189,6 @@
       "must_find": ["high dash density"]
     },
     {
-      "id": "extended-ilyakhov-common-knowledge",
-      "mode": "extended",
-      "text": "Как известно, этот способ используют давно.",
-      "must_find": ["ilyakhov: common-knowledge wrapper"]
-    },
-    {
-      "id": "extended-ilyakhov-numbering",
-      "mode": "extended",
-      "text": "Во-первых, проверим данные. Во-вторых, сравним версии.",
-      "must_find": ["ilyakhov: verbal-numbering cluster"]
-    },
-    {
-      "id": "extended-ilyakhov-politeness",
-      "mode": "extended",
-      "text": "Обращаем ваше внимание на срок. Просим вас прислать файл. С уважением, отдел.",
-      "must_find": ["ilyakhov: ceremonial-politeness cluster"]
-    },
-    {
-      "id": "extended-ilyakhov-intensifiers",
-      "mode": "extended",
-      "text": "Это абсолютно, невероятно и действительно важный результат.",
-      "must_find": ["ilyakhov: intensifier cluster"]
-    },
-    {
-      "id": "extended-ilyakhov-present-time-metric-only",
-      "mode": "extended",
-      "text": "В настоящее время компания выпускает три модели.",
-      "must_not_find": ["ilyakhov: present-time wrapper"]
-    },
-    {
-      "id": "extended-ilyakhov-meta-intro",
-      "mode": "extended",
-      "text": "В данной статье мы рассмотрим порядок возврата товара.",
-      "must_find": ["ilyakhov: meta-intro candidate"]
-    },
-    {
-      "id": "extended-ilyakhov-ritual-conclusion",
-      "mode": "extended",
-      "text": "Подводя итог, ещё раз повторим основные положения.",
-      "must_find": ["ilyakhov: ritual-conclusion candidate"]
-    },
-    {
-      "id": "extended-ilyakhov-broad-precision",
-      "mode": "extended",
-      "text": "99% всех людей используют этот метод каждый день.",
-      "must_find": ["ilyakhov: suspicious broad precision"]
-    },
-    {
-      "id": "extended-ilyakhov-generic-benefit",
-      "mode": "extended",
-      "text": "Наша команда профессионалов предлагает эффективные решения и индивидуальный подход.",
-      "must_find": ["ilyakhov: generic-benefit cluster"]
-    },
-    {
       "id": "extended-single-dialogue-not-qa-cluster",
       "mode": "extended",
       "text": "Кого любит Паша? Машу.",
@@ -301,24 +205,6 @@
       "mode": "extended",
       "text": "Это не ошибка, а предупреждение.",
       "must_not_find": ["repeated contrast formula"]
-    },
-    {
-      "id": "extended-ilyakhov-time-contrast-negative",
-      "mode": "extended",
-      "text": "Раньше выпускали одну модель, а в настоящее время выпускаем три.",
-      "must_not_find": ["ilyakhov: present-time wrapper"]
-    },
-    {
-      "id": "extended-ilyakhov-normal-politeness-negative",
-      "mode": "extended",
-      "text": "Пожалуйста, пришлите файл до пятницы.",
-      "must_not_find": ["ilyakhov: ceremonial-politeness cluster"]
-    },
-    {
-      "id": "extended-ilyakhov-single-intensifier-negative",
-      "mode": "extended",
-      "text": "Это очень важный для меня результат.",
-      "must_not_find": ["ilyakhov: intensifier cluster"]
     }
   ]
 }

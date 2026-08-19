@@ -16,14 +16,60 @@
 
 `NORM` отвечает на вопрос «можно ли так по-русски?». `NATIVE_USAGE` — «как из допустимых вариантов естественнее сказал бы носитель?». Это разные задачи.
 
+## Два режима из одного движка
+
+Проект развивает не две отдельные ветки продукта, а два entrypoint одного `main` и одного набора knowledge libraries.
+
+### Compact humanizer
+
+Для CI, быстрой проверки и проектов, которым не нужна редакционная коллегия:
+
+```bash
+python3 scripts/check.py text.md
+python3 scripts/check.py --json text.md
+```
+
+Компактный режим схлопывает источник правил в короткий mechanical-first результат.
+
+### Editorial board
+
+Для глубокой редактуры с отдельными мнениями редакторских школ:
+
+```bash
+python3 scripts/review.py text.md --style neutral
+python3 scripts/review.py text.md --style rslive_content --format json
+```
+
+Board сохраняет provenance каждого reviewer, группирует совпадающие явления через `phenomenon_id`, показывает `CONSENSUS`, `MAJORITY`, `SOURCE_CONFLICT` и применяет style policy. Имена авторов означают оценку по формализованной системе источника, а не реальную рецензию автора.
+
+Подробнее: `BOARD_SKILL.md` и `docs/editorial-board-architecture.md`.
+
+## Книги как библиотеки знаний
+
+Каждый новый источник подключается через manifest:
+
+```text
+libraries/<author>/library.json
+reviewers/<author>.json
+scripts/lint_<author>.py
+```
+
+Исследование живёт в долгоживущей ветке по фамилии автора (`gal`, `ilyakhov`, `chukovsky`, ...). После merge такую ветку не удаляют: она периодически подтягивает свежий `main` и продолжает развивать rules/evals/provenance.
+
+Разные авторы могут не соглашаться. Это не ошибка интеграции: source-specific `rule_id` сохраняется, а общий source-neutral `phenomenon_id` позволяет compact-режиму дедуплицировать сигнал и board-режиму показать конфликт.
+
+Оригинальные охраняемые книги не должны храниться в публичном repo. Их можно держать в приватном source repo; в `humanizer_russian` попадают производные rules, locators, provenance, tests и audits.
+
+См. `libraries/README.md` и `docs/source-integration-runbook.md`.
+
 ## Архитектурный контракт для разработки
 
-Корневой [`AGENTS.md`](AGENTS.md) — обязательный контракт для coding/research agents и интеграции новых языковых слоёв. [`CONTRIBUTING.md`](CONTRIBUTING.md) содержит тот же протокол в форме contributor guide.
+Корневой [`AGENTS.md`](AGENTS.md) — обязательный контракт для coding/research agents и интеграции новых языковых слоёв. [`CONTRIBUTING.md`](CONTRIBUTING.md) содержит contributor protocol.
 
 Ключевые требования:
 
 - текущий `main` является архитектурной базой для интеграции Галь, Ильяхова, Чуковского и следующих источников;
-- старые source-ветки не должны wholesale заменять `SKILL.md`, `scripts/check.py`, `scripts/lint.py`, benchmark, CI или native layer;
+- author branches не должны wholesale заменять `SKILL.md`, `BOARD_SKILL.md`, `scripts/check.py`, benchmark, CI или native layer;
 - каждое новое правило получает явный уровень: `HARD_GATE`, `DEFAULT_MECHANICAL`, `EXTENDED_SOFT`, `MODEL_ONLY` или `METRIC_ONLY`;
 - mechanical rule не попадает в default runtime без positive case, natural negative control и deterministic regression test;
 - source namespace (`GAL-*`, `ILY-*`, `CHUK-*`) показывает provenance, а не автоматически severity;
@@ -34,13 +80,6 @@
 
 ## Mechanical-first runtime
 
-Главный runtime-entrypoint:
-
-```bash
-python3 scripts/check.py text.md
-python3 scripts/check.py --json text.md
-```
-
 По умолчанию `check.py` показывает только сравнительно точные surface findings:
 
 - технические артефакты;
@@ -50,7 +89,7 @@ python3 scripts/check.py --json text.md
 
 Контекстные AI/style эвристики не должны запускаться автоматически для каждого текста.
 
-Если нужен глубокий аудит:
+Если нужен глубокий compact-аудит:
 
 ```bash
 python3 scripts/check.py --extended text.md
@@ -58,31 +97,27 @@ python3 scripts/check.py --extended text.md
 
 Extended mode добавляет SVO-lock proxies, context undercompression, possessive overexplication, Q/A-кластеры, повтор риторических формул, кальки и другие мягкие сигналы.
 
-`scripts/lint.py` остаётся движком surface-эвристик. `scripts/check.py` решает, какая их часть попадает в дешёвый runtime-pass.
+`scripts/lint.py` остаётся текущим core surface linter. Новые книги должны по возможности жить в source-specific modules и подключаться как libraries, а не раздувать один файл.
 
 ## Детерминированное тестирование
 
-Главный regression test не использует LLM-judge, web и reference-файлы:
+Основные regression tests не используют LLM-judge, web и полный набор reference-файлов:
 
 ```bash
 python3 scripts/benchmark_lint.py
-python3 scripts/benchmark_lint.py --json
+python3 scripts/benchmark_board.py
 ```
 
-Корпус: `tests/lint_cases.json`.
+Корпуса: `tests/lint_cases.json` и `tests/editorial_board_cases.json`.
 
-Там есть как положительные примеры, так и clean/negative controls. Поэтому новый regex должен не только поймать синтетику, но и не сработать на нормальном живом варианте.
-
-Правило считается готовым к mechanical runtime только если у него есть:
+Новое mechanical rule должно иметь как минимум:
 
 1. положительный пример;
 2. естественный отрицательный контроль;
 3. пограничный пример, если он нужен;
 4. deterministic regression case.
 
-Если проверку нельзя надёжно сделать механически, правило остаётся в `extended` или reference-слое.
-
-Подробнее: `tests/README.md`.
+Если проверку нельзя надёжно сделать механически, правило остаётся `EXTENDED_SOFT`, `METRIC_ONLY` или `MODEL_ONLY`.
 
 ## Ключевые идеи живого русского
 
@@ -161,20 +196,22 @@ python3 scripts/benchmark_lint.py --json
 
 ## Файлы проекта
 
-- `AGENTS.md` — обязательный архитектурный контракт для агентов и source-layer integration;
-- `CONTRIBUTING.md` — contributor protocol;
-- `SKILL.md` — короткая runtime-спецификация;
-- `scripts/check.py` — mechanical-first вход;
-- `scripts/lint.py` — полный surface linter;
-- `scripts/benchmark_lint.py` — deterministic benchmark;
-- `tests/lint_cases.json` — regression corpus;
+- `AGENTS.md` — обязательный архитектурный контракт;
+- `SKILL.md` — compact runtime-spec;
+- `BOARD_SKILL.md` — editorial-board orchestration;
+- `libraries/` — подключаемые knowledge libraries;
+- `reviewers/` — UI/provenance profiles рецензентов;
+- `styles/` — редакционные политики;
+- `scripts/check.py` — compact mechanical-first вход;
+- `scripts/review.py` — editorial-board вход;
+- `scripts/library_runtime.py` — загрузка/нормализация libraries;
+- `scripts/editorial_board.py` — aggregation/conflict layer;
+- `scripts/benchmark_lint.py` — compact deterministic benchmark;
+- `scripts/benchmark_board.py` — board deterministic benchmark;
 - `references/russian-language.md` — нормативная база;
 - `references/native-russian.md` — систематизированный слой живого русского;
 - `references/native-russian-user-context.md` — исходные наблюдения носителя для разработки правил;
-- `references/nora-gal.md` — семантическая и литературная редактура;
-- `references/rule-audit.md` / `references/evidence-audit.md` — аудит унаследованных эвристик и доказательности;
-- `references/author-profile.md` — персонализация;
-- `knowledge/corrections.md` — журнал подтверждённых регрессий/исправлений.
+- `references/author-profile.md` — персонализация.
 
 Reference-файлы — база для разработки и разбора спорных случаев, а не обязательный payload каждого runtime-pass.
 
@@ -188,19 +225,18 @@ python3 scripts/profile_author.py corpus/ -o profile.json
 
 Ошибки автора хранятся отдельно от голоса и по умолчанию не имитируются.
 
-Схема: `profiles/schema.json`.
-
 ## CI
 
 CI проверяет:
 
 - компиляцию Python;
-- self-test полного линтера;
-- deterministic mechanical benchmark;
+- architecture contract;
+- library/reviewer/style schemas;
+- self-test core linter;
+- deterministic compact benchmark;
+- deterministic editorial-board benchmark;
 - author profiler + JSON Schema;
 - валидность JSON fixtures.
-
-Новые source-specific validators должны **добавляться** к этим проверкам, а не заменять их.
 
 ## Критерий качества
 

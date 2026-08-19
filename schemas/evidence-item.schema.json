@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence-item.schema.json",
+  "type": "object",
+  "required": ["provider_id", "phenomenon_id", "evidence_type", "direction", "target_scope", "reason"],
+  "properties": {
+    "provider_id": {"type": "string"},
+    "phenomenon_id": {"type": "string", "minLength": 1},
+    "evidence_type": {"enum": ["CORPUS_USAGE", "SPOKEN_USAGE", "LEXICAL_PRAGMATICS", "NORMATIVE_REFERENCE", "PARSED_CORPUS", "RESEARCH_EVIDENCE"]},
+    "direction": {"enum": ["SUPPORTS_KEEP", "SUPPORTS_CHANGE", "CONTEXT", "NEUTRAL"]},
+    "target_scope": {"enum": ["PHENOMENON", "SPAN"]},
+    "strength": {"enum": ["LOW", "MODERATE", "HIGH", "UNSPECIFIED"]},
+    "scope": {"type": "string"},
+    "line": {"type": "integer", "minimum": 0},
+    "excerpt": {"type": "string"},
+    "reason": {"type": "string"},
+    "provenance": {"type": "array", "items": {"type": "object", "required": ["source"], "properties": {"source": {"type": "string"}, "locator": {"type": "string"}, "url": {"type": "string"}, "accessed_at": {"type": "string"}}, "additionalProperties": true}}
+  },
+  "additionalProperties": true
+}
