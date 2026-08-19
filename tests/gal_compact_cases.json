@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "gal-compact-default-hides-extended",
+      "mode": "mechanical",
+      "text": "Команда осуществила проведение проверки сервиса.",
+      "must_not_find": ["GAL-KANZ-VERB"]
+    },
+    {
+      "id": "gal-compact-extended-nominalization",
+      "mode": "extended",
+      "text": "Команда осуществила проведение проверки сервиса.",
+      "must_find": ["GAL-KANZ-VERB"]
+    },
+    {
+      "id": "gal-compact-extended-pseudoformal",
+      "mode": "extended",
+      "text": "Прошу осуществить предоставление информации о задаче.",
+      "must_find": ["GAL-KANZ-PSEUDOFORMAL"]
+    },
+    {
+      "id": "gal-compact-extended-explicitness",
+      "mode": "extended",
+      "text": "Он положил свою руку в свой карман.",
+      "must_find": ["GAL-EXPLICITNESS"]
+    },
+    {
+      "id": "gal-compact-natural-negative",
+      "mode": "extended",
+      "text": "Команда провела проверку сервиса. Я положил свою книгу рядом с его книгой.",
+      "must_not_find": ["GAL-KANZ-VERB", "GAL-KANZ-PSEUDOFORMAL", "GAL-EXPLICITNESS"]
+    }
+  ]
+}
