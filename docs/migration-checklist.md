@@ -13,7 +13,9 @@
 - [x] Custom GPT instructions/setup/tests migrated.
 - [x] owner corrections log migrated.
 - [x] CI workflow migrated.
+- [x] detailed migration notes for old PR #1 and PR #2 preserved in the new repository.
+- [x] migration comments posted to old PR #1 and PR #2.
+- [x] old PR #1 and PR #2 closed without merge; `humanizer--ru/main` remains unchanged by these feature lines.
 - [ ] verify CI on an independent-repo pull request.
-- [ ] close old PR #1 and PR #2 after verification.
-- [ ] delete old development branch refs from `humanizer--ru` in GitHub UI if the connector cannot delete refs.
-- [ ] delete temporary migration-test branches from this repository.
+- [ ] delete old development branch refs from `humanizer--ru` in GitHub UI (branch deletion is not exposed by the current integration): `agent/add-nora-gal-language-patterns`, `agent/russian-language-layer`, `humanizer_russian`.
+- [ ] delete temporary migration branches from this repository when no longer needed: `migration-test`, `migration-test-2`, `migration-test-3`, `ci-validation`.
