@@ -6,7 +6,8 @@ search and subcorpus in the NKRЯ UI, export its JSON (Ctrl+Shift+E on the
 results page), save that fixture locally, then replay it here.
 
 Authentication is read only from RUSCORPORA_API_TOKEN. Raw results are written
-only when --output is supplied. The token is never included in reports.
+only when --output is supplied. The token is never included in reports and is
+never sent outside the official ruscorpora.ru HTTPS API host.
 """
 
 from __future__ import annotations
@@ -16,14 +17,16 @@ import datetime as dt
 import hashlib
 import json
 import os
-import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
 
 DEFAULT_ENDPOINT = "https://ruscorpora.ru/api/v1/lex-gramm/concordance"
+ALLOWED_API_HOST = "ruscorpora.ru"
+ALLOWED_API_PATH = "/api/v1/lex-gramm/concordance"
 RETRYABLE_HTTP = {408, 409, 429, 500, 502, 503, 504}
 
 
@@ -54,10 +57,31 @@ def query_sha256(value: dict[str, Any]) -> str:
     return hashlib.sha256(canonical_bytes(value)).hexdigest()
 
 
+def validate_endpoint(endpoint: str) -> str:
+    """Allow bearer-token requests only to the official HTTPS NKRЯ endpoint."""
+    parsed = urllib.parse.urlsplit(endpoint)
+    if (
+        parsed.scheme != "https"
+        or parsed.hostname != ALLOWED_API_HOST
+        or parsed.port not in {None, 443}
+        or parsed.path != ALLOWED_API_PATH
+        or parsed.query
+        or parsed.fragment
+        or parsed.username is not None
+        or parsed.password is not None
+    ):
+        raise ValueError(
+            "--endpoint must be the official NKRЯ HTTPS lex-gramm concordance endpoint "
+            f"({DEFAULT_ENDPOINT})"
+        )
+    return urllib.parse.urlunsplit(("https", ALLOWED_API_HOST, ALLOWED_API_PATH, "", ""))
+
+
 def request_shape(endpoint: str, token: str, query: dict[str, Any]) -> urllib.request.Request:
-    """Build the authenticated POST request without exposing the token elsewhere."""
+    """Build the authenticated POST request after validating the credential destination."""
+    safe_endpoint = validate_endpoint(endpoint)
     return urllib.request.Request(
-        endpoint,
+        safe_endpoint,
         data=json.dumps(query, ensure_ascii=False).encode("utf-8"),
         headers={
             "Authorization": f"Bearer {token}",
@@ -77,9 +101,10 @@ def post_query(
     retries: int,
 ) -> dict[str, Any]:
     """POST one NKRЯ query with bounded retries for transient failures."""
+    safe_endpoint = validate_endpoint(endpoint)
     last_error: Exception | None = None
     for attempt in range(retries + 1):
-        request = request_shape(endpoint, token, query)
+        request = request_shape(safe_endpoint, token, query)
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 raw = response.read().decode("utf-8")
@@ -145,13 +170,14 @@ def build_report(
     dry_run: bool,
 ) -> dict[str, Any]:
     """Build a provenance-first report without authentication material."""
+    safe_endpoint = validate_endpoint(endpoint)
     report: dict[str, Any] = {
         "schema_version": 1,
         "created_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
         "dry_run": dry_run,
         "fixture_name": fixture.name,
         "query_sha256": query_sha256(query),
-        "endpoint": endpoint,
+        "endpoint": safe_endpoint,
         "corpus": query.get("corpus"),
         "has_subcorpus": isinstance(query.get("subcorpus"), dict),
         "params": query.get("params", {}),
@@ -170,7 +196,7 @@ def build_report(
 
 
 def self_test() -> None:
-    """Validate hashing, request construction, redaction, and returned-page counting offline."""
+    """Validate hashing, endpoint safety, request redaction, and page counting offline."""
     query = {
         "corpus": {"type": "MAIN"},
         "lexGramm": {
@@ -195,11 +221,27 @@ def self_test() -> None:
     request = request_shape(DEFAULT_ENDPOINT, "secret-test-token", query)
     if request.method != "POST":
         raise AssertionError(request.method)
+    if request.full_url != DEFAULT_ENDPOINT:
+        raise AssertionError(request.full_url)
     if request.headers.get("Authorization") != "Bearer secret-test-token":
         raise AssertionError("Bearer header not constructed")
     body = json.loads((request.data or b"").decode("utf-8"))
     if body != query:
         raise AssertionError("request body changed query fixture")
+
+    for malicious in [
+        "http://ruscorpora.ru/api/v1/lex-gramm/concordance",
+        "https://evil.example/api/v1/lex-gramm/concordance",
+        "https://ruscorpora.ru.evil.example/api/v1/lex-gramm/concordance",
+        "https://ruscorpora.ru/api/v1/word-portrait/",
+        "https://user:pass@ruscorpora.ru/api/v1/lex-gramm/concordance",
+    ]:
+        try:
+            request_shape(malicious, "secret-test-token", query)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"unsafe credential destination accepted: {malicious}")
 
     fake_response = {
         "concordanceData": {
@@ -244,7 +286,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Replay an exported NKRЯ lexicogrammatical query")
     parser.add_argument("fixture", nargs="?", type=Path, help="JSON exported from the NKRЯ results UI")
     parser.add_argument("--output", type=Path, help="write provenance + raw response JSON here")
-    parser.add_argument("--endpoint", default=DEFAULT_ENDPOINT)
+    parser.add_argument(
+        "--endpoint",
+        default=DEFAULT_ENDPOINT,
+        help="official NKRЯ endpoint; alternate hosts/paths are rejected before bearer auth",
+    )
     parser.add_argument("--timeout", type=float, default=120.0)
     parser.add_argument("--retries", type=int, default=2)
     parser.add_argument("--dry-run", action="store_true")
@@ -263,11 +309,12 @@ def main() -> None:
     if args.retries < 0:
         raise SystemExit("--retries must be >= 0")
 
+    safe_endpoint = validate_endpoint(args.endpoint)
     query = load_query(args.fixture)
     if args.dry_run:
         report = build_report(
             fixture=args.fixture,
-            endpoint=args.endpoint,
+            endpoint=safe_endpoint,
             query=query,
             response=None,
             dry_run=True,
@@ -277,7 +324,7 @@ def main() -> None:
         if not token:
             raise SystemExit("RUSCORPORA_API_TOKEN is required for a live NKRЯ request")
         response = post_query(
-            args.endpoint,
+            safe_endpoint,
             token,
             query,
             timeout=args.timeout,
@@ -285,7 +332,7 @@ def main() -> None:
         )
         report = build_report(
             fixture=args.fixture,
-            endpoint=args.endpoint,
+            endpoint=safe_endpoint,
             query=query,
             response=response,
             dry_run=False,
