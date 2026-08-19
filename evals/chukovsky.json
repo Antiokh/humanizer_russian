@@ -1,5 +1,5 @@
 {
-  "suite": "humanizer-plus-ru-chukovsky-integration",
+  "suite": "humanizer_russian-chukovsky-integration",
   "version": 1,
   "provenance": "Derived only after the independent deep-book study in studies/chukovsky-zhivoy-kak-zhizn/ was completed. All eval texts are original.",
   "evals": [
