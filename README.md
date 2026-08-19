@@ -16,6 +16,22 @@
 
 `NORM` отвечает на вопрос «можно ли так по-русски?». `NATIVE_USAGE` — «как из допустимых вариантов естественнее сказал бы носитель?». Это разные задачи.
 
+## Архитектурный контракт для разработки
+
+Корневой [`AGENTS.md`](AGENTS.md) — обязательный контракт для coding/research agents и интеграции новых языковых слоёв. [`CONTRIBUTING.md`](CONTRIBUTING.md) содержит тот же протокол в форме contributor guide.
+
+Ключевые требования:
+
+- текущий `main` является архитектурной базой для интеграции Галь, Ильяхова, Чуковского и следующих источников;
+- старые source-ветки не должны wholesale заменять `SKILL.md`, `scripts/check.py`, `scripts/lint.py`, benchmark, CI или native layer;
+- каждое новое правило получает явный уровень: `HARD_GATE`, `DEFAULT_MECHANICAL`, `EXTENDED_SOFT`, `MODEL_ONLY` или `METRIC_ONLY`;
+- mechanical rule не попадает в default runtime без positive case, natural negative control и deterministic regression test;
+- source namespace (`GAL-*`, `ILY-*`, `CHUK-*`) показывает provenance, а не автоматически severity;
+- книжный совет остаётся `EDITING`, пока отдельно не доказано, что это современная `NORM`;
+- reference/source-файлы не загружаются целиком в каждый runtime pass.
+
+Для новых PR используется `.github/pull_request_template.md` с архитектурным checklist.
+
 ## Mechanical-first runtime
 
 Главный runtime-entrypoint:
@@ -145,6 +161,8 @@ python3 scripts/benchmark_lint.py --json
 
 ## Файлы проекта
 
+- `AGENTS.md` — обязательный архитектурный контракт для агентов и source-layer integration;
+- `CONTRIBUTING.md` — contributor protocol;
 - `SKILL.md` — короткая runtime-спецификация;
 - `scripts/check.py` — mechanical-first вход;
 - `scripts/lint.py` — полный surface linter;
@@ -181,6 +199,8 @@ CI проверяет:
 - deterministic mechanical benchmark;
 - author profiler + JSON Schema;
 - валидность JSON fixtures.
+
+Новые source-specific validators должны **добавляться** к этим проверкам, а не заменять их.
 
 ## Критерий качества
 
