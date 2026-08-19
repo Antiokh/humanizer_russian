@@ -10,13 +10,12 @@ The point is not to maximize the number of regexes. A mechanical implementation 
 
 ### 1. Narrow lexical / phrase patterns
 
-Useful mechanically, but usually only in extended mode:
+Useful mechanically, but only in extended mode:
 
 - `PS-R09` common-knowledge wrappers — regex candidate; function remains contextual.
 - `PS-R11` verbal numbering — tokenizer/regex cluster; normal in algorithms, so extended only.
 - `PS-R13` ceremonial politeness — phrase **cluster**, not a single polite formula.
 - `PS-R18` decorative intensification — lexical **cluster**, never a ban on one intensifier.
-- `PS-R21` present-time wrappers — phrase candidate with explicit temporal-contrast exclusions.
 - `PS-R22` bureaucratic shells — conservative phrase candidates; legal/official register creates FP risk.
 - `PS-R62` meta-introduction — narrow informational-genre candidate only.
 - `PS-R63` ritual conclusion — narrow candidate only.
@@ -24,6 +23,8 @@ Useful mechanically, but usually only in extended mode:
 - `PS-R85` generic self-presentation benefit — only generic-praise clusters, scoped to extended review.
 
 These are `EXTENDED_SOFT`, not default correctness rules.
+
+`PS-R21` present-time wrappers were initially in this group, but were **demoted after natural-corpus calibration**. See `corpus-calibration.md`.
 
 ### 2. Project-derived high-precision subset
 
@@ -39,12 +40,13 @@ Detect only explicit light-verb / nominalization duplication such as forms equiv
 
 This is intentionally much narrower than either source rule. It does **not** flag normal combinations such as `провести исследование`, `осуществить переход`, `выполнить проверку` or a normal passive result phrase.
 
-Feasibility: regex + morphology-lite inflection lists are sufficient. No LLM is needed for the narrow subset. Candidate for `DEFAULT_MECHANICAL` after deterministic negative controls pass.
+Feasibility: regex + morphology-lite inflection lists are sufficient. No LLM is needed for the narrow subset. It remains the only source-derived project operator exposed in `DEFAULT_MECHANICAL`.
 
 ### 3. Token/structure metrics
 
 Mechanically measurable but not safe to call an error:
 
+- `PS-R21` — count present-time wrappers and wrappers without a nearby explicit contrast: `METRIC_ONLY` after corpus calibration found 51 ordinary encyclopedic hits in 218,167 words (23.377/100k).
 - `PS-R48` — span between paired correlatives (`не только … но и`, `как … так и`, `если … то`): `METRIC_ONLY` for span length / token distance.
 - `PS-R50` — density of state predicates / copular descriptions: `METRIC_ONLY`; definitions and state descriptions are normal Russian.
 - `PS-R101` — comma count / multi-comma sentence count: `METRIC_ONLY`; punctuation itself is not the defect.
@@ -98,26 +100,49 @@ The old author-branch linter is narrowed as follows:
 - broad nominalization regex: **remove from default**; retain only narrow tautological subset as `ILY-M01`.
 - state-predicate cluster: **metric only**.
 - long-correlative fixed character threshold: **metric only**.
-- single common-knowledge, politeness, intensifier or time phrase: never a default error; extended candidate only.
+- comma count: **metric only**.
+- present-time wrapper: **metric only after corpus calibration**, even without a local explicit contrast.
+- single common-knowledge, politeness or intensifier phrase: never a default error; extended candidate only.
 - generic intro/conclusion/praise: extended and genre-sensitive only.
+
+## Corpus calibration gate
+
+A one-off development run used 30 Russian Wikipedia articles / 218,167 words as natural negative material. Before demotion the Ilyakhov source layer produced:
+
+- `ILY-M01`: 0 hits;
+- bureaucratic-shell candidate: 2 hits (both in `Право`);
+- verbal-numbering cluster: 3 hits;
+- present-time wrapper: 51 hits;
+- other source-specific extended findings: 0 hits.
+
+This corpus is a false-positive probe, not a recall benchmark. Zero hits do not justify promotion. The 51 present-time hits do justify demotion because the surface phrase clearly occurs as ordinary edited Russian at scale.
 
 ## Mechanical implementation plan
 
-1. New `scripts/lint_ilyakhov.py` owns source-specific findings and metrics.
+1. `scripts/lint_ilyakhov.py` owns source-specific findings and metrics.
 2. `scripts/lint.py` aggregates it.
-3. `scripts/check.py` exposes only `ILY-M01` in default mechanical mode; all other Ilyakhov findings require `--extended`.
+3. `scripts/check.py` exposes only `ILY-M01` in default mechanical mode; all remaining Ilyakhov findings require `--extended`.
 4. Source-specific self-tests include true positives, natural negatives, boundaries and intentional-use controls.
-5. Central benchmark adds regression cases without weakening existing negative controls.
-6. Only after deterministic tests pass is the model-only residue summarized in the runtime reference layer.
+5. Central benchmark locks the present-time demotion as a negative finding control.
+6. `scripts/calibrate_ilyakhov_corpus.py` is a manual/networked development tool; the fetched corpus is never committed.
+7. Only after deterministic tests pass is the model-only residue summarized in the runtime reference layer.
 
-## Expected source-rule automation distribution
+## Automation distribution
 
-The full 102 source rules are classified conservatively:
+Gate-A integration matrix originally classified the full 102 source rules as:
 
 - `HARD_GATE`: 0
 - `DEFAULT_MECHANICAL`: 0
 - `EXTENDED_SOFT`: 10
 - `METRIC_ONLY`: 3
 - `MODEL_ONLY`: 89
+
+After implementation tests and natural-corpus calibration, the **effective mechanical treatment** is:
+
+- `HARD_GATE`: 0
+- `DEFAULT_MECHANICAL`: 0 source rules
+- `EXTENDED_SOFT`: **9**
+- `METRIC_ONLY`: **4**
+- `MODEL_ONLY`: **89**
 
 `ILY-M01` is a **PROJECT_DERIVED** default-mechanical subset of `PS-R22` + `PS-R29`; it is not counted as a source rule and is not presented as a direct quotation/rule of the authors.
