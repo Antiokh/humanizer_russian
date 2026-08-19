@@ -74,3 +74,6 @@ jobs:
                   json.load(f)
               print(path)
           PY
+
+      - name: Validate deep-book-study structure
+        run: python scripts/validate_book_study.py
