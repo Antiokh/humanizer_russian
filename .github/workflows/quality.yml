@@ -63,19 +63,32 @@ jobs:
         run: python scripts/benchmark_board.py
 
       - name: Smoke-test board JSON output
-        run: printf '%s' 'Это не ошибка в расчёте, а ошибка в исходных данных.' | python scripts/review.py --format json >/tmp/board.json
+        run: |
+          printf '%s' 'Это не ошибка в расчёте, а ошибка в исходных данных.' | python scripts/review.py --format json >/tmp/board.json
+          python - <<'PY'
+          import json
+          report = json.load(open('/tmp/board.json', encoding='utf-8'))
+          assert report['mode'] == 'editorial_board', report
+          assert report['style']['id'] == 'neutral', report
+          assert report['board']['groups'], report
+          PY
 
       - name: Smoke-test Chukovsky in compact and board runtimes
         run: |
           printf '%s' 'Следует отметить, что резервная копия завершилась в 03:10.' | python scripts/check.py --extended --json >/tmp/chuk-compact.json
           printf '%s' 'Следует отметить, что резервная копия завершилась в 03:10.' | python scripts/review.py --libraries native,chukovsky --format json >/tmp/chuk-board.json
+          printf '%s' 'Следует отметить, что резервная копия завершилась в 03:10.' | python scripts/review.py --libraries native,chukovsky --style rslive_content --format json >/tmp/chuk-rslive.json
           python - <<'PY'
           import json
           compact = json.load(open('/tmp/chuk-compact.json', encoding='utf-8'))
           board = json.load(open('/tmp/chuk-board.json', encoding='utf-8'))
+          rslive = json.load(open('/tmp/chuk-rslive.json', encoding='utf-8'))
           assert any(item.get('library_id') == 'chukovsky' and item.get('phenomenon_id') == 'editing.metadiscourse_announcement' for item in compact['findings']), compact
           assert any(item.get('library_id') == 'chukovsky' and item.get('rule_id') == 'CHUK-R24' for item in board['findings']), board
-          assert not any(item.get('library_id') == 'native' and str(item.get('rule_id', '')).startswith('CHUK-') for item in board['findings']), board
+          assert not any(item.get('library_id') == 'native' and str(item.get('legacy_rule', '')).startswith('chukovsky:') for item in board['findings']), board
+          assert not any(str(key).startswith('chukovsky_') for key in board['metrics'].get('native', {})), board
+          assert rslive['style']['id'] == 'rslive_content', rslive
+          assert any(item.get('rule_id') == 'CHUK-R24' for item in rslive['findings']), rslive
           PY
 
       - name: Smoke-test and validate author profiler
