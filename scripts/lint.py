@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """Conservative surface linter for humanizer+ru.
 
-The linter does not decide what is grammatical or "human" by regex. It only
-finds surface candidates for contextual review.
+The linter does not decide what is grammatical or "human" by regex. It surfaces
+candidates for contextual review and explicit comparison tests.
 
 Kinds:
-  ARTIFACT       technical chatbot/citation traces; the only automatic gate
-  AI_PATTERN     repeated formulae or calque-like patterns
-  NATIVE_WARNING formally possible but potentially synthetic/native-unfriendly
-  STYLE_WARNING rhythm/format patterns that may be intentional
+  ARTIFACT            technical chatbot/citation traces; the only automatic gate
+  AI_PATTERN          repeated formulae or calque-like patterns
+  NATIVE_WARNING      formally possible but potentially synthetic/native-unfriendly
+  STYLE_WARNING       rhythm/format patterns that may be intentional
+  EDITING_SUGGESTION  positive rewrite/test opportunity; never a blocker
 
 Descriptive metrics are returned separately. Exit status is non-zero only when
 ARTIFACT findings remain.
@@ -21,6 +22,14 @@ import json
 import re
 import sys
 from pathlib import Path
+
+try:
+    from chukovsky_checks import check_chukovsky, self_test as chukovsky_self_test
+except ImportError:  # package/import context
+    from scripts.chukovsky_checks import (
+        check_chukovsky,
+        self_test as chukovsky_self_test,
+    )
 
 
 ARTIFACT_PATTERNS = [
@@ -36,14 +45,12 @@ ARTIFACT_PATTERNS = [
     ("chatgpt/openai utm", re.compile(r"utm_source=(?:chatgpt(?:\.com)?|openai)", re.I)),
 ]
 
+# These families are provenance/AI hypotheses, not Russian-language errors.
+# Ordinary discourse phrases require clustering rather than a single token hit.
 AI_PHRASE_FAMILIES = {
     "assistant-wrapper": [
         "надеюсь, это поможет", "надеюсь, было полезно", "дайте знать, если",
         "буду рад помочь", "вот краткий обзор",
-    ],
-    "importance-announcement": [
-        "важно отметить", "следует подчеркнуть", "стоит обратить внимание",
-        "нельзя не упомянуть", "необходимо учитывать",
     ],
     "pseudo-depth": [
         "если копнуть глубже", "глубинная проблема", "настоящий вопрос в том",
@@ -61,6 +68,14 @@ AI_PHRASE_FAMILIES = {
         "кроме того", "более того", "также стоит", "ещё один аспект",
         "ещё одним аспектом",
     ],
+}
+
+AI_FAMILY_THRESHOLDS = {
+    "assistant-wrapper": 1,
+    "pseudo-depth": 2,
+    "video-script": 2,
+    "generic-conclusion": 2,
+    "stack-connector": 2,
 }
 
 CALQUE_PATTERNS = [
@@ -152,6 +167,17 @@ def first_words(s: str, n: int = 2) -> tuple[str, ...]:
     return tuple(items[:n])
 
 
+def percentile(values: list[int], q: float) -> float:
+    if not values:
+        return 0
+    vals = sorted(values)
+    pos = (len(vals) - 1) * q
+    lo = int(pos)
+    hi = min(lo + 1, len(vals) - 1)
+    frac = pos - lo
+    return round(vals[lo] * (1 - frac) + vals[hi] * frac, 2)
+
+
 def add(
     findings: list[dict],
     kind: str,
@@ -191,13 +217,17 @@ def lint(text: str) -> tuple[list[dict], dict]:
 
     for family, phrases in AI_PHRASE_FAMILIES.items():
         hits = [phrase for phrase in phrases if phrase in low]
-        if hits:
+        threshold = AI_FAMILY_THRESHOLDS[family]
+        if len(hits) >= threshold:
             add(
                 findings,
                 "AI_PATTERN",
                 family,
                 "; ".join(hits),
-                note="soft signal; judge by function and clustering",
+                note=(
+                    f"soft provenance signal; family threshold={threshold}; "
+                    "judge by discourse function and clustering"
+                ),
             )
 
     for rule, rx in CALQUE_PATTERNS:
@@ -313,18 +343,26 @@ def lint(text: str) -> tuple[list[dict], dict]:
             note="check typography; do not replace normative em dash for anti-detection",
         )
 
+    # Chukovsky pass: positive editing opportunities, never hard gates.
+    chuk_findings, chuk_metrics = check_chukovsky(prose, sents)
+    findings.extend(chuk_findings)
+
     dash_count = len(re.findall(r"[—–]", prose))
     words_total = sum(lengths)
     metrics = {
         "sentences": len(sents),
         "words": words_total,
-        "sentence_length_median": sorted(lengths)[len(lengths) // 2] if lengths else 0,
+        "sentence_length_p25": percentile(lengths, 0.25),
+        "sentence_length_median": percentile(lengths, 0.50),
+        "sentence_length_p75": percentile(lengths, 0.75),
+        "sentence_length_p90": percentile(lengths, 0.90),
         "short_sentences_le_4": sum(1 for x in lengths if x <= 4),
         "dashes": dash_count,
         "colons": prose.count(":"),
         "questions": prose.count("?"),
         "emoji": len(EMOJI.findall(prose)),
         "bold_spans": len(BOLD_SPAN.findall(text)),
+        **chuk_metrics,
     }
 
     if len(sents) >= 6 and dash_count >= 5 and dash_count > len(sents) / 2:
@@ -398,6 +436,27 @@ def self_test() -> None:
     findings, _ = lint(calque)
     assert any(item["rule"].startswith("calque:") for item in findings), findings
 
+    # A single ordinary discourse connector is not an AI family hit.
+    findings, _ = lint("Кроме того, проект продолжается.")
+    assert not [
+        item for item in findings
+        if item["kind"] == "AI_PATTERN" and item["rule"] == "stack-connector"
+    ], findings
+
+    # Announcing metadiscourse is an A/B editing test, not AI attribution.
+    findings, _ = lint("Важно отметить, что сервер работает.")
+    assert any(
+        item["kind"] == "EDITING_SUGGESTION"
+        and item["rule"] == "chukovsky: metadiscourse deletion test"
+        for item in findings
+    ), findings
+    assert not [
+        item for item in findings
+        if item["kind"] == "AI_PATTERN" and "importance" in item["rule"]
+    ], findings
+
+    chukovsky_self_test()
+
     print("self-test: OK")
 
 
@@ -426,7 +485,7 @@ def main() -> None:
             for finding in findings:
                 loc = f"line {finding['line']}" if finding["line"] else "text"
                 print(
-                    f"{finding['kind']:14} {loc:10} "
+                    f"{finding['kind']:18} {loc:10} "
                     f"{finding['rule']}: {finding['excerpt']}"
                 )
                 if finding["note"]:
@@ -443,7 +502,10 @@ def main() -> None:
             print("\ngate failed: technical chatbot artifacts remain")
         else:
             print("\ngate passed: no technical chatbot artifacts")
-            print("soft/native findings still require contextual Russian-language review")
+            print(
+                "soft/native/editing findings still require contextual "
+                "Russian-language review"
+            )
 
     if any(item["kind"] == "ARTIFACT" for item in findings):
         raise SystemExit(1)
