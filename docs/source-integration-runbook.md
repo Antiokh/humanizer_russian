@@ -1,127 +1,73 @@
 # Source Integration Runbook
 
-Этот runbook описывает, как интегрировать в `humanizer_russian` отдельную исследовательскую/source-ветку: Галь, Ильяхова, Чуковского или любой следующий источник.
+Этот runbook описывает интеграцию книги/автора в `humanizer_russian` как **долгоживущей knowledge library**.
 
-Цель: сначала доказать, что источник разобран корректно и полно, затем встроить его в текущую архитектуру `main`, отдавая приоритет воспроизводимым механическим проверкам с хорошими отрицательными контролями.
+Главные принципы:
 
-## Главный принцип
+- `main` — источник архитектуры;
+- ветка по фамилии автора (`gal`, `ilyakhov`, `chukovsky`, ...) — долгоживущая линия исследования источника;
+- ветку автора после merge не удалять;
+- одна и та же библиотека должна обслуживать два режима продукта: compact humanizer и editorial board;
+- сначала mechanical feasibility, потом model-only residue;
+- разные авторы могут не соглашаться, и этот конфликт надо сохранять.
 
-Нельзя начинать интеграцию с merge старой source-ветки в `main`.
+## Phase 0 — start
 
-Работа идёт через два независимых gate:
+Перед изменениями прочитать:
 
-1. **STUDY GATE** — источник сначала проходит `docs/book-study-framework.md`.
-2. **INTEGRATION GATE** — только после этого его знания переносятся поверх текущего `main` по mechanical-first архитектуре из `AGENTS.md`.
+1. `AGENTS.md`;
+2. `docs/book-study-framework.md`;
+3. `docs/editorial-board-architecture.md`;
+4. `libraries/README.md`;
+5. при неполном study — `docs/book-study-prompt.md`.
 
-Source branch — источник знаний и provenance. `main` — источник архитектуры.
+Если книга уже доступна в текущем чате/контексте, использовать её как первичный источник. Если оригинал недоступен, допускается приватный source repo. Оригинальные охраняемые книги не копировать в публичный репозиторий.
 
----
+## Gate A — STUDY
 
-## Phase 0. Старт
+До runtime integration проверить источник по `book-study-framework`:
 
-Перед любыми изменениями:
+- source inventory и полное покрытие;
+- последовательное чтение, а не snippets;
+- atomic rules/concepts/positive operations;
+- guards и counterexamples;
+- interactions;
+- provenance/locators;
+- claims, требующие внешней проверки;
+- loss audit и overgeneralization audit;
+- preservation/no-op evals.
 
-1. прочитать `AGENTS.md`;
-2. прочитать `docs/book-study-framework.md`;
-3. если study ещё не завершён — использовать `docs/book-study-prompt.md`;
-4. определить source branch/PR и его source-specific файлы;
-5. не менять core runtime до завершения STUDY GATE.
+Минимальный статус для интеграции — `AUDITED`, предпочтительный — `OPERATIONAL`.
 
-Для старых веток, созданных до текущего `main`, не использовать их `SKILL.md`, `README.md`, `scripts/lint.py`, CI и другие core-файлы как архитектурную базу.
+Старые regex, hard bans и старый `SKILL.md` из author branch считаются кандидатами, а не доказательством правильной автоматизации.
 
----
+## Gate B — INTEGRATION MATRIX
 
-# Gate A — STUDY GATE
-
-## A1. Проверить полноту source study
-
-Источник должен пройти framework как самостоятельная система знаний.
-
-Минимально проверить:
-
-- есть source inventory;
-- есть полная карта покрытия/оглавления;
-- источник прочитан последовательно, а не по snippets;
-- нет скрытых `UNREAD` при заявленной полноте;
-- выделены concepts, rules, positive operations, guards, counterexamples;
-- описаны interactions;
-- source claims отделены от project-derived выводов;
-- исторические/нормативные/эмпирические claims вынесены на внешнюю проверку;
-- есть evals и preservation/counterexample cases;
-- проведены loss audit и overgeneralization audit;
-- provenance восстанавливается до source locator;
-- публичные файлы не копируют защищённый текст источника.
-
-Статус study перед интеграцией должен быть минимум `AUDITED`; для завершённой интеграции предпочтительно `OPERATIONAL`.
-
-Если этих артефактов нет, **не переходить к runtime integration**. Сначала закончить study.
-
-## A2. Не принимать старую реализацию как доказательство
-
-Если source-ветка уже содержит regex, linter, hard bans или старый `SKILL.md`, они считаются только кандидатами.
-
-Нужно заново спросить для каждой идеи:
-
-- что именно утверждает источник;
-- каков scope;
-- это норма, native usage, editing advice, AI heuristic или author behavior;
-- есть ли отрицательный пример;
-- можно ли это надёжно определить поверхностно;
-- что будет false positive.
-
-Наличие кода в старой ветке не повышает automation level автоматически.
-
----
-
-# Gate B — INTEGRATION GATE
-
-После прохождения STUDY GATE создать **новую integration branch от текущего `main`**.
-
-Рекомендуемое имя:
-
-```text
-integration/<source>
-```
-
-Примеры:
-
-```text
-integration/nora-gal
-integration/ilyakhov
-integration/chukovsky
-```
-
-Не использовать source branch как новую базу runtime.
-
-## B1. Сначала построить Integration Matrix
-
-До изменения `scripts/lint.py` или `SKILL.md` составить таблицу для **каждого operational rule/operation** источника.
-
-Минимальные поля:
+До изменения core runtime составить матрицу для всех operational rules:
 
 ```text
 rule_id
 source_locator
+provenance
 project_class
 scope
+semantic_invariant
 automation_level
 surface_trigger
 required_context
 false_positive_risk
 positive_case
-negative_control
+natural_negative_control
 boundary_case
+intentional_counterexample
 existing_overlap
 native_usage_conflict
+phenomenon_id
 planned_module
 runtime_visibility
 ```
 
-Где:
-
-### `project_class`
-
-Одно из:
+`project_class`:
 
 - `NORM`
 - `NATIVE_USAGE`
@@ -130,240 +76,179 @@ runtime_visibility
 - `AUTHOR`
 - `ARTIFACT`
 
-Source namespace (`GAL-*`, `ILY-*`, `CHUK-*`) хранит provenance, но не заменяет project class.
-
-### `automation_level`
-
-Одно из:
+`automation_level`:
 
 - `HARD_GATE`
 - `DEFAULT_MECHANICAL`
 - `EXTENDED_SOFT`
-- `MODEL_ONLY`
 - `METRIC_ONLY`
+- `MODEL_ONLY`
 
-## B2. Mechanical feasibility pass — сделать ДО prompt integration
+Source namespace (`GAL-*`, `ILY-*`, `CHUK-*`) — provenance, не severity.
 
-Для каждого rule сначала попытаться найти дешёвый наблюдаемый сигнал.
+## Gate C — MECHANICAL FEASIBILITY
 
-Порядок вопросов:
+Для каждого правила сначала проверить, можно ли вынести работу из prompt:
 
-1. Есть ли surface trigger, который можно определить без semantic model?
-2. Можно ли отделить true positive от естественного negative control?
-3. Можно ли исключить code/URL/quote/dialogue/markdown и другие очевидные ложные зоны?
-4. Требуется ли морфология/dependency parser вместо regex?
-5. Можно ли сделать статистическую/структурную проверку без утверждения «это ошибка»?
-6. Если механическая проверка возможна, какой минимальный уровень автоматизации ей честно соответствует?
+1. exact/string pattern;
+2. regex;
+3. tokenization;
+4. morphology;
+5. dependency parse;
+6. structural/statistical signal;
+7. metric-only;
+8. только затем `MODEL_ONLY`.
 
-Цель этого pass — **не автоматизировать максимум**, а вынести максимум надёжной работы из prompt/runtime контекста.
+Precision важнее recall. Если естественный negative control ломается, правило сужается или остаётся soft/model-only.
 
-Если правило требует понимания смысла, референтов, жанра, темы/ремы, идиомы, POV, характера, эмоционального такта или авторского намерения — оставить `MODEL_ONLY`.
+Не писать псевдолингвистический regex для задач, которым реально нужны смысл, референты, тема/рема, идиома, жанр, POV или авторское намерение.
 
-Не писать псевдолингвистический regex только ради механизации.
+## Gate D — SOURCE LIBRARY
 
-## B3. Приоритет реализации
+Работа продолжается **в ветке автора**, а не в одноразовой integration branch.
 
-Реализовывать в следующем порядке:
+Перед очередным PR аккуратно подтянуть свежий `main` в author branch. При конфликтах core-файлов архитектурный приоритет имеет текущий `main`; source-specific знания переносятся поверх него.
 
-### 1. HARD_GATE
+Для крупного источника добавить:
 
-Только если правило действительно однозначно и блокирующее.
+```text
+scripts/lint_<author>.py        # или другой ясный source-specific module
+libraries/<author>/library.json
+reviewers/<author>.json
+references/...                  # только производные знания/locators
+source-specific evals/tests
+```
 
-### 2. DEFAULT_MECHANICAL
+Новые библиотеки предпочитают adapter `review_v1` из `libraries/README.md`.
 
-Высокая precision, дешёвая проверка, доказанные negative controls.
+### `phenomenon_id`
 
-Каждое новое default rule требует:
+Это source-neutral идентификатор явления. Если несколько авторов описывают одну проблему, их `rule_id` остаются разными, но `phenomenon_id` должен совпадать там, где механизм действительно один.
+
+Пример:
+
+```text
+GAL-...  ┐
+ILY-...  ├─> editing.action_hidden_in_nominalization
+CHUK-... ┘
+```
+
+Так compact mode может дедуплицировать сигнал, а editorial board — показать независимые мнения.
+
+## Gate E — IMPLEMENTATION ORDER
+
+Обязательный порядок:
+
+1. `HARD_GATE` — только однозначные блокирующие случаи;
+2. `DEFAULT_MECHANICAL` — high precision + deterministic negative controls;
+3. `EXTENDED_SOFT` — полезные, но шумные surface heuristics;
+4. `METRIC_ONLY` — измерять без ложной нормативности;
+5. `MODEL_ONLY` — остаток после механизации.
+
+Для `DEFAULT_MECHANICAL` нужны:
 
 - true positive;
 - natural negative control;
 - boundary case;
 - intentional-use counterexample, если применимо;
-- regression case в `tests/lint_cases.json`;
-- зелёный `scripts/benchmark_lint.py`.
+- exclusions (code/URL/quotes/dialogue/markdown), если нужны;
+- deterministic regression.
 
-### 3. EXTENDED_SOFT
+Не удалять negative test ради зелёного CI.
 
-Полезная механическая эвристика, но с заметным false-positive risk.
+## Gate F — TWO PRODUCT MODES
 
-Она может жить в source-specific linter и попадать только в `--extended`.
+Каждая интегрированная библиотека должна быть совместима с обоими режимами.
 
-### 4. METRIC_ONLY
+### Compact
 
-Считать, но не оценивать без калибровки.
-
-### 5. MODEL_ONLY
-
-Только после того, как mechanical layer забрал всё, что можно проверить без модели.
-
-Именно на этом этапе добавлять адресные reference instructions/model evals.
-
----
-
-## B4. Source-specific modules
-
-Для крупного источника предпочитать отдельный модуль:
-
-```text
-scripts/lint_gal.py
-scripts/lint_ilyakhov.py
-scripts/chukovsky_checks.py
+```bash
+python scripts/check.py text.md
 ```
 
-или другое ясное source-specific имя.
+Короткая механическая проверка. Не обязана показывать provenance всех редакторов.
 
-Главный `scripts/lint.py` агрегирует findings, но не превращается в свалку всех regex проекта.
+### Editorial board
 
-Source-specific findings по умолчанию неблокирующие, пока отдельно не доказан `HARD_GATE`.
+```bash
+python scripts/review.py text.md --style neutral
+```
 
-`scripts/check.py` остаётся контроллером default mechanical runtime. Новое правило не попадает туда автоматически только потому, что оно реализовано в коде.
+Сохраняет `reviewer_id`, группирует findings по `phenomenon_id`, показывает consensus/majority/conflict и применяет style policy.
 
----
+Редакционный конфликт — нормальный результат. Не превращать разных авторов в одну «общую истину» при интеграции.
 
-## B5. Контекст только после механики
+## Gate G — MODEL-ONLY RESIDUE
 
-После mechanical feasibility/implementation pass посмотреть, что осталось.
+Только после mechanical pass:
 
-Для остатка:
+- сделать короткие operational references;
+- не грузить полный book study в обычный runtime;
+- подгружать только релевантные rule cards;
+- добавить preservation/no-op model evals;
+- не дублировать в prompt то, что уже надёжно проверяет код.
 
-- сократить source knowledge до operational reference;
-- не загружать book study целиком в обычный runtime;
-- model-only instructions делать адресными;
-- evals проверяют не только исправление, но и preservation/no-op;
-- source map/provenance используется при аудите, а не на каждую пользовательскую фразу.
+## Compatibility with Russian core
 
-Цель: model layer получает только unresolved semantic cases, а не повторно делает работу линтера.
+Любое книжное правило проверить против:
 
----
-
-## B6. Проверка конфликтов с core Russian layer
-
-Каждый source rule проверить против:
-
-- `NORM`;
+- `USER_INTENT + SEMANTICS + NORM`;
 - `NATIVE_USAGE`;
-- контекстной экономии;
-- правил удаления немотивированных повторов;
+- контекстной экономии и эллипсиса;
+- отсутствия немотивированных повторов;
 - информационной структуры;
 - функциональной парцелляции;
 - прагматических частиц;
 - author profile.
 
-Если книжная рекомендация конфликтует с живым русским, сначала сузить её scope. Не понижать `NATIVE_USAGE` до уровня книжной рекомендации.
+Если `EDITING`-совет конфликтует с живым русским, сначала сузить scope книжного правила.
 
----
+## Tests before PR
 
-## B7. Интеграционные тесты
-
-До изменения большого prompt/skill слоя должны быть готовы mechanical tests.
-
-Обязательные команды:
+Минимум:
 
 ```bash
 python -m compileall -q scripts
 python scripts/validate_architecture.py
+python scripts/validate_libraries.py
 python scripts/lint.py --self-test
 python scripts/benchmark_lint.py
+python scripts/benchmark_board.py
 ```
 
-Если добавлен source validator — он также включается в CI.
+Плюс source-specific self-test/validator, если он добавлен.
 
-Если source-specific linter имеет self-test — он запускается отдельно.
+## PR and branch lifecycle
 
-Model evals идут **после** mechanical regression suite и не заменяют его.
-
----
-
-# Recommended agent workflow
-
-## Step 1 — Audit only
-
-Первый агент/первый этап не должен сразу редактировать runtime.
-
-Его задача:
-
-1. пройти source branch по `book-study-framework`;
-2. закрыть gaps;
-3. получить `AUDITED/OPERATIONAL` study;
-4. построить Integration Matrix;
-5. выдать mechanical feasibility report;
-6. перечислить, какие правила кандидат в default/extended/model-only;
-7. не менять core runtime до завершения отчёта.
-
-## Step 2 — Mechanical implementation
-
-После approval/самопроверки матрицы:
-
-1. создать fresh branch от `main`;
-2. перенести source-specific knowledge/provenance;
-3. сначала реализовать mechanical candidates;
-4. добавить deterministic tests и negative controls;
-5. измерить ложные срабатывания;
-6. только надёжные правила добавить в default checker;
-7. остальные оставить extended/model-only.
-
-## Step 3 — Contextual integration
-
-Только затем:
-
-1. добавить model-only instructions;
-2. сократить runtime context;
-3. добавить semantic/model evals;
-4. интегрировать source layer в `SKILL.md` и GPT-инструкции;
-5. проверить, что prompt не дублирует mechanical checker.
-
-## Step 4 — Final integration audit
-
-Перед merge ответить:
-
-- что из source study реально вошло в runtime;
-- что механизировано;
-- что осталось extended;
-- что осталось model-only;
-- какие правила сознательно не автоматизированы;
-- какие negative controls защищают native Russian;
-- где есть unresolved claims;
-- не вырос ли обязательный runtime context без необходимости;
-- не удалены ли базовые mechanical tests/CI gates.
-
----
-
-# Что запрещено при интеграции
-
-- merge старого source branch поверх `main` с wholesale conflict resolution;
-- считать book rule нормой без отдельной normative verification;
-- делать hard ban из surface pattern без negative controls;
-- удалять существующие clean tests ради нового rule;
-- загружать весь book study в prompt обычного runtime;
-- объявлять JSON model evals «пройденными», если модель не запускалась;
-- дублировать в prompt то, что уже надёжно делает механический checker;
-- оптимизироваться под detector score;
-- заменять естественный русский «более книжным» только ради соответствия автору источника.
-
----
-
-# Короткая формула
+Финальный PR идёт:
 
 ```text
-SOURCE
-  ↓
-BOOK STUDY FRAMEWORK
-  ↓
-AUDITED / OPERATIONAL KNOWLEDGE
-  ↓
-INTEGRATION MATRIX
-  ↓
-MECHANICAL FEASIBILITY PASS
-  ↓
-DEFAULT MECHANICAL / EXTENDED / METRIC
-  ↓
-MODEL-ONLY RESIDUE
-  ↓
-SKILL + SOURCE REFERENCES
-  ↓
-DETERMINISTIC CI + MODEL EVALS
-  ↓
-MERGE
+<author-branch> -> main
 ```
 
-Главный критерий: после интеграции источник должен усиливать общий движок, а не добавлять ещё один автономный prompt-слой.
+После merge ветку автора **сохранить**. Следующий цикл:
+
+1. checkout author branch;
+2. merge свежий `main`;
+3. продолжить study/rules/tests;
+4. открыть следующий PR из той же ветки.
+
+Таким образом:
+
+- `main` = стабильный собранный движок;
+- `gal` / `ilyakhov` / `chukovsky` = непрерывная история исследований конкретных источников.
+
+## Short formula
+
+```text
+BOOK / PRIVATE SOURCE
+  -> AUDITED STUDY
+  -> INTEGRATION MATRIX
+  -> MECHANICAL FEASIBILITY
+  -> SOURCE LIBRARY + NORMALIZED FINDINGS
+  -> COMPACT + EDITORIAL BOARD
+  -> MODEL-ONLY RESIDUE
+  -> DETERMINISTIC CI
+  -> AUTHOR BRANCH -> MAIN
+  -> KEEP AUTHOR BRANCH
+```
