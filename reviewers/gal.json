@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "gal",
+  "display_name": "Нора Галь",
+  "short_label": "Галь",
+  "review_label": "По системе Норы Галь",
+  "kind": "book_author",
+  "avatar": null,
+  "domains": ["semantic_precision", "collocation", "voice", "literary_editing"],
+  "disclaimer": "Автоматическая оценка по формализованным принципам из работ Норы Галь, а не реальная рецензия, цитата или endorsement автора."
+}

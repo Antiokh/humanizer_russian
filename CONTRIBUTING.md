@@ -1,145 +1,122 @@
 # Contributing
 
-`humanizer_russian` — единый проект русского редактора/humanizer.
+`humanizer_russian` — единый проект русского редактора/humanizer с двумя product modes: compact и editorial board.
 
-Перед изменением правил, линтера, skill или source-specific слоёв прочитай корневой [`AGENTS.md`](AGENTS.md). Он является обязательным архитектурным контрактом и для людей, и для coding/research agents.
+Перед изменением правил, линтера, skill или source-specific слоёв прочитай `AGENTS.md`, `docs/source-integration-runbook.md` и `libraries/README.md`.
 
-## Главная архитектура
+## Core priorities
 
-Жёсткие ограничения:
+Hard constraints:
 
 `USER_INTENT + SEMANTICS + NORM`
 
-Выбор среди допустимых вариантов:
+Preference among valid forms:
 
 `AUTHOR > NATIVE_USAGE > EDITING > AI_CALQUE > detector score`
 
-Runtime — **mechanical-first**:
+Mechanical-first runtime:
 
 ```bash
 python scripts/check.py text.md
 ```
 
-Более рискованные эвристики:
+Editorial-board runtime:
 
 ```bash
-python scripts/check.py --extended text.md
+python scripts/review.py text.md --style neutral
 ```
 
-Reference-файлы и model reasoning подключаются адресно, а не целиком на каждый текст.
+Оба режима используют одни и те же libraries/rules. Не дублируй реализацию специально для board.
 
-## Перед добавлением правила
-
-Сначала классифицируй его:
+## Rule classes
 
 - `NORM-*` — source-backed ограничение русского языка;
-- `NATIVE-*` — предпочтение/наблюдение живого русского среди допустимых вариантов;
-- `EDIT-*` — редакторская операция или рекомендация;
+- `NATIVE-*` — предпочтение живого русского;
+- `EDIT-*` — редакторская операция;
 - `AI-CALQUE-*` — вероятностный машинный/переводной паттерн;
 - `AUTHOR-*` — corpus-derived идиолект;
 - `ARTIFACT-*` — технический след;
-- `GAL-*`, `ILY-*`, `CHUK-*` и другие source namespaces — provenance, а не автоматическая severity.
+- `GAL-*`, `ILY-*`, `CHUK-*` и другие namespaces — provenance, не severity.
 
-Не называй native preference грамматической ошибкой. Не называй книжный совет нормой. Не называй нормальную русскую конструкцию AI-паттерном только из-за её частоты у LLM.
+## Automation levels
 
-## Выбери уровень автоматизации
+- `HARD_GATE`;
+- `DEFAULT_MECHANICAL`;
+- `EXTENDED_SOFT`;
+- `METRIC_ONLY`;
+- `MODEL_ONLY`.
 
-Каждое правило должно явно попасть в один из уровней:
+Для `DEFAULT_MECHANICAL` нужны true positive, natural negative control, boundary case, intentional counterexample (если применимо) и deterministic regression. Precision важнее recall.
 
-- `HARD_GATE` — только действительно надёжное блокирующее нарушение;
-- `DEFAULT_MECHANICAL` — высокоточная детерминированная surface-проверка;
-- `EXTENDED_SOFT` — полезная, но более рискованная эвристика;
-- `MODEL_ONLY` — смысл/дискурс/голос/жанр/идиома/просодия;
-- `METRIC_ONLY` — описательная статистика без порога.
+## Books as knowledge libraries
 
-Книжная рекомендация или detector marker не становятся hard gate автоматически.
+Каждый крупный источник интегрируется как отдельная library:
 
-## Mechanical rule: обязательный тестовый пакет
+```text
+libraries/<author>/library.json
+reviewers/<author>.json
+scripts/lint_<author>.py
+source-specific evals/references
+```
 
-Для любого нового mechanical rule нужны минимум:
+Предпочтительный adapter для новых libraries — `review_v1`.
 
-1. true positive;
-2. natural negative control;
-3. boundary case;
-4. intentional-use counterexample, если применимо;
-5. exclusions для code/URL/quotes/markdown/dialogue, если нужны;
-6. regression case в `tests/lint_cases.json`;
-7. успешный `python scripts/benchmark_lint.py`.
+Каждый source finding сохраняет свой `rule_id`. Если несколько источников описывают один механизм, используйте общий source-neutral `phenomenon_id`.
 
-Для `DEFAULT_MECHANICAL` приоритет — precision. Если negative controls не проходят, правило остаётся `EXTENDED_SOFT` или `MODEL_ONLY`.
+Разногласие авторов не надо «чинить» при merge. Editorial board должен уметь показать `SOURCE_CONFLICT`; конкретный стиль может разрешить конфликт позже.
 
-Не удаляй существующий negative test только ради того, чтобы новая эвристика стала зелёной. Если ожидание теста действительно было неверным, объясни изменение в PR.
+## Author branch lifecycle
 
-## Evidence expectations
+Исследовательские ветки по фамилии автора (`gal`, `ilyakhov`, `chukovsky`, ...) — долгоживущие.
 
-Для `NORM-*` приводи актуальный авторитетный источник.
+Перед очередным PR подтяни свежий `main` в author branch, сохрани архитектуру `main`, затем открой PR `<author-branch> -> main`. После merge ветку не удаляй.
 
-Для `AI-CALQUE-*` с числовым порогом документируй корпус, язык, жанры, модели/дату и false-positive behavior. Без калибровки это мягкая эвристика.
+Оригинальные книги не хранить в публичном repo. Если нужен постоянный source access, используйте приватный source repo; в public repo сохраняются производные rules, locators, provenance, tests и audits.
 
-Для `NATIVE-*` нужны положительные и отрицательные примеры и контекст. Corpus evidence и review филолога усиливают правило, но не превращают его автоматически в академическую норму.
+## Reviewer profiles and avatars
 
-Для книжных источников сохраняй provenance и scope. Исторические нормативные claims перепроверяй по современному источнику.
+Reviewer profile — представление формализованной системы источника. Даже если UI показывает имя/аватар автора, текст должен ясно означать «по системе автора», а не реальную рецензию, цитату или endorsement.
 
-## Интеграция Галь, Ильяхова, Чуковского и следующих источников
+Портреты добавлять только с понятной лицензией/источником; metadata хранить в reviewer profile.
 
-Текущий `main` — архитектурная база.
+## Mechanical tests
 
-Старую source-ветку нельзя мержить выбором `theirs` поверх core-файлов. Нужно переносить source-specific знания поверх текущей mechanical-first архитектуры.
-
-Особенно не откатывай wholesale:
-
-- `AGENTS.md`;
-- `SKILL.md`;
-- `scripts/check.py`;
-- `scripts/lint.py`;
-- `scripts/benchmark_lint.py`;
-- `tests/lint_cases.json`;
-- `.github/workflows/quality.yml`;
-- `README.md`;
-- этот файл.
-
-Для крупных source-linters предпочитай отдельные модули (`lint_ilyakhov.py`, `chukovsky_checks.py` и т. п.) с агрегацией в основном линтере.
-
-`EDITING` идёт после `NATIVE_USAGE`: редакторская школа не должна заставлять русский звучать менее естественно.
-
-## Evals
-
-Deterministic surface rules проверяются benchmark-ом, а не model judge.
-
-Model evals используются для контекстных задач: смысл, тема/рема, голос, register, POV, идиомы, сложное взаимодействие правил.
-
-Каждый meaningful contextual rule должен иметь preservation/counterexample case.
-
-Не называй JSON fixtures «пройденным benchmark», если модель фактически не запускалась.
-
-## Author profiles
-
-Не храни raw corpus paths, приватный исходный текст или психологические диагнозы в generated profile.
-
-Ошибки автора отделяй от стиля и по умолчанию не имитируй.
-
-## Перед PR
-
-Запусти минимум:
+Перед PR:
 
 ```bash
 python -m compileall -q scripts
+python scripts/validate_architecture.py
+python scripts/validate_libraries.py
 python scripts/lint.py --self-test
 python scripts/benchmark_lint.py
+python scripts/benchmark_board.py
 ```
 
-Если менялся profiler/schema или source-specific validator — запусти и их.
+Плюс source-specific validators/self-tests, если они есть.
 
-CI должен добавлять новые проверки к существующим, а не заменять базовый compile/self-test/benchmark.
+Не удаляй natural negative tests ради нового rule. Если механика врёт без контекста — оставь правило soft/model-only.
 
-В PR явно укажи:
+## Source integration
 
-- provenance;
-- новые правила/операции;
-- automation level каждого класса;
-- hard gates и обоснование;
+Сначала study audit по `docs/book-study-framework.md`, затем Integration Matrix и Mechanical Feasibility, и только после этого runtime implementation.
+
+`EDITING` идёт после `NATIVE_USAGE`. Книжная рекомендация не становится `NORM` без отдельной современной нормативной проверки.
+
+Не откатывай wholesale core-файлы (`AGENTS.md`, `SKILL.md`, `BOARD_SKILL.md`, `scripts/check.py`, board/library runtime, benchmarks, CI, README).
+
+## PR description
+
+Укажи:
+
+- provenance/source status;
+- operational rules;
+- automation levels;
 - positive/negative/boundary tests;
-- риск false positives;
-- что остаётся model-only;
-- конфликт/совместимость с `NATIVE_USAGE`;
-- нужен ли новый runtime context (по умолчанию — минимальный и адресный).
+- `phenomenon_id` overlaps;
+- reviewer conflicts;
+- compatibility with `NATIVE_USAGE`;
+- compact behavior;
+- board behavior;
+- false-positive risks;
+- model-only residue;
+- runtime-context impact.
