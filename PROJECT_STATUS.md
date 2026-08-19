@@ -56,8 +56,19 @@ Completed:
 - complete eval coverage for all 42 atomic rules;
 - more than ten explicit counterexamples protecting contextual rules from becoming stop-lists;
 - `scripts/validate_nora_gal.py` — deterministic structural/traceability validator;
-- CI invocation for the validator;
 - deep Nora behavior integrated into `SKILL.md`, Custom GPT instructions/setup, evidence policy and manual smoke tests.
+
+### Automated validation
+
+The draft deep-Nora PR has passed GitHub Actions with:
+
+- Python compilation;
+- linter self-test;
+- author-profiler/schema smoke test;
+- repository JSON validation;
+- Nora Gal rule/eval/source traceability validation.
+
+The validator checks ordered `gal-01` — `gal-45`, 42 atomic rules, complete rule coverage, counterexample minimums and mapped chapter names against the exact ebook-label inventory. This is a structural contract, **not** a model-judge benchmark.
 
 ### What the deeper layer now covers
 
@@ -111,8 +122,7 @@ The old materials remain available in the historical repository/PRs. If any old 
 
 ## Next work
 
-- validate CI on the deep Nora Gal pull request;
-- review CodeRabbit feedback on the new source-grounded layer;
+- finish and triage CodeRabbit review on the source-grounded layer;
 - expand compound/paragraph-level Gal evals beyond single sentences;
 - build/run a model-judge harness for `gal-01` — `gal-45` instead of relying only on fixture validation;
 - add corpus-backed `NATIVE_USAGE` tests;
