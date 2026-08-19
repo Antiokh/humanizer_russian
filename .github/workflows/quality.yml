@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - agent/**
+      - study/**
   pull_request:
 
 jobs:
@@ -25,6 +26,9 @@ jobs:
 
       - name: Linter self-test
         run: python scripts/lint.py --self-test
+
+      - name: Validate Pishi deep study
+        run: python scripts/validate_pishi_study.py
 
       - name: Smoke-test and validate author profiler
         run: |
