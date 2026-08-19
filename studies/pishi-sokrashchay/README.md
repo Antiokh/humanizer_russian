@@ -28,7 +28,8 @@ The repository contains derived concepts, rules, source locators and original te
 
 Files:
 
-- `source-coverage.md` — source inventory and complete structural coverage;
+- `source.md` — source inventory, edition confidence, locator strategy and source-handling policy;
+- `coverage.md` — complete structural coverage of all 211 NCX nodes;
 - `concepts.md` — conceptual model;
 - `rules-*.md` — atomic operational rules;
 - `counterexamples-claims.md` — preservation cases and claims audit;
