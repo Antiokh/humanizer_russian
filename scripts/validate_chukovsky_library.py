@@ -12,6 +12,7 @@ REGISTRY = ROOT / "libraries" / "chukovsky" / "rules.json"
 ROUTING = ROOT / "studies" / "chukovsky-zhivoy-kak-zhizn" / "library-routing.md"
 MANIFEST = ROOT / "libraries" / "chukovsky" / "library.json"
 REVIEWER = ROOT / "reviewers" / "chukovsky.json"
+CHECKS = ROOT / "scripts" / "chukovsky_checks.py"
 ADAPTER = ROOT / "scripts" / "lint_chukovsky.py"
 
 EXPECTED_SOFT = {"CHUK-R09", "CHUK-R15", "CHUK-R17", "CHUK-R18", "CHUK-R19", "CHUK-R24", "CHUK-R25"}
@@ -22,12 +23,13 @@ EXPECTED_STUDY = {f"CHK-R{i:02d}" for i in range(1, 39)}
 
 
 def main() -> None:
-    for path in [REGISTRY, ROUTING, MANIFEST, REVIEWER, ADAPTER]:
+    for path in [REGISTRY, ROUTING, MANIFEST, REVIEWER, CHECKS, ADAPTER]:
         assert path.is_file(), f"missing Chukovsky library artifact: {path.relative_to(ROOT)}"
 
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     reviewer = json.loads(REVIEWER.read_text(encoding="utf-8"))
     registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    checks = CHECKS.read_text(encoding="utf-8")
     adapter = ADAPTER.read_text(encoding="utf-8")
 
     assert manifest["id"] == "chukovsky"
@@ -78,18 +80,22 @@ def main() -> None:
     assert by_id["CHUK-R24"]["phenomenon_id"] == "editing.metadiscourse_announcement"
     assert by_id["CHUK-R32"]["phenomenon_id"] == "native.idiom_as_lexical_unit"
 
-    adapter_rule_ids = set(re.findall(r'"(CHUK-R\d{2})"', adapter))
-    assert EXPECTED_SOFT <= adapter_rule_ids, adapter_rule_ids
+    # Mechanical rule identity is declared in the detector itself and consumed
+    # structurally by the adapter. No free-form label → id map lives in the board.
+    detector_rule_ids = set(re.findall(r'"(CHUK-R\d{2})"', checks))
+    assert detector_rule_ids == EXPECTED_SOFT, detector_rule_ids
+    assert "item.get(\"rule_id\")" in adapter
+    assert "item.get(\"source\")" in adapter
     assert not re.search(r'"CHK-R\d{2}"', adapter), "legacy study ids leaked into runtime adapter"
 
     print("chukovsky library validation: OK")
-    print("  canonical runtime rules: 38 (CHUK-Rxx)")
-    print("  historical study aliases: 38 (CHK-Rxx)")
-    print("  HARD_GATE: 0")
-    print("  DEFAULT_MECHANICAL: 0")
-    print("  EXTENDED_SOFT: 7")
-    print("  METRIC_ONLY: 2")
-    print("  MODEL_ONLY: 29")
+    print(f"  canonical runtime rules: {len(runtime_ids)} (CHUK-Rxx)")
+    print(f"  historical study aliases: {len(study_ids)} (CHK-Rxx)")
+    print(f"  HARD_GATE: {len(by_level['HARD_GATE'])}")
+    print(f"  DEFAULT_MECHANICAL: {len(by_level['DEFAULT_MECHANICAL'])}")
+    print(f"  EXTENDED_SOFT: {len(by_level['EXTENDED_SOFT'])}")
+    print(f"  METRIC_ONLY: {len(by_level['METRIC_ONLY'])}")
+    print(f"  MODEL_ONLY: {len(by_level['MODEL_ONLY'])}")
     print("  review_v1 library: enabled")
 
 
