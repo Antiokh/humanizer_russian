@@ -4,4 +4,5 @@ __pycache__/
 venv/
 profile.json
 *.local.json
+eval-results/
 .DS_Store
