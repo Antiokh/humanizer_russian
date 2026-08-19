@@ -24,6 +24,7 @@ MECHANICAL_RULES = {
     "repeated common element in contrast",
     "parcellated enumeration",
     "ascii hyphen used as dash",
+    "ilyakhov: bureaucratic tautology",
 }
 
 
