@@ -1,57 +1,27 @@
 # Knowledge libraries
 
-`humanizer_russian` treats every book/source layer as a pluggable knowledge library.
+`humanizer_russian` treats books/editorial systems as pluggable knowledge libraries.
 
-A library lives in `libraries/<id>/library.json`. It declares provenance, reviewer identity and the linter adapter/module used at runtime. The original book does **not** belong in this public repository.
+A library lives in `libraries/<id>/library.json`. Two product modes consume the same libraries: compact `scripts/check.py` and editorial board `scripts/review.py`.
 
-Two product modes consume the same libraries:
+## Libraries are not evidence providers
 
-- compact: `scripts/check.py` — one short mechanical-first verdict;
-- editorial board: `scripts/review.py` — preserves reviewer provenance, disagreement and style policy.
+Books/editorial systems answer **what this system recommends** and produce reviewer findings.
 
-## Add a new book
+Corpora, dictionaries, current normative references and parsed datasets answer **what evidence is available**. They belong under `evidence/`, never become reviewer votes, and are optional/off by default. See `evidence/README.md`.
 
-1. Keep the research in a long-lived author branch (`gal`, `ilyakhov`, `chukovsky`, ...).
-2. Complete the book/source study and mechanical-feasibility pass.
-3. Add a source-specific linter module where mechanical checks are justified.
-4. Add `libraries/<id>/library.json` from `_template/library.json`.
-5. Add `reviewers/<id>.json` from `reviewers/_template.json`.
-6. Add deterministic positive/negative/boundary tests.
-7. Run `scripts/validate_libraries.py`, `scripts/benchmark_lint.py`, and `scripts/benchmark_board.py`.
-8. Merge the author branch into `main`; keep the author branch for later research.
+## Add a book
 
-## Runtime adapter contract
+1. Keep research in a long-lived author branch.
+2. Complete source study and mechanical-feasibility pass.
+3. Add a source-specific linter where justified.
+4. Add `libraries/<id>/library.json` and `reviewers/<id>.json`.
+5. Add deterministic positive/negative/boundary tests.
+6. Run library/lint/board validators.
+7. Merge to `main`; keep the author branch.
 
-Preferred adapter: `review_v1`.
+Preferred adapter is `review_v1`. A finding contains `rule_id`, source-neutral `phenomenon_id`, project class, automation level, verdict, excerpt/location, reason and optional operation.
 
-The declared Python module exports:
+Two libraries may disagree. Preserve that disagreement. Book namespaces indicate provenance, not severity.
 
-```python
-def review(text: str) -> dict:
-    return {
-        "findings": [
-            {
-                "rule_id": "GAL-001",
-                "phenomenon_id": "editing.action_hidden_in_nominalization",
-                "project_class": "EDITING",
-                "automation_level": "EXTENDED_SOFT",
-                "verdict": "CHANGE",
-                "excerpt": "...",
-                "line": 1,
-                "reason": "...",
-                "operation": "recover_actor_action_object"
-            }
-        ],
-        "metrics": {}
-    }
-```
-
-`library_runtime.py` fills `library_id`, `source_namespace` and `reviewer_id` from the manifest, so source modules do not need to duplicate registry metadata.
-
-`legacy_lint_v1` exists only to adapt the current core `scripts/lint.py` while source libraries migrate to the normalized contract.
-
-## Findings are opinions, not merged truth
-
-Two libraries may disagree. Do not erase that disagreement by collapsing rules during integration. Give semantically equivalent findings a shared `phenomenon_id`; the editorial-board layer can then show consensus, majority, compatible alternatives or conflict.
-
-Book namespaces (`GAL-*`, `ILY-*`, `CHUK-*`) indicate provenance. They do not determine severity or normative status.
+Evidence may use the same `phenomenon_id` to contextualize a finding, but remains a separate report field and does not enter `reviewer_verdicts`.

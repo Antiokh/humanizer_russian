@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "example_provider",
+  "display_name": "Example evidence provider",
+  "status": "PLANNED",
+  "evidence_type": "CORPUS_USAGE",
+  "adapter": "evidence_v1",
+  "enabled_by_default": false,
+  "network_required": true,
+  "failure_policy": "SKIP",
+  "timeout_ms": 800,
+  "description": "Template only. Do not use as a production evidence source.",
+  "capabilities": [],
+  "references": []
+}

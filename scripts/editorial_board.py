@@ -1,107 +1,60 @@
 #!/usr/bin/env python3
 """Aggregate normalized findings without erasing reviewer disagreement."""
-
 from __future__ import annotations
-
 import re
 from collections import defaultdict
 from typing import Any
 
+def key_excerpt(text): return re.sub(r"\s+"," ",text.strip().lower())[:180]
 
-def key_excerpt(text: str) -> str:
-    return re.sub(r"\s+", " ", text.strip().lower())[:180]
+def _evidence_matches_group(item,group):
+    if item.get("phenomenon_id")!=group.get("phenomenon_id"): return False
+    if item.get("target_scope","PHENOMENON")=="PHENOMENON": return True
+    if item.get("target_scope")!="SPAN": return False
+    line=int(item.get("line",0) or 0); group_lines={int(f.get("line",0) or 0) for f in group.get("findings",[]) if int(f.get("line",0) or 0)>0}
+    if line>0 and line in group_lines: return True
+    return bool(key_excerpt(item.get("excerpt","")) and key_excerpt(item.get("excerpt",""))==key_excerpt(group.get("excerpt","")))
 
-
-def group_findings(findings: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    guardrails = [f for f in findings if not f.get("reviewer_id") or f.get("project_class") in {"ARTIFACT", "NORM"}]
-    review_findings = [f for f in findings if f not in guardrails]
-    groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
-    for finding in review_findings:
-        groups[(finding["phenomenon_id"], key_excerpt(finding.get("excerpt", "")))].append(finding)
-    return guardrails, [build_group(items) for items in groups.values()]
-
-
-def build_group(items: list[dict[str, Any]]) -> dict[str, Any]:
-    by_reviewer: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for item in items:
-        by_reviewer[item["reviewer_id"]].append(item)
-
-    verdicts = {}
-    for reviewer, rows in by_reviewer.items():
-        values = {row["verdict"] for row in rows}
-        if "CHANGE" in values and "KEEP" in values:
-            verdicts[reviewer] = "CONFLICT"
-        elif "CHANGE" in values:
-            verdicts[reviewer] = "CHANGE"
-        elif "KEEP" in values:
-            verdicts[reviewer] = "KEEP"
-        else:
-            verdicts[reviewer] = "REVIEW"
-
-    visible = [v for v in verdicts.values() if v != "REVIEW"]
-    if "CHANGE" in visible and "KEEP" in visible:
-        status = "SOURCE_CONFLICT"
-    elif len(verdicts) == 1:
-        status = "SINGLE_REVIEW"
-    elif visible and all(v == "CHANGE" for v in visible) and len(visible) == len(verdicts):
-        status = "CONSENSUS"
-    elif visible and all(v == "KEEP" for v in visible) and len(visible) == len(verdicts):
-        status = "NO_ACTION"
-    elif "CHANGE" in visible:
-        status = "MAJORITY"
-    elif "KEEP" in visible:
-        status = "MAJORITY"
-    else:
-        status = "REVIEW"
-
-    operations = [x.get("operation") for x in items if x.get("operation")]
-    return {
-        "phenomenon_id": items[0]["phenomenon_id"],
-        "excerpt": items[0].get("excerpt", ""),
-        "status": status,
-        "reviewer_verdicts": verdicts,
-        "operations": list(dict.fromkeys(operations)),
-        "findings": items,
-    }
-
-
-def apply_style(groups: list[dict[str, Any]], style: dict[str, Any]) -> list[dict[str, Any]]:
-    weights = style.get("reviewer_weights", {})
-    policy = style.get("conflict_policy", "show_alternatives")
+def attach_evidence(groups,evidence=None):
     for group in groups:
-        score = 0.0
-        for reviewer, verdict in group["reviewer_verdicts"].items():
-            weight = float(weights.get(reviewer, 1.0))
-            if verdict == "CHANGE":
-                score += weight
-            elif verdict == "KEEP":
-                score -= weight
-        group["style_score"] = round(score, 3)
-        if group["status"] == "SOURCE_CONFLICT" and policy == "preserve_original":
-            group["recommendation"] = "KEEP"
-        elif group["status"] == "SOURCE_CONFLICT" and policy == "weighted_majority":
-            group["recommendation"] = "CHANGE" if score > 0 else "KEEP" if score < 0 else "SHOW_ALTERNATIVES"
-        elif group["status"] == "SOURCE_CONFLICT":
-            group["recommendation"] = "SHOW_ALTERNATIVES"
-        elif score > 0:
-            group["recommendation"] = "CHANGE"
-        elif score < 0:
-            group["recommendation"] = "KEEP"
-        else:
-            group["recommendation"] = "REVIEW"
+        matched=[x for x in (evidence or []) if _evidence_matches_group(x,group)]; group["evidence"]=matched
+        group["evidence_summary"]={"total":len(matched),"supports_keep":sum(x.get("direction")=="SUPPORTS_KEEP" for x in matched),"supports_change":sum(x.get("direction")=="SUPPORTS_CHANGE" for x in matched),"context":sum(x.get("direction")=="CONTEXT" for x in matched),"neutral":sum(x.get("direction")=="NEUTRAL" for x in matched)}
     return groups
 
+def group_findings(findings):
+    guardrails=[f for f in findings if not f.get("reviewer_id") or f.get("project_class") in {"ARTIFACT","NORM"}]; review=[f for f in findings if f not in guardrails]; groups=defaultdict(list)
+    for f in review: groups[(f["phenomenon_id"],key_excerpt(f.get("excerpt","")))].append(f)
+    return guardrails,[build_group(x) for x in groups.values()]
 
-def build_board(findings: list[dict[str, Any]], style: dict[str, Any]) -> dict[str, Any]:
-    guardrails, groups = group_findings(findings)
-    groups = apply_style(groups, style)
-    return {
-        "guardrails": guardrails,
-        "groups": groups,
-        "summary": {
-            "guardrails": len(guardrails),
-            "groups": len(groups),
-            "consensus": sum(1 for g in groups if g["status"] == "CONSENSUS"),
-            "conflicts": sum(1 for g in groups if g["status"] == "SOURCE_CONFLICT"),
-        },
-    }
+def build_group(items):
+    by=defaultdict(list)
+    for x in items: by[x["reviewer_id"]].append(x)
+    verdicts={}
+    for reviewer,rows in by.items():
+        vals={r["verdict"] for r in rows}
+        verdicts[reviewer]="CONFLICT" if {"CHANGE","KEEP"}<=vals else "CHANGE" if "CHANGE" in vals else "KEEP" if "KEEP" in vals else "REVIEW"
+    visible=[v for v in verdicts.values() if v!="REVIEW"]
+    if "CHANGE" in visible and "KEEP" in visible: status="SOURCE_CONFLICT"
+    elif len(verdicts)==1: status="SINGLE_REVIEW"
+    elif visible and all(v=="CHANGE" for v in visible) and len(visible)==len(verdicts): status="CONSENSUS"
+    elif visible and all(v=="KEEP" for v in visible) and len(visible)==len(verdicts): status="NO_ACTION"
+    elif "CHANGE" in visible or "KEEP" in visible: status="MAJORITY"
+    else: status="REVIEW"
+    ops=[x.get("operation") for x in items if x.get("operation")]
+    return {"phenomenon_id":items[0]["phenomenon_id"],"excerpt":items[0].get("excerpt",""),"status":status,"reviewer_verdicts":verdicts,"operations":list(dict.fromkeys(ops)),"findings":items,"evidence":[],"evidence_summary":{"total":0,"supports_keep":0,"supports_change":0,"context":0,"neutral":0}}
+
+def apply_style(groups,style):
+    weights=style.get("reviewer_weights",{}); policy=style.get("conflict_policy","show_alternatives")
+    for g in groups:
+        score=sum(float(weights.get(r,1.0))*(1 if v=="CHANGE" else -1 if v=="KEEP" else 0) for r,v in g["reviewer_verdicts"].items()); g["style_score"]=round(score,3)
+        if g["status"]=="SOURCE_CONFLICT" and policy=="preserve_original": g["recommendation"]="KEEP"
+        elif g["status"]=="SOURCE_CONFLICT" and policy=="weighted_majority": g["recommendation"]="CHANGE" if score>0 else "KEEP" if score<0 else "SHOW_ALTERNATIVES"
+        elif g["status"]=="SOURCE_CONFLICT": g["recommendation"]="SHOW_ALTERNATIVES"
+        elif score>0: g["recommendation"]="CHANGE"
+        elif score<0: g["recommendation"]="KEEP"
+        else: g["recommendation"]="REVIEW"
+    return groups
+
+def build_board(findings,style,evidence=None):
+    guardrails,groups=group_findings(findings); groups=apply_style(attach_evidence(groups,evidence),style)
+    return {"guardrails":guardrails,"groups":groups,"summary":{"guardrails":len(guardrails),"groups":len(groups),"consensus":sum(g["status"]=="CONSENSUS" for g in groups),"conflicts":sum(g["status"]=="SOURCE_CONFLICT" for g in groups),"evidence_items_attached":sum(len(g.get("evidence",[])) for g in groups)}}
