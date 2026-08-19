@@ -6,6 +6,7 @@
 - `evals/russian-language.json` — норма, живой русский и взаимодействие правил;
 - `evals/chukovsky.json` — guardrails и метод различения по «Живой как жизнь»;
 - `evals/chukovsky-positive.json` — положительные редакторские операции второго прохода по Чуковскому;
+- `evals/chukovsky-syntax.json` — падежная прозрачность, цепи зависимостей и semantic backtranslation;
 - `gpt/TESTS.md` — ручные smoke-тесты;
 - `python3 scripts/lint.py --self-test` — детерминированные surface checks, включая Chukovsky pass.
 
@@ -102,6 +103,18 @@
 19. фамильярный регистр;
 20. порядок `современное значение → узус → этимология`.
 
+## Chukovsky syntax/backtranslation eval
+
+`evals/chukovsky-syntax.json` содержит `chuk-syn-01` — `chuk-syn-05`:
+
+1. конкурирующие роли творительного;
+2. длинная цепь зависимых существительных;
+3. отрицательная номинализация → явное условие/событие;
+4. plain-language backtranslation перед стилистической правкой;
+5. запрет угадывать смысл при двух допустимых разборах.
+
+Эти сценарии намеренно model-level: без морфологического и dependency-разбора regex не должен притворяться, что понимает синтаксические роли.
+
 ## Как оценивать
 
 Semantic/native/editing eval получает:
@@ -125,7 +138,7 @@ Judge проверяет функцию, а не дословное совпад
 - bureaucratic-register cluster;
 - light verb + nominalization;
 - nominalization cluster;
-- redundant qualifier candidate;
+- modifier subtraction candidate;
 - evaluative stamp cluster;
 - abstract semantic collision;
 - repeated `вопрос` packaging;
@@ -134,6 +147,14 @@ Judge проверяет функцию, а не дословное совпад
 - suffix/ending echo.
 
 Ни одна из этих находок не является hard gate. Для финального решения нужны жанр, адресат и контекст.
+
+После второго прохода также ужесточены false-positive guardrails самого линтера:
+
+- одиночное `важно отметить` больше не маркируется как `AI_PATTERN`: это редакторский deletion test;
+- один обычный связующий маркер (`кроме того` и т. п.) не считается AI-сигналом;
+- AI phrase families требуют семейно-зависимого кластера, кроме сильных assistant-wrapper артефактов;
+- `light verb + nominalization` требует именно глагольной формы и не должен ловить голое `осуществление проекта`;
+- единичный официальный маркер не считается достаточным для вывода о register leakage.
 
 ## Будущий корпусный eval
 
