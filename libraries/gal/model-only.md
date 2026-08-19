@@ -6,7 +6,7 @@ Mechanical implementation уже отвечает за `GAL-KANZ-VERB`, `GAL-KAN
 
 ## 36 contextual rules
 
-| Rule | Phenomenon | Source locator | Что нужен модели | Главный guard |
+| Rule | Phenomenon | Source locator | Что нужно модели | Главный guard |
 |---|---|---|---|---|
 | `GAL-KANZ-NOUN-CHAIN` | `editing.nominal_chain_obscures_relations` | Откуда что берется?; Жечь или сушить?; Туманы… | восстановить отношения между существительными | не выдумывать одну трактовку двусмысленной цепи |
 | `GAL-KANZ-PASSIVE` | `editing.passive_obscures_agent` | Откуда что берется?; Жечь или сушить? | понять, важен/известен ли агент | пассив нормативен; неизвестного агента не создавать |
