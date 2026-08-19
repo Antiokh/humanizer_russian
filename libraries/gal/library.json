@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "gal",
+  "display_name": "Нора Галь — «Слово живое и мертвое»",
+  "source_namespace": "GAL",
+  "source_type": "book",
+  "source_branch": "gal",
+  "reviewer_id": "gal",
+  "adapter": "review_v1",
+  "linter_path": "scripts/lint_gal.py",
+  "enabled_by_default": true,
+  "status": "AUDITED",
+  "source_status": "full sequential EPUB study; 35/35 spine documents covered",
+  "source_version": "epub-sha256:38bdce9dfaf93ea820aae3fd0c7da74e9c2a908f5a3c77da2764793535bf4aa9",
+  "references": [
+    "studies/nora-gal/source.md",
+    "studies/nora-gal/coverage.md",
+    "studies/nora-gal/concepts.md",
+    "studies/nora-gal/rules.md",
+    "studies/nora-gal/interactions.md",
+    "studies/nora-gal/claims.md",
+    "studies/nora-gal/audit.md",
+    "references/nora-gal-source-map.md",
+    "references/nora-gal-rule-index.md",
+    "libraries/gal/rules.json",
+    "libraries/gal/model-only.md"
+  ],
+  "notes": "Book-derived EDITING library. No Gal rule is a HARD_GATE or NORM merely because it appears in the source. Compact default consumes this library but exposes no Gal findings until a rule is calibrated as DEFAULT_MECHANICAL; current Gal surface findings are EXTENDED_SOFT."
+}
