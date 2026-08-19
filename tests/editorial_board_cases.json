@@ -1,0 +1,24 @@
+[
+  {
+    "id": "native_redundant_contrast",
+    "text": "Это не ошибка в расчёте, а ошибка в исходных данных.",
+    "expect_phenomena": ["native.redundant_shared_material"],
+    "expect_guardrails": 0
+  },
+  {
+    "id": "native_compressed_clean",
+    "text": "Это ошибка не в расчёте, а в исходных данных.",
+    "must_not_have_phenomena": ["native.redundant_shared_material"],
+    "expect_guardrails": 0
+  },
+  {
+    "id": "artifact_is_guardrail",
+    "text": "Черновик с oaicite внутри.",
+    "expect_guardrails_min": 1
+  },
+  {
+    "id": "intentional_repeat_not_contrast",
+    "text": "Никогда. Никогда больше.",
+    "must_not_have_phenomena": ["native.redundant_shared_material"]
+  }
+]
