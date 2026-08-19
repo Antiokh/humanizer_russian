@@ -41,6 +41,12 @@ jobs:
       - name: Validate Chukovsky dual-runtime library routing
         run: python scripts/validate_chukovsky_library.py
 
+      - name: Validate Ilyakhov source study
+        run: python scripts/validate_pishi_study.py
+
+      - name: Validate Ilyakhov dual-runtime library routing
+        run: python scripts/validate_ilyakhov_library.py
+
       - name: Validate Nora Gal study and library routing
         run: python scripts/validate_nora_gal.py
 
@@ -52,6 +58,9 @@ jobs:
 
       - name: Chukovsky normalized adapter self-test
         run: python scripts/lint_chukovsky.py
+
+      - name: Ilyakhov normalized adapter self-test
+        run: python scripts/lint_ilyakhov.py
 
       - name: Nora Gal normalized adapter self-test
         run: python scripts/lint_gal.py --self-test
@@ -67,6 +76,9 @@ jobs:
 
       - name: Chukovsky deterministic extended benchmark
         run: python scripts/benchmark_chukovsky.py
+
+      - name: Ilyakhov deterministic source benchmark
+        run: python scripts/benchmark_ilyakhov.py
 
       - name: Nora Gal deterministic source and dual-runtime benchmark
         run: python scripts/benchmark_gal.py
@@ -104,6 +116,28 @@ jobs:
           assert not any(str(key).startswith('chukovsky_') for key in board['metrics'].get('native', {})), board
           assert rslive['style']['id'] == 'rslive_content', rslive
           assert any(item.get('rule_id') == 'CHUK-R24' for item in rslive['findings']), rslive
+          PY
+
+      - name: Smoke-test Ilyakhov in compact and board runtimes
+        run: |
+          printf '%s' 'Осуществляется проведение проверки.' | python scripts/check.py --json >/tmp/ily-default.json
+          printf '%s' 'В данной статье мы рассмотрим три способа резервного копирования.' | python scripts/check.py --extended --json >/tmp/ily-extended.json
+          printf '%s' 'Осуществляется проведение проверки.' | python scripts/review.py --libraries ilyakhov,chukovsky --format json >/tmp/ily-board.json
+          printf '%s' 'В данной статье мы рассмотрим три способа резервного копирования.' | python scripts/review.py --libraries ilyakhov --style rslive_content --format json >/tmp/ily-rslive.json
+          python - <<'PY'
+          import json
+          default = json.load(open('/tmp/ily-default.json', encoding='utf-8'))
+          extended = json.load(open('/tmp/ily-extended.json', encoding='utf-8'))
+          board = json.load(open('/tmp/ily-board.json', encoding='utf-8'))
+          rslive = json.load(open('/tmp/ily-rslive.json', encoding='utf-8'))
+          assert any(item.get('library_id') == 'ilyakhov' and item.get('rule') == 'ILY-M01' for item in default['findings']), default
+          assert any(item.get('library_id') == 'ilyakhov' and item.get('rule') == 'ILY-R62' for item in extended['findings']), extended
+          assert any(item.get('rule_id') == 'ILY-M01' for item in board['findings']), board
+          assert any(item.get('rule_id') == 'CHUK-R17' for item in board['findings']), board
+          groups = [g for g in board['board']['groups'] if g['phenomenon_id'] == 'editing.action_hidden_in_nominalization']
+          assert len(groups) == 1 and groups[0]['status'] == 'MAJORITY', board
+          assert rslive['style']['id'] == 'rslive_content', rslive
+          assert any(item.get('rule_id') == 'ILY-R62' for item in rslive['findings']), rslive
           PY
 
       - name: Smoke-test and validate author profiler
