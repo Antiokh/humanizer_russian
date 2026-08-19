@@ -24,6 +24,12 @@ EXPECTED_AUTOMATION = {
     "METRIC_ONLY": 3,
     "MODEL_ONLY": 36,
 }
+EXPECTED_SHARED_PHENOMENA = {
+    "GAL-KANZ-VERB": "editing.action_hidden_in_nominalization",
+    "GAL-KANZ-STAMP": "editing.template_without_semantic_gain",
+    "GAL-TERM-AUDIENCE": "editing.terminology_audience_fit",
+    "GAL-IDIOM-CONTAMINATION": "editing.idiom_play_vs_contamination",
+}
 SOURCE_SHA256 = "38bdce9dfaf93ea820aae3fd0c7da74e9c2a908f5a3c77da2764793535bf4aa9"
 REQUIRED_RULE_FIELDS = {
     "rule_id", "source_locator", "project_class", "scope", "automation_level",
@@ -74,17 +80,21 @@ def validate() -> None:
     source = (ROOT / "studies/nora-gal/source.md").read_text(encoding="utf-8")
     coverage = (ROOT / "studies/nora-gal/coverage.md").read_text(encoding="utf-8")
     audit = (ROOT / "studies/nora-gal/audit.md").read_text(encoding="utf-8")
+    integration = (ROOT / "studies/nora-gal/integration-matrix.md").read_text(encoding="utf-8")
     for marker in [SOURCE_SHA256, "35 XHTML", "34 navigation", "ch1-7.xhtml", "ch1-29.xhtml"]:
         assert marker in source, f"source inventory lost marker: {marker}"
     for marker in ["35/35", "30/30", "5/5", "34/34", "Inaccessible or unread parts: **none**"]:
         assert marker in coverage, f"coverage lost marker: {marker}"
     assert "no inaccessible or unread source parts" in audit.casefold()
+    for marker in ["42", "HARD_GATE", "DEFAULT_MECHANICAL", "EXTENDED_SOFT", "MODEL_ONLY"]:
+        assert marker in integration, f"integration matrix lost marker: {marker}"
 
     # Operational classification.
     rules = load_operational_rules()
     assert len(rules) == EXPECTED_RULE_COUNT, len(rules)
     ids = [r["rule_id"] for r in rules]
     assert len(ids) == len(set(ids)), "duplicate GAL rule IDs"
+    by_id = {r["rule_id"]: r for r in rules}
     for rule in rules:
         missing = REQUIRED_RULE_FIELDS - set(rule)
         assert not missing, f"{rule.get('rule_id')}: missing {sorted(missing)}"
@@ -98,11 +108,17 @@ def validate() -> None:
     for key in EXPECTED_AUTOMATION:
         actual_automation.setdefault(key, 0)
     assert actual_automation == EXPECTED_AUTOMATION, actual_automation
+    for rule_id, phenomenon_id in EXPECTED_SHARED_PHENOMENA.items():
+        assert by_id[rule_id]["phenomenon_id"] == phenomenon_id, (rule_id, by_id[rule_id])
+        assert phenomenon_id in by_id[rule_id]["existing_overlap"], rule_id
 
     residue = (ROOT / "libraries/gal/model-only.md").read_text(encoding="utf-8")
     model_ids = {r["rule_id"] for r in rules if r["automation_level"] == "MODEL_ONLY"}
     missing_residue = sorted(rid for rid in model_ids if f"`{rid}`" not in residue)
     assert not missing_residue, f"MODEL_ONLY rules missing from residue: {missing_residue}"
+    for rule_id, phenomenon_id in EXPECTED_SHARED_PHENOMENA.items():
+        if rule_id in model_ids:
+            assert phenomenon_id in residue, (rule_id, phenomenon_id)
 
     # Manifest and reviewer: source system, not impersonation.
     manifest = load_json("libraries/gal/library.json")
@@ -112,6 +128,9 @@ def validate() -> None:
     assert manifest["reviewer_id"] == "gal"
     assert manifest["source_branch"] == "gal"
     assert manifest["status"] in {"AUDITED", "OPERATIONAL"}
+    assert manifest["rules_path"] == "libraries/gal/rules.json"
+    assert manifest["model_only_reference"] == "libraries/gal/model-only.md"
+    assert "studies/nora-gal/integration-matrix.md" in manifest["references"]
     assert reviewer.get("library_id") == "gal"
     assert reviewer["review_label"] == "По системе Норы Галь"
     assert reviewer["avatar"] is None
@@ -126,6 +145,14 @@ def validate() -> None:
         assert {"rule_id", "phenomenon_id", "project_class", "automation_level", "verdict"} <= set(finding)
         assert finding["automation_level"] == "EXTENDED_SOFT"
         assert finding["verdict"] == "REVIEW"
+    shared = linter.review("Осуществляется проведение проверки.")
+    assert any(
+        item["rule_id"] == "GAL-KANZ-VERB"
+        and item["phenomenon_id"] == "editing.action_hidden_in_nominalization"
+        for item in shared["findings"]
+    ), shared
+    markup = linter.review("```text\nКоманда осуществила проведение проверки.\n```")
+    assert not markup["findings"], markup
 
     # Canonical 45 original project evals and source traceability map.
     suite = load_json("evals/nora-gal.json")
@@ -163,7 +190,8 @@ def validate() -> None:
     print(
         "Nora Gal validation: OK "
         f"(35/35 spine docs, {len(rules)} rules, automation={actual_automation}, "
-        f"{len(evals)} evals, {counterexamples} counterexamples)"
+        f"{len(evals)} evals, {counterexamples} counterexamples, "
+        f"shared phenomena={len(EXPECTED_SHARED_PHENOMENA)})"
     )
 
 
