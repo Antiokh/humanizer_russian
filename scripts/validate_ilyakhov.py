@@ -75,9 +75,9 @@ def main() -> None:
     assert not missing_patterns, f"Patterns without eval coverage: {sorted(missing_patterns)}"
 
     recommendation_ids = [item["id"] for item in recommendations]
-    expected_recommendations = [f"ILY-R{i:02d}" for i in range(1, 17)]
+    expected_recommendations = [f"ILY-R{i:02d}" for i in range(1, 25)]
     assert recommendation_ids == expected_recommendations, (
-        "Recommendation registry must remain ordered and contiguous ILY-R01..ILY-R16; "
+        "Recommendation registry must remain ordered and contiguous ILY-R01..ILY-R24; "
         f"got {recommendation_ids}"
     )
     assert len(recommendation_ids) == len(set(recommendation_ids)), "Duplicate recommendation IDs"
