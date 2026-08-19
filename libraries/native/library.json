@@ -7,12 +7,12 @@
   "source_branch": "main",
   "reviewer_id": "native",
   "adapter": "legacy_lint_v1",
-  "linter_path": "scripts/lint.py",
+  "linter_path": "scripts/lint_native.py",
   "enabled_by_default": true,
   "status": "OPERATIONAL",
   "references": [
     "references/native-russian.md",
     "references/russian-language.md"
   ],
-  "notes": "Temporary adapter for the existing core linter. New book layers should prefer review_v1."
+  "notes": "Legacy native/core adapter filters source-specific library findings so reviewer provenance remains correct. New book layers use review_v1."
 }

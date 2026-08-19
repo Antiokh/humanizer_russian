@@ -88,5 +88,91 @@
     ],
     "expect_status": "SOURCE_CONFLICT",
     "expect_recommendation": "SHOW_ALTERNATIVES"
+  },
+  {
+    "id": "chukovsky_runtime_metadiscourse",
+    "type": "runtime",
+    "libraries": ["native", "chukovsky"],
+    "text": "Следует отметить, что резервная копия завершилась в 03:10.",
+    "expect_phenomena": ["editing.metadiscourse_announcement"],
+    "expect_rule_ids": ["CHUK-R24"],
+    "expect_reviewers": ["chukovsky"],
+    "expect_status_by_phenomenon": {
+      "editing.metadiscourse_announcement": "SINGLE_REVIEW"
+    },
+    "expect_guardrails": 0
+  },
+  {
+    "id": "chukovsky_runtime_warning_negative",
+    "type": "runtime",
+    "libraries": ["chukovsky"],
+    "text": "Важно: после ротации ключа старый токен перестанет работать.",
+    "must_not_have_phenomena": ["editing.metadiscourse_announcement"],
+    "must_not_have_rule_ids": ["CHUK-R24"],
+    "expect_guardrails": 0
+  },
+  {
+    "id": "chukovsky_shared_phenomenon_consensus_contract",
+    "type": "board_unit",
+    "findings": [
+      {
+        "rule_id": "CHUK-R17",
+        "phenomenon_id": "editing.action_hidden_in_nominalization",
+        "library_id": "chukovsky",
+        "source_namespace": "CHUK",
+        "reviewer_id": "chukovsky",
+        "project_class": "EDITING",
+        "automation_level": "EXTENDED_SOFT",
+        "verdict": "CHANGE",
+        "excerpt": "Осуществляется проведение проверки",
+        "reason": "действие скрыто номинальной оболочкой"
+      },
+      {
+        "rule_id": "GAL-KANZ-VERB",
+        "phenomenon_id": "editing.action_hidden_in_nominalization",
+        "library_id": "gal",
+        "source_namespace": "GAL",
+        "reviewer_id": "gal",
+        "project_class": "EDITING",
+        "automation_level": "EXTENDED_SOFT",
+        "verdict": "CHANGE",
+        "excerpt": "Осуществляется проведение проверки",
+        "reason": "канцелярская конструкция скрывает действие"
+      }
+    ],
+    "expect_status": "CONSENSUS",
+    "expect_recommendation": "CHANGE"
+  },
+  {
+    "id": "chukovsky_source_conflict_contract",
+    "type": "board_unit",
+    "findings": [
+      {
+        "rule_id": "CHUK-R30",
+        "phenomenon_id": "native.expressive_redundancy",
+        "library_id": "chukovsky",
+        "source_namespace": "CHUK",
+        "reviewer_id": "chukovsky",
+        "project_class": "NATIVE_USAGE",
+        "automation_level": "MODEL_ONLY",
+        "verdict": "KEEP",
+        "excerpt": "Никогда. Никогда больше.",
+        "reason": "повтор несёт ритм и усиление"
+      },
+      {
+        "rule_id": "ILY-REDUNDANCY-1",
+        "phenomenon_id": "native.expressive_redundancy",
+        "library_id": "ilyakhov",
+        "source_namespace": "ILY",
+        "reviewer_id": "ilyakhov",
+        "project_class": "EDITING",
+        "automation_level": "MODEL_ONLY",
+        "verdict": "CHANGE",
+        "excerpt": "Никогда. Никогда больше.",
+        "reason": "в конкретной задаче повтор признан лишним"
+      }
+    ],
+    "expect_status": "SOURCE_CONFLICT",
+    "expect_recommendation": "SHOW_ALTERNATIVES"
   }
 ]

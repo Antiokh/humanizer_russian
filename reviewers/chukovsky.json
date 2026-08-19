@@ -5,7 +5,10 @@
   "short_label": "Чуковский",
   "review_label": "По системе Корнея Чуковского",
   "kind": "book_author",
+  "library_id": "chukovsky",
+  "source_title": "Живой как жизнь",
+  "source_namespace": "CHUK",
   "avatar": null,
   "domains": ["living_language", "register", "rhythm", "bureaucratese", "idiom"],
-  "disclaimer": "Автоматическая оценка по формализованным принципам из работ Корнея Чуковского, а не реальная рецензия, цитата или endorsement автора."
+  "disclaimer": "Автоматическая оценка по формализованной системе, извлечённой из «Живой как жизнь». Это не реальная рецензия, цитата, endorsement или личное мнение Корнея Чуковского о текущем тексте."
 }
