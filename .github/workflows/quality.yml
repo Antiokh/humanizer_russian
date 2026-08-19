@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ilyakhov
       - agent/**
       - feature/**
       - context/**
@@ -34,6 +35,15 @@ jobs:
 
       - name: Deterministic mechanical linter benchmark
         run: python scripts/benchmark_lint.py
+
+      - name: Validate Pishi source study
+        run: python scripts/validate_pishi_study.py
+
+      - name: Ilyakhov source-specific linter self-test
+        run: python scripts/lint_ilyakhov.py --self-test
+
+      - name: Validate Ilyakhov integration matrix
+        run: python scripts/validate_ilyakhov_integration.py
 
       - name: Smoke-test and validate author profiler
         run: |
