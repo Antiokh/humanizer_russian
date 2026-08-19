@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """Conservative surface linter for humanizer+ru.
 
-The linter does not decide what is grammatical or "human" by regex. It only
-finds surface candidates for contextual review.
+The linter does not decide what is grammatical or "human" by regex. It surfaces
+candidates for contextual review and, where possible, constructive editing
+alternatives.
 
 Kinds:
-  ARTIFACT       technical chatbot/citation traces; the only automatic gate
-  AI_PATTERN     repeated formulae or calque-like patterns
-  NATIVE_WARNING formally possible but potentially synthetic/native-unfriendly
-  STYLE_WARNING rhythm/format patterns that may be intentional
+  ARTIFACT            technical chatbot/citation traces; the only automatic gate
+  AI_PATTERN          repeated formulae or calque-like patterns
+  NATIVE_WARNING      formally possible but potentially synthetic/native-unfriendly
+  STYLE_WARNING       rhythm/format patterns that may be intentional
+  EDITING_SUGGESTION  positive rewrite opportunity; never a blocker
 
 Descriptive metrics are returned separately. Exit status is non-zero only when
 ARTIFACT findings remain.
@@ -21,6 +23,14 @@ import json
 import re
 import sys
 from pathlib import Path
+
+try:
+    from chukovsky_checks import check_chukovsky, self_test as chukovsky_self_test
+except ImportError:  # package/import context
+    from scripts.chukovsky_checks import (
+        check_chukovsky,
+        self_test as chukovsky_self_test,
+    )
 
 
 ARTIFACT_PATTERNS = [
@@ -150,6 +160,17 @@ def word_count(s: str) -> int:
 def first_words(s: str, n: int = 2) -> tuple[str, ...]:
     items = re.findall(r"[A-Za-zА-Яа-яЁё]+", s.lower())
     return tuple(items[:n])
+
+
+def percentile(values: list[int], q: float) -> float:
+    if not values:
+        return 0
+    vals = sorted(values)
+    pos = (len(vals) - 1) * q
+    lo = int(pos)
+    hi = min(lo + 1, len(vals) - 1)
+    frac = pos - lo
+    return round(vals[lo] * (1 - frac) + vals[hi] * frac, 2)
 
 
 def add(
@@ -313,18 +334,26 @@ def lint(text: str) -> tuple[list[dict], dict]:
             note="check typography; do not replace normative em dash for anti-detection",
         )
 
+    # Chukovsky pass: positive editing opportunities, never hard gates.
+    chuk_findings, chuk_metrics = check_chukovsky(prose, sents)
+    findings.extend(chuk_findings)
+
     dash_count = len(re.findall(r"[—–]", prose))
     words_total = sum(lengths)
     metrics = {
         "sentences": len(sents),
         "words": words_total,
-        "sentence_length_median": sorted(lengths)[len(lengths) // 2] if lengths else 0,
+        "sentence_length_p25": percentile(lengths, 0.25),
+        "sentence_length_median": percentile(lengths, 0.50),
+        "sentence_length_p75": percentile(lengths, 0.75),
+        "sentence_length_p90": percentile(lengths, 0.90),
         "short_sentences_le_4": sum(1 for x in lengths if x <= 4),
         "dashes": dash_count,
         "colons": prose.count(":"),
         "questions": prose.count("?"),
         "emoji": len(EMOJI.findall(prose)),
         "bold_spans": len(BOLD_SPAN.findall(text)),
+        **chuk_metrics,
     }
 
     if len(sents) >= 6 and dash_count >= 5 and dash_count > len(sents) / 2:
@@ -398,6 +427,15 @@ def self_test() -> None:
     findings, _ = lint(calque)
     assert any(item["rule"].startswith("calque:") for item in findings), findings
 
+    chukovsky_self_test()
+    chuk_text = (
+        "Важно отметить, что в рамках данного проекта осуществляется "
+        "обеспечение повышения эффективности реализации процесса."
+    )
+    findings, metrics = lint(chuk_text)
+    assert any(item["kind"] == "EDITING_SUGGESTION" for item in findings), findings
+    assert "chukovsky_nominalizations" in metrics, metrics
+
     print("self-test: OK")
 
 
@@ -426,7 +464,7 @@ def main() -> None:
             for finding in findings:
                 loc = f"line {finding['line']}" if finding["line"] else "text"
                 print(
-                    f"{finding['kind']:14} {loc:10} "
+                    f"{finding['kind']:18} {loc:10} "
                     f"{finding['rule']}: {finding['excerpt']}"
                 )
                 if finding["note"]:
@@ -443,7 +481,10 @@ def main() -> None:
             print("\ngate failed: technical chatbot artifacts remain")
         else:
             print("\ngate passed: no technical chatbot artifacts")
-            print("soft/native findings still require contextual Russian-language review")
+            print(
+                "soft/native/editing findings still require contextual "
+                "Russian-language review"
+            )
 
     if any(item["kind"] == "ARTIFACT" for item in findings):
         raise SystemExit(1)
