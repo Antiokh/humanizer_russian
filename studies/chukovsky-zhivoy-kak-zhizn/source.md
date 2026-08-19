@@ -1,6 +1,6 @@
 # Source inventory — Корней Чуковский, «Живой как жизнь»
 
-Study status: `INGESTED`; sequential reading in progress.
+Study status: `OPERATIONAL_FOR_INTEGRATION`; sequential reading and independent audit complete.
 
 ## Source
 
@@ -56,6 +56,13 @@ Format:
 For chapter-level provenance, also include chapter/section (`Гл. 6, II`) when available. EPUB XHTML filename/anchor may be added as a secondary locator, but line ranges are primary because they are directly reproducible through the file reader used for this study.
 
 Do not use semantic-search snippets as evidence of full reading. Sequential coverage is established only by contiguous reads from line 1 through line 4530.
+
+## Completion evidence
+
+- full coverage: `coverage.md`;
+- independent loss / overgeneralization / claims audit: `audit.md`;
+- explicit re-audit before runtime integration: `re-audit-2026-08-19.md`;
+- integration classification: `integration-matrix.md` (created after the study gate).
 
 ## Source/copyright policy
 
