@@ -123,6 +123,8 @@ def normalize_legacy(finding: dict[str, Any], manifest: dict[str, Any]) -> dict[
         "reason": finding.get("note", ""),
         "operation": None,
         "confidence": None,
+        "legacy_rule": rule,
+        "legacy_kind": kind,
     }
 
 
@@ -170,3 +172,26 @@ def run_libraries(text: str, library_ids: list[str] | None = None) -> tuple[list
         findings.extend(lib_findings)
         metrics[manifest["id"]] = lib_metrics
     return findings, metrics
+
+
+def compact_shape(item: dict[str, Any]) -> dict[str, Any]:
+    """Stable compact shape compatible with the existing check/benchmark interface."""
+    project_class = item.get("project_class")
+    kind = item.get("legacy_kind") or {
+        "ARTIFACT": "ARTIFACT",
+        "NATIVE_USAGE": "NATIVE_WARNING",
+        "AI_CALQUE": "AI_PATTERN",
+        "EDITING": "STYLE_WARNING",
+        "NORM": "LANGUAGE_ERROR",
+    }.get(project_class, "STYLE_WARNING")
+    return {
+        "kind": kind,
+        "line": item.get("line", 0),
+        "rule": item.get("legacy_rule") or item["rule_id"],
+        "excerpt": item.get("excerpt", ""),
+        "note": item.get("reason", ""),
+        "library_id": item.get("library_id"),
+        "reviewer_id": item.get("reviewer_id"),
+        "phenomenon_id": item.get("phenomenon_id"),
+        "automation_level": item.get("automation_level"),
+    }
