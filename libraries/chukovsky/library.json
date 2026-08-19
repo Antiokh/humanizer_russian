@@ -15,7 +15,8 @@
     "libraries/chukovsky/rules.json",
     "references/chukovsky.md",
     "studies/chukovsky-zhivoy-kak-zhizn/integration-matrix.md",
-    "studies/chukovsky-zhivoy-kak-zhizn/library-routing.md"
+    "studies/chukovsky-zhivoy-kak-zhizn/library-routing.md",
+    "studies/chukovsky-zhivoy-kak-zhizn/external-provenance-gap.md"
   ],
   "source_status": "OPERATIONAL_FOR_INTEGRATION",
   "source_version": "2010 EPUB; text identifies 2nd corrected and expanded edition",
@@ -23,5 +24,5 @@
   "rules_path": "libraries/chukovsky/rules.json",
   "model_only_reference": "references/chukovsky.md",
   "model_eval_path": "evals/chukovsky.json",
-  "notes": "38 audited rules: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 7 EXTENDED_SOFT, 2 METRIC_ONLY, 29 MODEL_ONLY. CHUK-Rxx is the canonical runtime rule namespace; historical CHK-Rxx study IDs are retained only as research aliases. Public repository contains derived knowledge only; the source EPUB is not stored here."
+  "notes": "38 audited rules: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 7 EXTENDED_SOFT, 2 METRIC_ONLY, 29 MODEL_ONLY. CHUK-Rxx is the canonical runtime rule namespace; historical CHK-Rxx study IDs are retained only as research aliases. Primary-book provenance is reproducible; the secondary EXT-01..EXT-14 registry has an explicit open locator/access-metadata gap and cannot by itself promote current NORM. Public repository contains derived knowledge only; the source EPUB is not stored here."
 }
