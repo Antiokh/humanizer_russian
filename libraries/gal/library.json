@@ -22,6 +22,7 @@
     "studies/nora-gal/rules.md",
     "studies/nora-gal/interactions.md",
     "studies/nora-gal/claims.md",
+    "studies/nora-gal/external-evidence-2026.md",
     "studies/nora-gal/audit.md",
     "studies/nora-gal/integration-matrix.md",
     "references/nora-gal-source-map.md",
@@ -29,5 +30,5 @@
     "libraries/gal/rules.json",
     "libraries/gal/model-only.md"
   ],
-  "notes": "42 audited book-derived EDITING rules: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 3 METRIC_ONLY, 36 MODEL_ONLY. Compact default consumes the library but remains silent for Gal; --extended exposes only the calibrated surface candidates. Editorial Board uses the same review_v1 output and preserves Gal provenance. Promoted to OPERATIONAL after the full deterministic architecture/library/source/compact/board CI suite passed on PR #16."
+  "notes": "42 audited book-derived EDITING rules: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 3 METRIC_ONLY, 36 MODEL_ONLY. Compact default consumes the library but remains silent for Gal; --extended exposes only the calibrated surface candidates. Editorial Board uses the same review_v1 output and preserves Gal provenance. Promoted to OPERATIONAL after the full deterministic architecture/library/source/compact/board CI suite passed on PR #16. Historical/empirical source claims are separately calibrated against modern external evidence in studies/nora-gal/external-evidence-2026.md and never become NORM by source authority."
 }
