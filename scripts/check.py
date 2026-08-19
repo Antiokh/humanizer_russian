@@ -32,6 +32,7 @@ MECHANICAL_RULES = {
 
 
 def select_normalized(findings: list[dict], extended: bool = False) -> list[dict]:
+    """Select findings visible in default or extended compact mode."""
     if extended:
         return [item for item in findings if item.get("automation_level") != "MODEL_ONLY"]
     return [
@@ -42,14 +43,17 @@ def select_normalized(findings: list[dict], extended: bool = False) -> list[dict
 
 
 def _normalized_excerpt(item: dict) -> str:
+    """Normalize a finding excerpt for conservative local deduplication."""
     return re.sub(r"\s+", " ", str(item.get("excerpt", "")).strip().lower())[:180]
 
 
 def _line_no(item: dict) -> int:
+    """Return a normalized positive line number or zero when unknown."""
     return int(item.get("line", 0) or 0)
 
 
 def _provenance(item: dict) -> dict:
+    """Project one normalized finding into compact provenance metadata."""
     return {
         "rule_id": item.get("rule_id"),
         "library_id": item.get("library_id"),
@@ -68,10 +72,14 @@ def _group_compatible_surface(findings: list[dict]) -> list[list[dict]]:
     surface group; it must not arbitrarily join when the same excerpt occurs on
     multiple known lines. This lets cross-library deduplication work without
     throwing away occurrence information.
+
+    Missing, empty, and explicitly null ``phenomenon_id`` values are treated as
+    unmapped and receive per-item synthetic keys, so unrelated findings cannot
+    collapse merely because both omitted a shared phenomenon identifier.
     """
     groups: list[dict] = []
     for index, item in enumerate(findings):
-        phenomenon = str(item.get("phenomenon_id", "")) or f"__unmapped__:{index}"
+        phenomenon = str(item.get("phenomenon_id") or "") or f"__unmapped__:{index}"
         excerpt = _normalized_excerpt(item)
         line = _line_no(item)
         candidates = [
@@ -134,12 +142,14 @@ def compact_rows(findings: list[dict]) -> list[dict]:
 
 
 def check_text(text: str, extended: bool = False) -> tuple[list[dict], dict]:
+    """Run enabled libraries and return compact findings plus metrics."""
     normalized, metrics = run_libraries(text)
     selected = select_normalized(normalized, extended=extended)
     return compact_rows(selected), metrics
 
 
 def main() -> None:
+    """Parse CLI arguments, run compact checks, print results, and set exit code."""
     parser = argparse.ArgumentParser(description="Compact mechanical-first checker for humanizer_russian")
     parser.add_argument("file", nargs="?")
     parser.add_argument(
@@ -177,7 +187,7 @@ def main() -> None:
             loc = f":{item['line']}" if item["line"] else ""
             note = f" — {item['note']}" if item["note"] else ""
             source = f" · {item['library_id']}" if item.get("library_id") else ""
-            print(f"{item['kind']}{loc} [{item['rule']}] {source}: {item['excerpt']}{note}")
+            print(f"{item['kind']}{loc} [{item['rule']}]{source}: {item['excerpt']}{note}")
         print(json.dumps(metrics, ensure_ascii=False))
 
     if any(item["kind"] in {"ARTIFACT", "LANGUAGE_ERROR"} for item in findings):
