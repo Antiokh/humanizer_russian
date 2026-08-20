@@ -26,6 +26,19 @@ SPLIT_CONTRAST_RE = re.compile(
     re.I,
 )
 
+# Tiny high-precision ontology for a mechanical candidate. This is not a
+# general semantic engine: only explicit copular equations between a known
+# member noun and its collection noun are surfaced. More general type/category
+# collisions remain MODEL_ONLY.
+MEMBER_COLLECTION_PATTERNS = [
+    re.compile(
+        r"\bкниг(?:а|и|у|ой|е|ами|ах)?\b\s*"
+        r"(?:(?:—|-)\s*(?:это\s+)?|это\s+)"
+        r"библиотек(?:а|и|у|ой|е|ами|ах)?\b",
+        re.I,
+    ),
+]
+
 LATIN_JARGON = {
     "prompt", "runtime", "pipeline", "framework", "benchmark", "preflight",
     "entrypoint", "adapter", "linter", "backend", "frontend", "deploy",
@@ -161,6 +174,20 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
 
         cyrillic_letters = len(CYRILLIC_RE.findall(clean))
 
+        for rx in MEMBER_COLLECTION_PATTERNS:
+            for match in rx.finditer(clean):
+                findings.append(_finding(
+                    "RU-SEM-MEMBER-COLLECTION-EQUATION",
+                    "semantics.member_collection_equation",
+                    "NATIVE_USAGE",
+                    "DEFAULT_MECHANICAL",
+                    "REVIEW",
+                    match.group(0),
+                    line_no,
+                    "Похоже, отдельный объект/класс приравнен к названию коллекции таких объектов. Проверьте реальное отношение: книга может входить в библиотеку или быть сборником правил, но не становится библиотекой буквально.",
+                    "replace_equation_with_real_member_collection_relation",
+                ))
+
         for rx in RUSSIAN_JARGON_PATTERNS:
             for match in rx.finditer(clean):
                 findings.append(_finding(
@@ -192,9 +219,6 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
                     "replace_explain_or_keep_by_audience",
                 ))
 
-            # Independent of jargon classification, a lowercase Latin token in
-            # clearly Russian prose is worth surfacing. This is still REVIEW,
-            # not an error: the original spelling may be justified.
             if cyrillic_letters < 8:
                 continue
             if token.isupper() or token[:1].isupper():
@@ -250,6 +274,7 @@ def self_test() -> None:
     cases = [
         ("# Заголовок.\nТекст.", "RU-NORM-HEADING-PERIOD"),
         ("Это не реальная рецензия. Это оценка по правилам.", "RU-NATIVE-SPLIT-CONTRAST"),
+        ("Книги — это библиотеки знаний.", "RU-SEM-MEMBER-COLLECTION-EQUATION"),
         ("Мы используем prompt только для остатка.", "RU-REGISTER-JARGON-TERM"),
         ("Мы используем prompt только для остатка.", "RU-LEX-LATIN-IN-RUSSIAN"),
         ("Это обычный russianword в русской фразе.", "RU-LEX-LATIN-IN-RUSSIAN"),
@@ -258,9 +283,13 @@ def self_test() -> None:
         rows = review(text, {"register": "everyday"})["findings"]
         assert any(item["rule_id"] == rule for item in rows), (text, rule, rows)
 
-    clean = review("# Заголовок\nЭто не ошибка, а предупреждение.", {"register": "everyday"})["findings"]
+    clean = review(
+        "# Заголовок\nЭто не ошибка, а предупреждение.\nКниги хранятся в библиотеках.",
+        {"register": "everyday"},
+    )["findings"]
     assert not any(item["rule_id"] == "RU-NORM-HEADING-PERIOD" for item in clean), clean
     assert not any(item["rule_id"] == "RU-NATIVE-SPLIT-CONTRAST" for item in clean), clean
+    assert not any(item["rule_id"] == "RU-SEM-MEMBER-COLLECTION-EQUATION" for item in clean), clean
 
 
 if __name__ == "__main__":
