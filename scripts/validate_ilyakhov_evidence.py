@@ -43,7 +43,7 @@ EVIDENCE_BEARING = {
     "COUNTEREVIDENCE",
 }
 TRUSTED_PREFIXES = ("https://doi.org/", "https://pubmed.ncbi.nlm.nih.gov/")
-STABLE_ID_RE = re.compile(r"^(?:DOI:10\.\d{4,9}/\S+|PMID:\d+)$")
+STABLE_ID_RE = re.compile(r"^(?:DOI:10\.\d{4,9}/[^\s;]+|PMID:\d+)$")
 NARRATIVE_ROW_RE = re.compile(
     r"^\|\s*(PS-CL\d{2})\s*\|\s*([A-Z_]+)\s*\|",
     re.M,
@@ -58,6 +58,14 @@ def load_json(path: Path) -> dict:
     return value
 
 
+def fail(failures: list[str]) -> None:
+    """Print accumulated evidence-contract failures and exit non-zero."""
+    print("Ilyakhov external-evidence validation FAILED")
+    for failure in failures:
+        print(f"- {failure}")
+    raise SystemExit(1)
+
+
 def validate() -> None:
     """Validate evidence coverage, declared artifact paths and runtime boundaries."""
     data = load_json(DATA_PATH)
@@ -69,8 +77,8 @@ def validate() -> None:
             failures.append(message)
 
     # The registry declares which public artifacts its evidence contract refers to.
-    # Validate those declarations before reading the fixed trusted repository paths,
-    # so a typo or silent redirect cannot pass while the validator reads another file.
+    # Fail closed before reading the fixed trusted paths: otherwise a bad declaration
+    # could coexist with successful validation against an unrelated hard-coded file.
     declared_paths = {
         "source_claim_document": SOURCE_CLAIMS_REL,
         "narrative_evidence_document": NARRATIVE_REL,
@@ -78,6 +86,8 @@ def validate() -> None:
     }
     for field, expected in declared_paths.items():
         check(data.get(field) == expected, f"{field} must equal {expected!r}")
+    if failures:
+        fail(failures)
 
     narrative = NARRATIVE_PATH.read_text(encoding="utf-8")
     source_claims = SOURCE_CLAIMS_PATH.read_text(encoding="utf-8")
@@ -167,10 +177,7 @@ def validate() -> None:
         check(required in references, f"Ilyakhov manifest missing evidence reference: {required}")
 
     if failures:
-        print("Ilyakhov external-evidence validation FAILED")
-        for failure in failures:
-            print(f"- {failure}")
-        raise SystemExit(1)
+        fail(failures)
 
     print(
         "Ilyakhov external-evidence validation: OK "
