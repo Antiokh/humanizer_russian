@@ -87,20 +87,13 @@ def run_cases(cases: list[dict], validator: Draft202012Validator) -> list[str]:
         if case.get("type", "runtime") == "board_unit":
             board = build_board(case["findings"], style, evidence=case.get("evidence"))
             if len(board["groups"]) != 1:
-                failures.append(
-                    f"{case['id']}: expected one board group, got {len(board['groups'])}"
-                )
+                failures.append(f"{case['id']}: expected one board group, got {len(board['groups'])}")
                 continue
             group = board["groups"][0]
             if group["status"] != case["expect_status"]:
-                failures.append(
-                    f"{case['id']}: status {group['status']} != {case['expect_status']}"
-                )
+                failures.append(f"{case['id']}: status {group['status']} != {case['expect_status']}")
             if group["recommendation"] != case["expect_recommendation"]:
-                failures.append(
-                    f"{case['id']}: recommendation {group['recommendation']} "
-                    f"!= {case['expect_recommendation']}"
-                )
+                failures.append(f"{case['id']}: recommendation {group['recommendation']} != {case['expect_recommendation']}")
             continue
 
         report = run_review(
@@ -108,6 +101,7 @@ def run_cases(cases: list[dict], validator: Draft202012Validator) -> list[str]:
             style_id=case.get("style", "neutral"),
             library_ids=case.get("libraries"),
             evidence_ids=case.get("evidence"),
+            register=case.get("register", "general"),
         )
         try:
             validator.validate(report)
@@ -122,9 +116,7 @@ def run_cases(cases: list[dict], validator: Draft202012Validator) -> list[str]:
         statuses = {g["phenomenon_id"]: g["status"] for g in groups}
         guardrails = len(report["board"]["guardrails"])
         rule_ids = {x["rule_id"] for x in report["findings"]}
-        reviewers = {
-            x.get("reviewer_id") for x in report["findings"] if x.get("reviewer_id")
-        }
+        reviewers = {x.get("reviewer_id") for x in report["findings"] if x.get("reviewer_id")}
 
         for expected in case.get("expect_phenomena", []):
             if expected not in phenomena:
@@ -143,18 +135,11 @@ def run_cases(cases: list[dict], validator: Draft202012Validator) -> list[str]:
                 failures.append(f"{case['id']}: missing reviewer {expected}")
         for phenomenon, expected_status in case.get("expect_status_by_phenomenon", {}).items():
             if statuses.get(phenomenon) != expected_status:
-                failures.append(
-                    f"{case['id']}: status for {phenomenon} "
-                    f"{statuses.get(phenomenon)} != {expected_status}"
-                )
+                failures.append(f"{case['id']}: status for {phenomenon} {statuses.get(phenomenon)} != {expected_status}")
         if "expect_guardrails" in case and guardrails != case["expect_guardrails"]:
-            failures.append(
-                f"{case['id']}: guardrails {guardrails} != {case['expect_guardrails']}"
-            )
+            failures.append(f"{case['id']}: guardrails {guardrails} != {case['expect_guardrails']}")
         if "expect_guardrails_min" in case and guardrails < case["expect_guardrails_min"]:
-            failures.append(
-                f"{case['id']}: guardrails {guardrails} < {case['expect_guardrails_min']}"
-            )
+            failures.append(f"{case['id']}: guardrails {guardrails} < {case['expect_guardrails_min']}")
     return failures
 
 
