@@ -2,7 +2,7 @@
   "schema_version": 1,
   "source_cycle": 4,
   "cases": [
-    {"id":"ROS4-E01","text":"Этот вариант более интереснее предыдущего.","expected":"CHANGE","rule_id":"ROS-R53","note":"Existing narrow mixed-comparative surface remains active."},
+    {"id":"ROS4-E01","text":"Новая версия более красивее старой.","expected":"CHANGE","rule_id":"ROS-R53","note":"Existing narrow mixed-comparative surface remains active; benchmark stays inside the conservative detector vocabulary."},
     {"id":"ROS4-E02","text":"Для более старших детей подготовили отдельную программу.","expected":"KEEP","rule_id":"ROS-R53","note":"Current norm and source both preserve более старший."},
     {"id":"ROS4-E03","text":"Согласно приказа встречу перенесли.","expected":"CHANGE","rule_id":"ROS-R44","note":"Existing current-norm government rule."},
     {"id":"ROS4-E04","text":"Согласно приказу встречу перенесли.","expected":"KEEP","rule_id":"ROS-R44","note":"Correct dative."},
