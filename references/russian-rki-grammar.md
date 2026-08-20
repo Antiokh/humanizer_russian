@@ -29,7 +29,21 @@ Russian does not require every semantic subject to appear as an overt nominative
 
 A high density of overt `я/мы/он/они` can trigger a document-level audit, but never licenses deletion by itself.
 
-## 3. Process, transition, result and state
+## 3. Quantitative agreement
+
+Do not turn `много/немного/мало/немало/столько/сколько` into a singular-only correction rule. Current normative references themselves preserve a tension between formal and semantic agreement:
+
+- the Gramota Pismovnik, following the academic *Russian Grammar*, states singular agreement for this group;
+- Gramota Help Desk answers № 322014 (2025), № 320220 (2024) and № 298593 (2018) accept plural semantic agreement as current norm, especially when active persons are foregrounded; singular remains common and often preferred.
+
+So compare function, not just form:
+
+- `Собралось много людей` foregrounds the quantity/group and formal agreement;
+- `Много людей пишут нам после публикации` foregrounds the actions of individual people and is not ungrammatical merely because the predicate is plural.
+
+Other quantitative groups (`пять экспертов`, `несколько участников`, `директор с юристом`) have their own agreement factors. Do not transfer one construction's preference to another.
+
+## 4. Process, transition, result and state
 
 Before choosing aspect, voice or copula, identify which event phase is being asserted:
 
@@ -37,7 +51,7 @@ Before choosing aspect, voice or copula, identify which event phase is being ass
 
 Do not map an English progressive/passive form directly onto Russian morphology. The existing `ломаться` rule is one concrete case of this broader event-construal check.
 
-## 4. Aspect under modality
+## 5. Aspect under modality
 
 Aspect in infinitive constructions can distinguish prohibition/non-necessity from inability to achieve a result, but lexical formulas are not absolute. Compare the intended event:
 
@@ -47,7 +61,7 @@ Aspect in infinitive constructions can distinguish prohibition/non-necessity fro
 
 Aspect selection remains contextual/model-only.
 
-## 5. Voice and resultative perspective
+## 6. Voice and resultative perspective
 
 Active and passive structures describe the same broad situation from different information-structural perspectives. Check register and discourse center rather than banning passive.
 
@@ -57,7 +71,7 @@ Three distinctions matter:
 - possessive resultative `у меня + краткое страдательное причастие` can naturally present an available result without identifying the doer (`Билеты у меня куплены`);
 - stative/result description is not the same as an ongoing action-passive on `-ся`; do not write a process form merely because another language uses a passive form.
 
-## 6. Copulas and classificatory predicates
+## 7. Copulas and classificatory predicates
 
 Present-tense Russian often uses a zero copula. `есть`, `являться`, `представлять собой`, `состоять в`, `заключаться в`, `сводиться к` are not interchangeable generic equivalents of “be”.
 
@@ -69,13 +83,13 @@ Check semantic function and register:
 
 Do not stop-list any of these words.
 
-## 7. Participles
+## 8. Participles
 
 First enforce structural norm: the participial phrase must attach unambiguously to its real head; the participle must agree with that head. Only then compare a relative clause with participial compression.
 
 Use a participle when it compresses a background property without changing time, reference or register. Do not introduce one by quota, and do not expand a clean participle into `который...` merely for simplicity.
 
-## 8. Gerunds
+## 9. Gerunds
 
 Core check: the gerundial action and the action/state it modifies must share a permissible semantic subject.
 
@@ -87,7 +101,7 @@ Important guards:
 
 Do not implement “no nominative subject → dangling gerund” as a regex.
 
-## 9. Introductory words and scope
+## 10. Introductory words and scope
 
 Parenthetic modality/source markers are not disposable filler. Position can change scope:
 
@@ -96,11 +110,12 @@ Parenthetic modality/source markers are not disposable filler. Position can chan
 
 Also distinguish parenthetic framing from a predicative complement (`Как известно, ...` vs `Известно, что ...`).
 
-## 10. Explicit non-rules from the source
+## 11. Explicit non-rules from the source
 
 Do **not** infer any of the following:
 
 - `есть` is forbidden in present-tense existence;
+- `много/столько/сколько` licenses only singular agreement in all current contexts;
 - `невозможно` always requires perfective;
 - `не нужно` always requires imperfective;
 - bare `к радости` is ungrammatical;
