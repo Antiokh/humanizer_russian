@@ -7,13 +7,14 @@
   "source_branch": "main",
   "reviewer_id": "russian",
   "adapter": "review_v1",
-  "linter_path": "scripts/lint_russian.py",
+  "linter_path": "scripts/lint_russian_all.py",
   "enabled_by_default": true,
   "status": "OPERATIONAL",
   "references": [
     "references/russian-language.md",
+    "references/russian-calques.md",
     "docs/russian-error-priorities.md",
     "libraries/russian/rules.json"
   ],
-  "notes": "Нормативные правила становятся guardrails; употребление, РКИ-похожие интерференции и регистр остаются неблокирующими review findings, если не подтверждены как NORM."
+  "notes": "Нормативные правила становятся guardrails; употребление, РКИ-похожие интерференции, кальки и регистр остаются неблокирующими review findings, если не подтверждены как NORM."
 }
