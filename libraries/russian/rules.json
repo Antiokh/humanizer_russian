@@ -52,6 +52,16 @@
       "guard": "Это warning, а не запрет: разрыв может быть функциональным при резком возражении, коррекции или драматическом ударе."
     },
     {
+      "rule_id": "RU-CALQUE-ABSTRACT-BREAK",
+      "phenomenon_id": "russian.abstract_break_calque",
+      "project_class": "AI_CALQUE",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "scope": "Abstract operational subjects such as process, logic, scenario, algorithm, system, integration or automation used with ломаться/сломаться in the broad sense 'fail/go wrong'",
+      "source_locator": "references/russian-calques.md; Gramota.ru dictionaries for ломаться delimit native meanings",
+      "operation": "replace_abstract_break_with_specific_failure_verb",
+      "guard": "Не запрещать физическое ломаться, повторяющиеся поломки предметов, ломаться о голосе и закреплённые переносные значения. В разговорной технической речи система/логика/сценарий ломается может быть намеренным жаргоном. Finding требует уточнить реальный тип отказа: останавливается, сбивается, нарушается, перестаёт работать, даёт сбой и т. п."
+    },
+    {
       "rule_id": "RU-LEX-LATIN-IN-RUSSIAN",
       "phenomenon_id": "russian.foreign_word_in_russian_prose",
       "project_class": "NATIVE_USAGE",
