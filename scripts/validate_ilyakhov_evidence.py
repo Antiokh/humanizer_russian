@@ -20,6 +20,10 @@ SOURCE_CLAIMS_PATH = STUDY / "counterexamples-claims.md"
 CORPUS_PATH = STUDY / "corpus-calibration.md"
 MANIFEST_PATH = ROOT / "libraries" / "ilyakhov" / "library.json"
 
+SOURCE_CLAIMS_REL = "studies/pishi-sokrashchay/counterexamples-claims.md"
+NARRATIVE_REL = "studies/pishi-sokrashchay/external-claims-evidence.md"
+CORPUS_REL = "studies/pishi-sokrashchay/corpus-calibration.md"
+
 EXPECTED_CLAIMS = [f"PS-CL{i:02d}" for i in range(1, 33)]
 EXPECTED_SOURCES = [f"ILY-EXT-{i:02d}" for i in range(1, 26)]
 ALLOWED_DISPOSITIONS = {
@@ -39,6 +43,7 @@ EVIDENCE_BEARING = {
     "COUNTEREVIDENCE",
 }
 TRUSTED_PREFIXES = ("https://doi.org/", "https://pubmed.ncbi.nlm.nih.gov/")
+STABLE_ID_RE = re.compile(r"^(?:DOI:10\.\d{4,9}/\S+|PMID:\d+)$")
 NARRATIVE_ROW_RE = re.compile(
     r"^\|\s*(PS-CL\d{2})\s*\|\s*([A-Z_]+)\s*\|",
     re.M,
@@ -46,6 +51,7 @@ NARRATIVE_ROW_RE = re.compile(
 
 
 def load_json(path: Path) -> dict:
+    """Load a UTF-8 JSON object."""
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError(f"expected JSON object in {path}")
@@ -53,16 +59,29 @@ def load_json(path: Path) -> dict:
 
 
 def validate() -> None:
+    """Validate evidence coverage, declared artifact paths and runtime boundaries."""
     data = load_json(DATA_PATH)
     manifest = load_json(MANIFEST_PATH)
-    narrative = NARRATIVE_PATH.read_text(encoding="utf-8")
-    source_claims = SOURCE_CLAIMS_PATH.read_text(encoding="utf-8")
-    corpus = CORPUS_PATH.read_text(encoding="utf-8")
     failures: list[str] = []
 
     def check(condition: bool, message: str) -> None:
         if not condition:
             failures.append(message)
+
+    # The registry declares which public artifacts its evidence contract refers to.
+    # Validate those declarations before reading the fixed trusted repository paths,
+    # so a typo or silent redirect cannot pass while the validator reads another file.
+    declared_paths = {
+        "source_claim_document": SOURCE_CLAIMS_REL,
+        "narrative_evidence_document": NARRATIVE_REL,
+        "corpus_calibration_document": CORPUS_REL,
+    }
+    for field, expected in declared_paths.items():
+        check(data.get(field) == expected, f"{field} must equal {expected!r}")
+
+    narrative = NARRATIVE_PATH.read_text(encoding="utf-8")
+    source_claims = SOURCE_CLAIMS_PATH.read_text(encoding="utf-8")
+    corpus = CORPUS_PATH.read_text(encoding="utf-8")
 
     check(data.get("schema_version") == 1, "schema_version must be 1")
     check(data.get("audit_date") == "2026-08-20", "unexpected audit_date")
@@ -91,8 +110,8 @@ def validate() -> None:
         )
         stable_id = str(row.get("stable_id", ""))
         check(
-            stable_id.startswith("DOI:") or stable_id.startswith("PMID:"),
-            f"{source_id}: stable_id must be DOI or PMID",
+            bool(STABLE_ID_RE.fullmatch(stable_id)),
+            f"{source_id}: stable_id must be exactly one canonical DOI or PMID",
         )
 
     claims = data.get("claims")
@@ -144,11 +163,7 @@ def validate() -> None:
     check("METRIC_ONLY" in corpus and "PS-R21" in corpus, "corpus calibration lost PS-R21 METRIC_ONLY boundary")
 
     references = manifest.get("references", [])
-    for required in (
-        "studies/pishi-sokrashchay/external-claims-evidence.md",
-        "studies/pishi-sokrashchay/external-evidence-2026.json",
-        "studies/pishi-sokrashchay/corpus-calibration.md",
-    ):
+    for required in (NARRATIVE_REL, "studies/pishi-sokrashchay/external-evidence-2026.json", CORPUS_REL):
         check(required in references, f"Ilyakhov manifest missing evidence reference: {required}")
 
     if failures:
