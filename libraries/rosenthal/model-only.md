@@ -1,24 +1,31 @@
 # Rosenthal MODEL_ONLY residue
 
-This file is a compact routing reference. Canonical rule cards live in `rules.json` (cycle 1) and `rules-cycle2.json` (cycle 2); full studies are not loaded into ordinary runtime.
+This file is a compact routing reference. Canonical rule cards live in `rules.json` (cycle 1), `rules-cycle2.json` (cycle 2), and `rules-cycle3.json` (cycle 3); full studies are not loaded into ordinary runtime.
 
-Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`, `ROS-R44`, `ROS-R53`. `ROS-R10` remains metric-only.
+Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`, `ROS-R44`, `ROS-R53`. `ROS-R10` remains metric-only. **Cycle 3 deliberately adds no new mechanical finding.**
 
 ## Cycle 2 contextual rules
 
+`ROS-R47` grammatical synonym choice; `R48` multi-criterion revision; `R49` word-formation register; `R50` discourse-marker function; `R51` borrowing; `R52` trope fit; `R54` subjunctive-particle duplication; `R55` expressive syntax; `R56` sentence boundary; `R57` image collision; `R58` rhetorical figure; `R59` current-orthoepy verification.
+
+## Cycle 3 contextual rules
+
 | Rule | Phenomenon |
 |---|---|
-| `ROS-R47` | `editing.grammatical_synonym_choice` |
-| `ROS-R48` | `editing.multi_criterion_revision` |
-| `ROS-R49` | `editing.word_formation_register_fit` |
-| `ROS-R50` | `editing.discourse_filler_function` |
-| `ROS-R51` | `editing.borrowing_need_and_register` |
-| `ROS-R52` | `editing.trope_register_fit` |
-| `ROS-R54` | `norm.subjunctive_particle_duplication` |
-| `ROS-R55` | `editing.expressive_syntax_choice` |
-| `ROS-R56` | `editing.sentence_boundary_function` |
-| `ROS-R57` | `editing.image_system_collision` |
-| `ROS-R58` | `editing.rhetorical_figure_function` |
-| `ROS-R59` | `norm.orthoepy_requires_current_verification` |
+| `ROS-R60` | `ai_calque.false_friend_semantic_transfer` |
+| `ROS-R61` | `editing.text_type_structure_fit` |
+| `ROS-R62` | `editing.inter_sentence_information_progression` |
+| `ROS-R63` | `editing.microtheme_cohesion` |
+| `ROS-R64` | `editing.paragraph_boundary_function` |
+| `ROS-R65` | `editing.logical_relation_fit` |
+| `ROS-R66` | `editing.comparison_basis_consistency` |
+| `ROS-R67` | `editing.multi_proposition_focus` |
+| `ROS-R68` | `editing.terminology_audience_fit` |
+| `ROS-R69` | `editing.reported_speech_fidelity` |
+| `ROS-R70` | `editing.local_change_whole_fit` |
+| `ROS-R71` | `author.expressive_compensation` |
+| `ROS-R72` | `editing.edit_type_fit` |
+| `ROS-R73` | `register.spoken_delivery_style_fit` |
+| `ROS-R74` | `editing.pause_information_structure` |
 
-Cycle-1 MODEL_ONLY rules remain canonical in `libraries/rosenthal/rules.json`. Do not infer blanket bans on nominalization, passive, repetition, long sentences, participles, gerunds, colloquial markers, loanwords, tropes or rhetorical figures.
+Cycle-1 MODEL_ONLY rules remain canonical in `libraries/rosenthal/rules.json`. Do not infer blanket bans on nominalization, passive, repetition, long sentences, participles, gerunds, colloquial markers, loanwords, tropes, rhetorical figures, paragraphing, ellipsis, or spoken reduction.
