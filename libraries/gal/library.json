@@ -15,6 +15,7 @@
   "rules_path": "libraries/gal/rules.json",
   "model_only_reference": "libraries/gal/model-only.md",
   "model_eval_path": "evals/nora-gal.json",
+  "model_eval_map_path": "evals/nora-gal-map.json",
   "references": [
     "studies/nora-gal/source.md",
     "studies/nora-gal/coverage.md",

@@ -1,0 +1,24 @@
+{
+  "suite": "humanizer_russian-golub-context-v1",
+  "library_id": "golub",
+  "cases": [
+    {"id": "golub-01", "rules": ["GOLUB-R02"], "counterexample": false},
+    {"id": "golub-02", "rules": ["GOLUB-R05"], "counterexample": true},
+    {"id": "golub-03", "rules": ["GOLUB-R20"], "counterexample": false},
+    {"id": "golub-04", "rules": ["GOLUB-R20", "GOLUB-R25"], "counterexample": true},
+    {"id": "golub-05", "rules": ["GOLUB-R25"], "counterexample": false},
+    {"id": "golub-06", "rules": ["GOLUB-R25"], "counterexample": true},
+    {"id": "golub-07", "rules": ["GOLUB-R30"], "counterexample": false},
+    {"id": "golub-08", "rules": ["GOLUB-R30"], "counterexample": true},
+    {"id": "golub-09", "rules": ["GOLUB-R33", "GOLUB-R34"], "counterexample": true},
+    {"id": "golub-10", "rules": ["GOLUB-R82"], "counterexample": true},
+    {"id": "golub-11", "rules": ["GOLUB-R54"], "counterexample": true},
+    {"id": "golub-12", "rules": ["GOLUB-R56"], "counterexample": true},
+    {"id": "golub-13", "rules": ["GOLUB-R65"], "counterexample": false},
+    {"id": "golub-14", "rules": ["GOLUB-R65"], "counterexample": true},
+    {"id": "golub-15", "rules": ["GOLUB-R77"], "counterexample": false},
+    {"id": "golub-16", "rules": ["GOLUB-R69", "GOLUB-R77"], "counterexample": true},
+    {"id": "golub-17", "rules": ["GOLUB-R64"], "counterexample": true},
+    {"id": "golub-18", "rules": ["GOLUB-R07"], "counterexample": true}
+  ]
+}

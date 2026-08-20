@@ -1,5 +1,5 @@
 {
-  "suite": "humanizer-plus-ru-nora-gal",
+  "suite": "humanizer_russian-nora-gal",
   "version": 2,
   "source_policy": {
     "basis": "Nora Gal, Slovo zhivoe i mertvoe; chapter-based source map in references/nora-gal-source-map.md",
