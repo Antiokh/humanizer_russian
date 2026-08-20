@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "id": "golub",
+  "display_name": "И. Б. Голуб",
+  "short_label": "Голуб",
+  "review_label": "По формализованной системе Голуб",
+  "kind": "book_author",
+  "library_id": "golub",
+  "source_namespace": "GOLUB",
+  "source_name": "«Книга о хорошей речи» + «Занимательная стилистика» (обе в соавторстве с Д. Э. Розенталем)",
+  "avatar": null,
+  "domains": [
+    "lexical_precision",
+    "redundancy",
+    "speech_insufficiency",
+    "grammar",
+    "syntax",
+    "register",
+    "imagery",
+    "euphony",
+    "editing"
+  ],
+  "disclaimer": "Автоматическая оценка по формализованным принципам единого Golub study. Обе книги написаны совместно с Д. Э. Розенталем; chapter-level attribution «Занимательной стилистики» сохранена в study. Это не реальная рецензия И. Б. Голуб или Д. Э. Розенталя, не цитата и не endorsement."
+}

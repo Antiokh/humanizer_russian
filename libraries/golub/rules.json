@@ -1,0 +1,1245 @@
+{
+  "schema_version": 1,
+  "library_id": "golub",
+  "source_namespace": "GOLUB",
+  "rule_count": 93,
+  "automation_counts": {
+    "HARD_GATE": 0,
+    "DEFAULT_MECHANICAL": 3,
+    "EXTENDED_SOFT": 1,
+    "METRIC_ONLY": 2,
+    "MODEL_ONLY": 87
+  },
+  "rules": [
+    {
+      "rule_id": "GOLUB-R01",
+      "phenomenon_id": "editing.information_density",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "убрать материал без информационной или прагматической функции"
+    },
+    {
+      "rule_id": "GOLUB-R02",
+      "phenomenon_id": "editing.semantic_redundancy",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "удалить только реально продублированный смысл"
+    },
+    {
+      "rule_id": "GOLUB-R03",
+      "phenomenon_id": "editing.redundancy_without_semantic_gain",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сравнить значение с вариантом без повторяющего компонента"
+    },
+    {
+      "rule_id": "GOLUB-R04",
+      "phenomenon_id": "editing.tautology_function_test",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "устранить только случайный корневой шум без функции"
+    },
+    {
+      "rule_id": "GOLUB-R05",
+      "phenomenon_id": "native.functional_repetition",
+      "project_class": "NATIVE_USAGE",
+      "analytic_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить функциональный повтор; редактировать только лишний"
+    },
+    {
+      "rule_id": "GOLUB-R06",
+      "phenomenon_id": "editing.lexical_repetition_local",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "рассмотреть опущение, перестройку или точный синоним без потери смысла"
+    },
+    {
+      "rule_id": "GOLUB-R07",
+      "phenomenon_id": "native.recoverable_ellipsis",
+      "project_class": "NATIVE_USAGE",
+      "analytic_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить безопасный эллипсис; восстановить только недостающий смысловой компонент"
+    },
+    {
+      "rule_id": "GOLUB-R08",
+      "phenomenon_id": "editing.speech_insufficiency",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить минимальный компонент, делающий связь однозначной"
+    },
+    {
+      "rule_id": "GOLUB-R09",
+      "phenomenon_id": "editing.logical_consistency",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "устранить внутреннее логическое противоречие, сохранив факты"
+    },
+    {
+      "rule_id": "GOLUB-R10",
+      "phenomenon_id": "editing.causal_link_fit",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-46.xhtml#id45"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "назвать реальное отношение: причина, время, условие, следствие или сопоставление"
+    },
+    {
+      "rule_id": "GOLUB-R11",
+      "phenomenon_id": "editing.homogeneous_semantic_class",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-45.xhtml#id44"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "развести разные основания или явно оформить намеренное столкновение"
+    },
+    {
+      "rule_id": "GOLUB-R12",
+      "phenomenon_id": "editing.comparison_basis_consistency",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-20.xhtml#id19"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить одинаковое основание сравнения"
+    },
+    {
+      "rule_id": "GOLUB-R13",
+      "phenomenon_id": "editing.lexical_semantic_precision",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "выбрать слово, которое точно называет нужный смысл"
+    },
+    {
+      "rule_id": "GOLUB-R14",
+      "phenomenon_id": "editing.lexical_collocation",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-4.xhtml#id3"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить естественную сочетаемость или подтвердить авторскую метафору"
+    },
+    {
+      "rule_id": "GOLUB-R15",
+      "phenomenon_id": "editing.polysemy_accidental_collision",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-5.xhtml#id4"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "снять случайную двусмысленность или использовать её явно"
+    },
+    {
+      "rule_id": "GOLUB-R16",
+      "phenomenon_id": "editing.homonym_ambiguity",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-6.xhtml#id5"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "уточнить значение минимальным контекстом"
+    },
+    {
+      "rule_id": "GOLUB-R17",
+      "phenomenon_id": "editing.paronym_distinction",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-7.xhtml#id6"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "выбрать пароним по нормативному значению"
+    },
+    {
+      "rule_id": "GOLUB-R18",
+      "phenomenon_id": "editing.synonym_semantic_difference",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-8.xhtml#id7"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "выбирать синоним по функции, а не ради разнообразия"
+    },
+    {
+      "rule_id": "GOLUB-R19",
+      "phenomenon_id": "editing.antonymic_contrast_function",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-9.xhtml#id8"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить реальный контраст и убрать декоративную псевдосимметрию"
+    },
+    {
+      "rule_id": "GOLUB-R20",
+      "phenomenon_id": "editing.register_scene_fit",
+      "project_class": "EDITING",
+      "analytic_class": "REGISTER",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-10.xhtml#id9"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить или заменить слово по регистровой задаче"
+    },
+    {
+      "rule_id": "GOLUB-R21",
+      "phenomenon_id": "REGISTER.dialectism_fit",
+      "project_class": "EDITING",
+      "analytic_class": "REGISTER",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-11.xhtml#id10"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить маркировку или дать нейтральный эквивалент по задаче"
+    },
+    {
+      "rule_id": "GOLUB-R22",
+      "phenomenon_id": "REGISTER.jargon_fit",
+      "project_class": "EDITING",
+      "analytic_class": "REGISTER",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-12.xhtml#id11"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "оставить, объяснить или заменить по аудитории"
+    },
+    {
+      "rule_id": "GOLUB-R23",
+      "phenomenon_id": "HISTORICAL.archaism_historicism_status",
+      "project_class": "EDITING",
+      "analytic_class": "HISTORICAL",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-13.xhtml#id12"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверить эпоху и функцию; не модернизировать автоматически"
+    },
+    {
+      "rule_id": "GOLUB-R24",
+      "phenomenon_id": "HISTORICAL.neologism_current_status",
+      "project_class": "EDITING",
+      "analytic_class": "HISTORICAL",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-14.xhtml#id13"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверить современную словарную фиксацию и реальное употребление"
+    },
+    {
+      "rule_id": "GOLUB-R25",
+      "phenomenon_id": "editing.borrowing_need_and_register",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-15.xhtml#id14"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить точный термин, объяснить его или заменить функциональным русским эквивалентом",
+      "existing_overlap": [
+        "ROS-R51"
+      ]
+    },
+    {
+      "rule_id": "GOLUB-R26",
+      "phenomenon_id": "editing.terminology_audience_fit",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-15.xhtml#id14"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить термин в экспертном контексте; при необходимости кратко раскрыть"
+    },
+    {
+      "rule_id": "GOLUB-R27",
+      "phenomenon_id": "editing.template_without_semantic_gain",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "заменить пустую формулу фактом или оставить жанровую формулу"
+    },
+    {
+      "rule_id": "GOLUB-R28",
+      "phenomenon_id": "editing.register_leakage_bureaucratic",
+      "project_class": "EDITING",
+      "analytic_class": "REGISTER",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-44.xhtml#id43"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "не уничтожать требуемую юридическую точность; упростить вне официальной функции"
+    },
+    {
+      "rule_id": "GOLUB-R29",
+      "phenomenon_id": "editing.generic_verb_specific_action",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "назвать конкретное действие без добавления новых фактов"
+    },
+    {
+      "rule_id": "GOLUB-R30",
+      "phenomenon_id": "editing.action_hidden_in_nominalization",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "вернуть действие в глагол только при реальном выигрыше"
+    },
+    {
+      "rule_id": "GOLUB-R31",
+      "phenomenon_id": "editing.nominal_chain_obscures_relations",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить действия и отношения, не угадывая смысл"
+    },
+    {
+      "rule_id": "GOLUB-R32",
+      "phenomenon_id": "editing.euphemism_hides_event",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверить, не потеряно ли фактическое событие; сохранить нужную степень такта"
+    },
+    {
+      "rule_id": "GOLUB-R33",
+      "phenomenon_id": "editing.reference_antecedent_ambiguity",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-35.xhtml#id34"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить однозначную связь минимальной правкой"
+    },
+    {
+      "rule_id": "GOLUB-R34",
+      "phenomenon_id": "editing.word_order_information_structure",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-37.xhtml#id36"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "переставить компоненты по информационной структуре, если текущее чтение ложное"
+    },
+    {
+      "rule_id": "GOLUB-R35",
+      "phenomenon_id": "native.pronoun_explicitness",
+      "project_class": "NATIVE_USAGE",
+      "analytic_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-35.xhtml#id34"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "убрать лишнюю эксплицитность только при однозначности"
+    },
+    {
+      "rule_id": "GOLUB-R36",
+      "phenomenon_id": "norm.subject_predicate_agreement",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-38.xhtml#id37"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "исправить форму только после синтаксического разбора"
+    },
+    {
+      "rule_id": "GOLUB-R37",
+      "phenomenon_id": "norm.modifier_agreement",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-39.xhtml#id38"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить нормативное согласование"
+    },
+    {
+      "rule_id": "GOLUB-R38",
+      "phenomenon_id": "HISTORICAL.apposition_place_name_agreement",
+      "project_class": "EDITING",
+      "analytic_class": "HISTORICAL",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-40.xhtml#id39"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверить современный словарь/справочник для конкретного топонима"
+    },
+    {
+      "rule_id": "GOLUB-R39",
+      "phenomenon_id": "editing.government_lexeme_specific",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить управление по актуальному словарю"
+    },
+    {
+      "rule_id": "GOLUB-R40",
+      "phenomenon_id": "norm.soglasno_dative",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "заменить подтверждённый генитивный шаблон на дательный"
+    },
+    {
+      "rule_id": "GOLUB-R41",
+      "phenomenon_id": "norm.payment_verb_government",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "для узких подтверждённых объектов убрать «за» или заменить глагол на «заплатить»"
+    },
+    {
+      "rule_id": "GOLUB-R42",
+      "phenomenon_id": "HISTORICAL.skučat_po_variant",
+      "project_class": "EDITING",
+      "analytic_class": "HISTORICAL",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "STYLE:ch1-41.xhtml#id40"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "не исправлять «по вам» на «по вас» автоматически; учитывать регистр и современную норму"
+    },
+    {
+      "rule_id": "GOLUB-R43",
+      "phenomenon_id": "HISTORICAL.blagodarya_cause_semantics",
+      "project_class": "EDITING",
+      "analytic_class": "HISTORICAL",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "не заменять механически на «из-за»; проверить оценку, иронию и регистр"
+    },
+    {
+      "rule_id": "GOLUB-R44",
+      "phenomenon_id": "norm.double_comparative_marking",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "оставить один способ образования сравнительной степени",
+      "existing_overlap": [
+        "ROS-R53"
+      ]
+    },
+    {
+      "rule_id": "GOLUB-R45",
+      "phenomenon_id": "norm.adjective_short_full_fit",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "выбрать нормативную форму без стилистического выравнивания класса"
+    },
+    {
+      "rule_id": "GOLUB-R46",
+      "phenomenon_id": "norm.numeral_declension",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-34.xhtml#id33"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверить каждую изменяемую часть числительного"
+    },
+    {
+      "rule_id": "GOLUB-R47",
+      "phenomenon_id": "norm.noun_gender",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "согласовать по нормативному роду и значению"
+    },
+    {
+      "rule_id": "GOLUB-R48",
+      "phenomenon_id": "norm.number_form_lexical_restriction",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-31.xhtml#id30"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверить словарную парадигму конкретной лексемы"
+    },
+    {
+      "rule_id": "GOLUB-R49",
+      "phenomenon_id": "HISTORICAL.personal_name_declension",
+      "project_class": "EDITING",
+      "analytic_class": "HISTORICAL",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-32.xhtml#id31"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверять конкретное имя по современному справочнику, не по общему regex"
+    },
+    {
+      "rule_id": "GOLUB-R50",
+      "phenomenon_id": "norm.defective_first_person_verb",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "использовать описательную конструкцию вместо несуществующей формы"
+    },
+    {
+      "rule_id": "GOLUB-R51",
+      "phenomenon_id": "HISTORICAL.verb_variant_current_usage",
+      "project_class": "EDITING",
+      "analytic_class": "HISTORICAL",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "не механизировать старую помету; хранить текущую словарную маркировку"
+    },
+    {
+      "rule_id": "GOLUB-R52",
+      "phenomenon_id": "norm.participle_head_attachment",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "поставить оборот рядом с определяемым словом и проверить пунктуацию"
+    },
+    {
+      "rule_id": "GOLUB-R53",
+      "phenomenon_id": "norm.gerund_subject_attachment",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить общий субъект или перестроить предложение"
+    },
+    {
+      "rule_id": "GOLUB-R54",
+      "phenomenon_id": "native.participle_gerund_load_by_function",
+      "project_class": "NATIVE_USAGE",
+      "analytic_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41",
+        "STYLE:ch1-43.xhtml#id42"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранять естественную компрессию; перестраивать только при реальной тяжести/неясности"
+    },
+    {
+      "rule_id": "GOLUB-R55",
+      "phenomenon_id": "editing.participle_position_function",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "приблизить оборот к head noun, не нормализуя все обороты в одну позицию"
+    },
+    {
+      "rule_id": "GOLUB-R56",
+      "phenomenon_id": "native.gerund_information_structure",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "ставить оборот рядом с действием/фоном, к которому он функционально относится"
+    },
+    {
+      "rule_id": "GOLUB-R57",
+      "phenomenon_id": "editing.homogeneous_syntactic_category_consistency",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "выровнять синтаксическую функцию, если смешение случайно"
+    },
+    {
+      "rule_id": "GOLUB-R58",
+      "phenomenon_id": "editing.parallel_government_consistency",
+      "project_class": "NORM",
+      "analytic_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "повторить/перестроить зависимый компонент с правильным управлением"
+    },
+    {
+      "rule_id": "GOLUB-R59",
+      "phenomenon_id": "editing.paired_conjunction_alignment",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "EXTENDED_SOFT",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сделать части структурно и смыслово соизмеримыми"
+    },
+    {
+      "rule_id": "GOLUB-R60",
+      "phenomenon_id": "editing.conjunction_semantic_fit",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "уточнить субъект/союз/границу предложения"
+    },
+    {
+      "rule_id": "GOLUB-R61",
+      "phenomenon_id": "editing.relative_antecedent_ambiguity",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "переставить придаточное или назвать референт явно"
+    },
+    {
+      "rule_id": "GOLUB-R62",
+      "phenomenon_id": "editing.relative_clause_chain",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "разбить или перестроить только при реальной потере связей"
+    },
+    {
+      "rule_id": "GOLUB-R63",
+      "phenomenon_id": "editing.long_sentence_clarity",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "METRIC_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "измерять длину, но делить только при выигрыше ясности"
+    },
+    {
+      "rule_id": "GOLUB-R64",
+      "phenomenon_id": "editing.sentence_boundary_function",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45",
+        "STYLE:ch1-47.xhtml#id46"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "объединить/разделить только по функции",
+      "existing_overlap": [
+        "ROS-R56"
+      ]
+    },
+    {
+      "rule_id": "GOLUB-R65",
+      "phenomenon_id": "editing.active_passive_impersonal_perspective",
+      "project_class": "NATIVE_USAGE",
+      "analytic_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить актив только когда это улучшает роли и фокус"
+    },
+    {
+      "rule_id": "GOLUB-R66",
+      "phenomenon_id": "REGISTER.morphological_variant_fit",
+      "project_class": "EDITING",
+      "analytic_class": "REGISTER",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29",
+        "STYLE:ch1-36.xhtml#id35"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверить актуальную помету и жанр, не запрещать вариант по старому изданию"
+    },
+    {
+      "rule_id": "GOLUB-R67",
+      "phenomenon_id": "editing.word_formation_register_fit",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "оценить значение и окраску производного слова, не запрещать продуктивную модель",
+      "existing_overlap": [
+        "ROS-R49"
+      ]
+    },
+    {
+      "rule_id": "GOLUB-R68",
+      "phenomenon_id": "AUTHOR.diminutive_expressive_choice",
+      "project_class": "AUTHOR",
+      "analytic_class": "AUTHOR",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранять подтверждённую авторскую функцию; не нейтрализовать автоматически"
+    },
+    {
+      "rule_id": "GOLUB-R69",
+      "phenomenon_id": "editing.trope_function",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить работающий образ; убрать/заменить образ без функции",
+      "existing_overlap": [
+        "ROS-R52"
+      ]
+    },
+    {
+      "rule_id": "GOLUB-R70",
+      "phenomenon_id": "editing.epithet_semantic_fit",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-19.xhtml#id18"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверить, добавляет ли эпитет нужный признак/тон"
+    },
+    {
+      "rule_id": "GOLUB-R71",
+      "phenomenon_id": "editing.comparison_image_fit",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-20.xhtml#id19"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить ясное сравнение или восстановить общее основание"
+    },
+    {
+      "rule_id": "GOLUB-R72",
+      "phenomenon_id": "editing.metaphor_coherence",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "выстроить один образный механизм или сделать буквальный переход явным"
+    },
+    {
+      "rule_id": "GOLUB-R73",
+      "phenomenon_id": "editing.metonymy_relation_clarity",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-22.xhtml#id21"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "уточнить референт, если перенос создаёт ложное буквальное чтение"
+    },
+    {
+      "rule_id": "GOLUB-R74",
+      "phenomenon_id": "AUTHOR.personification_choice",
+      "project_class": "AUTHOR",
+      "analytic_class": "AUTHOR",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-23.xhtml#id22"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранять намеренную персонификацию; исправлять только случайную буквальность"
+    },
+    {
+      "rule_id": "GOLUB-R75",
+      "phenomenon_id": "AUTHOR.hyperbole_choice",
+      "project_class": "AUTHOR",
+      "analytic_class": "AUTHOR",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-24.xhtml#id23"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "не фактчекать риторическую гиперболу как буквальное утверждение; сохранять функцию"
+    },
+    {
+      "rule_id": "GOLUB-R76",
+      "phenomenon_id": "editing.periphrasis_reference",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-25.xhtml#id24"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "назвать объект прямо, если перифраза затемняет смысл без функции"
+    },
+    {
+      "rule_id": "GOLUB-R77",
+      "phenomenon_id": "editing.image_system_collision",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "свести случайное смешение к совместимому образу или подтвердить намеренность",
+      "existing_overlap": [
+        "ROS-R57"
+      ]
+    },
+    {
+      "rule_id": "GOLUB-R78",
+      "phenomenon_id": "editing.idiom_play_vs_contamination",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "восстановить один оборот или сделать игру считываемой"
+    },
+    {
+      "rule_id": "GOLUB-R79",
+      "phenomenon_id": "editing.euphony_local_collision",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-26.xhtml#id25"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "прочитать вслух и перестроить только реально мешающий фрагмент"
+    },
+    {
+      "rule_id": "GOLUB-R80",
+      "phenomenon_id": "editing.sound_collision",
+      "project_class": "EDITING",
+      "analytic_class": "EDITING",
+      "automation_level": "METRIC_ONLY",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "измерять кандидаты, решение оставлять контексту"
+    },
+    {
+      "rule_id": "GOLUB-R81",
+      "phenomenon_id": "AUTHOR.sound_pattern_choice",
+      "project_class": "AUTHOR",
+      "analytic_class": "AUTHOR",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранять подтверждённую звуковую организацию даже при высокой повторяемости"
+    },
+    {
+      "rule_id": "GOLUB-R82",
+      "phenomenon_id": "AUTHOR.inversion_choice",
+      "project_class": "AUTHOR",
+      "analytic_class": "AUTHOR",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-37.xhtml#id36"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "не нормализовать к SVO без доказанного дефекта информационной структуры"
+    },
+    {
+      "rule_id": "GOLUB-R83",
+      "phenomenon_id": "AUTHOR.rhetorical_repetition",
+      "project_class": "AUTHOR",
+      "analytic_class": "AUTHOR",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "защищать от механической дедупликации при подтверждённой риторической функции",
+      "existing_overlap": [
+        "ROS-R58"
+      ]
+    },
+    {
+      "rule_id": "GOLUB-R84",
+      "phenomenon_id": "AUTHOR.parallelism_choice",
+      "project_class": "AUTHOR",
+      "analytic_class": "AUTHOR",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "сохранить смысловой параллелизм; ломать симметрию только если она искусственна",
+      "existing_overlap": [
+        "ROS-R58"
+      ]
+    },
+    {
+      "rule_id": "GOLUB-R85",
+      "phenomenon_id": "REGISTER.oral_written_fit",
+      "project_class": "EDITING",
+      "analytic_class": "REGISTER",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "адаптировать плотность, эллипсис и связки к каналу/жанру"
+    },
+    {
+      "rule_id": "GOLUB-R86",
+      "phenomenon_id": "HISTORICAL.purism_vs_current_loan",
+      "project_class": "EDITING",
+      "analytic_class": "HISTORICAL",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "проверять современную освоенность и функцию, не импортировать старый stop-list"
+    },
+    {
+      "rule_id": "GOLUB-R87",
+      "phenomenon_id": "norm.orthoepy_requires_current_verification",
+      "project_class": "NORM",
+      "analytic_class": "HISTORICAL",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "STYLE:ch1-28.xhtml#id27"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "не переносить старую помету без актуального подтверждения",
+      "existing_overlap": [
+        "ROS-R59"
+      ],
+      "current_status": "SOURCE_PERIOD"
+    },
+    {
+      "rule_id": "GOLUB-R88",
+      "phenomenon_id": "NATIVE_USAGE.correctness_not_sufficient",
+      "project_class": "NATIVE_USAGE",
+      "analytic_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ],
+      "provenance": "SOURCE_REPEATED",
+      "operation": "после нормы проверить естественность и функцию"
+    },
+    {
+      "rule_id": "GOLUB-R89",
+      "phenomenon_id": "AI_CALQUE.redundant_semantic_repackaging",
+      "project_class": "AI_CALQUE",
+      "analytic_class": "AI_CALQUE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "PROJECT_DERIVED",
+      "operation": "сопоставить пропозиции и удалить только повтор без новой функции"
+    },
+    {
+      "rule_id": "GOLUB-R90",
+      "phenomenon_id": "AI_CALQUE.abstract_nominalization_chain",
+      "project_class": "AI_CALQUE",
+      "analytic_class": "AI_CALQUE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ],
+      "provenance": "PROJECT_DERIVED",
+      "operation": "восстановить акторов и действия там, где это не разрушает терминологию"
+    },
+    {
+      "rule_id": "GOLUB-R91",
+      "phenomenon_id": "AI_CALQUE.generic_predicate_overuse",
+      "project_class": "AI_CALQUE",
+      "analytic_class": "AI_CALQUE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ],
+      "provenance": "PROJECT_DERIVED",
+      "operation": "подставить доступный конкретный глагол без придумывания фактов"
+    },
+    {
+      "rule_id": "GOLUB-R92",
+      "phenomenon_id": "AI_CALQUE.mechanical_parallelism",
+      "project_class": "AI_CALQUE",
+      "analytic_class": "AI_CALQUE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ],
+      "provenance": "PROJECT_DERIVED",
+      "operation": "проверить, соответствует ли синтаксическая симметрия реальной логической симметрии"
+    },
+    {
+      "rule_id": "GOLUB-R93",
+      "phenomenon_id": "AI_CALQUE.overexplicit_reference_packaging",
+      "project_class": "AI_CALQUE",
+      "analytic_class": "AI_CALQUE",
+      "automation_level": "MODEL_ONLY",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ],
+      "provenance": "PROJECT_DERIVED",
+      "operation": "сжать только однозначно восстанавливаемый материал"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-08-20",
+  "items": [
+    {
+      "id": "GNV-01",
+      "phenomenon_id": "norm.soglasno_dative",
+      "status": "CURRENT_CONFIRMED",
+      "source": "Gramota.ru, «Согласно» (Словарь-справочник трудностей)",
+      "url": "https://gramota.ru/biblioteka/spravochniki/slovar-trudnostey/soglasno",
+      "result": "Современная норма требует дательного падежа: согласно чему."
+    },
+    {
+      "id": "GNV-02",
+      "phenomenon_id": "norm.payment_verb_government",
+      "status": "CURRENT_CONFIRMED",
+      "source": "Gramota.ru, справочная служба №208929/256269",
+      "url": "https://gramota.ru/poisk?mode=spravka&query=%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%B8%D1%82%D1%8C+%D0%BF%D1%80%D0%BE%D0%B5%D0%B7%D0%B4",
+      "result": "Нормативно: оплатить проезд; заплатить за проезд."
+    },
+    {
+      "id": "GNV-03",
+      "phenomenon_id": "HISTORICAL.skučat_po_variant",
+      "status": "CURRENT_USAGE",
+      "source": "Gramota.ru, справочная служба №298024 и актуальная подборка 2026",
+      "url": "https://gramota.ru/poisk?mode=spravka&query=%D1%81%D0%BA%D1%83%D1%87%D0%B0%D1%82%D1%8C+%D0%BF%D0%BE+%D0%B2%D0%B0",
+      "result": "«По вас» — старая норма; «по вам» — новая; варианты конкурируют. Не делать старую рекомендацию hard gate."
+    },
+    {
+      "id": "GNV-04",
+      "phenomenon_id": "HISTORICAL.verb_variant_current_usage",
+      "status": "CURRENT_USAGE",
+      "source": "Gramota.ru dictionary search for выздороветь",
+      "url": "https://gramota.ru/poisk?query=%D0%B2%D1%8B%D0%B7%D0%B4%D0%BE%D1%80%D0%BE%D0%B2%D0%B5%D1%82%D1%8C",
+      "result": "Нейтральная парадигма выздоровеют сосуществует со словарно маркированными разговорными вариантами; старую помету не превращать в абсолютный запрет."
+    },
+    {
+      "id": "GNV-05",
+      "phenomenon_id": "norm.gerund_subject_attachment",
+      "status": "CURRENT_CONFIRMED",
+      "source": "Gramota.ru, материалы о деепричастном обороте",
+      "url": "https://gramota.ru/poisk?query=%D0%B4%D0%B5%D0%B5%D0%BF%D1%80%D0%B8%D1%87%D0%B0%D1%81%D1%82%D0%BD%D1%8B%D0%B9+%D0%BE%D0%B1%D0%BE%D1%80%D0%BE%D1%82+%D0%B1%D0%B5%D0%B7%D0%BB%D0%B8%D1%87%D0%BD%D0%BE%D0%B5",
+      "result": "Нельзя кодировать запрет всех безличных конструкций: допустимость зависит от инфинитива и общего семантического субъекта."
+    },
+    {
+      "id": "GNV-06",
+      "phenomenon_id": "editing.pleonasm_function_test",
+      "status": "CURRENT_USAGE",
+      "source": "Gramota.ru, справочная служба №322830",
+      "url": "https://gramota.ru/spravka/vopros/322830",
+      "result": "«Период времени» не является безусловной ошибкой: «времени» может уточнять многозначное «период»."
+    },
+    {
+      "id": "GNV-07",
+      "phenomenon_id": "HISTORICAL.blagodarya_cause_semantics",
+      "status": "CONTESTED",
+      "source": "Gramota.ru, словарные описания благодаря",
+      "url": "https://gramota.ru/poisk?mode=slovari&query=%D0%B1%D0%BB%D0%B0%D0%B3%D0%BE%D0%B4%D0%B0%D1%80%D1%8F",
+      "result": "Положительная причинность остаётся центральной, но современное описание шире старого категорического запрета отрицательной причины."
+    },
+    {
+      "id": "GNV-08",
+      "phenomenon_id": "norm.double_comparative_marking",
+      "status": "CURRENT_CONFIRMED",
+      "source": "Gramota.ru, «Более лучше, более веселее»",
+      "url": "https://gramota.ru/journal/stati/nauka/bolee-luchshe-bolee-veselee",
+      "result": "Есть два способа образования сравнительной степени; их механическое удвоение типа «более лучше» не является нормативной формой."
+    },
+    {
+      "id": "GNV-09",
+      "phenomenon_id": "norm.defective_first_person_verb",
+      "status": "CURRENT_CONFIRMED",
+      "source": "Gramota.ru, материалы о глаголе победить",
+      "url": "https://gramota.ru/journal/rekomenduem/pobedyu-ili-pobezhu-pochemu-nekotorye-slova-idut-ne-v-nogu",
+      "result": "Простой нормативной формы 1-го лица ед. числа для «победить» нет; требуется описательная конструкция."
+    }
+  ]
+}

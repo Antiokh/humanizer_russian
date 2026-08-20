@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "id": "golub",
+  "display_name": "И. Б. Голуб — единая система двух книг (в соавторстве с Д. Э. Розенталем)",
+  "source_namespace": "GOLUB",
+  "source_type": "book",
+  "source_branch": "golub",
+  "reviewer_id": "golub",
+  "adapter": "review_v1",
+  "linter_path": "scripts/lint_golub.py",
+  "enabled_by_default": true,
+  "status": "OPERATIONAL",
+  "references": [
+    "studies/golub/source.md",
+    "studies/golub/coverage.md",
+    "studies/golub/observations.json",
+    "studies/golub/cross-book-audit.md",
+    "studies/golub/integration-matrix.md",
+    "studies/golub/mechanical-feasibility.md",
+    "studies/golub/modern-norm-audit.md",
+    "studies/golub/audit.md",
+    "libraries/golub/rules.json",
+    "references/golub.md"
+  ],
+  "notes": "93 deduplicated phenomena from two fully read coauthored books. Two books are one source school, never two votes. 3 narrow DEFAULT_MECHANICAL NORM subsets, 1 shared EXTENDED_SOFT paired-conjunction surface, 2 descriptive metrics, 87 contextual rules. Five AI_CALQUE observations are PROJECT_DERIVED. Mechanical surfaces shared with current Rosenthal are factored into scripts/shared_russian_norm_surfaces.py rather than duplicated per author. No mandatory model context expansion."
+}
