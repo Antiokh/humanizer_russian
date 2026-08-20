@@ -115,7 +115,8 @@ def main() -> None:
     for rid, cells in rows.items():
         classes[cells[4].strip("`")] += 1
         automation[cells[7].strip("`")] += 1
-        assert cells[17].endswith("rki-grammar.md"), f"{rid}: unexpected planned module"
+        expected_module = "RKI_METRIC" if rid.startswith("VEL-M") else "RKI_MODEL"
+        assert cells[17].strip("`") == expected_module, f"{rid}: unexpected planned module {cells[17]}"
     assert classes == EXPECTED_CLASSES, f"class counts drifted: {classes}"
     assert automation == EXPECTED_AUTOMATION, f"automation counts drifted: {automation}"
     for rid in expected_rules:
