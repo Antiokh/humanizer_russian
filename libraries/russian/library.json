@@ -11,7 +11,8 @@
   "enabled_by_default": true,
   "status": "OPERATIONAL",
   "references": [
-    "references/russian-language.md"
+    "references/russian-language.md",
+    "references/russian-core-rules.md"
   ],
   "notes": "Нормативные правила становятся guardrails; употребление и регистр остаются неблокирующими review findings."
 }
