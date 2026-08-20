@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "map": [
+    {"eval_id":"double-comparative-more-better","rule_ids":["ROS-R53"]},
+    {"eval_id":"double-comparative-more-prettier","rule_ids":["ROS-R53"]},
+    {"eval_id":"analytic-comparative-clean","rule_ids":["ROS-R53"]},
+    {"eval_id":"synthetic-comparative-clean","rule_ids":["ROS-R53"]},
+    {"eval_id":"samyi-luchshii-register-boundary","rule_ids":["ROS-R53"]},
+    {"eval_id":"quote-metalinguistic","rule_ids":["ROS-R53"]},
+    {"eval_id":"code-double-comparative","rule_ids":["ROS-R53"]},
+    {"eval_id":"by-separate-predications","rule_ids":["ROS-R54"]},
+    {"eval_id":"by-same-predication","rule_ids":["ROS-R54"]},
+    {"eval_id":"functional-parceling","rule_ids":["ROS-R56"]},
+    {"eval_id":"functional-anaphora","rule_ids":["ROS-R58"]},
+    {"eval_id":"functional-loanword","rule_ids":["ROS-R51"]}
+  ]
+}
