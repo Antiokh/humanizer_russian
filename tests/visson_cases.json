@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "cases": [
+    {"id":"ask-direct","text":"Я хочу спросить у вас вопрос о сроках.","must_find":["VISSON-NORM-ASK-QUESTION"]},
+    {"id":"ask-adjective","text":"Можно спросить один вопрос?","must_find":["VISSON-NORM-ASK-QUESTION"]},
+    {"id":"ask-natural-negative","text":"Я хочу задать вам вопрос о сроках.","must_not_find":["VISSON-NORM-ASK-QUESTION"]},
+    {"id":"ask-boundary","text":"Я хочу спросить у вас о вопросе, который вчера обсуждали.","must_not_find":["VISSON-NORM-ASK-QUESTION"]},
+    {"id":"ask-metalinguistic","text":"В статье разбирается выражение «спросить вопрос».","must_not_find":["VISSON-NORM-ASK-QUESTION"]},
+    {"id":"ask-multiline-quotation","text":"В статье разбирается цитата «спросить\nвопрос» как пример.","must_not_find":["VISSON-NORM-ASK-QUESTION"]},
+    {"id":"pretend-direct","text":"Он претендует, что ничего не знает.","must_find":["VISSON-CALQUE-PRETEND-CLAUSE"]},
+    {"id":"pretend-natural-negative","text":"Он претендует на должность директора.","must_not_find":["VISSON-CALQUE-PRETEND-CLAUSE"]},
+    {"id":"pretend-boundary","text":"Он не претендует на то, что теория окончательна.","must_not_find":["VISSON-CALQUE-PRETEND-CLAUSE"]},
+    {"id":"have-day","text":"Имейте хороший день!","must_find":["VISSON-CALQUE-HAVE-NICE-DAY"]},
+    {"id":"have-day-negative","text":"Имейте в виду: день будет сложным.","must_not_find":["VISSON-CALQUE-HAVE-NICE-DAY"]},
+    {"id":"birthday","text":"Счастливого дня рождения!","must_find":["VISSON-CALQUE-HAPPY-BIRTHDAY"]},
+    {"id":"birthday-boundary","text":"Желаю тебе счастливого дня рождения!","must_not_find":["VISSON-CALQUE-HAPPY-BIRTHDAY"]},
+    {"id":"enjoy","text":"Наслаждайтесь!","must_find":["VISSON-CALQUE-ENJOY-STANDALONE"]},
+    {"id":"enjoy-negative","text":"Наслаждайтесь тишиной, пока есть возможность.","must_not_find":["VISSON-CALQUE-ENJOY-STANDALONE"]},
+    {"id":"markup-code","text":"```text\nЯ хочу спросить у вас вопрос.\nОн претендует, что всё знает.\n```","must_not_find":["VISSON-NORM-ASK-QUESTION","VISSON-CALQUE-PRETEND-CLAUSE"]}
+  ]
+}
