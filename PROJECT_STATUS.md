@@ -1,19 +1,18 @@
 # Project status
 
-## 2026-08-19 — independent multi-library editor operational
+## 2026-08-20 — eight-profile multi-library Russian editor operational
 
 The active canonical repository is `Antiokh/humanizer_russian`. The project name is **humanizer_russian**.
 
-The repository now combines:
+The current `main` combines:
 
-- Russian norm and native-usage layers;
-- author-profile adaptation;
-- source-specific editorial knowledge libraries for Nora Gal, Chukovsky and Ilyakhov/Sarycheva;
-- deterministic compact checking and an Editorial Board runtime;
-- optional external-evidence providers separated from reviewer votes;
-- deterministic regression suites and CI;
-- reproducible but opt-in live-model and NKRЯ research harnesses;
-- a blind independent-philologist review protocol.
+- two project-core reviewer profiles: **Russian language / norm and usage** and **Native Russian**;
+- six operational author/source libraries: **Nora Gal**, **Ilyakhov/Sarycheva**, **Chukovsky**, **Lynn Visson**, **D. E. Rosenthal**, and **I. B. Golub**;
+- the bounded A. V. Velichko RKI/grammar study integrated source-neutrally into the Russian core rather than exposed as a separate reviewer vote;
+- deterministic Compact checking and a provenance-preserving Editorial Board runtime;
+- optional external-evidence providers kept separate from reviewer votes;
+- deterministic regression suites, source-specific validation workflows, and opt-in research harnesses;
+- author-profile adaptation and a blind independent-philologist review protocol.
 
 ## Unified architecture
 
@@ -28,24 +27,11 @@ Selection among valid variants:
 Consequences:
 
 - an editorial source cannot create a language error merely by authority;
+- current normative constraints outrank historical or stylistic recommendations;
 - natural Russian is chosen among normative variants using context and information structure;
 - author voice is protected among normative variants;
 - detector-style signals are weak and never outrank semantics, norm or source-grounded editing;
 - a valid outcome can be **no change**.
-
-## Native-Russian layer
-
-The current native layer is context-first rather than sentence-template-first:
-
-- context economy and safe ellipsis;
-- repeated common material factored before synonym substitution;
-- Russian morphology allowed to carry relations instead of restoring English-like SVO;
-- word order selected by theme/rheme, contrast and strong positions rather than fixed SVO;
-- `не X, а Y` remains a normal Russian construction; repetition is reduced only when it adds no function;
-- `а`, `но`, `зато` are not mechanically conflated;
-- pragmatic particles are preserved by discourse function;
-- parcellation is judged by function, not sentence length;
-- good natural Russian is a negative control: the editor must be able to leave it alone.
 
 ## Runtime
 
@@ -68,113 +54,100 @@ This adds lower-confidence mechanical/style candidates. Source-neutral `phenomen
 Editorial Board:
 
 ```bash
-python scripts/review.py --format json
+python scripts/review.py text.md --style neutral
 ```
 
-The board preserves reviewer identity, disagreement and source provenance. `SEMANTICS`, `NORM` and `ARTIFACT` guardrails remain outside stylistic voting. Optional corpus/dictionary/normative evidence is also kept separate from reviewer votes.
+The board preserves reviewer identity, disagreement and source provenance. `SEMANTICS`, `NORM` and `ARTIFACT` guardrails remain outside stylistic voting. If author/source conclusions conflict, `SOURCE_CONFLICT` is preserved rather than resolved by choosing one source or averaging them away.
 
-## Operational source libraries
+The default board currently has eight profiles:
 
-### Nora Gal
+1. `russian` — current norm, syntax, punctuation, lexical fit, register and RKI-like interference;
+2. `native` — contextual economy, ellipsis, information structure and native-usage preferences;
+3. `gal` — Nora Gal;
+4. `ilyakhov` — Maxim Ilyakhov / Lyudmila Sarycheva;
+5. `chukovsky` — Korney Chukovsky;
+6. `visson` — Lynn Visson;
+7. `rosenthal` — D. E. Rosenthal;
+8. `golub` — I. B. Golub.
 
-The full supplied EPUB of «Слово живое и мертвое» was studied sequentially:
+Author names mean “evaluation by formalized source-derived principles”, not a real review, quotation, endorsement or personal opinion of the author.
 
-- 35/35 EPUB spine documents covered;
-- 30/30 content-bearing documents `VERIFIED`;
-- 5/5 structural/title documents `NO_OPERATIONAL_CONTENT`;
-- inaccessible/unread parts: none;
-- source fingerprint and locators retained; the copyrighted book is not stored in the public repository.
+## Current source-library snapshot
 
-Operational routing:
+Exact operational counts live in each `libraries/<id>/library.json`; the current snapshot is:
 
-- 42 audited `GAL-*` rules;
-- 0 `HARD_GATE`;
-- 0 `DEFAULT_MECHANICAL`;
-- 3 `EXTENDED_SOFT`;
-- 3 `METRIC_ONLY`;
-- 36 `MODEL_ONLY`.
+- **Nora Gal** — 42 audited book-derived rules: 3 `EXTENDED_SOFT`, 3 `METRIC_ONLY`, 36 `MODEL_ONLY`;
+- **Ilyakhov/Sarycheva** — 102 audited source rules: 9 `EXTENDED_SOFT`, 4 `METRIC_ONLY`, 89 `MODEL_ONLY`; `ILY-M01` is a separate project-derived `DEFAULT_MECHANICAL` subset rather than a direct author rule;
+- **Chukovsky** — 38 audited rules: 7 `EXTENDED_SOFT`, 2 `METRIC_ONLY`, 29 `MODEL_ONLY`;
+- **Lynn Visson** — 39 operational rules derived from 72 atomic observations: 2 `DEFAULT_MECHANICAL`, 3 `EXTENDED_SOFT`, 2 `METRIC_ONLY`, 32 `MODEL_ONLY`;
+- **Rosenthal** — 74 cumulative rules across four fully read source cycles: 3 `EXTENDED_SOFT`, 1 `METRIC_ONLY`, 70 `MODEL_ONLY`. Cycle 4 adds provenance to existing phenomena rather than duplicate rule IDs or new mechanical detectors;
+- **Golub** — 93 deduplicated phenomena from two fully read books coauthored with D. E. Rosenthal: 3 narrow `DEFAULT_MECHANICAL` norm subsets, 1 `EXTENDED_SOFT`, 2 descriptive metrics, 87 contextual rules. The two books form one Golub source school and never become two votes inside that library.
 
-The same `review_v1` library feeds compact and board modes.
+All six author/source libraries are enabled by default and feed the same normalized library runtime.
 
-### Chukovsky
+## Russian core and the Velichko study
 
-The Chukovsky library remains operational with its audited source registry, extended mechanical candidates and model-only residue. It shares source-neutral phenomena with other libraries where the actual diagnostic question is the same rather than merely similar.
+The Russian core owns current norm and general Russian-usage rules. Normative findings may become guardrails; native-usage, register, RKI-like interference and calque findings remain non-blocking unless independently confirmed as `NORM`.
 
-### Ilyakhov / Sarycheva
+The available 2004 Velichko fragment was studied as a bounded source and integrated into this core. Its useful grammar/RKI observations cover, among other things, valency and government, subject realization, event construal and aspect, passive/result-state distinctions, copular choice, participles, gerunds, quantitative agreement and introductory-word scope.
 
-The Ilyakhov/Sarycheva library is integrated into the same architecture. Its `ILY-M01` nominalization route is `DEFAULT_MECHANICAL`; Gal and Chukovsky routes for the same `editing.action_hidden_in_nominalization` phenomenon remain softer. Default compact therefore exposes only the default-calibrated source, while extended compact may preserve all compatible provenances.
+Velichko is deliberately **not** a ninth reviewer: the study contributes source-neutral Russian-core knowledge. Unavailable source chapters are not reconstructed or claimed as covered.
+
+## Native-Russian layer
+
+The native layer is context-first rather than sentence-template-first:
+
+- context economy and safe ellipsis;
+- repeated common material factored before synonym substitution;
+- Russian morphology allowed to carry relations instead of restoring English-like SVO;
+- word order selected by theme/rheme, contrast and strong positions rather than fixed SVO;
+- `не X, а Y` remains a normal Russian construction; repetition is reduced only when it adds no function;
+- pragmatic particles are preserved by discourse function;
+- parcellation is judged by function, not sentence length;
+- good natural Russian is a negative control: the editor must be able to leave it alone.
+
+## Source accumulation and deduplication
+
+Long-lived author branches remain the research branches for additional sources by the same author/school. New books do not automatically create new reviewer identities.
+
+When a later source repeats an existing phenomenon:
+
+- preserve the new source locator/provenance;
+- reuse the source-neutral `phenomenon_id` where the diagnostic question is genuinely the same;
+- do not duplicate mechanical detectors merely because another book states the same rule;
+- preserve `SOURCE_CONFLICT` when sources truly disagree;
+- never promote a historical prescription to current `NORM` by source authority alone.
+
+Rosenthal is the clearest current example: four source cycles feed one long-lived library, while later cycles can enrich provenance without multiplying runtime rules.
+
+Golub is similarly deduplicated across two coauthored books; shared mechanical surfaces with Rosenthal are factored into common Russian-norm surface logic rather than copied independently per author.
 
 ## Deterministic validation
 
-The CI suite currently covers:
+Repository validation is split between the base `quality` workflow and focused source workflows.
 
-- Python compilation;
-- architecture and JSON-schema contracts;
-- knowledge-library manifests and routing;
-- Nora Gal, Chukovsky and Ilyakhov/Sarycheva source/integration validation;
-- source-adapter self-tests;
-- base compact benchmark and source-specific compact benchmarks;
-- source-specific deterministic benchmarks;
-- Editorial Board regression and source-specific board integration;
-- shared-phenomenon/provenance behavior;
-- author-profile schema/privacy regression;
-- repository JSON validation;
-- offline validation of the live-model harness, NKRЯ replay runner and philologist-review protocol.
+The current workflow set includes:
 
-These deterministic tests validate software contracts. They do **not** substitute for live model results, corpus measurements or human linguistic review.
+- base architecture/library/JSON validation and Compact/Editorial Board regressions;
+- bounded Velichko integration validation;
+- Gal, Chukovsky and Ilyakhov source/library benchmarks in the base quality workflow;
+- dedicated `visson-quality`, `rosenthal-quality` and `golub-quality` workflows;
+- separate external-evidence workflows where configured for Chukovsky and Ilyakhov;
+- offline tests for the live-model harness, NKRЯ replay runner and philologist-review protocol.
 
-## Nora Gal external-evidence calibration
+These deterministic tests validate software and study contracts. They do **not** substitute for live model results, corpus measurements or independent human linguistic review.
 
-All 15 source-facing `GAL-CLAIM-*` items now have a separate modern evidence disposition in:
+## External evidence and open blockers
 
-- `studies/nora-gal/external-evidence-2026.md`;
-- `studies/nora-gal/external-evidence-2026.json`.
+Optional corpus, dictionary and normative-reference evidence is kept separate from reviewer votes. Evidence can support, weaken or contextualize a claim; it does not become an additional member of the Editorial Board.
 
-The source-facing claims are preserved rather than silently rewritten.
+Three explicit external-validation issues remain open:
 
-Current important boundaries:
+1. **#22** — run the live Nora Gal contextual/model benchmark with explicit API models and credentials;
+2. **#23** — run real NKRЯ corpus calibration for the remaining Gal empirical claims using authenticated exported queries and validated denominators;
+3. **#24** — obtain an independent qualified philologist review of the Russian-language boundary cases.
 
-- blanket avoidance of foreign words is not a current norm rule;
-- participles/gerunds are normal grammatical resources; register/frequency questions are separate;
-- sentence-final focus is not universal; information structure allows other focus positions;
-- textual opacity does not license a psychological diagnosis of the author;
-- historical claims that machines cannot use contextual literary information are obsolete as present-day absolutes, while literary-translation quality and voice remain real open problems;
-- child-language input evidence supports only a narrower developmental claim, not a language-wide moral/historical conclusion;
-- source/editorial agreement does not itself create `NORM`.
-
-Claims `GAL-CLAIM-01`, `GAL-CLAIM-03` and `GAL-CLAIM-14` remain explicitly `TESTABLE_NOT_YET_MEASURED` where a real corpus result is required.
-
-## Live model evaluation
-
-`scripts/run_model_evals.py` is the reproducible opt-in harness for contextual/model-only evaluation.
-
-It:
-
-- joins the 45 Nora Gal fixtures to source rule cards;
-- does not expose expected answers to the candidate model;
-- judges candidate output in a separate structured-output call;
-- records candidate/judge model IDs, response IDs and token usage;
-- sends `store: false`;
-- reads `OPENAI_API_KEY` only from the environment;
-- supports dry-run and offline CI self-test.
-
-**No live model benchmark has been executed by the project yet.** This remains open issue #22 and requires explicit API credentials/models plus acceptance of API usage cost.
-
-## Corpus calibration
-
-`studies/nora-gal/corpus-calibration-plan.md` defines the measurement discipline for the remaining empirical claims.
-
-`scripts/run_ruscorpora_query.py` can replay a query exported from the NKRЯ web interface. It does not invent query/subcorpus JSON. Bearer credentials are restricted to the exact official HTTPS NKRЯ lexicogrammatical-concordance endpoint, and returned-page counts are explicitly not treated as prevalence or total corpus hits.
-
-**No live NKRЯ calibration has been executed by the project yet.** Issue #23 requires an NKRЯ API token plus deliberately designed/exported subcorpus queries.
-
-## Independent philologist review
-
-The repository now contains a 28-case external-review protocol covering the highest-risk norm/native/editing boundaries.
-
-The first pass is blind: `scripts/export_philologist_packet.py` removes project positions, rule IDs and phenomenon IDs before the reviewer sees the cases. A completed review has a JSON schema and semantic validation rules; `LANGUAGE_ERROR` requires a normative source, and context-sensitive classifications require a counterexample/boundary.
-
-**No real philologist verdict is stored in the repository yet.** Issue #24 requires a qualified external reviewer. Synthetic validator fixtures are test plumbing only and are not linguistic evidence.
+Until those are completed, the project must not claim live-model calibration, completed NKRЯ measurement for those claims, or external philologist validation.
 
 ## Author profile
 
@@ -195,12 +168,4 @@ Errors remain separate from voice and are not imitated by default. Source paths 
 - model-judge evals treated as the primary deterministic correctness signal;
 - corpus page counts treated as prevalence without a validated denominator.
 
-## True external blockers / next evidence
-
-The remaining high-value validation work now depends on evidence that the repository cannot fabricate:
-
-1. issue #22 — live contextual model benchmark with explicit API models/key;
-2. issue #23 — real NKRЯ corpus measurements with authenticated exported queries;
-3. issue #24 — independent qualified philologist review.
-
-After those results exist, integrate them case by case. Only then consider promoting any additional rule from `MODEL_ONLY`/`EXTENDED_SOFT`, changing a normative classification, or adding new mechanical surface proxies.
+The next high-value progress is therefore not another generic style heuristic. It is either a carefully integrated new source cycle or one of the three real external-validation steps above.
