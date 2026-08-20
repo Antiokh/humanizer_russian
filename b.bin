@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "evals": [
+    {
+      "id": "GOLUB-R01-POS",
+      "rule_id": "GOLUB-R01",
+      "kind": "positive",
+      "text": "В отчёте три абзаца повторяют один и тот же вывод разными общими словами.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R01-NEG",
+      "rule_id": "GOLUB-R01",
+      "kind": "natural_negative",
+      "text": "Краткое резюме повторяет вывод раздела для читателя, который читает только summary.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R01-BOUND",
+      "rule_id": "GOLUB-R01",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R01-INT",
+      "rule_id": "GOLUB-R01",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R02-POS",
+      "rule_id": "GOLUB-R02",
+      "kind": "positive",
+      "text": "Мы заранее спланировали план работ.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R02-NEG",
+      "rule_id": "GOLUB-R02",
+      "kind": "natural_negative",
+      "text": "Мы снова повторили термин в определении, чтобы сохранить однозначность.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R02-BOUND",
+      "rule_id": "GOLUB-R02",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R02-INT",
+      "rule_id": "GOLUB-R02",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R03-POS",
+      "rule_id": "GOLUB-R03",
+      "kind": "positive",
+      "text": "Главная суть аргумента уже сформулирована выше.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R03-NEG",
+      "rule_id": "GOLUB-R03",
+      "kind": "natural_negative",
+      "text": "Период времени выбран для явного противопоставления периоду колебаний.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R03-BOUND",
+      "rule_id": "GOLUB-R03",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+     {
+      "id": "GOLUB-R03-INT",
+      "rule_id": "GOLUB-R03",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R04-POS",
+      "rule_id": "GOLUB-R04",
+      "kind": "positive",
+      "text": "Исследователь исследовал исследование.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R04-NEG",
+      "rule_id": "GOLUB-R04",
+      "kind": "natural_negative",
+      "text": "Следователь расследовал делов; повтор корня здесь не является механическим дефектом.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R04-BOUND",
+      "rule_id": "GOLUB-R04",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R04-INT",
+      "rule_id": "GOLUB-R04",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R05-POS",
+      "rule_id": "GOLUB-R05",
+      "kind": "positive",
+      "text": "В каждом соседнем предложении случайно повторено длинное название без нужды.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R05-NEG",
+      "rule_id": "GOLUB-R05",
+      "kind": "natural_negative",
+      "text": "Я помню этот день. Я помню этот голос. Я помню эту паузу.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R05-BOUND",
+      "rule_id": "GOLUB-R05",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R05-INT",
+      "rule_id": "GOLUB-R05",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R06-POS",
+      "rule_id": "GOLUB-R06",
+      "kind": "positive",
+      "text": "Вопрос был поставлен в вопросительной форме и этот вопрос вызвал вопросы.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R06-NEG",
+      "rule_id": "GOLUB-R06",
+      "kind": "natural_negative",
+      "text": "Термин API повторяется, потому что синоним создал бы двусмысленность.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R06-BOUND",
+      "rule_id": "GOLUB-R06",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R06-INT",
+      "rule_id": "GOLUB-R06",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R07-POS",
+      "rule_id": "GOLUB-R07",
+      "kind": "positive",
+      "text": "На совещании обсудили о запуске — пропущен объект/глагольная связь.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R07-NEG",
+      "rule_id": "GOLUB-R07",
+      "kind": "natural_negative",
+      "text": "Я взял красную папку, а она — синюю.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R07-BOUND",
+      "rule_id": "GOLUB-R07",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и рM�

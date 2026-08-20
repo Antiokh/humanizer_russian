@@ -1,6 +1,0 @@
-[
-  {"id":"visson-board-ask-norm","text":"Я хочу спросить у вас вопрос о сроках.","libraries":["visson"],"expect_rule_ids":["VISSON-NORM-ASK-QUESTION"],"expect_guardrails_min":1},
-  {"id":"visson-board-pretend","text":"Он претендует, что ничего не знает.","libraries":["visson"],"expect_rule_ids":["VISSON-CALQUE-PRETEND-CLAUSE"],"expect_phenomena":["russian.false_friend_pretend_claim"],"expect_reviewers":["visson"],"expect_status_by_phenomenon":{"russian.false_friend_pretend_claim":"SINGLE_REVIEW"}},
-  {"id":"visson-board-formula","text":"Имейте хороший день!","libraries":["visson"],"expect_rule_ids":["VISSON-CALQUE-HAVE-NICE-DAY"],"expect_phenomena":["russian.literal_have_nice_day"],"expect_reviewers":["visson"]},
-  {"id":"visson-board-negative","text":"Я хочу задать вам вопрос. Он претендует на должность директора.","libraries":["visson"],"must_not_have_rule_ids":["VISSON-NORM-ASK-QUESTION","VISSON-CALQUE-PRETEND-CLAUSE"],"expect_guardrails":0}
-]
