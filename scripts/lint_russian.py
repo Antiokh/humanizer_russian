@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-"""Russian-language norm, usage and register layer.
+"""Russian-language norm, usage, rubrication and register layer.
 
-This library is deliberately split by confidence:
-- NORM findings are only narrow mechanically defensible rules;
-- NATIVE_USAGE findings point to a surface that deserves a Russian rewrite check;
-- register/jargon findings become default only when the caller explicitly says
-  the text is everyday/non-professional.
-
-The module never treats a foreign word, borrowing or professional term as an
-error merely because of its origin.
+The library separates mechanically defensible norm checks from contextual
+Russian-usage candidates. It deliberately does not infer a heading merely from
+its meaning: heading punctuation is licensed by structural/typographic
+rubrication, while an unmarked plain-text pseudoheading is only a soft editing
+candidate.
 """
 from __future__ import annotations
 
@@ -16,20 +13,22 @@ import re
 from typing import Any
 
 CYRILLIC_RE = re.compile(r"[А-Яа-яЁё]")
+CYRILLIC_WORD_RE = re.compile(r"[А-Яа-яЁё-]+")
 LATIN_TOKEN_RE = re.compile(r"(?<![A-Za-z0-9_])([A-Za-z][A-Za-z'-]{1,})(?![A-Za-z0-9_])")
 INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
 URL_RE = re.compile(r"https?://\S+|www\.\S+", re.I)
 MD_LINK_TARGET_RE = re.compile(r"\]\([^\n)]*\)")
 HEADING_RE = re.compile(r"^\s{0,3}#{1,6}\s+(?P<body>.+?)\s*$")
+LIST_RE = re.compile(
+    r"^\s*(?P<marker>(?:[-*+]|(?:\d+|[А-Яа-яA-Za-z])[.)]))\s+(?P<body>.+?)\s*$"
+)
 SPLIT_CONTRAST_RE = re.compile(
     r"\bЭто\s+не\s+(?P<left>[^.!?\n]{1,160})\.\s+Это\s+(?P<right>[^.!?\n]{1,160})(?P<end>[.!?])",
     re.I,
 )
 
-# Tiny high-precision ontology for a mechanical candidate. This is not a
-# general semantic engine: only explicit copular equations between a known
-# member noun and its collection noun are surfaced. More general type/category
-# collisions remain MODEL_ONLY.
+# Tiny high-precision ontology for one mechanically useful semantic candidate.
+# General category/container collisions stay MODEL_ONLY.
 MEMBER_COLLECTION_PATTERNS = [
     re.compile(
         r"\bкниг(?:а|и|у|ой|е|ами|ах)?\b\s*"
@@ -102,6 +101,7 @@ def _finding(
 
 
 def _visible_lines(text: str) -> list[tuple[int, str]]:
+    """Return all non-fenced lines, including blanks needed for rubrication."""
     out: list[tuple[int, str]] = []
     fenced = False
     fence_marker = None
@@ -128,6 +128,16 @@ def _mask_inline(line: str) -> str:
     return line
 
 
+def _plain_inline_text(text: str) -> str:
+    """Drop a few Markdown emphasis markers without pretending to parse Markdown."""
+    return re.sub(r"[*_~]+", "", text).strip()
+
+
+def _first_cyrillic_letter(text: str) -> str:
+    match = CYRILLIC_RE.search(_plain_inline_text(text))
+    return match.group(0) if match else ""
+
+
 def _heading_period_finding(raw: str, line_no: int) -> dict[str, Any] | None:
     match = HEADING_RE.match(raw)
     if not match:
@@ -143,10 +153,170 @@ def _heading_period_finding(raw: str, line_no: int) -> dict[str, Any] | None:
         "CHANGE",
         body,
         line_no,
-        "В конце вынесенного заголовка точку опускают; вопросительный, восклицательный знак и многоточие сохраняются.",
-        "remove_terminal_period_from_heading",
+        "Строка структурно размечена как заголовок: финальную точку в вынесенной рубрике опускают; ? ! … сохраняются.",
+        "remove_terminal_period_from_marked_heading",
         reviewer_id=None,
     )
+
+
+def _next_nonblank(visible: list[tuple[int, str]], index: int) -> tuple[int, str] | None:
+    for item in visible[index + 1 :]:
+        if item[1].strip():
+            return item
+    return None
+
+
+def _unmarked_heading_finding(
+    visible: list[tuple[int, str]], index: int
+) -> dict[str, Any] | None:
+    """Surface only high-ish-signal pseudoheadings; never call them NORM errors."""
+    line_no, raw = visible[index]
+    clean = _plain_inline_text(_mask_inline(raw))
+    if not clean or HEADING_RE.match(raw) or LIST_RE.match(raw):
+        return None
+    if raw.lstrip().startswith((">", "|")):
+        return None
+    if clean.endswith((".", "?", "!", "…", ":", ";", ",")):
+        return None
+    words = CYRILLIC_WORD_RE.findall(clean)
+    if not 2 <= len(words) <= 10:
+        return None
+    first = _first_cyrillic_letter(clean)
+    if not first or not first.isupper():
+        return None
+    prev_blank = index == 0 or not visible[index - 1][1].strip()
+    if not prev_blank:
+        return None
+    following = _next_nonblank(visible, index)
+    if not following:
+        return None
+    following_clean = _plain_inline_text(_mask_inline(following[1]))
+    # Requiring a substantial following line avoids treating a stack of labels
+    # as prose headings. It remains an EXTENDED_SOFT candidate because plain
+    # text can intentionally use captions, titles and UI labels.
+    if len(CYRILLIC_WORD_RE.findall(following_clean)) < 5:
+        return None
+    return _finding(
+        "RU-STYLE-UNMARKED-HEADING",
+        "russian.unmarked_heading_candidate",
+        "EDITING",
+        "EXTENDED_SOFT",
+        "REVIEW",
+        clean,
+        line_no,
+        "Строка выглядит как рубрика по функции, но в plain text ничем не размечена. Либо оформите её настоящим заголовком средствами целевого формата, либо включите в обычный текст и пунктуируйте как предложение.",
+        "mark_as_heading_or_punctuate_as_sentence",
+    )
+
+
+def _list_groups(visible: list[tuple[int, str]]) -> list[list[tuple[int, str, re.Match[str]]]]:
+    groups: list[list[tuple[int, str, re.Match[str]]]] = []
+    current: list[tuple[int, str, re.Match[str]]] = []
+    previous_line = None
+    for line_no, raw in visible:
+        match = LIST_RE.match(raw)
+        if match and (previous_line is None or line_no == previous_line + 1):
+            current.append((line_no, raw, match))
+        elif match:
+            if current:
+                groups.append(current)
+            current = [(line_no, raw, match)]
+        else:
+            if current:
+                groups.append(current)
+                current = []
+        previous_line = line_no
+    if current:
+        groups.append(current)
+    return [group for group in groups if len(group) >= 2]
+
+
+def _list_findings(visible: list[tuple[int, str]]) -> list[dict[str, Any]]:
+    findings: list[dict[str, Any]] = []
+    for group in _list_groups(visible):
+        for index, (line_no, raw, match) in enumerate(group):
+            marker = match.group("marker")
+            body = _plain_inline_text(match.group("body"))
+            first = _first_cyrillic_letter(body)
+            if not first:
+                continue
+            terminal = body[-1:] if body else ""
+            dot_marker = marker.endswith(".")
+            is_last = index == len(group) - 1
+
+            # A number/letter followed by a dot introduces a capitalized rubric.
+            if dot_marker and first.islower():
+                findings.append(_finding(
+                    "RU-NORM-LIST-DOT-MARKER-CAPITAL",
+                    "norm.list_marker_case_alignment",
+                    "NORM",
+                    "DEFAULT_MECHANICAL",
+                    "CHANGE",
+                    raw.strip(),
+                    line_no,
+                    "После номера/литеры с точкой рубрика начинается с прописной буквы и оформляется как самостоятельный пункт.",
+                    "capitalize_item_after_dot_marker_and_end_with_period",
+                    reviewer_id=None,
+                ))
+                continue
+            if dot_marker and first.isupper() and terminal in {",", ";"}:
+                findings.append(_finding(
+                    "RU-NORM-LIST-DOT-MARKER-CAPITAL",
+                    "norm.list_marker_case_alignment",
+                    "NORM",
+                    "DEFAULT_MECHANICAL",
+                    "CHANGE",
+                    raw.strip(),
+                    line_no,
+                    "Пункт, введённый номером/литерой с точкой и начатый с прописной, обычно завершается точкой, а не запятой или точкой с запятой.",
+                    "end_dot_marker_item_as_sentence",
+                    reviewer_id=None,
+                ))
+                continue
+
+            if dot_marker:
+                continue
+
+            # Bullets and parenthesized markers normally form a lowercase
+            # continuation. We only surface mismatches; proper-name initials and
+            # the final full stop of the entire enumeration are protected.
+            if first.islower() and not is_last and terminal == ".":
+                findings.append(_finding(
+                    "RU-LIST-CASE-PUNCTUATION-CONSISTENCY",
+                    "russian.list_case_punctuation_alignment",
+                    "EDITING",
+                    "EXTENDED_SOFT",
+                    "REVIEW",
+                    raw.strip(),
+                    line_no,
+                    "Строчный пункт внутри продолжающегося перечня обычно отделяется запятой или точкой с запятой; точка делает его самостоятельным предложением и требует другой схемы списка.",
+                    "align_list_case_marker_and_terminal_punctuation",
+                ))
+            elif first.islower() and not is_last and terminal not in {",", ";", ":"}:
+                findings.append(_finding(
+                    "RU-LIST-CASE-PUNCTUATION-CONSISTENCY",
+                    "russian.list_case_punctuation_alignment",
+                    "EDITING",
+                    "EXTENDED_SOFT",
+                    "REVIEW",
+                    raw.strip(),
+                    line_no,
+                    "У строчного пункта продолжающегося перечня нет разделительного знака. Для простого пункта возможна запятая, для более сложного обычно нужна точка с запятой.",
+                    "align_list_case_marker_and_terminal_punctuation",
+                ))
+            elif first.isupper() and terminal in {",", ";"}:
+                findings.append(_finding(
+                    "RU-LIST-CASE-PUNCTUATION-CONSISTENCY",
+                    "russian.list_case_punctuation_alignment",
+                    "EDITING",
+                    "EXTENDED_SOFT",
+                    "REVIEW",
+                    raw.strip(),
+                    line_no,
+                    "Прописная буква вместе с запятой/точкой с запятой смешивает две схемы оформления. Проверьте: либо самостоятельные пункты с прописной и точкой, либо синтаксически продолжающийся перечень со строчной. Имя собственное — исключение.",
+                    "align_list_case_marker_and_terminal_punctuation",
+                ))
+    return findings
 
 
 def _jargon_automation(register: str) -> str:
@@ -163,12 +333,20 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
         item = _heading_period_finding(raw, line_no)
         if item:
             findings.append(item)
+    for index in range(len(visible)):
+        item = _unmarked_heading_finding(visible, index)
+        if item:
+            findings.append(item)
+    findings.extend(_list_findings(visible))
 
     for line_no, raw in visible:
         clean = _mask_inline(raw)
         heading = HEADING_RE.match(clean)
         if heading:
             clean = heading.group("body")
+        list_match = LIST_RE.match(clean)
+        if list_match:
+            clean = list_match.group("body")
         if not clean.strip():
             continue
 
@@ -238,7 +416,7 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
     prose_parts: list[str] = []
     line_map: list[int] = []
     for line_no, raw in visible:
-        if HEADING_RE.match(raw):
+        if HEADING_RE.match(raw) or LIST_RE.match(raw):
             continue
         clean = _mask_inline(raw).strip()
         if clean:
@@ -260,36 +438,51 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
             "compare_with_single_russian_contrast_or_keep_if_emphatic",
         ))
 
+    model_only = [
+        "RU-SEM-CATEGORY-COLLECTION",
+        "RU-NORM-GERUND-SUBJECT-ATTACHMENT",
+        "RU-NATIVE-GERUND-FRAME-POSITION",
+        "RU-NORM-PARTICIPLE-HEAD-ATTACHMENT",
+        "RU-NATIVE-PARTICIPIAL-COMPRESSION",
+        "RU-RKI-SYNTACTIC-INTERFERENCE-AUDIT",
+    ]
     return {
         "findings": findings,
         "metrics": {
             "register": register,
             "russian_language_findings": len(findings),
-            "model_only_rules": ["RU-SEM-CATEGORY-COLLECTION"],
+            "model_only_rules": model_only,
         },
     }
 
 
 def self_test() -> None:
     cases = [
-        ("# Заголовок.\nТекст.", "RU-NORM-HEADING-PERIOD"),
-        ("Это не реальная рецензия. Это оценка по правилам.", "RU-NATIVE-SPLIT-CONTRAST"),
-        ("Книги — это библиотеки знаний.", "RU-SEM-MEMBER-COLLECTION-EQUATION"),
-        ("Мы используем prompt только для остатка.", "RU-REGISTER-JARGON-TERM"),
-        ("Мы используем prompt только для остатка.", "RU-LEX-LATIN-IN-RUSSIAN"),
-        ("Это обычный russianword в русской фразе.", "RU-LEX-LATIN-IN-RUSSIAN"),
+        ("# Заголовок.\nТекст.", "RU-NORM-HEADING-PERIOD", False),
+        ("Это не реальная рецензия. Это оценка по правилам.", "RU-NATIVE-SPLIT-CONTRAST", False),
+        ("Книги — это библиотеки знаний.", "RU-SEM-MEMBER-COLLECTION-EQUATION", False),
+        ("Мы используем prompt только для остатка.", "RU-REGISTER-JARGON-TERM", False),
+        ("Мы используем prompt только для остатка.", "RU-LEX-LATIN-IN-RUSSIAN", False),
+        ("Это обычный russianword в русской фразе.", "RU-LEX-LATIN-IN-RUSSIAN", False),
+        ("1. первый пункт\n2. Второй пункт.", "RU-NORM-LIST-DOT-MARKER-CAPITAL", False),
+        ("\nКниги как сборники правил\nНовая книга превращается в набор проверяемых и контекстных правил.", "RU-STYLE-UNMARKED-HEADING", False),
+        ("- первый пункт.\n- второй пункт.", "RU-LIST-CASE-PUNCTUATION-CONSISTENCY", False),
     ]
-    for text, rule in cases:
+    for text, rule, _ in cases:
         rows = review(text, {"register": "everyday"})["findings"]
         assert any(item["rule_id"] == rule for item in rows), (text, rule, rows)
 
     clean = review(
-        "# Заголовок\nЭто не ошибка, а предупреждение.\nКниги хранятся в библиотеках.",
+        "# Заголовок\nЭто не ошибка, а предупреждение.\nКниги хранятся в библиотеках.\n\n- первый пункт;\n- второй пункт.",
         {"register": "everyday"},
     )["findings"]
-    assert not any(item["rule_id"] == "RU-NORM-HEADING-PERIOD" for item in clean), clean
-    assert not any(item["rule_id"] == "RU-NATIVE-SPLIT-CONTRAST" for item in clean), clean
-    assert not any(item["rule_id"] == "RU-SEM-MEMBER-COLLECTION-EQUATION" for item in clean), clean
+    forbidden = {
+        "RU-NORM-HEADING-PERIOD",
+        "RU-NATIVE-SPLIT-CONTRAST",
+        "RU-SEM-MEMBER-COLLECTION-EQUATION",
+        "RU-LIST-CASE-PUNCTUATION-CONSISTENCY",
+    }
+    assert not any(item["rule_id"] in forbidden for item in clean), clean
 
 
 if __name__ == "__main__":
