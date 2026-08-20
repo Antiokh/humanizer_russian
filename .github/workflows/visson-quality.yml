@@ -1,0 +1,67 @@
+name: visson-quality
+
+on:
+  push:
+    branches:
+      - visson
+  pull_request:
+    paths:
+      - 'libraries/visson/**'
+      - 'studies/lynn-visson/**'
+      - 'references/*visson*'
+      - 'reviewers/visson.json'
+      - 'scripts/*visson*'
+      - 'scripts/check.py'
+      - 'scripts/review.py'
+      - 'scripts/lint.py'
+      - 'tests/visson*'
+      - 'evals/lynn-visson*'
+      - '.github/workflows/visson-quality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  visson-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validation dependency
+        run: python -m pip install --disable-pip-version-check jsonschema
+      - name: Compile Python
+        run: python -m compileall -q scripts
+      - name: Validate architecture
+        run: python scripts/validate_architecture.py
+      - name: Validate libraries
+        run: python scripts/validate_libraries.py
+      - name: Validate Visson study
+        run: python scripts/validate_visson.py
+      - name: Core linter self-test
+        run: python scripts/lint.py --self-test
+      - name: Visson linter self-test
+        run: python scripts/lint_visson.py --self-test
+      - name: Standard compact benchmark
+        run: python scripts/benchmark_lint.py
+      - name: Visson compact benchmark
+        run: python scripts/benchmark_lint.py tests/visson_compact_cases.json
+      - name: Visson source/dual-runtime benchmark
+        run: python scripts/benchmark_visson.py
+      - name: Standard board benchmark
+        run: python scripts/benchmark_board.py
+      - name: Visson board benchmark
+        run: python scripts/benchmark_board.py tests/visson_board_cases.json
+      - name: Validate all JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in sorted(Path('.').rglob('*.json')):
+              with path.open(encoding='utf-8') as f:
+                  json.load(f)
+          print('all json: OK')
+          PY

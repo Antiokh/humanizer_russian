@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "library_id": "visson",
+  "source_namespace": "VISSON",
+  "source_fingerprint_sha256": "45cd09d0101caa90effa2f7943d4ddf45659536857ae548910fccad144c806ca",
+  "rule_count": 39,
+  "class_counts": {
+    "NORM": 2,
+    "NATIVE_USAGE": 22,
+    "EDITING": 2,
+    "AI_CALQUE": 13
+  },
+  "automation_counts": {
+    "HARD_GATE": 0,
+    "DEFAULT_MECHANICAL": 2,
+    "EXTENDED_SOFT": 3,
+    "METRIC_ONLY": 2,
+    "MODEL_ONLY": 32
+  },
+  "groups": [
+    "libraries/visson/rules/group01.json",
+    "libraries/visson/rules/group02.json",
+    "libraries/visson/rules/group03.json",
+    "libraries/visson/rules/group04.json",
+    "libraries/visson/rules/group05.json",
+    "libraries/visson/rules/group06.json",
+    "libraries/visson/rules/group07.json",
+    "libraries/visson/rules/group08.json",
+    "libraries/visson/rules/group09.json",
+    "libraries/visson/rules/group10.json"
+  ],
+  "policy": "Contrastive source is reversed ENGLISH PATTERN -> RUSSIAN NATIVE PATTERN -> LIKELY INTERFERENCE. Source authority never upgrades a claim to NORM; NORM entries require external confirmation."
+}
