@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "map": [
+    {"eval_id":"ROS4-E01","rule_id":"ROS-R53","expected":"CHANGE"},
+    {"eval_id":"ROS4-E02","rule_id":"ROS-R53","expected":"KEEP"},
+    {"eval_id":"ROS4-E03","rule_id":"ROS-R44","expected":"CHANGE"},
+    {"eval_id":"ROS4-E04","rule_id":"ROS-R44","expected":"KEEP"},
+    {"eval_id":"ROS4-E05","rule_id":"ROS-R30","expected":"CHANGE"},
+    {"eval_id":"ROS4-E06","rule_id":"ROS-R30","expected":"KEEP"},
+    {"eval_id":"ROS4-E07","rule_id":"ROS-R06","expected":"KEEP"},
+    {"eval_id":"ROS4-E08","rule_id":"ROS-R09","expected":"KEEP"},
+    {"eval_id":"ROS4-E09","rule_id":"ROS-R41","expected":"KEEP"},
+    {"eval_id":"ROS4-E10","rule_id":"ROS-R51","expected":"KEEP"},
+    {"eval_id":"ROS4-E11","rule_id":"ROS-R14","expected":"KEEP"},
+    {"eval_id":"ROS4-E12","rule_id":"ROS-R54","expected":"KEEP"}
+  ]
+}
