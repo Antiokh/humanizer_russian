@@ -6,10 +6,40 @@
       "phenomenon_id": "norm.heading_terminal_period",
       "project_class": "NORM",
       "automation_level": "DEFAULT_MECHANICAL",
-      "scope": "Markdown headings",
-      "source_locator": "Gramota.ru answers 328383, 207572, 295905",
-      "operation": "remove_terminal_period_from_heading",
-      "guard": "Не удалять вопросительный, восклицательный знак или многоточие; точка внутри многопредложного заголовка допустима, финальная точка опускается."
+      "scope": "Structurally marked headings/rubrics such as Markdown headings",
+      "source_locator": "Gramota.ru: rules for rubrication and heading-final punctuation",
+      "operation": "remove_terminal_period_from_marked_heading",
+      "guard": "Применять только когда строка действительно оформлена как заголовок/рубрика. Семантически похожая на заголовок строка в plain text не получает этот статус автоматически. Не удалять вопросительный, восклицательный знак или многоточие; точка внутри многопредложного заголовка допустима, финальная точка опускается."
+    },
+    {
+      "rule_id": "RU-STYLE-UNMARKED-HEADING",
+      "phenomenon_id": "russian.unmarked_heading_candidate",
+      "project_class": "EDITING",
+      "automation_level": "EXTENDED_SOFT",
+      "scope": "Short isolated plain-text line that looks like a rubric semantically but is not marked as one structurally",
+      "source_locator": "project-derived presentation rule constrained by Russian rubrication norms",
+      "operation": "mark_as_heading_or_punctuate_as_sentence",
+      "guard": "Не объявлять строку заголовком только по смыслу. В формате с разметкой оформить её реальным heading/style; в plain text либо дать явный рубрикационный сигнал, либо пунктуировать как обычное предложение. Короткая реплика, подпись, название, интерфейсная метка и поэтическая строка могут быть корректны без точки."
+    },
+    {
+      "rule_id": "RU-NORM-LIST-DOT-MARKER-CAPITAL",
+      "phenomenon_id": "norm.list_marker_case_alignment",
+      "project_class": "NORM",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "scope": "List items introduced by a digit/letter followed by a full stop",
+      "source_locator": "Gramota.ru: punctuation of lists and rubrication",
+      "operation": "capitalize_item_after_dot_marker_and_end_with_period",
+      "guard": "Цифре/букве с точкой соответствует прописная буква в начале рубрики и точка в конце. Не переносить это правило на маркеры со скобкой и наборные знаки."
+    },
+    {
+      "rule_id": "RU-LIST-CASE-PUNCTUATION-CONSISTENCY",
+      "phenomenon_id": "russian.list_case_punctuation_alignment",
+      "project_class": "EDITING",
+      "automation_level": "EXTENDED_SOFT",
+      "scope": "Bulleted or parenthesized list items whose initial case and terminal punctuation disagree with Russian list convention",
+      "source_locator": "Gramota.ru: simple lowercase items use comma/semicolon; more complex lowercase items use semicolon; uppercase/sentence-like items use full stop",
+      "operation": "align_list_case_marker_and_terminal_punctuation",
+      "guard": "Простые строчные пункты могут оканчиваться запятой; точка с запятой тоже допустима и предпочтительна для более сложных пунктов. Последний пункт перечня может завершать всю конструкцию точкой. Имя собственное в начале строчного по структуре пункта не превращает его автоматически в предложение с прописной схемой."
     },
     {
       "rule_id": "RU-NATIVE-SPLIT-CONTRAST",
@@ -37,7 +67,7 @@
       "project_class": "EDITING",
       "automation_level": "EXTENDED_SOFT",
       "scope": "Technical jargon and terms whose fit depends on audience/register",
-      "source_locator": "Gramota.ru: term/jargon choice is context- and style-dependent",
+      "source_locator": "current Russian usage/style: term and jargon choice is context- and audience-dependent",
       "operation": "replace_explain_or_keep_by_audience",
       "guard": "В профессиональном тексте термин может быть точнее бытового эквивалента. В everyday register finding повышается до DEFAULT_MECHANICAL, но остаётся REVIEW."
     },
@@ -60,6 +90,56 @@
       "source_locator": "project-derived semantic guard",
       "operation": "restore_real_relation_between_entity_and_collection",
       "guard": "Не запрещать осмысленную метафору; проверить буквальный тип отношения и намеренную образность."
+    },
+    {
+      "rule_id": "RU-NORM-GERUND-SUBJECT-ATTACHMENT",
+      "phenomenon_id": "norm.gerund_subject_attachment",
+      "project_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Adverbial-participial (деепричастный) constructions",
+      "source_locator": "current Russian grammar/punctuation references; RKI error priority",
+      "operation": "restore_shared_semantic_subject_or_rebuild_clause",
+      "guard": "Действие деепричастия должно быть грамматически и семантически связано с допустимым субъектом основной предикации. Не исправлять только по позиции оборота; проверять безличные и специальные допустимые конструкции отдельно."
+    },
+    {
+      "rule_id": "RU-NATIVE-GERUND-FRAME-POSITION",
+      "phenomenon_id": "native.gerund_information_structure",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Choice and placement of a grammatical gerundial phrase among otherwise valid rewrites",
+      "source_locator": "project preference constrained by current Russian punctuation/attachment rules",
+      "operation": "use_gerund_as_background_frame_or_keep_with_target_conjunct",
+      "guard": "Не превращать препозицию в норму. Фоновый/контекстный оборот часто естественно ставить перед основной предикацией; оборот, семантически относящийся ко второй части или подготавливающий поворот/антитезу, держать рядом с этой частью. После союза а пунктуация зависит от того, входит ли союз в конструкцию. Постпозиция возможна для рематического добавочного действия или авторского довеска."
+    },
+    {
+      "rule_id": "RU-NORM-PARTICIPLE-HEAD-ATTACHMENT",
+      "phenomenon_id": "norm.participle_head_attachment",
+      "project_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Participial phrases and their head nouns",
+      "source_locator": "current Russian grammar/punctuation references",
+      "operation": "restore_clear_participle_head_attachment_and_punctuation",
+      "guard": "Причастный оборот нельзя отрывать от определяемого слова так, чтобы возникала ложная связь. Пунктуация зависит в том числе от положения относительно определяемого слова и добавочного обстоятельственного значения."
+    },
+    {
+      "rule_id": "RU-NATIVE-PARTICIPIAL-COMPRESSION",
+      "phenomenon_id": "native.participial_compression",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Choice between relative/subordinate clause and a natural Russian participial construction",
+      "source_locator": "project preference informed by Russian syntax and RKI contrast",
+      "operation": "consider_participial_compression_when_attachment_is_clear",
+      "guard": "Не добавлять причастия ради декоративного усложнения. Но и не разлагать естественный причастный оборот на аналитическое 'который...' только ради простоты. Предпочесть причастную конструкцию, если она точнее и компактнее выражает фоновый признак, не создаёт тяжести, двусмысленности или регистрового сдвига."
+    },
+    {
+      "rule_id": "RU-RKI-SYNTACTIC-INTERFERENCE-AUDIT",
+      "phenomenon_id": "russian.rki_like_syntactic_interference",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Russian prose that is orthographically correct but resembles learner/translation interference",
+      "source_locator": "RKI pedagogy/error studies plus editor/translator error-discovery sources",
+      "operation": "audit_government_agreement_word_order_valency_aspect_reference_and_clause_structure",
+      "guard": "Не объявлять любой необычный порядок слов или книжный синтаксис иностранным. Проверять конкретную связь: управление/предлог, согласование, валентность, актуальное членение, видо-временную связь, однородность, референт местоимения, границы предложения, союз и структуру сложного предложения."
     }
   ]
 }

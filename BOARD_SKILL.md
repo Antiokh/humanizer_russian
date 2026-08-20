@@ -27,10 +27,13 @@ The `russian` library is not another editing school. It contains current-norm gu
 
 Mechanical examples:
 
-- a final full stop in a Markdown heading -> `NORM` guardrail;
+- final full stop in a **structurally marked** Markdown heading -> `NORM` guardrail;
+- `1.` followed by a lowercase list item -> rubrication guardrail;
 - adjacent `Это не X. Это Y.` -> review the split contrast, but keep it when emphatic correction is functional;
-- a lowercase Latin word inside Russian prose -> check whether a Russian equivalent or explanation is preferable;
-- known technical jargon/terms -> check audience/register.
+- lowercase Latin word inside Russian prose -> check whether a Russian equivalent or explanation is preferable;
+- known technical jargon/terms -> check audience/register;
+- an unmarked short plain-text line that looks like a heading -> soft candidate to mark structurally or punctuate as ordinary prose;
+- mismatched lowercase/uppercase list punctuation -> soft list-formatting review.
 
 The caller may specify register:
 
@@ -41,17 +44,42 @@ python scripts/review.py text.md --register technical
 
 In `everyday`, known technical jargon is surfaced more aggressively. It still remains a review finding, not a language error merely because it is jargon or a borrowing.
 
+### Heading semantics are not heading markup
+
+Do not grant heading punctuation merely because a line *means* a section title. A heading must be structurally/typographically identified by the target format: Markdown/HTML heading, document style, explicit rubrication or another reliable signal.
+
+If output is plain text and the line is visually indistinguishable from ordinary prose, choose explicitly:
+
+- mark it using a representation available to the target medium; or
+- treat it as ordinary text and punctuate/connect it accordingly.
+
+The actual-heading rule and the pseudoheading review are intentionally different findings.
+
+### Model-only Russian syntax residue
+
+After mechanics, load only the relevant cards from `libraries/russian/rules.json` and `references/russian-language.md`.
+
+In particular review:
+
+- `RU-NORM-GERUND-SUBJECT-ATTACHMENT` — subject and temporal/aspect relation of the gerundial phrase;
+- `RU-NATIVE-GERUND-FRAME-POSITION` — background/frame gerunds often work preposed, while a gerund tied to the second conjunct or preparing an antithesis/vector shift should stay close to that conjunct; this is information structure, not a universal positional norm;
+- `RU-NORM-PARTICIPLE-HEAD-ATTACHMENT` — keep the participial phrase unambiguously attached to its head noun and punctuate it according to position/function;
+- `RU-NATIVE-PARTICIPIAL-COMPRESSION` — consider a natural participial phrase instead of reflexively expanding everything into `который + глагол`;
+- `RU-RKI-SYNTACTIC-INTERFERENCE-AUDIT` — government, valency, prepositions, agreement, word order/theme-rheme, aspect/tense, clause structure, homogeneous constructions, pronoun reference and punctuation transfer.
+
+Do **not** force participles/gerunds for decorative variety or by quota. They are desirable as available Russian syntactic resources when they improve compression and keep the attachment clear.
+
 ### Model-only semantic relation check
 
-After mechanics, apply `RU-SEM-CATEGORY-COLLECTION` when a definition or metaphor appears to confuse an object with a collection/container made of objects of that class.
+Apply `RU-SEM-CATEGORY-COLLECTION` when a definition or metaphor appears to confuse an object with a collection/container made of objects of that class.
 
 Example to challenge:
 
 > Книги — это библиотеки знаний.
 
-A book is not literally a library merely because a library contains books. First establish the real relation (`book -> collection of rules/examples`, `library -> collection of books/resources`), then rewrite. Preserve a metaphor only if the metaphor itself adds a deliberate useful meaning.
+First establish the real relation, then rewrite. Preserve a metaphor only if it adds deliberate useful meaning.
 
-See `references/russian-core-rules.md`.
+See `references/russian-language.md` and `docs/russian-error-priorities.md`.
 
 ## Reviewer semantics
 
