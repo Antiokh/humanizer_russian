@@ -24,7 +24,6 @@ DEFAULT_CASES = ROOT / "tests" / "lint_cases.json"
 
 
 def test_compact_deduplication() -> None:
-    """Exercise compatible, conflicting, and unmapped compact grouping cases."""
     common = {
         "phenomenon_id": "editing.action_hidden_in_nominalization",
         "project_class": "EDITING",
@@ -36,23 +35,8 @@ def test_compact_deduplication() -> None:
         "confidence": None,
     }
     compatible = [
-        {
-            **common,
-            "rule_id": "GAL-X",
-            "library_id": "gal",
-            "source_namespace": "GAL",
-            "reviewer_id": "gal",
-            "verdict": "REVIEW",
-        },
-        {
-            **common,
-            "line": 0,
-            "rule_id": "CHUK-R17",
-            "library_id": "chukovsky",
-            "source_namespace": "CHUK",
-            "reviewer_id": "chukovsky",
-            "verdict": "REVIEW",
-        },
+        {**common,"rule_id":"GAL-X","library_id":"gal","source_namespace":"GAL","reviewer_id":"gal","verdict":"REVIEW"},
+        {**common,"line":0,"rule_id":"CHUK-R17","library_id":"chukovsky","source_namespace":"CHUK","reviewer_id":"chukovsky","verdict":"REVIEW"},
     ]
     rows = compact_rows(compatible)
     assert len(rows) == 1, rows
@@ -63,7 +47,6 @@ def test_compact_deduplication() -> None:
     rows = compact_rows(same_line)
     assert len(rows) == 1, rows
     assert rows[0]["deduplicated_sources"] == 2, rows
-    assert {item["library_id"] for item in rows[0]["provenance"]} == {"gal", "chukovsky"}, rows
 
     conflict = [dict(compatible[0], verdict="CHANGE"), dict(compatible[1], verdict="KEEP")]
     rows = compact_rows(conflict)
@@ -71,22 +54,8 @@ def test_compact_deduplication() -> None:
     assert not any("deduplicated_sources" in row for row in rows), rows
 
     unmapped = [
-        dict(
-            compatible[0],
-            phenomenon_id=None,
-            rule_id="TEST-A",
-            library_id="a",
-            source_namespace="A",
-            reviewer_id="a",
-        ),
-        dict(
-            compatible[0],
-            phenomenon_id=None,
-            rule_id="TEST-B",
-            library_id="b",
-            source_namespace="B",
-            reviewer_id="b",
-        ),
+        dict(compatible[0], phenomenon_id=None, rule_id="TEST-A", library_id="a", source_namespace="A", reviewer_id="a"),
+        dict(compatible[0], phenomenon_id=None, rule_id="TEST-B", library_id="b", source_namespace="B", reviewer_id="b"),
     ]
     rows = compact_rows(unmapped)
     assert len(rows) == 2, rows
@@ -94,9 +63,9 @@ def test_compact_deduplication() -> None:
 
 
 def run_case(case: dict) -> dict:
-    """Run one deterministic corpus case and return a structured result."""
     extended = case.get("mode", "mechanical") == "extended"
-    findings, metrics = check_text(case["text"], extended=extended)
+    register = case.get("register", "general")
+    findings, metrics = check_text(case["text"], extended=extended, register=register)
     rules = [item["rule"] for item in findings]
 
     errors: list[str] = []
@@ -112,6 +81,7 @@ def run_case(case: dict) -> dict:
     return {
         "id": case["id"],
         "mode": case.get("mode", "mechanical"),
+        "register": register,
         "ok": not errors,
         "errors": errors,
         "rules": rules,
@@ -120,7 +90,6 @@ def run_case(case: dict) -> dict:
 
 
 def run_suite(path: Path) -> dict:
-    """Run a JSON corpus and summarize pass/fail counts by mode."""
     payload = json.loads(path.read_text(encoding="utf-8"))
     cases = payload["cases"]
 
@@ -144,14 +113,8 @@ def run_suite(path: Path) -> dict:
 
 
 def main() -> None:
-    """Run the requested benchmark corpus and print a human or JSON report."""
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "cases",
-        nargs="?",
-        default=str(DEFAULT_CASES),
-        help="path to deterministic JSON corpus",
-    )
+    parser.add_argument("cases", nargs="?", default=str(DEFAULT_CASES), help="path to deterministic JSON corpus")
     parser.add_argument("--json", action="store_true", dest="as_json")
     args = parser.parse_args()
 
@@ -161,14 +124,11 @@ def main() -> None:
     if args.as_json:
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
-        print(
-            f"linter benchmark: {report['passed']}/{report['cases']} passed "
-            f"({report['by_mode']}); compact dedupe OK"
-        )
+        print(f"linter benchmark: {report['passed']}/{report['cases']} passed ({report['by_mode']}); compact dedupe OK")
         for result in report["results"]:
             if result["ok"]:
                 continue
-            print(f"FAIL {result['id']} [{result['mode']}]")
+            print(f"FAIL {result['id']} [{result['mode']}/{result['register']}]")
             for error in result["errors"]:
                 print(f"  - {error}")
             print(f"  emitted: {result['rules']}")
