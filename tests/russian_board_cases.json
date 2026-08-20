@@ -1,0 +1,43 @@
+[
+  {
+    "id": "ru_board_split_contrast",
+    "type": "runtime",
+    "libraries": ["russian"],
+    "text": "Это не реальная рецензия автора. Это оценка по его правилам.",
+    "expect_phenomena": ["native.split_negation_correction"],
+    "expect_rule_ids": ["RU-NATIVE-SPLIT-CONTRAST"],
+    "expect_reviewers": ["russian"],
+    "expect_status_by_phenomenon": {"native.split_negation_correction":"SINGLE_REVIEW"},
+    "expect_guardrails": 0
+  },
+  {
+    "id": "ru_board_heading_norm_guardrail",
+    "type": "runtime",
+    "libraries": ["russian"],
+    "text": "## Заголовок.\nТекст.",
+    "expect_rule_ids": ["RU-NORM-HEADING-PERIOD"],
+    "expect_guardrails": 1
+  },
+  {
+    "id": "ru_board_latin_word",
+    "type": "runtime",
+    "libraries": ["russian"],
+    "text": "Для остатка запускаем prompt только при необходимости.",
+    "expect_phenomena": ["russian.foreign_word_in_russian_prose"],
+    "expect_rule_ids": ["RU-LEX-LATIN-IN-RUSSIAN"],
+    "expect_reviewers": ["russian"],
+    "expect_guardrails": 0
+  },
+  {
+    "id": "ru_board_everyday_jargon",
+    "type": "runtime",
+    "libraries": ["russian"],
+    "register": "everyday",
+    "text": "Потом проверим пайплайн и покажем результат пользователю.",
+    "expect_phenomena": ["russian.register_jargon_or_term"],
+    "expect_rule_ids": ["RU-REGISTER-JARGON-TERM"],
+    "expect_reviewers": ["russian"],
+    "expect_status_by_phenomenon": {"russian.register_jargon_or_term":"SINGLE_REVIEW"},
+    "expect_guardrails": 0
+  }
+]
