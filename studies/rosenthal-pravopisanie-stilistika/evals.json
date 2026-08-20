@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "source_cycle": 4,
+  "cases": [
+    {"id":"ROS4-E01","text":"Новая версия более красивее старой.","expected":"CHANGE","rule_id":"ROS-R53","note":"Existing narrow mixed-comparative surface remains active; benchmark stays inside the conservative detector vocabulary."},
+    {"id":"ROS4-E02","text":"Для более старших детей подготовили отдельную программу.","expected":"KEEP","rule_id":"ROS-R53","note":"Current norm and source both preserve более старший."},
+    {"id":"ROS4-E03","text":"Согласно приказа встречу перенесли.","expected":"CHANGE","rule_id":"ROS-R44","note":"Existing current-norm government rule."},
+    {"id":"ROS4-E04","text":"Согласно приказу встречу перенесли.","expected":"KEEP","rule_id":"ROS-R44","note":"Correct dative."},
+    {"id":"ROS4-E05","text":"Не только отчёт, а также приложение были отправлены.","expected":"CHANGE","rule_id":"ROS-R30","note":"Existing paired-conjunction surface."},
+    {"id":"ROS4-E06","text":"Не только отчёт, но и приложение были отправлены.","expected":"KEEP","rule_id":"ROS-R30","note":"Correct pair."},
+    {"id":"ROS4-E07","text":"В техническом регламенте производится контроль параметров.","expected":"KEEP","rule_id":"ROS-R06","note":"Official/technical nominalization cannot be blanket-banned mechanically."},
+    {"id":"ROS4-E08","text":"Он всё проверил. Дважды.","expected":"KEEP","rule_id":"ROS-R09","note":"Functional repetition/parcellation is protected."},
+    {"id":"ROS4-E09","text":"Прочитав отчёт, инженер подписал его.","expected":"KEEP","rule_id":"ROS-R41","note":"Normal gerund with shared subject."},
+    {"id":"ROS4-E10","text":"API возвращает JSON после успешной проверки.","expected":"KEEP","rule_id":"ROS-R51","note":"Technical borrowing is not a blacklist target."},
+    {"id":"ROS4-E11","text":"Слово «клипса» употреблено в инструкции.","expected":"KEEP","rule_id":"ROS-R14","note":"Current norm allows клипса; old exclusive preference is obsolete."},
+    {"id":"ROS4-E12","text":"Что было бы, если бы он отказался?","expected":"KEEP","rule_id":"ROS-R54","note":"Two бы belong to separate predications; no regex ban."}
+  ]
+}

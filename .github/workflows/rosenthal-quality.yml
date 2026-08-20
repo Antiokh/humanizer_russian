@@ -12,6 +12,7 @@ on:
       - 'scripts/validate_rosenthal.py'
       - 'scripts/benchmark_rosenthal.py'
       - 'scripts/benchmark_rosenthal_cycle3.py'
+      - 'scripts/benchmark_rosenthal_cycle4.py'
       - 'tests/rosenthal_cases.json'
       - 'studies/rosenthal-*/**'
       - 'references/rosenthal.md'
@@ -47,14 +48,16 @@ jobs:
         run: python scripts/benchmark_rosenthal.py
       - name: Rosenthal cycle 3 preservation benchmark
         run: python scripts/benchmark_rosenthal_cycle3.py
+      - name: Rosenthal cycle 4 provenance/preservation benchmark
+        run: python scripts/benchmark_rosenthal_cycle4.py
       - name: Validate JSON
         run: |
-          python - <<'PY'
+          python - <<'PY2'
           import json, pathlib
           for p in pathlib.Path('.').rglob('*.json'):
               json.loads(p.read_text(encoding='utf-8'))
           print('all json: OK')
-          PY
+          PY2
       - name: Smoke-test cumulative Rosenthal compact and board routing
         run: |
           set +e
@@ -63,7 +66,7 @@ jobs:
           set -e
           test "$compact_status" -eq 1
           python scripts/review.py --libraries rosenthal --format json <<< 'Этот вариант более лучше предыдущего.' >/tmp/ros-board.json
-          python - <<'PY'
+          python - <<'PY2'
           import json
           compact=json.load(open('/tmp/ros-compact.json',encoding='utf-8'))
           board=json.load(open('/tmp/ros-board.json',encoding='utf-8'))
@@ -73,4 +76,4 @@ jobs:
               return any(p.get('library_id')=='rosenthal' and p.get('rule_id')=='ROS-R53' for p in item.get('provenance',[]))
           assert any(compact_has_rosenthal_r53(x) for x in compact['findings']), compact
           assert any(x.get('library_id')=='rosenthal' and x.get('rule_id')=='ROS-R53' for x in board['findings']), board
-          PY
+          PY2

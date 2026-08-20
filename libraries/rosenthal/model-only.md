@@ -1,8 +1,8 @@
 # Rosenthal MODEL_ONLY residue
 
-This file is a compact routing reference. Canonical rule cards live in `rules.json` (cycle 1), `rules-cycle2.json` (cycle 2), and `rules-cycle3.json` (cycle 3); full studies are not loaded into ordinary runtime.
+This file is a compact routing reference. Canonical rule cards live in `rules.json` (cycle 1), `rules-cycle2.json` (cycle 2), and `rules-cycle3.json` (cycle 3). **Cycle 4 adds no new rule identities** and is routed through `provenance-cycle4.json`; full studies are not loaded into ordinary runtime.
 
-Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`, `ROS-R44`, `ROS-R53`. `ROS-R10` remains metric-only. **Cycle 3 deliberately adds no new mechanical finding.**
+Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`, `ROS-R44`, `ROS-R53`. `ROS-R10` remains metric-only. Cycles 3 and 4 deliberately add no new mechanical finding.
 
 ## Cycle 2 contextual rules
 
@@ -27,5 +27,9 @@ Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`,
 | `ROS-R72` | `editing.edit_type_fit` |
 | `ROS-R73` | `register.spoken_delivery_style_fit` |
 | `ROS-R74` | `editing.pause_information_structure` |
+
+## Cycle 4 provenance-only source
+
+The 1997 fifth edition «Справочник по правописанию и стилистике» ends at §213 and substantially overlaps the already integrated stylistic lineage. It enriches 50 existing rule cards and records edition/current-norm boundaries, especially `более старший`, `клипс/клипса`, duplicate `бы`, government and parallel constructions. No source-period list is promoted to modern NORM by author authority.
 
 Cycle-1 MODEL_ONLY rules remain canonical in `libraries/rosenthal/rules.json`. Do not infer blanket bans on nominalization, passive, repetition, long sentences, participles, gerunds, colloquial markers, loanwords, tropes, rhetorical figures, paragraphing, ellipsis, or spoken reduction.

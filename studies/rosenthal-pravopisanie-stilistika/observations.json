@@ -1,0 +1,71 @@
+{
+  "schema_version": 2,
+  "book": "Д. Э. Розенталь — «Справочник по правописанию и стилистике»",
+  "source_fingerprint_sha256": "1a737311abfacf32a1c5551e4e1ce21c061883dcbf1800d9ac97a3b49ef3bdeb",
+  "atomic_observation_count": 58,
+  "card_defaults": {
+    "source_book": "Справочник по правописанию и стилистике",
+    "edition": "5-е изд., испр. и доп.; Д. Э. Розенталь; М.: ИК «Комплект», 1997 (по метаданным owner-supplied EPUB)",
+    "scope": [
+      "general",
+      "contextual"
+    ],
+    "semantic_invariant": "Современная норма, смысл, синтаксические связи, регистр и авторская функция имеют приоритет над датированным примером или поверхностным совпадением.",
+    "trigger": "Конструкция или нормативный список, описанные в claim.",
+    "diagnosis": "Сопоставить с уже существующим Rosenthal phenomenon_id; для нормы 1997 года проверить современный нормативный источник.",
+    "preferred_variant": "Современный функционально точный вариант без потери авторской задачи.",
+    "valid_alternatives": [
+      "сохранить исходный вариант при нормативности и функциональной оправданности",
+      "перестроить после контекстной или словарной проверки"
+    ],
+    "register": [
+      "neutral",
+      "literary",
+      "colloquial",
+      "official",
+      "academic"
+    ],
+    "positive_example": "Проектный пример механизма, не цитата из книги.",
+    "natural_negative_control": "Похожая конструкция, нормативная или функционально оправданная.",
+    "boundary_case": "Исторически изменчивая форма, собственное имя, термин, цитата или конструкция с несколькими синтаксическими разборами.",
+    "intentional_counterexample": "Намеренная авторская, разговорная, риторическая или жанровая конструкция.",
+    "exclusions": [
+      "code",
+      "URL",
+      "meta-quote",
+      "intentional play",
+      "source-period list without current verification"
+    ],
+    "do_not_infer": "Не превращать список вариантов 1997 года в современный blacklist и не считать авторское имя нормативным приоритетом."
+  },
+  "required_resolved_fields": [
+    "source_book",
+    "edition",
+    "source_locator",
+    "provenance",
+    "claim",
+    "current_status",
+    "project_class",
+    "scope",
+    "semantic_invariant",
+    "trigger",
+    "diagnosis",
+    "operation",
+    "preferred_variant",
+    "valid_alternatives",
+    "register",
+    "positive_example",
+    "natural_negative_control",
+    "boundary_case",
+    "intentional_counterexample",
+    "exclusions",
+    "do_not_infer",
+    "interactions",
+    "confidence",
+    "verification_status"
+  ],
+  "observation_parts": [
+    "observations-part1.json",
+    "observations-part2.json"
+  ]
+}

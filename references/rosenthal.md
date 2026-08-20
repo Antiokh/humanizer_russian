@@ -2,8 +2,10 @@
 
 Use the Rosenthal library as a contextual editorial source, not as an impersonation or a frozen historical norm. Prefer current `russian` NORM where a modern rule exists.
 
-Canonical source-specific rule cards are routed through `libraries/rosenthal/rules-index.json`, whose groups currently cover three source cycles. For contextual review load only relevant `ROS-Rxx` cards; do not load or reproduce the copyrighted books.
+Canonical source-specific rule cards are routed through `libraries/rosenthal/rules-index.json`. Four owner-supplied source cycles are integrated; cycle 4 is provenance-only and therefore does not add a fourth rule file. For contextual review load only relevant `ROS-Rxx` cards; do not load or reproduce the copyrighted books.
 
 Cycle 3 is a coauthored 3rd edition (Розенталь, Джанджакова, Кабанова; ЧеРо, 1999). Attribute its unique observations to the edition/source unless authorship of a particular passage is independently established.
 
-Mechanical findings are already emitted by `scripts/lint_rosenthal.py` and must not be duplicated by a model pass. Cycle 3 adds no new mechanical finding; cohesion, logic, audience, reported-speech fidelity, edit depth, pronunciation and prosody remain contextual/audio-dependent.
+Cycle 4 is D. E. Rosenthal, «Справочник по правописанию и стилистике», 5th corrected/expanded edition, ИК «Комплект», 1997. It is older and narrower than cycle 3 and ends at §213. Its value is independent edition provenance and evidence of norm change; later/current normative evidence wins where prescriptions differ.
+
+Mechanical findings are already emitted by `scripts/lint_rosenthal.py` and must not be duplicated by a model pass. Cycles 3 and 4 add no new mechanical finding. Cohesion, logic, audience, reported-speech fidelity, edit depth, dated morphology and most lexical/government choices remain contextual or dictionary-dependent.
