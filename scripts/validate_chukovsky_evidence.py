@@ -60,6 +60,10 @@ def validate() -> None:
 
     check(payload.get("schema_version") == 1, "schema_version must be 1")
     check(payload.get("audit_date") == "2026-08-20", "unexpected audit_date")
+    check(
+        payload.get("audit_timezone") == "Europe/Belgrade",
+        "audit_timezone must make the local calendar date explicit",
+    )
 
     sources = payload.get("sources")
     check(isinstance(sources, list), "sources must be an array")
@@ -87,9 +91,14 @@ def validate() -> None:
                 isinstance(secondary, str) and secondary.startswith(TRUSTED_PREFIXES),
                 f"{source_id}: unapproved secondary URL {secondary!r}",
             )
+        accessed_on = str(row.get("accessed_on", ""))
         check(
-            bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(row.get("accessed_on", "")))),
+            bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", accessed_on)),
             f"{source_id}: accessed_on must be YYYY-MM-DD",
+        )
+        check(
+            accessed_on == payload.get("audit_date"),
+            f"{source_id}: accessed_on must match the completed local audit date",
         )
 
     for source_id in ("EXT-01", "EXT-02", "EXT-03"):
@@ -121,6 +130,8 @@ def validate() -> None:
         check(disposition in ALLOWED_DISPOSITIONS, f"{claim_id}: invalid disposition {disposition!r}")
         source_refs = row.get("source_ids")
         check(isinstance(source_refs, list), f"{claim_id}: source_ids must be an array")
+        if disposition == "EXTERNAL_CONFIRMED":
+            check(bool(source_refs), f"{claim_id}: EXTERNAL_CONFIRMED requires source_ids")
         for source_id in source_refs if isinstance(source_refs, list) else []:
             check(source_id in known_sources, f"{claim_id}: unknown source_id {source_id}")
         check(bool(str(row.get("runtime_boundary", "")).strip()), f"{claim_id}: missing runtime_boundary")
@@ -139,6 +150,10 @@ def validate() -> None:
         check(required in references, f"Chukovsky manifest missing evidence reference: {required}")
 
     check("Status: `CLOSED`" in gap_doc, "external provenance gap must be marked CLOSED")
+    check(
+        "Europe/Belgrade" in gap_doc,
+        "gap closure must state the timezone used for the audit/access calendar date",
+    )
     check(
         "does not promote" in gap_doc.lower(),
         "gap closure must preserve explicit no-promotion boundary",
