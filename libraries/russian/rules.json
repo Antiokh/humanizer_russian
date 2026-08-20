@@ -42,6 +42,16 @@
       "guard": "В профессиональном тексте термин может быть точнее бытового эквивалента. В everyday register finding повышается до DEFAULT_MECHANICAL, но остаётся REVIEW."
     },
     {
+      "rule_id": "RU-SEM-MEMBER-COLLECTION-EQUATION",
+      "phenomenon_id": "semantics.member_collection_equation",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "scope": "Known member/collection noun pairs directly equated by an explicit copular pattern",
+      "source_locator": "project-derived high-precision semantic candidate",
+      "operation": "replace_equation_with_real_member_collection_relation",
+      "guard": "Finding остаётся REVIEW: намеренная метафора возможна. Срабатывание ограничено известными парами и явным приравниванием, а не простым соседством слов."
+    },
+    {
       "rule_id": "RU-SEM-CATEGORY-COLLECTION",
       "phenomenon_id": "semantics.category_collection_collision",
       "project_class": "NATIVE_USAGE",
