@@ -1,0 +1,15 @@
+{
+  "schema_version":1,
+  "library_id":"rosenthal",
+  "source_cycle":5,
+  "source_title":"Справочник по русскому языку: орфография и пунктуация",
+  "source_fingerprint_sha256":"20d76510863a76a345b4c6ff32c15bd614131f79d821924f33c7f27fd4c71cc0",
+  "rule_count":4,
+  "rules":[
+    {"rule_id":"ROS-R75","phenomenon_id":"editing.punctuation_variant_semantic_choice","project_class":"EDITING","automation_level":"MODEL_ONLY","source_book":"Справочник по русскому языку: орфография и пунктуация","source_locator":"Пунктуация: Предисловие; разд. 19 §§70–72","provenance":"SOURCE_DIRECT","current_status":"CURRENT_USAGE","operation":"choose_punctuation_variant_by_semantic_and_stylistic_function","guard":"Нормативно допустимые знаки не считать абсолютными синонимами: выбор зависит от смыслового отношения, силы границы, информационного статуса и стилистической задачи. Не нормализовать вариативную пунктуацию по одной поверхности."},
+    {"rule_id":"ROS-R76","phenomenon_id":"author.punctuation_system_intent","project_class":"AUTHOR","automation_level":"MODEL_ONLY","source_book":"Справочник по русскому языку: орфография и пунктуация","source_locator":"Пунктуация: разд. 20 «Авторская пунктуация»","provenance":"SOURCE_DIRECT","current_status":"CURRENT_CONFIRMED","operation":"preserve_or_challenge_authorial_punctuation_by_coherent_intent","guard":"Не выдавать случайную ошибку за авторскую пунктуацию. Сохранять осознанное системное отступление, когда художественная, ритмическая или экспрессивная функция читается в тексте; иначе применять современную норму."},
+    {"rule_id":"ROS-R77","phenomenon_id":"register.spoken_syntax_punctuation","project_class":"REGISTER","automation_level":"MODEL_ONLY","source_book":"Справочник по русскому языку: орфография и пунктуация","source_locator":"Пунктуация: разд. 21 «Знаки препинания в текстах разговорной речи»","provenance":"SOURCE_DIRECT","current_status":"CURRENT_USAGE","operation":"punctuate_spoken_syntax_without_forcing_bookish_rewrite","guard":"Письменная передача живой речи может сохранять разговорные сегментации, внутренние главные части и другие конструкции. Сначала определить функцию и синтаксис реплики; не переписывать её автоматически в книжную модель ради пунктуационной регулярности."},
+    {"rule_id":"ROS-R78","phenomenon_id":"native.serial_verb_unit_punctuation","project_class":"NATIVE_USAGE","automation_level":"MODEL_ONLY","source_book":"Справочник по русскому языку: орфография и пунктуация","source_locator":"Пунктуация: разд. 21, п. 10","provenance":"SOURCE_DIRECT","current_status":"CURRENT_CONFIRMED","operation":"distinguish_serial_verb_unit_from_distinct_predications","guard":"Между двумя глаголами в одинаковой форме не ставится запятая, если они образуют единое смысловое целое (например движение + цель). При разных деятелях или самостоятельных предикациях знак определяется обычной синтаксической связью. Требуется морфология и семантические роли."}
+  ],
+  "automation_counts":{"HARD_GATE":0,"DEFAULT_MECHANICAL":0,"EXTENDED_SOFT":0,"METRIC_ONLY":0,"MODEL_ONLY":4}
+}

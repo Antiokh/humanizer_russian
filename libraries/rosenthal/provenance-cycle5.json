@@ -1,0 +1,27 @@
+{
+  "schema_version":1,
+  "library_id":"rosenthal",
+  "source_cycle":5,
+  "source_fingerprint_sha256":"20d76510863a76a345b4c6ff32c15bd614131f79d821924f33c7f27fd4c71cc0",
+  "source_title":"Справочник по русскому языку: орфография и пунктуация",
+  "edition":"UNKNOWN_IN_SUPPLIED_DOCX",
+  "existing_rules_enriched":14,
+  "new_rule_ids":["ROS-R75","ROS-R76","ROS-R77","ROS-R78"],
+  "map":[
+    {"rule_id":"ROS-R14","source_locator":"Орфография/Пунктуация, предисловия","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R17","source_locator":"Пунктуация, разд. 21, п. 11","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R30","source_locator":"Пунктуация, разд. 3 §14","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R37","source_locator":"Пунктуация, разд. 14–15","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R41","source_locator":"Пунктуация, разд. 5 §20","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R46","source_locator":"Орфография, разд. 1–19","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R50","source_locator":"Пунктуация, разд. 7 §25","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R55","source_locator":"Пунктуация, §§1, 70–72; разд. 20–21","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R56","source_locator":"Пунктуация, §1; разд. 19–20","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R58","source_locator":"Пунктуация, разд. 20","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R65","source_locator":"Пунктуация, предисловие; разд. 19","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R69","source_locator":"Пунктуация, разд. 14–15","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R73","source_locator":"Пунктуация, разд. 21","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."},
+    {"rule_id":"ROS-R74","source_locator":"Пунктуация, разд. 20–21","evidence":"Cycle 5 independently supports the existing mechanism or its preservation boundary.","scope_note":"Additional source provenance only; current normative evidence and canonical guard remain authoritative."}
+  ],
+  "policy":"Cycle 5 adds four contextual punctuation phenomena and otherwise enriches existing mechanisms. Concrete orthography and mandatory punctuation remain owned by current russian/NORM."
+}
