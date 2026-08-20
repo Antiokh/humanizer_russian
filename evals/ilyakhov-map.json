@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "library_id": "ilyakhov",
+  "suite": "humanizer_russian-ilyakhov-model-only",
+  "description": "Traceability map from the compact runtime suite to canonical ILY rule IDs and the original synthetic study eval IDs. Expected answers remain only in the suite and are never exposed to the candidate model.",
+  "cases": [
+    {"id":"ily-prod-01","source_eval_id":"ps-e001","rules":["ILY-R01","ILY-R02","ILY-R58"],"counterexample":false},
+    {"id":"ily-prod-02","source_eval_id":"ps-e002","rules":["ILY-R03","ILY-R10","ILY-R38"],"counterexample":true},
+    {"id":"ily-prod-03","source_eval_id":"ps-e003","rules":["ILY-R04","ILY-R05","ILY-R99"],"counterexample":false},
+    {"id":"ily-prod-04","source_eval_id":"ps-e004","rules":["ILY-R06","ILY-R07","ILY-R09"],"counterexample":false},
+    {"id":"ily-prod-05","source_eval_id":"ps-e005","rules":["ILY-R11","ILY-R12","ILY-R13","ILY-R14"],"counterexample":false},
+    {"id":"ily-prod-06","source_eval_id":"ps-e006","rules":["ILY-R15","ILY-R16","ILY-R18"],"counterexample":false},
+    {"id":"ily-prod-07","source_eval_id":"ps-e007","rules":["ILY-R17","ILY-R79"],"counterexample":false},
+    {"id":"ily-prod-08","source_eval_id":"ps-e008","rules":["ILY-R19","ILY-R20","ILY-R85"],"counterexample":false},
+    {"id":"ily-prod-09","source_eval_id":"ps-e010","rules":["ILY-R22","ILY-R23","ILY-R29","ILY-R32"],"counterexample":false},
+    {"id":"ily-prod-10","source_eval_id":"ps-e011","rules":["ILY-R24","ILY-R25","ILY-R28"],"counterexample":false},
+    {"id":"ily-prod-11","source_eval_id":"ps-e012","rules":["ILY-R26","ILY-R27","ILY-R40","ILY-R44"],"counterexample":true},
+    {"id":"ily-prod-12","source_eval_id":"ps-e013","rules":["ILY-R30","ILY-R31","ILY-R32","ILY-R50"],"counterexample":true},
+    {"id":"ily-prod-13","source_eval_id":"ps-e014","rules":["ILY-R33","ILY-R34","ILY-R35"],"counterexample":true},
+    {"id":"ily-prod-14","source_eval_id":"ps-e015","rules":["ILY-R36"],"counterexample":false},
+    {"id":"ily-prod-15","source_eval_id":"ps-e016","rules":["ILY-R37","ILY-R39","ILY-R76"],"counterexample":true},
+    {"id":"ily-prod-16","source_eval_id":"ps-e017","rules":["ILY-R41","ILY-R42","ILY-R43"],"counterexample":false}
+  ]
+}

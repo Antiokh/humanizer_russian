@@ -26,5 +26,6 @@
   "rules_path": "libraries/chukovsky/rules.json",
   "model_only_reference": "references/chukovsky.md",
   "model_eval_path": "evals/chukovsky.json",
+  "model_eval_map_path": "evals/chukovsky-map.json",
   "notes": "38 audited rules: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 7 EXTENDED_SOFT, 2 METRIC_ONLY, 29 MODEL_ONLY. CHUK-Rxx is the canonical runtime rule namespace; historical CHK-Rxx study IDs are retained only as research aliases. Primary-book provenance is reproducible. EXT-01..EXT-14 now have reproducible machine-readable source/access metadata and claim dispositions in external-evidence-2026.json; that closure does not itself promote current NORM or runtime severity. Public repository contains derived knowledge only; the source EPUB is not stored here."
 }
