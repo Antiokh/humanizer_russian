@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import importlib.util
+import inspect
 import json
 import re
 from pathlib import Path
@@ -145,19 +146,39 @@ def normalize_review_v1(item: dict[str, Any], manifest: dict[str, Any]) -> dict[
     return out
 
 
-def run_library(manifest: dict[str, Any], text: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def _call_review(module: Any, text: str, context: dict[str, Any] | None) -> dict[str, Any]:
+    """Pass optional runtime context only to adapters that declare it.
+
+    Existing book adapters keep their one-argument ``review(text)`` contract;
+    context-aware project libraries may opt into ``review(text, context=...)``.
+    """
+    params = inspect.signature(module.review).parameters
+    if "context" in params:
+        return module.review(text, context=context or {})
+    return module.review(text)
+
+
+def run_library(
+    manifest: dict[str, Any],
+    text: str,
+    context: dict[str, Any] | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     module = import_path(manifest["linter_path"])
     adapter = manifest["adapter"]
     if adapter == "legacy_lint_v1":
         findings, metrics = module.lint(text)
         return [normalize_legacy(item, manifest) for item in findings], metrics
     if adapter == "review_v1":
-        result = module.review(text)
+        result = _call_review(module, text, context)
         return [normalize_review_v1(item, manifest) for item in result.get("findings", [])], result.get("metrics", {})
     raise ValueError(f"unsupported adapter: {adapter}")
 
 
-def run_libraries(text: str, library_ids: list[str] | None = None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def run_libraries(
+    text: str,
+    library_ids: list[str] | None = None,
+    context: dict[str, Any] | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     manifests = library_manifests(include_disabled=bool(library_ids))
     if library_ids:
         wanted = set(library_ids)
@@ -168,7 +189,7 @@ def run_libraries(text: str, library_ids: list[str] | None = None) -> tuple[list
     findings: list[dict[str, Any]] = []
     metrics: dict[str, Any] = {}
     for manifest in manifests:
-        lib_findings, lib_metrics = run_library(manifest, text)
+        lib_findings, lib_metrics = run_library(manifest, text, context=context)
         findings.extend(lib_findings)
         metrics[manifest["id"]] = lib_metrics
     return findings, metrics
