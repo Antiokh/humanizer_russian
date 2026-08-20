@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Validate the bounded Velichko source study and Russian-core integration.
 
-This validator proves traceability and architectural boundaries only. It does
-not pretend that the unavailable chapters 14–44 were read or reconstructed.
+This validator proves traceability, deduplication and architectural boundaries.
+It does not pretend that the unavailable chapters 14–44 were read or reconstructed.
 """
 from __future__ import annotations
 
@@ -47,10 +47,23 @@ def matrix_rows(text: str) -> dict[str, list[str]]:
     return rows
 
 
+def validate_runtime_cards(cards: list[dict], label: str) -> None:
+    required = {
+        "rule_id", "phenomenon_id", "project_class", "automation_level",
+        "scope", "source_locator", "operation", "guard",
+    }
+    unique([str(item.get("rule_id", "")) for item in cards], f"{label} rule IDs")
+    unique([str(item.get("phenomenon_id", "")) for item in cards], f"{label} phenomenon IDs")
+    for item in cards:
+        missing = sorted(required - set(item))
+        assert not missing, f"{label} {item.get('rule_id')}: missing fields {missing}"
+        assert item["rule_id"].startswith("RU-"), item
+
+
 def main() -> None:
     required = [
         "source.md", "coverage.md", "concepts.md", "claims.md", "counterexamples.md",
-        "interactions.md", "rules-index.md", "rules-01-12.md", "rules-13-24.md",
+        "interactions.md", "rules.md", "rules-01-12.md", "rules-13-24.md",
         "rules-25-35.md", "integration-matrix.md", "mechanical-feasibility.md",
         "evals.json", "eval-map.json", "integration.md", "audit.md",
     ]
@@ -62,6 +75,7 @@ def main() -> None:
     concepts = read("concepts.md")
     claims = read("claims.md")
     interactions = read("interactions.md")
+    rule_index = read("rules.md")
     matrix = read("integration-matrix.md")
     feasibility = read("mechanical-feasibility.md")
     audit = read("audit.md")
@@ -79,7 +93,10 @@ def main() -> None:
     rule_text = "\n".join(read(name) for name in ["rules-01-12.md", "rules-13-24.md", "rules-25-35.md"])
     rule_ids = unique(CARD_RE.findall(rule_text), "study rule IDs")
     expected_rules = {f"VEL-R{i:02d}" for i in range(1, 33)} | {f"VEL-M{i:02d}" for i in range(1, 4)}
+    expected_model_observations = {f"VEL-R{i:02d}" for i in range(1, 33)}
     assert rule_ids == expected_rules, f"study rule set drifted: {sorted(rule_ids ^ expected_rules)}"
+    for rid in expected_rules:
+        assert f"| {rid} |" in rule_index, f"rules.md index missing {rid}"
 
     required_fields = [
         "- source_locator:", "- provenance:", "- claim:", "- project_class:",
@@ -92,7 +109,9 @@ def main() -> None:
     cards = [part for part in re.split(r"(?=^##\s+VEL-(?:R|M)\d{2}\s+—)", rule_text, flags=re.M) if part.startswith("## VEL-")]
     assert len(cards) == 35
     for card in cards:
-        rid = CARD_RE.search(card).group(1)
+        match = CARD_RE.search(card)
+        assert match is not None
+        rid = match.group(1)
         for field in required_fields:
             assert field in card, f"{rid}: missing field {field}"
         locators = LOCATOR_RE.findall(card)
@@ -136,14 +155,39 @@ def main() -> None:
     runtime_rules_path = ROOT / "libraries" / "russian" / "rki-rules.json"
     runtime_reference = ROOT / "references" / "russian-rki-grammar.md"
     metric_module = ROOT / "scripts" / "lint_russian_rki_metrics.py"
+    core_rules_path = ROOT / "libraries" / "russian" / "rules.json"
     assert runtime_rules_path.is_file()
     assert runtime_reference.is_file()
     assert metric_module.is_file()
-    runtime_rules = json.loads(runtime_rules_path.read_text(encoding="utf-8"))
-    assert len(runtime_rules["rules"]) == 11
-    assert all(item["rule_id"].startswith("RU-") for item in runtime_rules["rules"])
-    assert all(not item["rule_id"].startswith("VEL-") for item in runtime_rules["rules"])
-    assert all(item["automation_level"] == "MODEL_ONLY" for item in runtime_rules["rules"])
+
+    runtime_rules = json.loads(runtime_rules_path.read_text(encoding="utf-8"))["rules"]
+    core_rules = json.loads(core_rules_path.read_text(encoding="utf-8"))["rules"]
+    assert len(runtime_rules) == 13
+    validate_runtime_cards(runtime_rules, "RKI runtime")
+    validate_runtime_cards(core_rules, "Russian core")
+    assert all(item["automation_level"] == "MODEL_ONLY" for item in runtime_rules)
+    assert all(not item["rule_id"].startswith("VEL-") for item in runtime_rules)
+
+    # One source-neutral Russian-core phenomenon must have one production card.
+    core_phenomena = {item["phenomenon_id"] for item in core_rules}
+    rki_phenomena = {item["phenomenon_id"] for item in runtime_rules}
+    overlap = sorted(core_phenomena & rki_phenomena)
+    assert not overlap, f"duplicate source-neutral phenomena across core/RKI cards: {overlap}"
+
+    mapped_study_rules: set[str] = set()
+    for item in [*core_rules, *runtime_rules]:
+        for rid in item.get("study_rule_ids", []):
+            assert rid in expected_model_observations, f"unknown mapped Velichko rule {rid}"
+            mapped_study_rules.add(rid)
+    assert mapped_study_rules == expected_model_observations, (
+        "not every model-only Velichko observation is represented in source-neutral Russian core: "
+        f"{sorted(expected_model_observations - mapped_study_rules)}"
+    )
+
+    runtime_by_id = {item["rule_id"]: item for item in runtime_rules}
+    assert runtime_by_id["RU-NORM-PARTICIPLE-AGREEMENT"]["project_class"] == "NORM"
+    assert runtime_by_id["RU-NATIVE-GERUND-GRAMMATICALIZED-GUARD"]["project_class"] == "NATIVE_USAGE"
+    assert runtime_by_id["RU-NATIVE-GERUND-OBJECT-INFINITIVE-ATTACHMENT"]["project_class"] == "NATIVE_USAGE"
 
     library = json.loads((ROOT / "libraries" / "russian" / "library.json").read_text(encoding="utf-8"))
     assert "libraries/russian/rki-rules.json" in library["references"]
@@ -159,7 +203,8 @@ def main() -> None:
     print("  concepts: 14; observations: 35; claims: 12; interactions: 12")
     print("  evals: 35 direct + 12 compound/preservation")
     print("  automation: HARD_GATE=0 DEFAULT_MECHANICAL=0 EXTENDED_SOFT=0 METRIC_ONLY=3 MODEL_ONLY=32")
-    print("  runtime contextual cards: 11 source-neutral RU-* rules")
+    print("  runtime contextual cards: 13 new RKI cards + enriched existing RU-* cards")
+    print("  source-neutral phenomenon duplicates across core/RKI cards: 0")
 
 
 if __name__ == "__main__":
