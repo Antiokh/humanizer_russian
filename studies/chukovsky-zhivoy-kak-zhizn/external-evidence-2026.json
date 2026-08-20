@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "audit_date": "2026-08-20",
+  "audit_timezone": "Europe/Belgrade",
   "source_claim_document": "studies/chukovsky-zhivoy-kak-zhizn/claims-external.md",
   "policy": "External evidence calibrates historical/editorial claims; it does not turn source authority into current NORM.",
   "sources": [
@@ -187,7 +188,7 @@
     {"claim_id":"CLM-12","disposition":"EXTERNAL_PARTIAL","source_ids":["EXT-12"],"runtime_boundary":"Treat diffusion as possible, not inevitable.","may_promote_norm_or_hard_gate":false},
     {"claim_id":"CLM-13","disposition":"EXTERNAL_PARTIAL","source_ids":["EXT-14"],"runtime_boundary":"Preserve formal genre function; legal necessity requires domain verification.","may_promote_norm_or_hard_gate":false},
     {"claim_id":"CLM-14","disposition":"EXTERNAL_UNRESOLVED","source_ids":[],"runtime_boundary":"Metric/candidate only; no nominalization threshold.","may_promote_norm_or_hard_gate":false},
-    {"claim_id":"CLM-15","disposition":"EXTERNAL_CONFIRMED","source_ids":[],"runtime_boundary":"Diagnose parse/roles, not raw case-chain counts.","may_promote_norm_or_hard_gate":false},
+    {"claim_id":"CLM-15","disposition":"EXTERNAL_CONFIRMED","source_ids":["EXT-06"],"runtime_boundary":"Diagnose parse/roles, not raw case-chain counts.","may_promote_norm_or_hard_gate":false},
     {"claim_id":"CLM-16","disposition":"EXTERNAL_UNRESOLVED","source_ids":[],"runtime_boundary":"Diagnose template prose, not thinking ability.","may_promote_norm_or_hard_gate":false},
     {"claim_id":"CLM-17","disposition":"VALUE_ONLY","source_ids":[],"runtime_boundary":"Value ideal only; never a metric or gate.","may_promote_norm_or_hard_gate":false},
     {"claim_id":"CLM-18","disposition":"EXTERNAL_CONTESTED","source_ids":["EXT-13"],"runtime_boundary":"Exclude person-level diagnosis.","may_promote_norm_or_hard_gate":false},
