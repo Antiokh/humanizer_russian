@@ -24,6 +24,20 @@ def resolved_observations(payload,cycle,study_dir=None):
         if r['project_class'] not in {'NORM','NATIVE_USAGE','EDITING','REGISTER','AI_CALQUE','AUTHOR','HISTORICAL'}: raise SystemExit(f'{oid}: invalid project_class {r["project_class"]}')
     return seen
 
+def eval_rule_ids(rows,study_name):
+    refs=set()
+    for row in rows:
+        if 'rule_id' in row:
+            refs.add(row['rule_id'])
+        elif 'rule_ids' in row:
+            values=row['rule_ids']
+            if not isinstance(values,list) or not values or not all(isinstance(x,str) and x for x in values):
+                raise SystemExit(f'invalid eval rule_ids: {study_name}: {row}')
+            refs.update(values)
+        else:
+            raise SystemExit(f'eval map row has no rule reference: {study_name}: {row}')
+    return refs
+
 def main():
     base=load('libraries/rosenthal/rules.json'); c2=load('libraries/rosenthal/rules-cycle2.json'); c3=load('libraries/rosenthal/rules-cycle3.json'); c5=load('libraries/rosenthal/rules-cycle5.json')
     idx=load('libraries/rosenthal/rules-index.json'); manifest=load('libraries/rosenthal/library.json')
@@ -77,7 +91,7 @@ def main():
     for study_name,n in [('rosenthal-a-kak-luchshe-skazat',12),('rosenthal-pravopisanie-proiznoshenie-redaktirovanie',16),('rosenthal-pravopisanie-stilistika',12),('rosenthal-orfografiya-punktuatsiya',14)]:
         e=load(f'studies/{study_name}/evals.json')['cases']; m=load(f'studies/{study_name}/eval-map.json')['map']
         if len(e)!=n or {x['id'] for x in e}!={x['eval_id'] for x in m}: raise SystemExit(f'eval map mismatch: {study_name}')
-        if {x['rule_id'] for x in m}-existing: raise SystemExit(f'eval maps unknown rules: {study_name}')
+        if eval_rule_ids(m,study_name)-existing: raise SystemExit(f'eval maps unknown rules: {study_name}')
     cases=load('tests/rosenthal_cases.json')['cases']
     if len(cases)<15: raise SystemExit('too few cumulative Rosenthal mechanical controls')
     norm3=(ROOT/'studies/rosenthal-pravopisanie-proiznoshenie-redaktirovanie/current-norm.md').read_text(encoding='utf-8')
