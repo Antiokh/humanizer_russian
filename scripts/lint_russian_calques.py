@@ -13,19 +13,25 @@ from typing import Any
 
 ABSTRACT_BREAK_SUBJECT = (
     r"(?:процесс(?:ы)?|логик(?:а|и)|сценари(?:й|и)|алгоритм(?:ы)?|"
-    r"систем(?:а|ы)|интеграц(?:ия|ии)|автоматизац(?:ия|ии)|пайплайн(?:ы)?)"
+    r"систем(?:а|ы)|интеграц(?:ия|ии)|автоматизац(?:ия|ии)|пайплайн(?:ы)?|"
+    r"карьер(?:а|ы))"
 )
-ABSTRACT_BREAK_VERB = (
-    r"(?:ломается|ломаются|сломался|сломалась|сломалось|сломались|сломается|сломаются)"
+
+# This rule targets the over-broad imperfective/ongoing use that often mirrors
+# English break = fail/go wrong. Perfective result forms such as "сломалась" or
+# resultative "сломана" are not this mechanical rule's target: with some nouns
+# they are ordinary Russian metaphors and need lexical/contextual judgement.
+ABSTRACT_BREAK_IMPERFECTIVE = (
+    r"(?:ломается|ломаются|ломался|ломалась|ломалось|ломались|ломаться)"
 )
 ABSTRACT_BREAK_PATTERNS = [
     re.compile(
         rf"\b(?P<subject>{ABSTRACT_BREAK_SUBJECT})\b"
-        rf"(?P<middle>[^.!?\n]{{0,60}}?)\b(?P<verb>{ABSTRACT_BREAK_VERB})\b",
+        rf"(?P<middle>[^.!?\n]{{0,60}}?)\b(?P<verb>{ABSTRACT_BREAK_IMPERFECTIVE})\b",
         re.I,
     ),
     re.compile(
-        rf"\b(?P<verb>{ABSTRACT_BREAK_VERB})\b"
+        rf"\b(?P<verb>{ABSTRACT_BREAK_IMPERFECTIVE})\b"
         rf"(?P<middle>[^.!?\n]{{0,40}}?)\b(?P<subject>{ABSTRACT_BREAK_SUBJECT})\b",
         re.I,
     ),
@@ -56,11 +62,12 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
                     "line": _line_no(text, match.start()),
                     "excerpt": " ".join(match.group(0).split())[:240],
                     "reason": (
-                        "`Ломаться` здесь относится к абстрактному процессу/логике/сценарию. "
-                        "В русском это часто слишком широкая калька с English break: уточните, "
-                        "что именно происходит — процесс останавливается, сбивается, нарушается, "
-                        "перестаёт работать или даёт сбой. Разговорное техническое употребление "
-                        "может быть намеренным, поэтому это REVIEW, а не запрет."
+                        "Несовершенное `ломаться` относится к абстрактному процессу, логике, "
+                        "сценарию или другой нефизической сущности. Здесь возможен слишком широкий "
+                        "перенос English break = fail/go wrong. Уточните реальное событие: процесс "
+                        "останавливается/сбивается, логика нарушается, сценарий перестаёт работать, "
+                        "система даёт сбой и т. п. Лексикализованные значения вроде `голос ломается` "
+                        "и намеренный технический жаргон не исправляются автоматически."
                     ),
                     "operation": "replace_abstract_break_with_specific_failure_verb",
                     "confidence": None,
@@ -76,8 +83,8 @@ def self_test() -> None:
     positives = [
         "На этом шаге процесс ломается.",
         "Если поле пустое, логика ломается.",
-        "После обновления сломался сценарий обработки.",
         "Под нагрузкой система ломается.",
+        "Из-за этой реформы карьера постепенно ломается.",
     ]
     for text in positives:
         rows = review(text)["findings"]
@@ -88,6 +95,9 @@ def self_test() -> None:
         "Весной лёд ломается на реке.",
         "У подростка ломается голос.",
         "Карандаш сломался пополам.",
+        "После обновления сломался сценарий обработки.",
+        "Его карьера сломалась после скандала.",
+        "Его карьера была сломана этим решением.",
     ]
     for text in negatives:
         rows = review(text)["findings"]
