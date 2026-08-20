@@ -9,12 +9,15 @@ Velichko is not added as an editorial persona or reviewer. The source is a gramm
 The integration therefore consists of:
 
 - source-neutral contextual cards under `libraries/russian/`;
+- enrichment of existing Russian-core cards when the phenomenon already existed, rather than a duplicate rule;
 - compact model-only residue in `references/russian-rki-grammar.md`;
 - current-NORM refinement for participle/gerund/quantifier rules where independently verified;
 - three `METRIC_ONLY` proxies for distributional audit;
-- preservation tests proving that context-only RKI patterns are **not** turned into regex findings.
+- preservation tests through both Compact and Editorial Board proving that context-only RKI patterns are **not** turned into deterministic findings.
 
 ## Counts
+
+Study observations:
 
 - atomic observations: 35
 - NORM: 5
@@ -27,6 +30,14 @@ The integration therefore consists of:
 - METRIC_ONLY: 3
 - MODEL_ONLY: 32
 
+Production integration:
+
+- 13 new source-neutral `RU-*` model-only cards in `libraries/russian/rki-rules.json`;
+- 3 existing Russian-core cards enriched with Velichko provenance/guards: gerund subject attachment, participle head attachment, participial compression;
+- 0 duplicate source-neutral `phenomenon_id` values between `libraries/russian/rules.json` and `libraries/russian/rki-rules.json`;
+- all 32 non-metric study observations mapped to at least one source-neutral Russian-core card;
+- 3 metric-only proxies, with no threshold or verdict.
+
 ## New RKI/interference families
 
 1. overt-subject bias where Russian chooses an indefinite-personal/impersonal structure;
@@ -36,8 +47,9 @@ The integration therefore consists of:
 5. agentive-passive overuse and failure to use possessive resultatives where functionally natural;
 6. `являться` / `представлять собой` used as generic equivalents of “be”;
 7. aspect chosen from tense/form alone rather than modal/event meaning;
-8. gerund/participle attachment and semantic-subject errors;
-9. introductory-word placement that shifts epistemic scope.
+8. participle head/agreement/time distinctions;
+9. gerund subject control vs grammaticalized forms vs object-infinitive ambiguity;
+10. introductory-word placement that shifts epistemic scope.
 
 ## Explicit non-integrations
 
@@ -52,4 +64,4 @@ The following source statements are retained only in `claims.md` and are not pro
 
 ## Runtime effect
 
-No new regex warning is introduced. Compact receives metrics only. Editorial Board/model reasoning gets concise source-neutral contextual instructions. Existing Russian mechanical output remains stable unless another already-existing rule fires.
+No new regex warning is introduced. Compact receives only the three RKI distribution metrics from this cycle. Editorial Board/model reasoning gets concise source-neutral contextual instructions. Existing Russian mechanical output remains stable unless another already-existing rule fires.
