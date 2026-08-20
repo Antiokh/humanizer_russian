@@ -38,8 +38,12 @@ jobs:
         run: python scripts/benchmark_rosenthal.py
       - name: Smoke-test Rosenthal compact and board routing
         run: |
-          printf '%s' 'Согласно приказа директора документ вступает в силу.' | python scripts/check.py --extended --json >/tmp/ros-compact.json
-          printf '%s' 'Согласно приказа директора документ вступает в силу.' | python scripts/review.py --libraries rosenthal --format json >/tmp/ros-board.json
+          set +e
+          python scripts/check.py --extended --json <<< 'Согласно приказа директора документ вступает в силу.' >/tmp/ros-compact.json
+          compact_status=$?
+          set -e
+          test "$compact_status" -eq 1
+          python scripts/review.py --libraries rosenthal --format json <<< 'Согласно приказа директора документ вступает в силу.' >/tmp/ros-board.json
           python - <<'PY'
           import json
           compact=json.load(open('/tmp/ros-compact.json',encoding='utf-8'))
