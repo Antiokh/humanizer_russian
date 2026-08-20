@@ -1,0 +1,36 @@
+name: ilyakhov-evidence
+
+on:
+  push:
+    branches:
+      - main
+      - ilyakhov
+    paths:
+      - 'studies/pishi-sokrashchay/**'
+      - 'libraries/ilyakhov/**'
+      - 'scripts/validate_ilyakhov_evidence.py'
+      - '.github/workflows/ilyakhov-evidence.yml'
+  pull_request:
+    paths:
+      - 'studies/pishi-sokrashchay/**'
+      - 'libraries/ilyakhov/**'
+      - 'scripts/validate_ilyakhov_evidence.py'
+      - '.github/workflows/ilyakhov-evidence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile evidence validator
+        run: python -m compileall -q scripts/validate_ilyakhov_evidence.py
+      - name: Validate Ilyakhov external evidence parity
+        run: python scripts/validate_ilyakhov_evidence.py
