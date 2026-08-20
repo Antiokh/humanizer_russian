@@ -1,0 +1,79 @@
+{
+  "name": "golub compact cases",
+  "cases": [
+    {
+      "name": "soglasno genitive",
+      "text": "Согласно приказа директора встреча переносится.",
+      "must_have": [
+        "GOLUB-R40"
+      ],
+      "must_not_have": []
+    },
+    {
+      "name": "soglasno dative preserve",
+      "text": "Согласно приказу директора встреча переносится.",
+      "must_have": [],
+      "must_not_have": [
+        "GOLUB-R40"
+      ]
+    },
+    {
+      "name": "oplatit za",
+      "text": "Оплатить за проезд можно картой.",
+      "must_have": [
+        "GOLUB-R41"
+      ],
+      "must_not_have": []
+    },
+    {
+      "name": "person za boundary",
+      "text": "Оплатить за друга счёт можно картой.",
+      "must_have": [],
+      "must_not_have": [
+        "GOLUB-R41"
+      ]
+    },
+    {
+      "name": "double comparative",
+      "text": "Этот вариант более лучше предыдущего.",
+      "must_have": [
+        "GOLUB-R44"
+      ],
+      "must_not_have": []
+    },
+    {
+      "name": "good comparative preserve",
+      "text": "Этот вариант намного лучше предыдущего.",
+      "must_have": [],
+      "must_not_have": [
+        "GOLUB-R44"
+      ]
+    },
+    {
+      "name": "quoted language example preserve",
+      "text": "«Согласно приказа» — пример обсуждаемой формы.",
+      "must_have": [],
+      "must_not_have": [
+        "GOLUB-R40"
+      ]
+    },
+    {
+      "name": "paired conjunction shared positive",
+      "text": "Он не только проверил данные, а также исправил отчёт.",
+      "must_have": [
+        "GOLUB-R59"
+      ],
+      "must_not_have": [],
+      "extended": true
+    },
+    {
+      "name": "paired conjunction shared negative",
+      "text": "Он не только проверил данные, но и исправил отчёт.",
+      "must_have": [],
+      "must_not_have": [
+        "GOLUB-R59"
+      ],
+      "extended": true
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+name: golub-quality
+
+on:
+  push:
+    branches:
+      - golub
+  pull_request:
+    paths:
+      - 'studies/golub/**'
+      - 'libraries/golub/**'
+      - 'references/golub.md'
+      - 'reviewers/golub.json'
+      - 'scripts/lint_golub.py'
+      - 'scripts/lint_rosenthal.py'
+      - 'scripts/shared_russian_norm_surfaces.py'
+      - 'scripts/validate_golub_*.py'
+      - 'tests/golub_cases.json'
+      - '.github/workflows/golub-quality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  golub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validation dependency
+        run: python -m pip install --disable-pip-version-check jsonschema
+      - name: Compile Python
+        run: python -m compileall -q scripts
+      - name: Validate architecture contract
+        run: python scripts/validate_architecture.py
+      - name: Validate knowledge libraries
+        run: python scripts/validate_libraries.py
+      - name: Validate unified Golub study
+        run: python scripts/validate_golub_study.py
+      - name: Validate Golub integration and preservation
+        run: python scripts/validate_golub_library.py
+      - name: Source adapter self-tests
+        run: |
+          python scripts/lint_golub.py --self-test
+          python scripts/lint_rosenthal.py --self-test
+          python scripts/lint.py --self-test
+      - name: Deterministic Compact benchmark
+        run: python scripts/benchmark_lint.py
+      - name: Deterministic Editorial Board benchmark
+        run: python scripts/benchmark_board.py
+      - name: Golub Compact, Board and preservation smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          printf '%s' 'Согласно приказа директора оплатить за проезд было более лучше.' | python scripts/check.py --json >/tmp/golub-compact.json
+          compact_status=$?
+          set -e
+          test "$compact_status" -eq 1
+          printf '%s' 'Согласно приказа директора документ обновили. Он не только проверил данные, а также исправил отчёт. Этот вариант более лучше.' | python scripts/review.py --libraries golub,rosenthal --format json >/tmp/golub-ros.json
+          printf '%s' 'Согласно приказу директора можно заплатить за проезд. Этот вариант лучше.' | python scripts/check.py --json >/tmp/golub-preserve.json
+          python - <<'PY'
+          import json
+          compact=json.load(open('/tmp/golub-compact.json',encoding='utf-8'))
+          report=json.load(open('/tmp/golub-ros.json',encoding='utf-8'))
+          preserve=json.load(open('/tmp/golub-preserve.json',encoding='utf-8'))
+          expected={'GOLUB-R40','GOLUB-R41','GOLUB-R44'}
+          assert expected <= {x.get('rule') for x in compact['findings'] if x.get('library_id')=='golub'}, compact
+          f=report['findings']
+          for pid,rules in {
+            'norm.soglasno_dative':{'GOLUB-R40','ROS-R44'},
+            'editing.paired_conjunction_alignment':{'GOLUB-R59','ROS-R30'},
+            'norm.double_comparative_marking':{'GOLUB-R44','ROS-R53'},
+          }.items():
+              rows=[x for x in f if x.get('phenomenon_id')==pid]
+              assert {x.get('rule_id') for x in rows}==rules,(pid,rows)
+          assert not any(x.get('library_id')=='golub' for x in preserve['findings']), preserve
+          PY
+      - name: Validate JSON and diff hygiene
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in sorted(Path('.').rglob('*.json')):
+              json.loads(path.read_text(encoding='utf-8'))
+          PY
+          git diff --check
