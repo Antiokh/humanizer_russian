@@ -1,81 +1,70 @@
-# Study audit — Величко, «Книга о грамматике»
+# Final study audit — Velichko 2004 supplied fragment
 
-Status: **BLOCKED AT SOURCE COMPLETENESS**.
+Status: **OPERATIONAL_FOR_AVAILABLE_FRAGMENT**.
 
-This audit exists to prevent a partial or wrong-edition study from being promoted into the Russian runtime layer.
+## Source gate
 
-## Gate A decision
+The complete advertised 2004 volume is unavailable, but the user explicitly confirmed on `2026-08-20` that the supplied fragment is all digital source available. The gate is therefore re-scoped from “full advertised book” to “full physically available fragment”.
 
-`FAIL` — source integrity/completeness.
+This is not a waiver of provenance. The audit records both facts simultaneously:
 
-The task names the 2024 collective monograph «Книга о грамматике. Лингводидактические основы преподавания русского языка как иностранного» (ISBN `978-5-19-011994-7`, 742 pp.). The uploaded DOCX identifies itself as the 2004 second edition «Книга о грамматике: Русский язык как иностранный» (ISBN `5-211-05040-1`, advertised as 816 pp.) and physically stops after chapter 13 at printed pp. 174–175.
+- available fragment: sequentially read and audited in full;
+- advertised chapters 14–44: unavailable and not inferred.
 
-A study based on this file cannot truthfully satisfy the project requirement “read the source completely before integration”.
+## Completion checklist
 
-## Integrity checks completed
+- [x] source fingerprint and edition identified
+- [x] all 6330 rendered source lines / all available chapter bodies read
+- [x] coverage map distinguishes available vs TOC-only chapters
+- [x] grammar separated from teaching methodology
+- [x] 35 atomic observation cards
+- [x] required positive / natural-negative / boundary / counterexample fields
+- [x] 14 concepts
+- [x] 12 disputed/teaching/external-verification claims
+- [x] interaction pass
+- [x] integration matrix for every operational observation
+- [x] mechanical feasibility before runtime design
+- [x] model-only residue compressed into source-neutral Russian core guidance
+- [x] preservation controls for natural Russian variation
+- [x] NORM subset independently checked against current references
 
-- uploaded file fingerprinted with SHA-256;
-- DOCX opened successfully with `python-docx`;
-- paragraph/table/section counts checked;
-- ZIP contents inspected for hidden media/page scans: none;
-- file TOC compared with body headings;
-- body termination checked at the end of chapter 13;
-- publisher metadata for the named 2024 monograph checked independently;
-- long-lived branch `velichko` created from fresh `main` before study artifacts were written.
+## NORM promoted in this cycle
 
-## Why substitution is not acceptable
+Only five source observations are treated as NORM candidates/guardrails, and all remain context-aware MODEL_ONLY in runtime:
 
-Other editions can be useful as independent evidence, but they cannot fill a provenance hole. Chapter numbering, ordering, authorship and revisions differ between editions. Reconstructing missing chapters from another edition would create false source locators and make later rule audits unreliable.
+1. `много/столько/сколько/мало/...` predicate-number behavior (`VEL-R12`);
+2. participial phrase head attachment (`VEL-R23`);
+3. participle agreement with its head (`VEL-R24`);
+4. gerund semantic-subject control (`VEL-R27`);
+5. gerund in impersonal + infinitive clauses when semantic subjects coincide (`VEL-R29`).
 
-The same applies to general linguistic knowledge: it can verify a claim independently, but it cannot stand in for the missing primary-source passage when the rule claims Velichko provenance.
+Current-reference verification narrows rather than expands automation: these are not regex rules.
 
-## High-value signals already visible in the supplied extract
+## External conflict found
 
-These are **revisit markers only**, not extracted atomic rules and not runtime decisions. They are recorded so the continuation can resume efficiently once the complete target source is supplied.
+The strongest source conflict in the available fragment concerns introductory emotion phrases. The source rejects forms like bare `к радости, ...` without an explicit possessor, while current Gramota material recognizes `к радости` as an introductory combination. The source restriction is therefore not integrated.
 
-1. **Meaning → form rather than form-only grammar.** The introduction explicitly treats universal semantic functions as having language-specific Russian realizations. This matches the intended `function → natural form → interference form → repair` architecture.
-2. **Valency is lexical-semantic, not merely case morphology.** The source contrasts `пользоваться чем`, `использовать что для чего / где / как`, and similar patterns; chapter 8 develops motivated vs lexically fixed government and polysemy-dependent frames.
-3. **Learner subject overexpression.** The chapter on indefinite-personal sentences explicitly marks insertion of `они` into a construction whose point is to leave the actor unnamed as a typical learner error.
-4. **Two-member bias in learner Russian.** The nominal-sentence chapter notes a tendency to force an explicit present-tense predicate where Russian naturally permits a nominative/existential presentation.
-5. **State / process / result construal.** Chapters on basic models, impersonal sentences and passive structures repeatedly distinguish ongoing action, state and result rather than treating tense morphology as sufficient.
-6. **Aspect can encode modal semantics.** Infinitive constructions contrast imperfective prohibition/non-necessity with perfective objective impossibility; this is inherently contextual and should not become a regex rule.
-7. **Natural-force events prefer Russian-specific impersonal models.** Constructions such as an affected object plus instrumental natural force and neuter singular predicate are treated as a recurrent learner difficulty.
-8. **Passive is a perspective choice and register choice.** Three-member agentive passive is described as strongly book-oriented and rare in ordinary conversation; possessive resultative structures provide a more conversational result-focused alternative in some contexts.
-9. **Statal vs action passive matters.** The source records learner errors where a reflexive action-passive form is used to describe a static spatial/property relation that Russian normally encodes with a stative/resultative construction.
-10. **Scientific linking predicates are not interchangeable.** `есть`, `являться`, `представлять собой`, `состоять в`, `заключаться в`, `сводиться к` have narrower semantic and register constraints than a generic “to be” equivalent.
-11. **Participial compression has hard attachment/agreement constraints and softer usage constraints.** Head attachment and agreement are potentially NORM; preference between participial and relative-clause forms is context/register dependent.
-12. **Gerund subject attachment has a core norm plus exceptions.** The shared-subject rule is central, but lexicalized/preposition-like forms (`исходя из`, `учитывая`, etc.) and some infinitival impersonal constructions require exclusions. Existing `RU-NORM-GERUND-SUBJECT-ATTACHMENT` therefore needs refinement rather than a simplistic regex.
-13. **Word position can alter scope/reference.** Even chapter 13 shows that relocating an introductory/modal element changes whose uncertainty is expressed. This is a direct warning against surface-only handling of reference and information structure.
-14. **Native colloquial syntax includes constructions a formal grammar may not predict.** Syntactic phraseologisms are productive, frequent spoken patterns and must be protected as negative controls against over-normalization.
-15. **Grammar and methodology are interleaved.** Many passages switch from describing Russian constraints to advice about sequencing classroom material; only the former can become project rules.
+Current Gramota also explicitly treats `исходя из` as a preposition, confirming that an exception is required around any generic dangling-gerund check.
 
-None of these markers has yet been assigned a final `project_class`, automation level, severity or `phenomenon_id` because doing so before complete-source extraction would violate the study gate.
+## Mechanical audit
 
-## Runtime audit
+- new hard/default warning checks: **0**
+- new extended warnings: **0**
+- new metrics: **3**
+- model-only observations: **32**
 
-No files under `libraries/russian/`, `references/`, `scripts/`, Compact runtime, or Editorial Board runtime were changed in this blocked pass.
+This is the intended precision-first outcome. Surface regex cannot reliably solve valency, LSV, semantic subject, aspect, action-vs-state passive, discourse scope or natural information structure.
 
-This is intentional. Existing Russian rules already cover several neighboring phenomena (abstract `ломаться`, gerund subject attachment, participle head attachment, generic RKI syntactic-interference audit). Premature source-specific additions would create overlap before the full source can be mapped.
+## Loss audit
 
-## Tests
+The study preserves the decision-changing distinctions visible in the fragment: semantic function vs form, subject realization, lexical valency, event construal, aspect/modality, voice/register, state/result, participial and gerund control, and introductory scope. Methodological sequencing, exercises and teacher-facing simplifications are not promoted as linter rules.
 
-Full integration tests were **not run as completion evidence**, because there is no runtime integration to validate and the source study is not eligible for `AUDITED`/`OPERATIONAL` status.
+## Overgeneralization audit
 
-The next complete-source pass must run the full required suite only after extraction, verification, integration matrix, mechanical feasibility review and runtime changes are complete.
+The main protected areas are: natural explicit pronouns, existential `есть`, quantitative plural agreement, agentive passive in bookish genres, participles/gerunds, grammaticalized `исходя из`, colloquial syntactic phraseologisms, and context-dependent aspect choice. See `counterexamples.md`.
 
-## Unblocking criteria
+## Remaining unavailable material
 
-One of the following is required:
+The missing 31 chapters include several high-priority domains: dedicated word-order/theme-rheme chapter, full aspect system, negation, motion verbs, reflexives, functional-semantic cause/purpose/condition/concession etc., secondary tense/aspect meanings and animacy. No claim is made about their content beyond TOC titles.
 
-1. **Preferred:** complete 2024 monograph, ISBN `978-5-19-011994-7`; or
-2. explicit re-scope to the 2004 second edition plus a complete file containing the missing body after printed p. 175 through the end of the volume.
-
-After unblocking:
-
-- refingerprint the complete source;
-- rebuild exact TOC/coverage from that source;
-- read it sequentially with no gaps;
-- only then create atomic observation cards, counterexamples, claims/evidence, integration matrix and runtime rules;
-- verify NORM claims independently;
-- run Compact/Board/RKI/Velichko tests;
-- open `velichko -> main` PR only after green gates.
+A future complete source can extend the same long-lived `velichko` branch without invalidating this bounded study.
