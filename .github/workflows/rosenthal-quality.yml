@@ -11,6 +11,7 @@ on:
       - 'scripts/lint_rosenthal.py'
       - 'scripts/validate_rosenthal.py'
       - 'scripts/benchmark_rosenthal.py'
+      - 'scripts/benchmark_rosenthal_cycle3.py'
       - 'tests/rosenthal_cases.json'
       - 'studies/rosenthal-*/**'
       - 'references/rosenthal.md'
@@ -44,6 +45,8 @@ jobs:
         run: python scripts/benchmark_board.py
       - name: Rosenthal deterministic benchmark
         run: python scripts/benchmark_rosenthal.py
+      - name: Rosenthal cycle 3 preservation benchmark
+        run: python scripts/benchmark_rosenthal_cycle3.py
       - name: Validate JSON
         run: |
           python - <<'PY'
@@ -52,7 +55,7 @@ jobs:
               json.loads(p.read_text(encoding='utf-8'))
           print('all json: OK')
           PY
-      - name: Smoke-test Rosenthal cycle 2 compact and board routing
+      - name: Smoke-test cumulative Rosenthal compact and board routing
         run: |
           set +e
           python scripts/check.py --extended --json <<< 'Этот вариант более лучше предыдущего.' >/tmp/ros-compact.json

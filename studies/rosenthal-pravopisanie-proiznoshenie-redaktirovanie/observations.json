@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "book": "Д. Э. Розенталь, Е. В. Джанджакова, Н. П. Кабанова — «Справочник по правописанию, произношению, литературному редактированию»",
+  "source_fingerprint_sha256": "45f01400ff6d954488dc06236b931ff2f10aa59c30f95d2720ded858468d2667",
+  "atomic_observation_count": 95,
+  "card_defaults": {
+    "source_book": "Справочник по правописанию, произношению, литературному редактированию",
+    "edition": "3-е изд.; Д. Э. Розенталь, Е. В. Джанджакова, Н. П. Кабанова; М.: ЧеРо, 1999",
+    "scope": ["general", "contextual"],
+    "semantic_invariant": "Смысл, логические отношения, регистр, адресат и авторская функция не должны искажаться при правке.",
+    "trigger": "Контекст или конструкция, описанные в claim.",
+    "diagnosis": "Проверить смысловую функцию, синтаксические/дискурсивные связи, адресата и современную норму, если claim нормативный.",
+    "operation": "choose_functional_variant",
+    "preferred_variant": "Функционально точный современный вариант без потери авторской задачи.",
+    "valid_alternatives": ["сохранить исходный функциональный вариант", "перестроить конструкцию после контекстной проверки"],
+    "register": ["neutral", "literary", "colloquial", "official", "academic", "spoken_public"],
+    "positive_example": "Собственный проектный пример механизма.",
+    "natural_negative_control": "Похожая поверхность с оправданной функцией.",
+    "boundary_case": "Требует контекста, аудио или современной словарной проверки.",
+    "intentional_counterexample": "Намеренная авторская, риторическая или разговорная конструкция.",
+    "exclusions": ["code", "URL", "meta-quote", "intentional play"],
+    "do_not_infer": "Не выводить blanket ban по одной поверхности."
+  },
+  "required_resolved_fields": ["source_book","edition","source_locator","provenance","claim","current_status","project_class","scope","semantic_invariant","trigger","diagnosis","operation","preferred_variant","valid_alternatives","register","positive_example","natural_negative_control","boundary_case","intentional_counterexample","exclusions","do_not_infer","interactions","confidence","verification_status"],
+  "observation_parts": ["observations-part1.json", "observations-part2.json", "observations-part3.json"]
+}
