@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "russian",
+  "display_name": "Русский язык",
+  "short_label": "Русский язык",
+  "review_label": "По норме и употреблению русского языка",
+  "kind": "project_core",
+  "avatar": null,
+  "domains": [
+    "norm",
+    "punctuation",
+    "lexical_fit",
+    "register",
+    "semantic_relations"
+  ],
+  "disclaimer": "Нормативные выводы должны иметь современное справочное основание; стилистические и регистровые замечания не являются нормой сами по себе."
+}
