@@ -6,6 +6,7 @@
     {"id":"ask-natural-negative","text":"Я хочу задать вам вопрос о сроках.","must_not_find":["VISSON-NORM-ASK-QUESTION"]},
     {"id":"ask-boundary","text":"Я хочу спросить у вас о вопросе, который вчера обсуждали.","must_not_find":["VISSON-NORM-ASK-QUESTION"]},
     {"id":"ask-metalinguistic","text":"В статье разбирается выражение «спросить вопрос».","must_not_find":["VISSON-NORM-ASK-QUESTION"]},
+    {"id":"ask-multiline-quotation","text":"В статье разбирается цитата «спросить\nвопрос» как пример.","must_not_find":["VISSON-NORM-ASK-QUESTION"]},
     {"id":"pretend-direct","text":"Он претендует, что ничего не знает.","must_find":["VISSON-CALQUE-PRETEND-CLAUSE"]},
     {"id":"pretend-natural-negative","text":"Он претендует на должность директора.","must_not_find":["VISSON-CALQUE-PRETEND-CLAUSE"]},
     {"id":"pretend-boundary","text":"Он не претендует на то, что теория окончательна.","must_not_find":["VISSON-CALQUE-PRETEND-CLAUSE"]},

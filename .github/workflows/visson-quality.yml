@@ -11,15 +11,23 @@ on:
       - 'references/*visson*'
       - 'reviewers/visson.json'
       - 'scripts/*visson*'
+      - 'scripts/check.py'
+      - 'scripts/review.py'
+      - 'scripts/lint.py'
       - 'tests/visson*'
       - 'evals/lynn-visson*'
       - '.github/workflows/visson-quality.yml'
+
+permissions:
+  contents: read
 
 jobs:
   visson-integration:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'

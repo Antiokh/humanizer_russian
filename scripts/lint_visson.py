@@ -60,7 +60,7 @@ def _mask_quotes(text: str) -> str:
     # Precision-first: ordinary quoted language is treated as citation/metalinguistic
     # material. This sacrifices recall in dialogue, which is preferable to flagging
     # examples such as «спросить вопрос» in linguistic prose.
-    patterns = [r"«[^»\n]*»", r"“[^”\n]*”", r'"[^"\n]*"']
+    patterns = [r"«[^»]*»", r"“[^”]*”", r'"[^"]*"']
     for pattern in patterns:
         text = re.sub(pattern, _blank_same_length, text)
     return text
@@ -68,19 +68,30 @@ def _mask_quotes(text: str) -> str:
 
 def _line_preserving_prose(text: str) -> str:
     clean = URL_OR_CODE.sub(lambda m: "\n" * m.group(0).count("\n"), text)
+    clean = _mask_quotes(clean)
     lines = strip_frontmatter(clean.splitlines())
     kept: list[str] = []
     for line in lines:
         if not line.strip() or MARKDOWN_NON_PROSE_LINE.match(line):
             kept.append("")
             continue
-        kept.append(_mask_quotes(line))
+        kept.append(line)
     return "\n".join(kept)
 
 
-def _finding(*, rule_id: str, phenomenon_id: str, project_class: str,
-             automation_level: str, verdict: str, excerpt: str, line: int,
-             reason: str, operation: str, reviewer_id: str | None = "visson") -> dict:
+def _finding(
+    *,
+    rule_id: str,
+    phenomenon_id: str,
+    project_class: str,
+    automation_level: str,
+    verdict: str,
+    excerpt: str,
+    line: int,
+    reason: str,
+    operation: str,
+    reviewer_id: str | None = "visson",
+) -> dict:
     item = {
         "rule_id": rule_id,
         "phenomenon_id": phenomenon_id,
@@ -103,74 +114,98 @@ def review(text: str, context: dict | None = None) -> dict:
     prose = _line_preserving_prose(text)
 
     for match in ASK_QUESTION.finditer(prose):
-        findings.append(_finding(
-            rule_id="VISSON-NORM-ASK-QUESTION",
-            phenomenon_id="norm.ask_question_valency",
-            project_class="NORM",
-            automation_level="DEFAULT_MECHANICAL",
-            verdict="CHANGE",
-            excerpt=match.group(0),
-            line=_line(prose, match.start()),
-            reason=("Английская рамка ask a question перенесена на русский `спросить`. "
+        findings.append(
+            _finding(
+                rule_id="VISSON-NORM-ASK-QUESTION",
+                phenomenon_id="norm.ask_question_valency",
+                project_class="NORM",
+                automation_level="DEFAULT_MECHANICAL",
+                verdict="CHANGE",
+                excerpt=match.group(0),
+                line=_line(prose, match.start()),
+                reason=(
+                    "Английская рамка ask a question перенесена на русский `спросить`. "
                     "Нормативно: `задать вопрос` либо `спросить кого-либо о чём-либо`. "
-                    "Цитаты/метаязык маскируются; намеренная языковая игра не является ошибкой текста."),
-            operation="restore_ask_question_valency",
-            reviewer_id=None,
-        ))
+                    "Цитаты/метаязык маскируются; намеренная языковая игра не является ошибкой текста."
+                ),
+                operation="restore_ask_question_valency",
+                reviewer_id=None,
+            )
+        )
 
     for match in PRETEND_CLAUSE.finditer(prose):
-        findings.append(_finding(
-            rule_id="VISSON-CALQUE-PRETEND-CLAUSE",
-            phenomenon_id="russian.false_friend_pretend_claim",
-            project_class="AI_CALQUE",
-            automation_level="DEFAULT_MECHANICAL",
-            verdict="REVIEW",
-            excerpt=match.group(0),
-            line=_line(prose, match.start()),
-            reason=("Похоже на перенос English `pretend that`: русское `претендовать` обычно строится "
+        findings.append(
+            _finding(
+                rule_id="VISSON-CALQUE-PRETEND-CLAUSE",
+                phenomenon_id="russian.false_friend_pretend_claim",
+                project_class="AI_CALQUE",
+                automation_level="DEFAULT_MECHANICAL",
+                verdict="REVIEW",
+                excerpt=match.group(0),
+                line=_line(prose, match.start()),
+                reason=(
+                    "Похоже на перенос English `pretend that`: русское `претендовать` обычно строится "
                     "с `на`, а значение притворства выражается `притворяться / делать вид`. "
-                    "Проверить смысл; `претендовать на то, что...` этим regex не охватывается."),
-            operation="replace_false_friend_pretend_frame",
-        ))
+                    "Проверить смысл; `претендовать на то, что...` этим regex не охватывается."
+                ),
+                operation="replace_false_friend_pretend_frame",
+            )
+        )
 
     for match in HAVE_NICE_DAY.finditer(prose):
-        findings.append(_finding(
-            rule_id="VISSON-CALQUE-HAVE-NICE-DAY",
-            phenomenon_id="russian.literal_have_nice_day",
-            project_class="AI_CALQUE",
-            automation_level="EXTENDED_SOFT",
-            verdict="REVIEW",
-            excerpt=match.group(0),
-            line=_line(prose, match.start()),
-            reason="Вероятная буквальная формула `Have a nice day`; в русском обычно выражают пожелание без `иметь`: `Хорошего дня`, `Всего доброго` и т. п.",
-            operation="replace_literal_farewell_formula",
-        ))
+        findings.append(
+            _finding(
+                rule_id="VISSON-CALQUE-HAVE-NICE-DAY",
+                phenomenon_id="russian.literal_have_nice_day",
+                project_class="AI_CALQUE",
+                automation_level="EXTENDED_SOFT",
+                verdict="REVIEW",
+                excerpt=match.group(0),
+                line=_line(prose, match.start()),
+                reason=(
+                    "Вероятная буквальная формула `Have a nice day`; в русском обычно выражают пожелание "
+                    "без `иметь`: `Хорошего дня`, `Всего доброго` и т. п."
+                ),
+                operation="replace_literal_farewell_formula",
+            )
+        )
 
     for offset, line_text in _iter_lines(prose):
         if HAPPY_BIRTHDAY_LINE.match(line_text):
-            findings.append(_finding(
-                rule_id="VISSON-CALQUE-HAPPY-BIRTHDAY",
-                phenomenon_id="russian.literal_happy_birthday",
-                project_class="AI_CALQUE",
-                automation_level="EXTENDED_SOFT",
-                verdict="REVIEW",
-                excerpt=line_text.strip(),
-                line=_line(prose, offset),
-                reason="Самостоятельное `Счастливого дня рождения!` похоже на буквальное `Happy Birthday`; нейтральная русская формула — `С днём рождения!`.",
-                operation="replace_literal_birthday_formula",
-            ))
+            findings.append(
+                _finding(
+                    rule_id="VISSON-CALQUE-HAPPY-BIRTHDAY",
+                    phenomenon_id="russian.literal_happy_birthday",
+                    project_class="AI_CALQUE",
+                    automation_level="EXTENDED_SOFT",
+                    verdict="REVIEW",
+                    excerpt=line_text.strip(),
+                    line=_line(prose, offset),
+                    reason=(
+                        "Самостоятельное `Счастливого дня рождения!` похоже на буквальное `Happy Birthday`; "
+                        "нейтральная русская формула — `С днём рождения!`."
+                    ),
+                    operation="replace_literal_birthday_formula",
+                )
+            )
         if ENJOY_LINE.match(line_text):
-            findings.append(_finding(
-                rule_id="VISSON-CALQUE-ENJOY-STANDALONE",
-                phenomenon_id="russian.literal_enjoy_formula",
-                project_class="AI_CALQUE",
-                automation_level="EXTENDED_SOFT",
-                verdict="REVIEW",
-                excerpt=line_text.strip(),
-                line=_line(prose, offset),
-                reason="Изолированное `Наслаждайтесь!` может калькировать универсальное English `Enjoy!`; по-русски формула обычно называет ситуацию (`Приятного аппетита/просмотра`, `Хорошего отдыха`). Оставить, если буквально нужно `наслаждаться`.",
-                operation="replace_generic_enjoy_formula_by_context",
-            ))
+            findings.append(
+                _finding(
+                    rule_id="VISSON-CALQUE-ENJOY-STANDALONE",
+                    phenomenon_id="russian.literal_enjoy_formula",
+                    project_class="AI_CALQUE",
+                    automation_level="EXTENDED_SOFT",
+                    verdict="REVIEW",
+                    excerpt=line_text.strip(),
+                    line=_line(prose, offset),
+                    reason=(
+                        "Изолированное `Наслаждайтесь!` может калькировать универсальное English `Enjoy!`; "
+                        "по-русски формула обычно называет ситуацию (`Приятного аппетита/просмотра`, "
+                        "`Хорошего отдыха`). Оставить, если буквально нужно `наслаждаться`."
+                    ),
+                    operation="replace_generic_enjoy_formula_by_context",
+                )
+            )
 
     metrics = {
         "metric_rule_ids": METRIC_RULE_IDS,
@@ -194,26 +229,39 @@ def _iter_lines(text: str):
 
 def self_test() -> None:
     def ids(text: str):
-        return {x["rule_id"] for x in review(text)["findings"]}
+        return {item["rule_id"] for item in review(text)["findings"]}
 
     assert "VISSON-NORM-ASK-QUESTION" in ids("Я хочу спросить у вас вопрос о сроках.")
     assert "VISSON-NORM-ASK-QUESTION" in ids("Можно спросить один вопрос?")
     assert "VISSON-NORM-ASK-QUESTION" not in ids("Я хочу задать вам вопрос о сроках.")
-    assert "VISSON-NORM-ASK-QUESTION" not in ids("Я хочу спросить у вас о вопросе, который вчера обсуждали.")
-    assert "VISSON-NORM-ASK-QUESTION" not in ids("В статье разбирается выражение «спросить вопрос».")
+    assert "VISSON-NORM-ASK-QUESTION" not in ids(
+        "Я хочу спросить у вас о вопросе, который вчера обсуждали."
+    )
+    assert "VISSON-NORM-ASK-QUESTION" not in ids(
+        "В статье разбирается выражение «спросить вопрос»."
+    )
+    assert "VISSON-NORM-ASK-QUESTION" not in ids(
+        "В статье разбирается цитата «спросить\nвопрос» как пример."
+    )
     assert not review("```text\nЯ хочу спросить у вас вопрос.\n```")["findings"]
 
     assert "VISSON-CALQUE-PRETEND-CLAUSE" in ids("Он претендует, что ничего не знает.")
     assert "VISSON-CALQUE-PRETEND-CLAUSE" not in ids("Он претендует на должность директора.")
-    assert "VISSON-CALQUE-PRETEND-CLAUSE" not in ids("Он не претендует на то, что теория окончательна.")
-    assert "VISSON-CALQUE-PRETEND-CLAUSE" not in ids("Калька «претендует, что» приведена как пример.")
+    assert "VISSON-CALQUE-PRETEND-CLAUSE" not in ids(
+        "Он не претендует на то, что теория окончательна."
+    )
+    assert "VISSON-CALQUE-PRETEND-CLAUSE" not in ids(
+        "Калька «претендует, что» приведена как пример."
+    )
 
     assert "VISSON-CALQUE-HAVE-NICE-DAY" in ids("Имейте хороший день!")
     assert "VISSON-CALQUE-HAVE-NICE-DAY" not in ids("Имейте в виду: день будет сложным.")
     assert "VISSON-CALQUE-HAPPY-BIRTHDAY" in ids("Счастливого дня рождения!")
     assert "VISSON-CALQUE-HAPPY-BIRTHDAY" not in ids("Желаю тебе счастливого дня рождения!")
     assert "VISSON-CALQUE-ENJOY-STANDALONE" in ids("Наслаждайтесь!")
-    assert "VISSON-CALQUE-ENJOY-STANDALONE" not in ids("Наслаждайтесь тишиной, пока есть возможность.")
+    assert "VISSON-CALQUE-ENJOY-STANDALONE" not in ids(
+        "Наслаждайтесь тишиной, пока есть возможность."
+    )
 
     metrics = review("Я открыл файл. Я проверил данные. Мы отправили отчёт.")["metrics"]
     assert metrics["explicit_subject_pronoun_starts"] >= 3, metrics
@@ -228,7 +276,8 @@ def main() -> None:
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
-        self_test(); return
+        self_test()
+        return
     text = Path(args.file).read_text(encoding="utf-8") if args.file else sys.stdin.read()
     result = review(text)
     if args.as_json:
@@ -237,6 +286,7 @@ def main() -> None:
         for item in result["findings"]:
             print(f"{item['rule_id']}:{item['line']} {item['excerpt']} — {item['reason']}")
         print(json.dumps(result["metrics"], ensure_ascii=False))
+
 
 if __name__ == "__main__":
     main()
