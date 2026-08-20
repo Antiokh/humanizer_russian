@@ -26,9 +26,6 @@ SPLIT_CONTRAST_RE = re.compile(
     re.I,
 )
 
-# English/Latin technical words that are especially likely to be register
-# choices rather than names. Lowercase words outside this set are still caught
-# by RU-LEX-LATIN-IN-RUSSIAN when embedded in Cyrillic prose.
 LATIN_JARGON = {
     "prompt", "runtime", "pipeline", "framework", "benchmark", "preflight",
     "entrypoint", "adapter", "linter", "backend", "frontend", "deploy",
@@ -92,7 +89,6 @@ def _finding(
 
 
 def _visible_lines(text: str) -> list[tuple[int, str]]:
-    """Return non-fenced Markdown lines; code/URLs stay masked later."""
     out: list[tuple[int, str]] = []
     fenced = False
     fence_marker = None
@@ -124,8 +120,6 @@ def _heading_period_finding(raw: str, line_no: int) -> dict[str, Any] | None:
     if not match:
         return None
     body = re.sub(r"\s+#+\s*$", "", match.group("body")).rstrip()
-    # Question/exclamation marks and ellipsis are preserved in headings. A lone
-    # final full stop is the mechanically safe case.
     if not body.endswith(".") or body.endswith("..."):
         return None
     return _finding(
@@ -152,13 +146,11 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
     findings: list[dict[str, Any]] = []
     visible = _visible_lines(text)
 
-    # 1. Narrow normative Markdown heading rule.
     for line_no, raw in visible:
         item = _heading_period_finding(raw, line_no)
         if item:
             findings.append(item)
 
-    # 2. Lexical/register checks line-by-line so code and URLs do not leak in.
     for line_no, raw in visible:
         clean = _mask_inline(raw)
         heading = HEADING_RE.match(clean)
@@ -168,11 +160,9 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
             continue
 
         cyrillic_letters = len(CYRILLIC_RE.findall(clean))
-        jargon_spans: list[tuple[int, int]] = []
 
         for rx in RUSSIAN_JARGON_PATTERNS:
             for match in rx.finditer(clean):
-                jargon_spans.append(match.span())
                 findings.append(_finding(
                     "RU-REGISTER-JARGON-TERM",
                     "russian.register_jargon_or_term",
@@ -190,7 +180,6 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
             lower = token.lower()
             is_known_term = lower in LATIN_JARGON or token in UPPER_TECH_TERMS
             if is_known_term:
-                jargon_spans.append(match.span())
                 findings.append(_finding(
                     "RU-REGISTER-JARGON-TERM",
                     "russian.register_jargon_or_term",
@@ -202,12 +191,10 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
                     "Англоязычный технический термин/жаргон: проверьте аудиторию. В бытовом тексте предпочтительны русский эквивалент или короткое объяснение.",
                     "replace_explain_or_keep_by_audience",
                 ))
-                continue
 
-            # Only call the generic foreign-word diagnostic when the local line
-            # is clearly Russian prose. Capitalized tokens are usually names or
-            # brands; all-uppercase abbreviations are handled only by the known
-            # technical-term list above.
+            # Independent of jargon classification, a lowercase Latin token in
+            # clearly Russian prose is worth surfacing. This is still REVIEW,
+            # not an error: the original spelling may be justified.
             if cyrillic_letters < 8:
                 continue
             if token.isupper() or token[:1].isupper():
@@ -224,9 +211,6 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
                 "check_russian_equivalent_or_explain_term",
             ))
 
-    # 3. Split 'Это не X. Это Y.' correction. It is not an error, but is a
-    # common place where Russian can factor the relation more naturally. The
-    # finding stays REVIEW because emphatic correction can be intentional.
     prose_parts: list[str] = []
     line_map: list[int] = []
     for line_no, raw in visible:
@@ -267,6 +251,7 @@ def self_test() -> None:
         ("# Заголовок.\nТекст.", "RU-NORM-HEADING-PERIOD"),
         ("Это не реальная рецензия. Это оценка по правилам.", "RU-NATIVE-SPLIT-CONTRAST"),
         ("Мы используем prompt только для остатка.", "RU-REGISTER-JARGON-TERM"),
+        ("Мы используем prompt только для остатка.", "RU-LEX-LATIN-IN-RUSSIAN"),
         ("Это обычный russianword в русской фразе.", "RU-LEX-LATIN-IN-RUSSIAN"),
     ]
     for text, rule in cases:
