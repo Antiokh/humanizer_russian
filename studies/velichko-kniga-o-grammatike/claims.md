@@ -17,8 +17,10 @@
 
 ## External checks used in this cycle
 
-- Gramota.ru, «Правильный выбор единственного и множественного числа сказуемого» — current confirmation for `много/столько/сколько` and contextual competition with quantitative groups.
-- Gramota.ru, rules on agreed detached definitions / participial phrases — current confirmation of participial agreement/attachment.
-- Gramota.ru answer № 328468 (2025) — gerund in impersonal clauses with infinitive is normative when semantic subjects coincide; without infinitive the dangling pattern is non-normative.
-- Gramota.ru punctuation dictionary: `исходя из` is also a preposition; this blocks a naive dangling-gerund rule.
-- Gramota.ru current punctuation material recognizes `к радости` as an introductory combination, conflicting with the source's stronger restriction.
+These sources verify only the current-norm subset; they do not replace the primary-source provenance above.
+
+- Gramota.ru, «Единственное и множественное число сказуемого»: https://gramota.ru/biblioteka/spravochniki/pismovnik/edinstvennoe-i-mnozhestvennoe-chislo-skazuemogo — explicitly gives singular agreement for `столько, сколько, много, немного, мало, немало` and separately describes contextual plural with active/individuated quantitative subjects.
+- Gramota.ru, «Обособленные согласованные определения»: https://gramota.ru/uchebnik/pravila/normy-obosobleniya-soglasovannykh-opredeleniy — confirms the structural relation between a participial phrase and its defining/head word; current Help Desk material also states that the participle agrees with the noun it actually defines.
+- Gramota.ru answer № 328468 (2025-12-06): https://gramota.ru/spravka/vopros/328468; answer № 315990 (2024-07-26): https://gramota.ru/spravka/vopros/315990 — a gerundial phrase is permitted in an impersonal clause containing an infinitive when the semantic subjects coincide; a comparable impersonal clause without an infinitive is outside the literary norm.
+- Gramota.ru punctuation dictionary, `исходя из`: https://gramota.ru/biblioteka/spravochniki/spravochnik-po-punktuatsii/iskhodya-iz-chego — classifies `исходя из` as a preposition, which blocks a naive dangling-gerund check.
+- Gramota.ru punctuation material lists `к радости` among introductory combinations; see https://gramota.ru/biblioteka/spravochniki/spravochnik-po-punktuatsii/k-radosti-kogo-chey and the general introductory-word rules. This makes the source's absolute learner restriction too strong for current NORM.
