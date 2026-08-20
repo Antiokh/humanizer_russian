@@ -59,6 +59,9 @@ jobs:
       - name: Native library provenance self-test
         run: python scripts/lint_native.py
 
+      - name: Russian language layer self-test
+        run: python scripts/lint_russian.py
+
       - name: Chukovsky normalized adapter self-test
         run: python scripts/lint_chukovsky.py
 
@@ -83,6 +86,9 @@ jobs:
       - name: Deterministic mechanical linter benchmark
         run: python scripts/benchmark_lint.py
 
+      - name: Russian language compact benchmark
+        run: python scripts/benchmark_lint.py tests/russian_cases.json
+
       - name: Nora Gal compact integration benchmark
         run: python scripts/benchmark_lint.py tests/gal_compact_cases.json
 
@@ -100,6 +106,9 @@ jobs:
 
       - name: Deterministic editorial board benchmark
         run: python scripts/benchmark_board.py
+
+      - name: Russian language editorial-board benchmark
+        run: python scripts/benchmark_board.py tests/russian_board_cases.json
 
       - name: Nora Gal editorial-board integration benchmark
         run: python scripts/benchmark_board.py tests/gal_board_cases.json
