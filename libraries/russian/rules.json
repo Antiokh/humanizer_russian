@@ -56,10 +56,10 @@
       "phenomenon_id": "russian.abstract_break_calque",
       "project_class": "AI_CALQUE",
       "automation_level": "DEFAULT_MECHANICAL",
-      "scope": "Abstract operational subjects such as process, logic, scenario, algorithm, system, integration or automation used with ломаться/сломаться in the broad sense 'fail/go wrong'",
-      "source_locator": "references/russian-calques.md; Gramota.ru dictionaries for ломаться delimit native meanings",
+      "scope": "Imperfective ломаться with abstract operational subjects such as process, logic, scenario, algorithm, system, integration, automation or career where English break may have been transferred in the broad sense fail/go wrong",
+      "source_locator": "references/russian-calques.md; Gramota.ru dictionaries, including aspect notes in Большой толковый словарь русских глаголов",
       "operation": "replace_abstract_break_with_specific_failure_verb",
-      "guard": "Не запрещать физическое ломаться, повторяющиеся поломки предметов, ломаться о голосе и закреплённые переносные значения. В разговорной технической речи система/логика/сценарий ломается может быть намеренным жаргоном. Finding требует уточнить реальный тип отказа: останавливается, сбивается, нарушается, перестаёт работать, даёт сбой и т. п."
+      "guard": "Это не запрет глагола ломаться. Не флагать физическую поломку, лексикализованное `голос ломается` и другие подтверждённые значения. Совершенный результат `сломался/сломалась` и результативное `сломан/сломана` этим механическим правилом не ловятся: например, `карьера сломалась` может быть естественной русской метафорой. В разговорной технической речи несовершенное `система/логика ломается` тоже может быть намеренным жаргоном, поэтому finding остаётся REVIEW."
     },
     {
       "rule_id": "RU-LEX-LATIN-IN-RUSSIAN",
