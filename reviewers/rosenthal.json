@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "id": "rosenthal",
+  "display_name": "Дитмар Розенталь",
+  "short_label": "Розенталь",
+  "review_label": "По системе Д. Э. Розенталя",
+  "kind": "book_author",
+  "library_id": "rosenthal",
+  "source_namespace": "ROS",
+  "avatar": null,
+  "domains": [
+    "norm",
+    "lexical_choice",
+    "collocation",
+    "register",
+    "government",
+    "word_order",
+    "syntax",
+    "participles",
+    "gerunds",
+    "nominalization",
+    "phraseology",
+    "editing"
+  ],
+  "disclaimer": "Автоматическая оценка по формализованным правилам, извлечённым из источников Д. Э. Розенталя и проверяемым на современную норму там, где это необходимо. Это не реальная рецензия, цитата или личное мнение Д. Э. Розенталя о текущем тексте."
+}
