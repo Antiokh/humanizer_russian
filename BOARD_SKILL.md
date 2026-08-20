@@ -57,15 +57,30 @@ The actual-heading rule and the pseudoheading review are intentionally different
 
 ### Model-only Russian syntax residue
 
-After mechanics, load only the relevant cards from `libraries/russian/rules.json` and `references/russian-language.md`.
+After mechanics, load only the relevant cards from:
+
+- `libraries/russian/rules.json`;
+- `libraries/russian/rki-rules.json`;
+- `references/russian-language.md`;
+- `references/russian-rki-grammar.md`.
+
+The RKI cards are source-neutral Russian-core diagnostics. Their study provenance is retained in `studies/velichko-kniga-o-grammatike/`; there is no Velichko reviewer vote.
 
 In particular review:
 
-- `RU-NORM-GERUND-SUBJECT-ATTACHMENT` — subject and temporal/aspect relation of the gerundial phrase;
+- `RU-NORM-GERUND-SUBJECT-ATTACHMENT` / `RU-NORM-GERUND-SUBJECT-CONTROL` — shared semantic subject, including the normative impersonal+infinitive case and grammaticalized/prepositional exceptions such as `исходя из`;
 - `RU-NATIVE-GERUND-FRAME-POSITION` — background/frame gerunds often work preposed, while a gerund tied to the second conjunct or preparing an antithesis/vector shift should stay close to that conjunct; this is information structure, not a universal positional norm;
-- `RU-NORM-PARTICIPLE-HEAD-ATTACHMENT` — keep the participial phrase unambiguously attached to its head noun and punctuate it according to position/function;
+- `RU-NORM-PARTICIPLE-HEAD-ATTACHMENT` and `RU-NATIVE-PARTICIPLE-TEMPORAL-FIT` — keep attachment/agreement clear, then preserve relative time and register when choosing compression;
 - `RU-NATIVE-PARTICIPIAL-COMPRESSION` — consider a natural participial phrase instead of reflexively expanding everything into `который + глагол`;
-- `RU-RKI-SYNTACTIC-INTERFERENCE-AUDIT` — government, valency, prepositions, agreement, word order/theme-rheme, aspect/tense, clause structure, homogeneous constructions, pronoun reference and punctuation transfer.
+- `RU-RKI-VALENCY-FRAME-FIT` — resolve lexical sense and participant role before changing case/preposition or copying a frame through nominalization;
+- `RU-NATIVE-SUBJECT-REALIZATION` — compare overt nominative subject with indefinite-personal, impersonal and dative-infinitive Russian models without deleting a functional subject;
+- `RU-NATIVE-EVENT-CONSTRUAL` — distinguish process, boundary/transition, result and resulting state before choosing aspect/voice;
+- `RU-NATIVE-PASSIVE-RESULT-STATE` — choose active/passive/resultative perspective by information focus and register rather than banning passive;
+- `RU-NATIVE-COPULA-SEMANTIC-FIT` — do not use `есть`, `являться`, `представлять собой` as interchangeable generic `be`, but do not stop-list them;
+- `RU-NATIVE-INTRODUCTORY-SCOPE` — keep parenthetic modality/source marking with the proposition it actually scopes over;
+- `RU-RKI-SYNTACTIC-INTERFERENCE-AUDIT` — broader fallback for government, valency, prepositions, agreement, word order/theme-rheme, aspect/tense, clause structure, homogeneous constructions, pronoun reference and punctuation transfer.
+
+The three RKI distribution signals in `scripts/lint_russian_rki_metrics.py` are `METRIC_ONLY`. They have no normative threshold and never vote or emit `CHANGE` by themselves.
 
 Do **not** force participles/gerunds for decorative variety or by quota. They are desirable as available Russian syntactic resources when they improve compression and keep the attachment clear.
 
@@ -79,7 +94,7 @@ Example to challenge:
 
 First establish the real relation, then rewrite. Preserve a metaphor only if it adds deliberate useful meaning.
 
-See `references/russian-language.md` and `docs/russian-error-priorities.md`.
+See `references/russian-language.md`, `references/russian-rki-grammar.md` and `docs/russian-error-priorities.md`.
 
 ## Reviewer semantics
 
