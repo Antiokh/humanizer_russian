@@ -11,18 +11,24 @@ def _parse_evidence_arg(value):
     if value.strip().lower() in {"auto","all"}: return value.strip().lower()
     return [x.strip() for x in value.split(",") if x.strip()]
 
-def run_review(text,style_id="neutral",library_ids=None,evidence_ids=None):
-    style=load_style(style_id); findings,metrics=run_libraries(text,library_ids=library_ids); evidence=[]; evidence_status=[]
+def run_review(text,style_id="neutral",library_ids=None,evidence_ids=None,register="general"):
+    style=load_style(style_id)
+    findings,metrics=run_libraries(
+        text,
+        library_ids=library_ids,
+        context={"mode":"editorial_board","register":register,"style_id":style_id},
+    )
+    evidence=[]; evidence_status=[]
     if evidence_ids is not None:
         from evidence_runtime import run_evidence
-        evidence,evidence_status=run_evidence(text,evidence_ids,context={"findings":findings,"style_id":style_id,"library_ids":library_ids or "default"})
+        evidence,evidence_status=run_evidence(text,evidence_ids,context={"findings":findings,"style_id":style_id,"library_ids":library_ids or "default","register":register})
     board=build_board(findings,style,evidence=evidence); profiles=reviewer_profiles(); used=sorted({f["reviewer_id"] for f in findings if f.get("reviewer_id")})
-    return {"schema_version":1,"mode":"editorial_board","style":style,"libraries":library_ids or "default","evidence_request":evidence_ids or "off","reviewers":{k:profiles.get(k,{"id":k,"display_name":k}) for k in used},"findings":findings,"metrics":metrics,"evidence":evidence,"evidence_status":evidence_status,"board":board}
+    return {"schema_version":1,"mode":"editorial_board","style":style,"register":register,"libraries":library_ids or "default","evidence_request":evidence_ids or "off","reviewers":{k:profiles.get(k,{"id":k,"display_name":k}) for k in used},"findings":findings,"metrics":metrics,"evidence":evidence,"evidence_status":evidence_status,"board":board}
 
 def render_markdown(report):
-    lines=["## Редколлегия humanizer_russian","",f"Стиль: **{report['style']['display_name']}**.",""]; guardrails=report["board"]["guardrails"]
+    lines=["## Редколлегия humanizer_russian","",f"Стиль: **{report['style']['display_name']}**. Регистр: **{report.get('register','general')}**.",""]; guardrails=report["board"]["guardrails"]
     if guardrails:
-        lines += ["### Guardrails",""]+[f"- **{x['project_class']}** `{x['rule_id']}`: {x.get('excerpt','')}" for x in guardrails]+[""]
+        lines += ["### Guardrails",""]+[f"- **{x['project_class']}** `{x['rule_id']}`: {x.get('excerpt','')} — {x.get('reason','')}" for x in guardrails]+[""]
     for g in report["board"]["groups"]:
         lines += [f"### {g['phenomenon_id']}","",f"Фрагмент: `{g.get('excerpt','')}`",f"Итог коллегии: **{g['status']} → {g['recommendation']}**",""]
         by={}
@@ -42,7 +48,14 @@ def render_markdown(report):
     return "\n".join(lines).rstrip()+"\n"
 
 def main():
-    p=argparse.ArgumentParser(description="Editorial-board review for humanizer_russian"); p.add_argument("file",nargs="?"); p.add_argument("--style",default="neutral"); p.add_argument("--libraries"); p.add_argument("--evidence",help="off (default), auto, all, or comma-separated provider ids"); p.add_argument("--format",choices=["json","markdown"],default="markdown"); a=p.parse_args()
-    text=Path(a.file).read_text(encoding="utf-8") if a.file else sys.stdin.read(); ids=[x.strip() for x in a.libraries.split(",") if x.strip()] if a.libraries else None; evidence_ids=_parse_evidence_arg(a.evidence); report=run_review(text,style_id=a.style,library_ids=ids,evidence_ids=evidence_ids)
+    p=argparse.ArgumentParser(description="Editorial-board review for humanizer_russian")
+    p.add_argument("file",nargs="?")
+    p.add_argument("--style",default="neutral")
+    p.add_argument("--libraries")
+    p.add_argument("--register",choices=["general","everyday","professional","technical"],default="general")
+    p.add_argument("--evidence",help="off (default), auto, all, or comma-separated provider ids")
+    p.add_argument("--format",choices=["json","markdown"],default="markdown")
+    a=p.parse_args()
+    text=Path(a.file).read_text(encoding="utf-8") if a.file else sys.stdin.read(); ids=[x.strip() for x in a.libraries.split(",") if x.strip()] if a.libraries else None; evidence_ids=_parse_evidence_arg(a.evidence); report=run_review(text,style_id=a.style,library_ids=ids,evidence_ids=evidence_ids,register=a.register)
     print(json.dumps(report,ensure_ascii=False,indent=2) if a.format=="json" else render_markdown(report),end="\n" if a.format=="json" else "")
 if __name__=="__main__": main()
