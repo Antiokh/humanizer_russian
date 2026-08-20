@@ -56,10 +56,20 @@
       "phenomenon_id": "russian.abstract_break_calque",
       "project_class": "AI_CALQUE",
       "automation_level": "DEFAULT_MECHANICAL",
-      "scope": "Imperfective ломаться with abstract operational subjects such as process, logic, scenario, algorithm, system, integration, automation or career where English break may have been transferred in the broad sense fail/go wrong",
+      "scope": "Present/infinitive imperfective ломается/ломаются/ломаться with abstract operational subjects where English break may have been transferred in the broad sense fail/go wrong",
       "source_locator": "references/russian-calques.md; Gramota.ru dictionaries, including aspect notes in Большой толковый словарь русских глаголов",
       "operation": "replace_abstract_break_with_specific_failure_verb",
-      "guard": "Это не запрет глагола ломаться. Не флагать физическую поломку, лексикализованное `голос ломается` и другие подтверждённые значения. Совершенный результат `сломался/сломалась` и результативное `сломан/сломана` этим механическим правилом не ловятся: например, `карьера сломалась` может быть естественной русской метафорой. В разговорной технической речи несовершенное `система/логика ломается` тоже может быть намеренным жаргоном, поэтому finding остаётся REVIEW."
+      "guard": "Русское `ломается` не следует читать как универсальное `is breaking`. Для поломки типична событийная модель: до границы называют конкретный процесс (`сбивается`, `глохнет`, `даёт сбой`, `нарушается`), после границы — результат (`сломалось`, `не работает`). Прошедшие `ломался/ломалась/ломались` не флагать автоматически: они могут обозначать повторяемые или отдельные завершившиеся эпизоды. Совершенный результат `сломался/сломалась` и `сломан/сломана` тоже не относится к этому механическому паттерну. Finding остаётся REVIEW."
+    },
+    {
+      "rule_id": "RU-NATIVE-BREAK-STATE-TRANSITION",
+      "phenomenon_id": "russian.break_state_transition",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "scope": "Explicit progressive reading with temporal cues such as сейчас/на глазах/постепенно and present ломается for ordinary physical or functioning objects",
+      "source_locator": "references/russian-calques.md; project-derived NATIVE_USAGE distinction constrained by dictionary meanings",
+      "operation": "name_prebreak_process_or_state_transition",
+      "guard": "В бытовом русском наблюдаемое приближение поломки обычно выражается конкретным процессом (`трещит`, `гнётся`, `барахлит`, `глохнет`) или границей (`сейчас сломается`), а не `ломается` как continuous. Не флагать повторяемое/диспозиционное `часто ломается`, `легко ломается`, прошедшие эпизоды `ломались`, устойчивое `голос ломается` и осознанное специальное употребление. Это NATIVE_USAGE/REVIEW, не NORM."
     },
     {
       "rule_id": "RU-LEX-LATIN-IN-RUSSIAN",
