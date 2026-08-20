@@ -11,6 +11,7 @@ on:
       - gal
       - ilyakhov
       - chukovsky
+      - velichko
   pull_request:
 
 jobs:
@@ -34,6 +35,9 @@ jobs:
 
       - name: Validate knowledge libraries
         run: python scripts/validate_libraries.py
+
+      - name: Validate Velichko bounded study and integration
+        run: python scripts/validate_velichko_study.py
 
       - name: Validate Chukovsky study and integration matrix
         run: python scripts/validate_chukovsky_study.py
@@ -61,6 +65,9 @@ jobs:
 
       - name: Russian language layer self-test
         run: python scripts/lint_russian.py
+
+      - name: Russian RKI distribution metrics self-test
+        run: python scripts/lint_russian_rki_metrics.py
 
       - name: Chukovsky normalized adapter self-test
         run: python scripts/lint_chukovsky.py
@@ -91,6 +98,9 @@ jobs:
 
       - name: Nora Gal compact integration benchmark
         run: python scripts/benchmark_lint.py tests/gal_compact_cases.json
+
+      - name: Velichko bounded integration benchmark
+        run: python scripts/benchmark_velichko.py
 
       - name: Chukovsky source-linter self-test
         run: python scripts/chukovsky_checks.py
