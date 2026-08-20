@@ -92,26 +92,48 @@
       "guard": "Не использовать `есть`, `являться` или `представлять собой` как взаимозаменяемые аналоги generic be, но и не превращать их в stop-list. Бытийное/эмфатическое `есть` нормально; `являться` уместно в книжном регистре; `представлять собой` полезно для характеристики природы/структуры."
     },
     {
+      "rule_id": "RU-NORM-PARTICIPLE-AGREEMENT",
+      "phenomenon_id": "norm.participle_agreement",
+      "project_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Agreement of a participle with the actual head noun of the participial construction",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-13-24.md (VEL-R24); current verification in studies/velichko-kniga-o-grammatike/claims.md",
+      "study_rule_ids": ["VEL-R24"],
+      "operation": "agree_participle_with_its_true_head",
+      "guard": "Согласовывать причастие с реальным определяемым словом по роду, числу и падежу, а не с ближайшим существительным внутри зависимой группы. Нужны morphology + dependencies; по линейной близости правило не механизировать."
+    },
+    {
       "rule_id": "RU-NATIVE-PARTICIPLE-TEMPORAL-FIT",
       "phenomenon_id": "russian.participle_temporal_fit",
       "project_class": "NATIVE_USAGE",
       "automation_level": "MODEL_ONLY",
-      "scope": "Choice between participial compression and relative clause after structural head/agreement checks",
+      "scope": "Temporal interpretation of a participle after structural head/agreement checks",
       "source_locator": "studies/velichko-kniga-o-grammatike/rules-25-35.md",
-      "study_rule_ids": ["VEL-R25", "VEL-R26"],
-      "operation": "use_participial_compression_only_when_reference_and_time_are_preserved",
-      "guard": "Сначала применить существующие нормы attachment/agreement. Затем проверить временной план и регистр. Не превращать каждый `который + глагол` в причастие и не разворачивать ясное причастие автоматически."
+      "study_rule_ids": ["VEL-R26"],
+      "operation": "preserve_relative_time_when_using_a_participle",
+      "guard": "Сначала применить существующие нормы attachment/agreement. Затем проверить временной план и регистр: форма причастия должна сохранять относительное время признака/действия. Не выводить выбор только из времени матричного глагола и не превращать учебную модель «план коммуникации / план информации» в универсальную норму."
     },
     {
-      "rule_id": "RU-NORM-GERUND-SUBJECT-CONTROL",
-      "phenomenon_id": "norm.gerund_subject_attachment",
-      "project_class": "NORM",
+      "rule_id": "RU-NATIVE-GERUND-GRAMMATICALIZED-GUARD",
+      "phenomenon_id": "russian.gerund_grammaticalization_guard",
+      "project_class": "NATIVE_USAGE",
       "automation_level": "MODEL_ONLY",
-      "scope": "Gerundial constructions including impersonal clauses and grammaticalized/prepositional forms",
-      "source_locator": "studies/velichko-kniga-o-grammatike/rules-25-35.md; current verification in studies/velichko-kniga-o-grammatike/claims.md",
-      "study_rule_ids": ["VEL-R27", "VEL-R28", "VEL-R29", "VEL-R30"],
-      "operation": "restore_shared_semantic_subject_or_recognize_licensed_exception",
-      "guard": "Общий семантический субъект остаётся ядром нормы. Безличное предложение с инфинитивом может лицензировать деепричастие при совпадении субъекта действий; без инфинитива типичный dangling pattern ненормативен. `исходя из` может быть предлогом. При объектном инфинитиве отдельно проверять, относится ли деепричастие к matrix subject или к исполнителю инфинитива."
+      "scope": "Forms historically or synchronically related to gerunds that may function as grammaticalized/prepositional expressions",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-25-35.md (VEL-R28); current verification in studies/velichko-kniga-o-grammatike/claims.md",
+      "study_rule_ids": ["VEL-R28"],
+      "operation": "distinguish_free_gerund_from_grammaticalized_or_prepositional_use",
+      "guard": "Не применять обычное правило общего субъекта к служебному употреблению автоматически. `исходя из` нормативно фиксируется и как предлог; `учитывая` и другие формы требуют контекстной классификации. Не делать unconditional whitelist всего списка."
+    },
+    {
+      "rule_id": "RU-NATIVE-GERUND-OBJECT-INFINITIVE-ATTACHMENT",
+      "phenomenon_id": "russian.gerund_object_infinitive_attachment",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Gerundial phrase near an object infinitive with two potential semantic controllers",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-25-35.md (VEL-R30)",
+      "study_rule_ids": ["VEL-R30"],
+      "operation": "disambiguate_matrix_subject_vs_object_infinitive_controller",
+      "guard": "При конструкциях типа `A попросил B сделать X, сделав Y` отдельно определить исполнителя добавочного действия. Если возможны два чтения, явно назвать субъекта, переставить оборот или развернуть придаточное. Не запрещать все деепричастия рядом с инфинитивом."
     },
     {
       "rule_id": "RU-NATIVE-INTRODUCTORY-SCOPE",
