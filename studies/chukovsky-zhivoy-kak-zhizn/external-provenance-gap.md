@@ -1,36 +1,48 @@
 # External-source reproducibility gap
 
-Status: `OPEN`.
+Status: `CLOSED` for `EXT-01` … `EXT-14` metadata as of 2026-08-20 (`Europe/Belgrade`).
 
-The primary-book study is fully covered and reproducibly located by `SRC:L…` locators. This note concerns only the **secondary external verification registry** in `claims-external.md`.
+The audit/access date is a local calendar date in `Europe/Belgrade`. The closing commits were created shortly after local midnight, so their GitHub UTC timestamps may still fall on 2026-08-19; this is not a future-dated access claim.
 
-## Finding
+The primary-book study remains fully covered and reproducibly located by `SRC:L…` locators. This note concerns only the **secondary external verification registry** used to calibrate historical/editorial claims.
 
-`EXT-01` … `EXT-14` currently identify the consulted modern sources by organization/work/entry description, but several entries do not yet record enough bibliographic/URL/section/access metadata for another researcher to reproduce the exact lookup without additional search.
+## Closure
 
-Therefore:
+Exact reproducibility metadata now lives in:
 
-- do **not** treat the external registry as a citation-complete bibliography;
-- do **not** promote a historical Chukovsky prescription to current `NORM` solely because `claims-external.md` labels a nearby mechanism `EXTERNAL_CONFIRMED`;
-- current normative corrections still require a fresh authoritative lookup at decision time;
-- the classifications in `claims-external.md` remain useful as a scoped audit of what was accepted, narrowed, contested or left unresolved, but their external provenance must be hardened before publication as independently reproducible research.
+- `claims-external.md` — narrative claim-by-claim audit;
+- `external-evidence-2026.json` — machine-readable source registry and dispositions.
 
-## Required next pass
+For every `EXT-01` … `EXT-14`, the JSON registry records where applicable:
 
-For every `EXT-01` … `EXT-14`, add where applicable:
-
-- canonical source URL or stable bibliographic identifier;
+- canonical HTTPS URL;
+- stable bibliographic identifier (DOI / PMCID / project identifier) when one exists;
 - title and responsible organization/authors;
-- exact dictionary entry, article/section or page/anchor;
-- edition/version/date where the resource supplies one;
-- access date;
-- for `EXT-01`–`EXT-03`, exact dictionary layer/edition and exact entry consulted;
-- for research papers, DOI/PMCID or equivalent stable identifier.
+- exact entry, section or content locator;
+- edition/layer/version metadata where the resource supplies it;
+- access date.
 
-After that pass, re-check every `EXTERNAL_CONFIRMED` / `EXTERNAL_PARTIAL` disposition whose conclusion materially depends on that source.
+The three pronunciation/norm sources explicitly retain their dictionary layer. Research-paper sources retain stable DOI identifiers; PMC-backed items also retain PMCID/PMID metadata.
+
+## Re-audit result
+
+Closing the bibliography gap **does not promote** any Chukovsky rule to current `NORM`, `HARD_GATE` or `DEFAULT_MECHANICAL`.
+
+The external audit still has unresolved/contested/value-only claims. In particular:
+
+- unresolved causal or historical generalizations stay unresolved;
+- a modern source supporting a mechanism does not validate every stronger formulation in the book;
+- historical dictionary prescriptions still require current item-by-item normative verification at decision time;
+- source/editorial agreement never creates `NORM` by vote.
+
+The machine-readable registry therefore stores `may_promote_norm_or_hard_gate: false` for every claim disposition.
 
 ## Runtime consequence
 
-None of the seven Chukovsky `EXTENDED_SOFT` mechanics depends on these external sources for its surface trigger. The gap therefore does not invalidate the mechanical library migration.
+None of the seven Chukovsky `EXTENDED_SOFT` mechanics depends on the external registry for its surface trigger, so this pass changes provenance/reproducibility only.
 
-It **does** reinforce the existing rule that `CHUK-R01`, `CHUK-R35`, `CHUK-R36` and `CHUK-R38` remain `MODEL_ONLY` and require current evidence before any mandatory normative correction.
+`CHUK-R01`, `CHUK-R35`, `CHUK-R36` and `CHUK-R38` remain `MODEL_ONLY` wherever current evidence is required before a mandatory normative correction.
+
+## Remaining research questions
+
+Closing this locator/access-metadata gap does not answer the open substantive questions already listed in `claims-external.md`, including quantitative innovation thresholds, abbreviation-survival causation, bureaucratic nominalization calibration, psychological claims about formulaic prose, historical language-policy causation, and full revalidation of every dictionary item in the source.
