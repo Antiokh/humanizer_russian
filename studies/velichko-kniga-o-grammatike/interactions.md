@@ -13,7 +13,7 @@
 `VEL-M01` is only distributional support for `VEL-R06`; it may trigger a contextual audit but never licenses pronoun deletion by itself.
 
 ## I05 — Quantitative agreement
-`VEL-R12` is a narrow current-NORM subset. `VEL-R13` and `VEL-R14` are broader semantic agreement choices. Do not generalize the hard quantifier rule to numerals or `X с Y`.
+`VEL-R12` is a current-NORM **variation guard**, not a singular-only rule: current Gramota materials conflict/evolve between academic formal singular agreement and accepted semantic plural agreement. `VEL-R13` and `VEL-R14` add broader information-structural choices for quantitative and joint-subject groups. Do not normalize number from the quantifier alone and do not generalize one construction's preference to numerals or `X с Y`.
 
 ## I06 — Passive perspective and register
 `VEL-R18 + VEL-R19 + VEL-R20 + VEL-M02` must be read together: the same situation can be framed as action, result, state, object-centered passive or possessive resultative. Passive density is not an error threshold.
@@ -34,4 +34,4 @@
 The chapter-3 syntactic phraseologisms are global negative controls for all structure regularizers: formal irregularity and unusual word order are not sufficient evidence of RKI interference.
 
 ## I12 — Norm verification boundary
-Only `VEL-R12`, `VEL-R23`, `VEL-R24`, `VEL-R27`, `VEL-R29` are promoted as NORM in this cycle, and only after independent current-reference checks. Source pedagogical absolutes in `claims.md` remain below NORM.
+Only `VEL-R12`, `VEL-R23`, `VEL-R24`, `VEL-R27`, `VEL-R29` are promoted as NORM in this cycle, and only after independent current-reference checks. For `VEL-R12`, that check exposed a current-reference conflict and therefore **narrows** NORM to preserving both licensed agreement patterns rather than enforcing singular. Source pedagogical absolutes in `claims.md` remain below NORM.
