@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "russian",
+  "display_name": "Русский язык / норма и употребление",
+  "source_namespace": "RU",
+  "source_type": "project_core",
+  "source_branch": "main",
+  "reviewer_id": "russian",
+  "adapter": "review_v1",
+  "linter_path": "scripts/lint_russian.py",
+  "enabled_by_default": true,
+  "status": "OPERATIONAL",
+  "references": [
+    "references/russian-language.md"
+  ],
+  "notes": "Нормативные правила становятся guardrails; употребление и регистр остаются неблокирующими review findings."
+}
