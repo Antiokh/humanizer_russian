@@ -116,10 +116,11 @@
       "phenomenon_id": "norm.gerund_subject_attachment",
       "project_class": "NORM",
       "automation_level": "MODEL_ONLY",
-      "scope": "Adverbial-participial (деепричастный) constructions",
-      "source_locator": "current Russian grammar/punctuation references; RKI error priority",
+      "scope": "Adverbial-participial (деепричастный) constructions, including controlled impersonal + infinitive clauses",
+      "source_locator": "current Russian grammar/punctuation references; RKI error priority; studies/velichko-kniga-o-grammatike/rules-25-35.md (VEL-R27, VEL-R29)",
+      "study_rule_ids": ["VEL-R27", "VEL-R29"],
       "operation": "restore_shared_semantic_subject_or_rebuild_clause",
-      "guard": "Действие деепричастия должно быть грамматически и семантически связано с допустимым субъектом основной предикации. Не исправлять только по позиции оборота; проверять безличные и специальные допустимые конструкции отдельно."
+      "guard": "Действие деепричастия должно быть грамматически и семантически связано с допустимым субъектом основной предикации. Безличная конструкция с инфинитивом может быть нормативной, если деепричастие и инфинитив имеют общий семантический субъект; отсутствие именительного подлежащего само по себе не делает оборот ошибочным. Грамматикализованные формы и объектный инфинитив проверять отдельными NATIVE_USAGE-карточками, а не расширять это NORM-правило."
     },
     {
       "rule_id": "RU-NATIVE-GERUND-FRAME-POSITION",
@@ -137,9 +138,10 @@
       "project_class": "NORM",
       "automation_level": "MODEL_ONLY",
       "scope": "Participial phrases and their head nouns",
-      "source_locator": "current Russian grammar/punctuation references",
+      "source_locator": "current Russian grammar/punctuation references; studies/velichko-kniga-o-grammatike/rules-13-24.md (VEL-R23)",
+      "study_rule_ids": ["VEL-R23"],
       "operation": "restore_clear_participle_head_attachment_and_punctuation",
-      "guard": "Причастный оборот нельзя отрывать от определяемого слова так, чтобы возникала ложная связь. Пунктуация зависит в том числе от положения относительно определяемого слова и добавочного обстоятельственного значения."
+      "guard": "Причастный оборот нельзя отрывать от определяемого слова так, чтобы возникала ложная связь. Пунктуация зависит в том числе от положения относительно определяемого слова и добавочного обстоятельственного значения. Согласование самого причастия с реальным определяемым словом — отдельная NORM-карточка, а не эвристика ближайшего существительного."
     },
     {
       "rule_id": "RU-NATIVE-PARTICIPIAL-COMPRESSION",
@@ -147,9 +149,10 @@
       "project_class": "NATIVE_USAGE",
       "automation_level": "MODEL_ONLY",
       "scope": "Choice between relative/subordinate clause and a natural Russian participial construction",
-      "source_locator": "project preference informed by Russian syntax and RKI contrast",
+      "source_locator": "project preference informed by Russian syntax and RKI contrast; studies/velichko-kniga-o-grammatike/rules-25-35.md (VEL-R25)",
+      "study_rule_ids": ["VEL-R25"],
       "operation": "consider_participial_compression_when_attachment_is_clear",
-      "guard": "Не добавлять причастия ради декоративного усложнения. Но и не разлагать естественный причастный оборот на аналитическое 'который...' только ради простоты. Предпочесть причастную конструкцию, если она точнее и компактнее выражает фоновый признак, не создаёт тяжести, двусмысленности или регистрового сдвига."
+      "guard": "Не добавлять причастия ради декоративного усложнения. Но и не разлагать естественный причастный оборот на аналитическое 'который...' только ради простоты. Предпочесть причастную конструкцию, если она точнее и компактнее выражает фоновый признак, не создаёт тяжести, двусмысленности или регистрового сдвига. Временной план причастия проверяется отдельной contextual-карточкой."
     },
     {
       "rule_id": "RU-RKI-SYNTACTIC-INTERFERENCE-AUDIT",

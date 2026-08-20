@@ -11,7 +11,12 @@ on:
       - gal
       - ilyakhov
       - chukovsky
+      - velichko
   pull_request:
+
+permissions:
+  contents: read
+  statuses: write
 
 jobs:
   python-and-json:
@@ -34,6 +39,9 @@ jobs:
 
       - name: Validate knowledge libraries
         run: python scripts/validate_libraries.py
+
+      - name: Validate Velichko bounded study and integration
+        run: python scripts/validate_velichko_study.py
 
       - name: Validate Chukovsky study and integration matrix
         run: python scripts/validate_chukovsky_study.py
@@ -61,6 +69,9 @@ jobs:
 
       - name: Russian language layer self-test
         run: python scripts/lint_russian.py
+
+      - name: Russian RKI distribution metrics self-test
+        run: python scripts/lint_russian_rki_metrics.py
 
       - name: Chukovsky normalized adapter self-test
         run: python scripts/lint_chukovsky.py
@@ -91,6 +102,9 @@ jobs:
 
       - name: Nora Gal compact integration benchmark
         run: python scripts/benchmark_lint.py tests/gal_compact_cases.json
+
+      - name: Velichko bounded integration benchmark
+        run: python scripts/benchmark_velichko.py
 
       - name: Chukovsky source-linter self-test
         run: python scripts/chukovsky_checks.py
@@ -207,3 +221,23 @@ jobs:
                   json.load(f)
               print(path)
           PY
+
+      - name: Publish Velichko branch quality status
+        if: always() && github.ref_name == 'velichko'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          case "$JOB_STATUS" in
+            success) state=success ;;
+            failure) state=failure ;;
+            *) state=error ;;
+          esac
+          payload=$(printf '{"state":"%s","context":"quality/velichko","description":"Full repository quality workflow: %s"}' "$state" "$JOB_STATUS")
+          curl --fail-with-body -sS \
+            -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" \
+            -d "$payload"

@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "status": "OPERATIONAL",
+  "scope": "Source-neutral Russian grammar/RKI model-only cards derived from the audited physically available 2004 Velichko fragment and narrowed by current normative checks.",
+  "rules": [
+    {
+      "rule_id": "RU-RKI-VALENCY-FRAME-FIT",
+      "phenomenon_id": "russian.valency_frame_fit",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Verb/adjective/noun government where case or preposition depends on lexical-semantic variant and participant role",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-01-12.md; rules-13-24.md",
+      "study_rule_ids": ["VEL-R01", "VEL-R15", "VEL-R16", "VEL-R17"],
+      "operation": "resolve_lexical_sense_and_restore_russian_valency_frame",
+      "guard": "Сначала определить значение главного слова и роль зависимого. Не переносить управление синонима, другого значения той же лексемы или исходного глагола на номинализацию. Не строить unconditional replacement map: редкая рамка требует словарной/корпусной проверки."
+    },
+    {
+      "rule_id": "RU-NATIVE-PHASE-AGENTIVITY",
+      "phenomenon_id": "russian.phase_verb_agentivity",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Choice among phase verbs such as прекратить/перестать/бросить + infinitive",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-01-12.md",
+      "study_rule_ids": ["VEL-R02", "VEL-R03"],
+      "operation": "choose_phase_verb_that_matches_control_and_finality",
+      "guard": "Проверять контроль субъекта и значение окончательного отказа. Не считать неодушевлённый субъект сам по себе ошибкой: организации и другие сущности могут быть метонимическими агенсами."
+    },
+    {
+      "rule_id": "RU-NATIVE-SUBJECT-REALIZATION",
+      "phenomenon_id": "russian.subject_realization",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Choice among overt nominative subject, indefinite-personal, infinitival-dative and impersonal Russian models",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-01-12.md",
+      "study_rule_ids": ["VEL-R06", "VEL-R07", "VEL-R09", "VEL-R10", "VEL-R11"],
+      "operation": "choose_native_subject_relation_without_inventing_an_actor",
+      "guard": "Русский не требует явного именительного субъекта для каждой ситуации. Проверять референцию, агентивность и роль experiencer-а. Сохранять явное местоимение при контрасте, анафоре или когда деятель действительно является темой. Не генерировать безличную модель по одному шаблону."
+    },
+    {
+      "rule_id": "RU-NATIVE-EVENT-CONSTRUAL",
+      "phenomenon_id": "russian.event_process_transition_result",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Aspect/event presentation where Russian distinguishes ongoing process, boundary/transition, result and resulting state",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-01-12.md; rules-13-24.md",
+      "study_rule_ids": ["VEL-R04", "VEL-R08", "VEL-R20"],
+      "operation": "name_process_transition_or_result_state_that_is_actually_asserted",
+      "guard": "Не выводить русскую форму из английского progressive/passive или из одного временного маркера. НСВ может быть процессуальным, повторным или диспозиционным; СВ — не универсальный маркер любого результата. Сначала установить фазу события и модальность."
+    },
+    {
+      "rule_id": "RU-NORM-QUANTIFIER-PREDICATE-NUMBER",
+      "phenomenon_id": "norm.quantifier_predicate_number",
+      "project_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Predicate number with subject groups containing много, немного, мало, немало, столько, сколько",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-01-12.md (VEL-R12); current-reference conflict recorded in studies/velichko-kniga-o-grammatike/claims.md",
+      "study_rule_ids": ["VEL-R12"],
+      "operation": "choose_singular_or_plural_by_formal_vs_semantic_agreement",
+      "guard": "Не вводить singular-only запрет. Письмовник Грамоты, следуя академической «Русской грамматике», предписывает для много/немного/мало/немало/столько/сколько формальное единственное число; при этом ответы Грамоты № 322014 (2025), № 320220 (2024) и № 298593 (2018) признают нормативным и множественное число как согласование по смыслу, особенно при активных лицах. Единственное число часто остаётся формальным/предпочтительным вариантом, множественное само по себе не ошибка. Нужны морфосинтаксис и контекст."
+    },
+    {
+      "rule_id": "RU-NATIVE-QUANTITATIVE-AGREEMENT-FOCUS",
+      "phenomenon_id": "russian.quantitative_agreement_focus",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Predicate number with quantitative groups and NOM + с + INSTR subject structures outside the narrow quantifier-reference conflict",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-13-24.md",
+      "study_rule_ids": ["VEL-R13", "VEL-R14"],
+      "operation": "choose_agreement_that_matches_collective_vs_individuated_participants",
+      "guard": "Учитывать активность участников, одушевлённость, порядок слов и равноправие/сопровождение. Не объявлять единственное или множественное число универсально предпочтительным."
+    },
+    {
+      "rule_id": "RU-NATIVE-PASSIVE-RESULT-STATE",
+      "phenomenon_id": "russian.passive_result_state",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Choice among active clause, agentive passive, possessive resultative and stative/result description",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-13-24.md",
+      "study_rule_ids": ["VEL-R18", "VEL-R19", "VEL-R20"],
+      "operation": "choose_voice_or_resultative_by_information_focus_and_register",
+      "guard": "Трёхчленный пассив допустим и особенно естествен в книжном/научном/официальном регистре, если агент информативен. `у меня + краткое причастие` может естественно представлять готовый результат без агента. Не заменять статическое состояние акциональным `-ся` пассивом и не запрещать процессуальный `-ся` пассив по классу."
+    },
+    {
+      "rule_id": "RU-NATIVE-COPULA-SEMANTIC-FIT",
+      "phenomenon_id": "russian.copula_semantic_fit",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Present-tense zero copula and bookish linking predicates есть/являться/представлять собой",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-01-12.md; rules-13-24.md",
+      "study_rule_ids": ["VEL-R05", "VEL-R21", "VEL-R22"],
+      "operation": "choose_copular_model_by_identity_existence_qualification_or_essence",
+      "guard": "Не использовать `есть`, `являться` или `представлять собой` как взаимозаменяемые аналоги generic be, но и не превращать их в stop-list. Бытийное/эмфатическое `есть` нормально; `являться` уместно в книжном регистре; `представлять собой` полезно для характеристики природы/структуры."
+    },
+    {
+      "rule_id": "RU-NORM-PARTICIPLE-AGREEMENT",
+      "phenomenon_id": "norm.participle_agreement",
+      "project_class": "NORM",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Agreement of a participle with the actual head noun of the participial construction",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-13-24.md (VEL-R24); current verification in studies/velichko-kniga-o-grammatike/claims.md",
+      "study_rule_ids": ["VEL-R24"],
+      "operation": "agree_participle_with_its_true_head",
+      "guard": "Согласовывать причастие с реальным определяемым словом по роду, числу и падежу, а не с ближайшим существительным внутри зависимой группы. Нужны morphology + dependencies; по линейной близости правило не механизировать."
+    },
+    {
+      "rule_id": "RU-NATIVE-PARTICIPLE-TEMPORAL-FIT",
+      "phenomenon_id": "russian.participle_temporal_fit",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Temporal interpretation of a participle after structural head/agreement checks",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-25-35.md",
+      "study_rule_ids": ["VEL-R26"],
+      "operation": "preserve_relative_time_when_using_a_participle",
+      "guard": "Сначала применить существующие нормы attachment/agreement. Затем проверить временной план и регистр: форма причастия должна сохранять относительное время признака/действия. Не выводить выбор только из времени матричного глагола и не превращать учебную модель «план коммуникации / план информации» в универсальную норму."
+    },
+    {
+      "rule_id": "RU-NATIVE-GERUND-GRAMMATICALIZED-GUARD",
+      "phenomenon_id": "russian.gerund_grammaticalization_guard",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Forms historically or synchronically related to gerunds that may function as grammaticalized/prepositional expressions",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-25-35.md (VEL-R28); current verification in studies/velichko-kniga-o-grammatike/claims.md",
+      "study_rule_ids": ["VEL-R28"],
+      "operation": "distinguish_free_gerund_from_grammaticalized_or_prepositional_use",
+      "guard": "Не применять обычное правило общего субъекта к служебному употреблению автоматически. `исходя из` нормативно фиксируется и как предлог; `учитывая` и другие формы требуют контекстной классификации. Не делать unconditional whitelist всего списка."
+    },
+    {
+      "rule_id": "RU-NATIVE-GERUND-OBJECT-INFINITIVE-ATTACHMENT",
+      "phenomenon_id": "russian.gerund_object_infinitive_attachment",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Gerundial phrase near an object infinitive with two potential semantic controllers",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-25-35.md (VEL-R30)",
+      "study_rule_ids": ["VEL-R30"],
+      "operation": "disambiguate_matrix_subject_vs_object_infinitive_controller",
+      "guard": "При конструкциях типа `A попросил B сделать X, сделав Y` отдельно определить исполнителя добавочного действия. Если возможны два чтения, явно назвать субъекта, переставить оборот или развернуть придаточное. Не запрещать все деепричастия рядом с инфинитивом."
+    },
+    {
+      "rule_id": "RU-NATIVE-INTRODUCTORY-SCOPE",
+      "phenomenon_id": "russian.introductory_scope_position",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Introductory/modal/source phrases whose position or syntactic status changes proposition scope",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-25-35.md",
+      "study_rule_ids": ["VEL-R31", "VEL-R32"],
+      "operation": "keep_introductory_marker_with_the_proposition_it_scopes_over",
+      "guard": "Не переставлять вводное слово ради ритма или anti-AI эффекта без проверки scope. Различать вводный компонент (`Как известно, ...`) и предикативную конструкцию (`Известно, что ...`). Не переносить устаревшее/учебное ограничение на `к радости`: текущие справочники признают эту вводную модель."
+    }
+  ]
+}
