@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {
+      "rule_id": "RU-NORM-HEADING-PERIOD",
+      "phenomenon_id": "norm.heading_terminal_period",
+      "project_class": "NORM",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "scope": "Markdown headings",
+      "source_locator": "Gramota.ru answers 328383, 207572, 295905",
+      "operation": "remove_terminal_period_from_heading",
+      "guard": "Не удалять вопросительный, восклицательный знак или многоточие; точка внутри многопредложного заголовка допустима, финальная точка опускается."
+    },
+    {
+      "rule_id": "RU-NATIVE-SPLIT-CONTRAST",
+      "phenomenon_id": "native.split_negation_correction",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "scope": "Adjacent 'Это не X. Это Y.' explanatory contrast",
+      "source_locator": "project-derived from native Russian contrast/compression rules",
+      "operation": "compare_with_single_russian_contrast_or_keep_if_emphatic",
+      "guard": "Это warning, а не запрет: разрыв может быть функциональным при резком возражении, коррекции или драматическом ударе."
+    },
+    {
+      "rule_id": "RU-LEX-LATIN-IN-RUSSIAN",
+      "phenomenon_id": "russian.foreign_word_in_russian_prose",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "DEFAULT_MECHANICAL",
+      "scope": "Lowercase Latin words inside predominantly Cyrillic prose",
+      "source_locator": "project-derived lexical-fit diagnostic; borrowings are not errors by category",
+      "operation": "check_russian_equivalent_or_explain_term",
+      "guard": "Не флагать URL/code, очевидные имена/бренды и аббревиатуры как языковую ошибку. Finding требует проверки уместности."
+    },
+    {
+      "rule_id": "RU-REGISTER-JARGON-TERM",
+      "phenomenon_id": "russian.register_jargon_or_term",
+      "project_class": "EDITING",
+      "automation_level": "EXTENDED_SOFT",
+      "scope": "Technical jargon and terms whose fit depends on audience/register",
+      "source_locator": "Gramota.ru: term/jargon choice is context- and style-dependent",
+      "operation": "replace_explain_or_keep_by_audience",
+      "guard": "В профессиональном тексте термин может быть точнее бытового эквивалента. В everyday register finding повышается до DEFAULT_MECHANICAL, но остаётся REVIEW."
+    },
+    {
+      "rule_id": "RU-SEM-CATEGORY-COLLECTION",
+      "phenomenon_id": "semantics.category_collection_collision",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "scope": "Definitions/metaphors that equate an item with a collection/container made of such items",
+      "source_locator": "project-derived semantic guard",
+      "operation": "restore_real_relation_between_entity_and_collection",
+      "guard": "Не запрещать осмысленную метафору; проверить буквальный тип отношения и намеренную образность."
+    }
+  ]
+}
