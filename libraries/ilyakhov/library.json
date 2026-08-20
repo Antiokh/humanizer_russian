@@ -17,12 +17,15 @@
     "studies/pishi-sokrashchay/README.md",
     "studies/pishi-sokrashchay/integration-matrix.md",
     "studies/pishi-sokrashchay/mechanical-feasibility.md",
-    "studies/pishi-sokrashchay/audit.md"
+    "studies/pishi-sokrashchay/audit.md",
+    "studies/pishi-sokrashchay/external-claims-evidence.md",
+    "studies/pishi-sokrashchay/external-evidence-2026.json",
+    "studies/pishi-sokrashchay/corpus-calibration.md"
   ],
   "source_status": "OPERATIONAL_FOR_INTEGRATION",
   "source_version": "User-provided EPUB; exact publisher/publication date/print-equivalent edition not established from EPUB metadata",
   "source_fingerprint_sha256": "21eae50b5dfd29adfe60f9f52130494673b2e4231fab4d0f29827a392bacb38d",
   "rules_path": "libraries/ilyakhov/rules.json",
   "model_only_reference": "references/ilyakhov.md",
-  "notes": "102 audited source rules: 0 HARD_GATE, 0 source DEFAULT_MECHANICAL, 9 EXTENDED_SOFT, 4 METRIC_ONLY, 89 MODEL_ONLY after natural-corpus calibration. ILY-M01 is one PROJECT_DERIVED DEFAULT_MECHANICAL subset of PS-R22 + PS-R29 and is not attributed as a direct rule of the authors. Public repository stores derived knowledge only; the source EPUB is not committed."
+  "notes": "102 audited source rules: 0 HARD_GATE, 0 source DEFAULT_MECHANICAL, 9 EXTENDED_SOFT, 4 METRIC_ONLY, 89 MODEL_ONLY after natural-corpus calibration. ILY-M01 is one PROJECT_DERIVED DEFAULT_MECHANICAL subset of PS-R22 + PS-R29 and is not attributed as a direct rule of the authors. External claim evidence and the 218,167-word natural-corpus calibration are registered as research artifacts only; neither can silently promote a source rule to current NORM/HARD_GATE. Public repository stores derived knowledge only; the source EPUB is not committed."
 }
