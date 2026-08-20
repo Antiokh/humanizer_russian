@@ -11,7 +11,8 @@ def resolved_observations(payload,cycle,study_dir=None):
     if cards is None:
         if not study_dir or not payload.get('observation_parts'): raise SystemExit(f'cycle{cycle} observations missing')
         cards=[]
-        for name in payload['observation_parts']: cards.extend(load(f'studies/{study_dir}/{name}').get('observations',[]))
+        for name in payload['observation_parts']:
+            cards.extend(load(f'studies/{study_dir}/{name}').get('observations',[]))
     seen=set()
     for card in cards:
         oid=card.get('observation_id')
@@ -35,7 +36,10 @@ def main():
     counts={k:sum(x['automation_level']==k for x in items) for k in ['HARD_GATE','DEFAULT_MECHANICAL','EXTENDED_SOFT','METRIC_ONLY','MODEL_ONLY']}
     if counts!=idx['automation_counts']: raise SystemExit(f'automation mismatch {counts} != {idx["automation_counts"]}')
     if idx['source_cycles']!=5 or idx['total_rule_count']!=78: raise SystemExit('expected 5 cycles / 78 cumulative rules')
-    if c2['rule_count']!=13 or c3['rule_count']!=15 or c5['rule_count']!=4: raise SystemExit('source rule counts mismatch')
+    if c2['rule_count']!=13 or c2['automation_counts']!={'HARD_GATE':0,'DEFAULT_MECHANICAL':0,'EXTENDED_SOFT':1,'METRIC_ONLY':0,'MODEL_ONLY':12}: raise SystemExit('cycle2 split mismatch')
+    if c3['rule_count']!=15 or c3['automation_counts']!={'HARD_GATE':0,'DEFAULT_MECHANICAL':0,'EXTENDED_SOFT':0,'METRIC_ONLY':0,'MODEL_ONLY':15}: raise SystemExit('cycle3 split mismatch')
+    if any(x['automation_level']!='MODEL_ONLY' for x in c3['rules']): raise SystemExit('cycle3 must not add pseudo-mechanical findings')
+    if c5['rule_count']!=4: raise SystemExit('cycle5 rule count mismatch')
     if c5['automation_counts']!={'HARD_GATE':0,'DEFAULT_MECHANICAL':0,'EXTENDED_SOFT':0,'METRIC_ONLY':0,'MODEL_ONLY':4}: raise SystemExit('cycle5 split mismatch')
     if any(x['automation_level']!='MODEL_ONLY' for x in c5['rules']): raise SystemExit('cycle5 must remain MODEL_ONLY')
     if len({x['phenomenon_id'] for x in c5['rules']})!=4: raise SystemExit('duplicate cycle5 phenomenon_id')
@@ -48,9 +52,15 @@ def main():
     if p4['existing_rules_enriched']!=50 or len(p4['map'])!=50 or p4.get('new_rule_ids')!=[]: raise SystemExit('cycle4 provenance mismatch')
     if p5['existing_rules_enriched']!=14 or len(p5['map'])!=14 or p5.get('new_rule_ids')!=['ROS-R75','ROS-R76','ROS-R77','ROS-R78']: raise SystemExit('cycle5 provenance mismatch')
     existing=set(ids)
-    for p in [p3,p4,p5]:
-        rids=[x['rule_id'] for x in p['map']]
-        if len(rids)!=len(set(rids)) or any(x not in existing for x in rids): raise SystemExit(f'provenance target invalid cycle {p.get("source_cycle")}')
+    for row in p3['map']:
+        if row['rule_id'] not in existing or int(row['rule_id'].split('R')[-1])>=60: raise SystemExit(f'cycle3 provenance target invalid: {row}')
+    p4_ids=[x['rule_id'] for x in p4['map']]
+    if len(p4_ids)!=len(set(p4_ids)) or any(x not in existing for x in p4_ids): raise SystemExit('cycle4 provenance target invalid/duplicate')
+    expected_p4={f'ROS-R{i:02d}' for i in range(1,47)}|{'ROS-R47','ROS-R49','ROS-R53','ROS-R54'}
+    if set(p4_ids)!=expected_p4: raise SystemExit(f'cycle4 provenance set mismatch: {sorted(set(p4_ids)^expected_p4)}')
+    p5_ids=[x['rule_id'] for x in p5['map']]
+    expected_p5={'ROS-R14','ROS-R17','ROS-R30','ROS-R37','ROS-R41','ROS-R46','ROS-R50','ROS-R55','ROS-R56','ROS-R58','ROS-R65','ROS-R69','ROS-R73','ROS-R74'}
+    if len(p5_ids)!=len(set(p5_ids)) or set(p5_ids)!=expected_p5: raise SystemExit(f'cycle5 provenance set mismatch: {sorted(set(p5_ids)^expected_p5)}')
     if manifest['source_branch']!='rosenthal' or manifest['adapter']!='review_v1': raise SystemExit('manifest routing mismatch')
     if manifest['rules_path']!='libraries/rosenthal/rules-index.json': raise SystemExit('manifest must route through cumulative index')
     if idx['groups']!=manifest['rule_groups'] or len(manifest.get('rule_groups',[]))!=4: raise SystemExit('cycle5 rule-group routing missing')
@@ -68,6 +78,16 @@ def main():
         e=load(f'studies/{study_name}/evals.json')['cases']; m=load(f'studies/{study_name}/eval-map.json')['map']
         if len(e)!=n or {x['id'] for x in e}!={x['eval_id'] for x in m}: raise SystemExit(f'eval map mismatch: {study_name}')
         if {x['rule_id'] for x in m}-existing: raise SystemExit(f'eval maps unknown rules: {study_name}')
+    cases=load('tests/rosenthal_cases.json')['cases']
+    if len(cases)<15: raise SystemExit('too few cumulative Rosenthal mechanical controls')
+    norm3=(ROOT/'studies/rosenthal-pravopisanie-proiznoshenie-redaktirovanie/current-norm.md').read_text(encoding='utf-8')
+    for needle in ['gramota.ru/meta/ambitsioznyy','gramota.ru/meta/agressivnyy','query=%D0%BF%D1%80%D0%B0%D1%87%D0%B5%D1%87%D0%BD%D0%B0%D1%8F','OBSOLETE','SOURCE_PERIOD']:
+        if needle not in norm3: raise SystemExit(f'missing cycle3 current-norm evidence/boundary: {needle}')
+    norm4=(ROOT/'studies/rosenthal-pravopisanie-stilistika/current-norm.md').read_text(encoding='utf-8')
+    for needle in ['vopros/324406','query=%D0%BA%D0%BB%D0%B8%D0%BF%D1%81','vopros/331581','OBSOLETE','SOURCE_PERIOD']:
+        if needle not in norm4: raise SystemExit(f'missing cycle4 current-norm evidence/boundary: {needle}')
+    gal=load('libraries/gal/rules/editor_workflow.json')['rules']
+    if not any(x.get('phenomenon_id')=='editing.local_change_whole_fit' for x in gal): raise SystemExit('expected cross-school whole-fit overlap with Gal')
     norm5=(ROOT/'studies/rosenthal-orfografiya-punktuatsiya/current-norm.md').read_text(encoding='utf-8')
     for needle in ['vopros/314903','vopros/306315','SOURCE_PERIOD','CURRENT_CONFIRMED']:
         if needle not in norm5: raise SystemExit(f'missing cycle5 current-norm evidence/boundary: {needle}')
