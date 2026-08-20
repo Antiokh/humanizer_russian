@@ -10,6 +10,10 @@
   "linter_path": "scripts/lint_golub.py",
   "enabled_by_default": true,
   "status": "OPERATIONAL",
+  "rules_path": "libraries/golub/rules.json",
+  "model_only_reference": "references/golub.md",
+  "model_eval_path": "evals/golub.json",
+  "model_eval_map_path": "evals/golub-map.json",
   "references": [
     "studies/golub/source.md",
     "studies/golub/coverage.md",
@@ -22,5 +26,5 @@
     "libraries/golub/rules.json",
     "references/golub.md"
   ],
-  "notes": "93 deduplicated phenomena from two fully read coauthored books. Two books are one source school, never two votes. 3 narrow DEFAULT_MECHANICAL NORM subsets, 1 shared EXTENDED_SOFT paired-conjunction surface, 2 descriptive metrics, 87 contextual rules. Five AI_CALQUE observations are PROJECT_DERIVED. Mechanical surfaces shared with current Rosenthal are factored into scripts/shared_russian_norm_surfaces.py rather than duplicated per author. No mandatory model context expansion."
+  "notes": "93 deduplicated phenomena from two fully read coauthored books. Two books are one source school, never two votes. 3 narrow DEFAULT_MECHANICAL NORM subsets, 1 shared EXTENDED_SOFT paired-conjunction surface, 2 descriptive metrics, 87 contextual rules. Five AI_CALQUE observations are PROJECT_DERIVED. Mechanical surfaces shared with current Rosenthal are factored into scripts/shared_russian_norm_surfaces.py rather than duplicated per author. No mandatory model context expansion. The opt-in model-eval harness uses a compact 18-case synthetic context/preservation suite; the full 372-record study eval corpus remains the deterministic research layer."
 }
