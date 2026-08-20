@@ -27,6 +27,7 @@ This is not a waiver of provenance. The audit records both facts simultaneously:
 - [x] model-only residue compressed into source-neutral Russian core guidance
 - [x] preservation controls for natural Russian variation
 - [x] NORM subset independently checked against current references
+- [x] full repository quality workflow passed before final PR
 
 ## NORM promoted in this cycle
 
@@ -54,6 +55,14 @@ Current Gramota also explicitly treats `исходя из` as a preposition, con
 - model-only observations: **32**
 
 This is the intended precision-first outcome. Surface regex cannot reliably solve valency, LSV, semantic subject, aspect, action-vs-state passive, discourse scope or natural information structure.
+
+## Integration validation
+
+The `quality` workflow now runs on the long-lived `velichko` branch and includes the bounded-study validator, RKI metric self-test and Velichko preservation benchmark in addition to the existing repository-wide compile, architecture/library validators, lint self-tests, Compact benchmarks, Editorial Board benchmarks, author-source validators, smoke tests and JSON validation.
+
+Pre-PR full gate result on commit `ab7d34b9554c13b392d69525282aaaf593c66364`: `quality/velichko = success`.
+
+The source-specific benchmark proves the intended boundary: 11 source-neutral `RU-*` contextual cards, 3 `METRIC_ONLY` proxies, 7 natural preservation controls, and **0 new deterministic findings**.
 
 ## Loss audit
 
