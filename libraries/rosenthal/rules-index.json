@@ -1,0 +1,11 @@
+{
+  "schema_version":1,
+  "library_id":"rosenthal",
+  "source_namespace":"ROS",
+  "source_cycles":2,
+  "total_rule_count":59,
+  "groups":["libraries/rosenthal/rules.json","libraries/rosenthal/rules-cycle2.json"],
+  "source_fingerprints":["b239448a8ebcaaf566340441c22eb94c272e128e82ec53c70231dcf70704c4f5","e48193cd41cda3ffb85b3ad64f793039b6dbbc4b098d890b61946d1125c779ac"],
+  "automation_counts":{"HARD_GATE":0,"DEFAULT_MECHANICAL":0,"EXTENDED_SOFT":3,"METRIC_ONLY":1,"MODEL_ONLY":55},
+  "policy":"Source-specific rule IDs are cumulative; source-neutral phenomenon_id is deduplicated across books/authors. Historical prescriptions do not become current NORM without current verification."
+}
