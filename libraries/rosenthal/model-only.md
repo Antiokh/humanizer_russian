@@ -1,8 +1,8 @@
 # Rosenthal MODEL_ONLY residue
 
-This file is a compact routing reference. Canonical rule cards live in `rules.json` (cycle 1), `rules-cycle2.json` (cycle 2), and `rules-cycle3.json` (cycle 3). **Cycle 4 adds no new rule identities** and is routed through `provenance-cycle4.json`; full studies are not loaded into ordinary runtime.
+This file is a compact routing reference. Canonical rule cards live in `rules.json` (cycle 1), `rules-cycle2.json` (cycle 2), `rules-cycle3.json` (cycle 3), and `rules-cycle5.json` (cycle 5). **Cycle 4 adds no new rule identities** and is routed through `provenance-cycle4.json`; full studies are not loaded into ordinary runtime.
 
-Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`, `ROS-R44`, `ROS-R53`. `ROS-R10` remains metric-only. Cycles 3 and 4 deliberately add no new mechanical finding.
+Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`, `ROS-R44`, `ROS-R53`. `ROS-R10` remains metric-only. Cycles 3–5 deliberately add no new mechanical finding.
 
 ## Cycle 2 contextual rules
 
@@ -32,4 +32,15 @@ Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`,
 
 The 1997 fifth edition «Справочник по правописанию и стилистике» ends at §213 and substantially overlaps the already integrated stylistic lineage. It enriches 50 existing rule cards and records edition/current-norm boundaries, especially `более старший`, `клипс/клипса`, duplicate `бы`, government and parallel constructions. No source-period list is promoted to modern NORM by author authority.
 
-Cycle-1 MODEL_ONLY rules remain canonical in `libraries/rosenthal/rules.json`. Do not infer blanket bans on nominalization, passive, repetition, long sentences, participles, gerunds, colloquial markers, loanwords, tropes, rhetorical figures, paragraphing, ellipsis, or spoken reduction.
+## Cycle 5 contextual rules
+
+| Rule | Phenomenon |
+|---|---|
+| `ROS-R75` | `editing.punctuation_variant_semantic_choice` |
+| `ROS-R76` | `author.punctuation_system_intent` |
+| `ROS-R77` | `register.spoken_syntax_punctuation` |
+| `ROS-R78` | `native.serial_verb_unit_punctuation` |
+
+Cycle 5 comes from the supplied DOCX «Справочник по русскому языку: орфография и пунктуация». Exact edition metadata is not recoverable from the supplied file. Concrete mandatory orthography and punctuation remain owned by current `russian/NORM`; the new Rosenthal cards cover only contextual choice and preservation boundaries.
+
+Cycle-1 MODEL_ONLY rules remain canonical in `libraries/rosenthal/rules.json`. Do not infer blanket bans or automatic normalization of nominalization, passive, repetition, long sentences, participles, gerunds, colloquial markers, loanwords, tropes, rhetorical figures, paragraphing, ellipsis, spoken reduction, punctuation variation, authorial punctuation, conversational syntax, or adjacent same-form verbs.

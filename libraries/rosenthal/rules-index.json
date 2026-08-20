@@ -1,11 +1,22 @@
 {
-  "schema_version":1,
-  "library_id":"rosenthal",
-  "source_namespace":"ROS",
-  "source_cycles":4,
-  "total_rule_count":74,
-  "groups":["libraries/rosenthal/rules.json","libraries/rosenthal/rules-cycle2.json","libraries/rosenthal/rules-cycle3.json"],
-  "source_fingerprints":["b239448a8ebcaaf566340441c22eb94c272e128e82ec53c70231dcf70704c4f5","e48193cd41cda3ffb85b3ad64f793039b6dbbc4b098d890b61946d1125c779ac","45f01400ff6d954488dc06236b931ff2f10aa59c30f95d2720ded858468d2667","1a737311abfacf32a1c5551e4e1ce21c061883dcbf1800d9ac97a3b49ef3bdeb"],
-  "automation_counts":{"HARD_GATE":0,"DEFAULT_MECHANICAL":0,"EXTENDED_SOFT":3,"METRIC_ONLY":1,"MODEL_ONLY":70},
-  "policy":"Source-specific rule IDs are cumulative; source-neutral phenomenon_id is deduplicated across books/authors. A source cycle may add provenance without adding new rule IDs. Historical prescriptions do not become current NORM without current verification. Coauthored editions retain edition-level provenance."
+  "schema_version": 1,
+  "library_id": "rosenthal",
+  "source_namespace": "ROS",
+  "source_cycles": 5,
+  "total_rule_count": 78,
+  "groups": [
+    "libraries/rosenthal/rules.json",
+    "libraries/rosenthal/rules-cycle2.json",
+    "libraries/rosenthal/rules-cycle3.json",
+    "libraries/rosenthal/rules-cycle5.json"
+  ],
+  "source_fingerprints": [
+    "b239448a8ebcaaf566340441c22eb94c272e128e82ec53c70231dcf70704c4f5",
+    "e48193cd41cda3ffb85b3ad64f793039b6dbbc4b098d890b61946d1125c779ac",
+    "45f01400ff6d954488dc06236b931ff2f10aa59c30f95d2720ded858468d2667",
+    "1a737311abfacf32a1c5551e4e1ce21c061883dcbf1800d9ac97a3b49ef3bdeb",
+    "20d76510863a76a345b4c6ff32c15bd614131f79d821924f33c7f27fd4c71cc0"
+  ],
+  "automation_counts": {"HARD_GATE":0,"DEFAULT_MECHANICAL":0,"EXTENDED_SOFT":3,"METRIC_ONLY":1,"MODEL_ONLY":74},
+  "policy": "Source-specific rule IDs are cumulative; source-neutral phenomenon_id is deduplicated across books/authors. A source cycle may add provenance without adding rule IDs. Historical prescriptions do not become current NORM without current verification. Concrete orthography and mandatory punctuation are owned by current russian/NORM; Rosenthal cycle 5 adds only contextual punctuation mechanisms."
 }

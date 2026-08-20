@@ -13,6 +13,7 @@ on:
       - 'scripts/benchmark_rosenthal.py'
       - 'scripts/benchmark_rosenthal_cycle3.py'
       - 'scripts/benchmark_rosenthal_cycle4.py'
+      - 'scripts/benchmark_rosenthal_cycle5.py'
       - 'tests/rosenthal_cases.json'
       - 'studies/rosenthal-*/**'
       - 'references/rosenthal.md'
@@ -50,14 +51,16 @@ jobs:
         run: python scripts/benchmark_rosenthal_cycle3.py
       - name: Rosenthal cycle 4 provenance/preservation benchmark
         run: python scripts/benchmark_rosenthal_cycle4.py
+      - name: Rosenthal cycle 5 punctuation preservation benchmark
+        run: python scripts/benchmark_rosenthal_cycle5.py
       - name: Validate JSON
         run: |
-          python - <<'PY2'
+          python - <<'PY'
           import json, pathlib
           for p in pathlib.Path('.').rglob('*.json'):
               json.loads(p.read_text(encoding='utf-8'))
           print('all json: OK')
-          PY2
+          PY
       - name: Smoke-test cumulative Rosenthal compact and board routing
         run: |
           set +e
@@ -66,14 +69,13 @@ jobs:
           set -e
           test "$compact_status" -eq 1
           python scripts/review.py --libraries rosenthal --format json <<< 'Этот вариант более лучше предыдущего.' >/tmp/ros-board.json
-          python - <<'PY2'
+          python - <<'PY'
           import json
           compact=json.load(open('/tmp/ros-compact.json',encoding='utf-8'))
           board=json.load(open('/tmp/ros-board.json',encoding='utf-8'))
-          def compact_has_rosenthal_r53(item):
-              if item.get('library_id')=='rosenthal' and item.get('rule')=='ROS-R53':
-                  return True
+          def has_r53(item):
+              if item.get('library_id')=='rosenthal' and item.get('rule')=='ROS-R53': return True
               return any(p.get('library_id')=='rosenthal' and p.get('rule_id')=='ROS-R53' for p in item.get('provenance',[]))
-          assert any(compact_has_rosenthal_r53(x) for x in compact['findings']), compact
+          assert any(has_r53(x) for x in compact['findings']), compact
           assert any(x.get('library_id')=='rosenthal' and x.get('rule_id')=='ROS-R53' for x in board['findings']), board
-          PY2
+          PY
