@@ -11,7 +11,7 @@ Use the same knowledge libraries and mechanical findings as compact mode, preser
 ## Runtime order
 
 1. Preserve `USER_INTENT + SEMANTICS + NORM` as hard constraints.
-2. Run registered mechanical knowledge libraries.
+2. Run registered mechanical knowledge libraries, including the project-core `russian` layer.
 3. Normalize findings to the shared finding contract.
 4. Group semantically equivalent findings by `phenomenon_id` and local excerpt/span.
 5. Keep each reviewer verdict separate.
@@ -20,6 +20,38 @@ Use the same knowledge libraries and mechanical findings as compact mode, preser
 8. Apply style policy only after reviewer opinions are preserved.
 9. Use model reasoning only for `MODEL_ONLY` residue or prose rendering.
 10. Re-check semantics and norm before applying a rewrite.
+
+## Russian language layer
+
+The `russian` library is not another editing school. It contains current-norm guardrails and source-neutral Russian usage/register diagnostics.
+
+Mechanical examples:
+
+- a final full stop in a Markdown heading -> `NORM` guardrail;
+- adjacent `Это не X. Это Y.` -> review the split contrast, but keep it when emphatic correction is functional;
+- a lowercase Latin word inside Russian prose -> check whether a Russian equivalent or explanation is preferable;
+- known technical jargon/terms -> check audience/register.
+
+The caller may specify register:
+
+```bash
+python scripts/review.py text.md --register everyday
+python scripts/review.py text.md --register technical
+```
+
+In `everyday`, known technical jargon is surfaced more aggressively. It still remains a review finding, not a language error merely because it is jargon or a borrowing.
+
+### Model-only semantic relation check
+
+After mechanics, apply `RU-SEM-CATEGORY-COLLECTION` when a definition or metaphor appears to confuse an object with a collection/container made of objects of that class.
+
+Example to challenge:
+
+> Книги — это библиотеки знаний.
+
+A book is not literally a library merely because a library contains books. First establish the real relation (`book -> collection of rules/examples`, `library -> collection of books/resources`), then rewrite. Preserve a metaphor only if the metaphor itself adds a deliberate useful meaning.
+
+See `references/russian-core-rules.md`.
 
 ## Reviewer semantics
 
@@ -75,5 +107,6 @@ Do not read every book or query every corpus for every text. If evidence is unav
 ```bash
 python scripts/review.py text.md --style neutral
 python scripts/review.py text.md --style rslive_content --format json
+python scripts/review.py text.md --register everyday --format json
 python scripts/review.py text.md --evidence current_usage --format json
 ```

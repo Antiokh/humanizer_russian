@@ -21,9 +21,6 @@ from pathlib import Path
 
 from library_runtime import compact_shape, run_libraries
 
-# Retained as an explicit architectural marker and for compatibility with
-# existing deterministic tests. New review_v1 libraries declare automation
-# level directly in their normalized findings.
 MECHANICAL_RULES = {
     "repeated common element in contrast",
     "parcellated enumeration",
@@ -32,7 +29,6 @@ MECHANICAL_RULES = {
 
 
 def select_normalized(findings: list[dict], extended: bool = False) -> list[dict]:
-    """Select findings visible in default or extended compact mode."""
     if extended:
         return [item for item in findings if item.get("automation_level") != "MODEL_ONLY"]
     return [
@@ -43,17 +39,14 @@ def select_normalized(findings: list[dict], extended: bool = False) -> list[dict
 
 
 def _normalized_excerpt(item: dict) -> str:
-    """Normalize a finding excerpt for conservative local deduplication."""
     return re.sub(r"\s+", " ", str(item.get("excerpt", "")).strip().lower())[:180]
 
 
 def _line_no(item: dict) -> int:
-    """Return a normalized positive line number or zero when unknown."""
     return int(item.get("line", 0) or 0)
 
 
 def _provenance(item: dict) -> dict:
-    """Project one normalized finding into compact provenance metadata."""
     return {
         "rule_id": item.get("rule_id"),
         "library_id": item.get("library_id"),
@@ -65,18 +58,6 @@ def _provenance(item: dict) -> dict:
 
 
 def _group_compatible_surface(findings: list[dict]) -> list[list[dict]]:
-    """Group the same phenomenon/surface without merging separate occurrences.
-
-    Some source adapters can locate a finding to a line while older/mechanical
-    adapters only know line ``0``. An unknown line may join a single compatible
-    surface group; it must not arbitrarily join when the same excerpt occurs on
-    multiple known lines. This lets cross-library deduplication work without
-    throwing away occurrence information.
-
-    Missing, empty, and explicitly null ``phenomenon_id`` values are treated as
-    unmapped and receive per-item synthetic keys, so unrelated findings cannot
-    collapse merely because both omitted a shared phenomenon identifier.
-    """
     groups: list[dict] = []
     for index, item in enumerate(findings):
         phenomenon = str(item.get("phenomenon_id") or "") or f"__unmapped__:{index}"
@@ -116,12 +97,6 @@ def _group_compatible_surface(findings: list[dict]) -> list[list[dict]]:
 
 
 def compact_rows(findings: list[dict]) -> list[dict]:
-    """Deduplicate compatible findings without erasing source provenance.
-
-    Directional CHANGE/KEEP conflicts are never collapsed; those rows stay
-    separate so compact mode cannot manufacture consensus. Editorial Board is
-    the place where reviewer disagreement is interpreted explicitly.
-    """
     out: list[dict] = []
     for items in _group_compatible_surface(findings):
         directional = {
@@ -141,21 +116,33 @@ def compact_rows(findings: list[dict]) -> list[dict]:
     return out
 
 
-def check_text(text: str, extended: bool = False) -> tuple[list[dict], dict]:
+def check_text(
+    text: str,
+    extended: bool = False,
+    register: str = "general",
+) -> tuple[list[dict], dict]:
     """Run enabled libraries and return compact findings plus metrics."""
-    normalized, metrics = run_libraries(text)
+    normalized, metrics = run_libraries(
+        text,
+        context={"mode": "compact", "register": register},
+    )
     selected = select_normalized(normalized, extended=extended)
     return compact_rows(selected), metrics
 
 
 def main() -> None:
-    """Parse CLI arguments, run compact checks, print results, and set exit code."""
     parser = argparse.ArgumentParser(description="Compact mechanical-first checker for humanizer_russian")
     parser.add_argument("file", nargs="?")
     parser.add_argument(
         "--extended",
         action="store_true",
         help="include lower-confidence mechanical/style/AI heuristics from enabled libraries",
+    )
+    parser.add_argument(
+        "--register",
+        choices=["general", "everyday", "professional", "technical"],
+        default="general",
+        help="text register; everyday promotes jargon/term candidates into the compact default surface",
     )
     parser.add_argument("--json", action="store_true", dest="as_json")
     parser.add_argument(
@@ -166,13 +153,14 @@ def main() -> None:
     args = parser.parse_args()
 
     text = Path(args.file).read_text(encoding="utf-8") if args.file else sys.stdin.read()
-    findings, metrics = check_text(text, extended=args.extended)
+    findings, metrics = check_text(text, extended=args.extended, register=args.register)
 
     if args.as_json:
         print(
             json.dumps(
                 {
                     "mode": "extended" if args.extended else "mechanical",
+                    "register": args.register,
                     "findings": findings,
                     "metrics": metrics,
                 },
@@ -182,7 +170,7 @@ def main() -> None:
         )
     else:
         mode = "extended" if args.extended else "mechanical"
-        print(f"mode: {mode}")
+        print(f"mode: {mode}; register: {args.register}")
         for item in findings:
             loc = f":{item['line']}" if item["line"] else ""
             note = f" — {item['note']}" if item["note"] else ""

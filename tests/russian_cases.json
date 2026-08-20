@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "cases": [
+    {"id":"ru_split_contrast_readme_case","text":"Это не «реальная рецензия Норы Галь» или другого автора. Это оценка по формализованным принципам, извлечённым из его работ.","must_find":["RU-NATIVE-SPLIT-CONTRAST"]},
+    {"id":"ru_integrated_contrast_negative","text":"Это не ошибка, а предупреждение.","must_not_find":["RU-NATIVE-SPLIT-CONTRAST"]},
+    {"id":"ru_member_collection_book_library","text":"Книги — это библиотеки знаний.","must_find":["RU-SEM-MEMBER-COLLECTION-EQUATION"]},
+    {"id":"ru_member_collection_relation_negative","text":"Книги хранятся в библиотеках.","must_not_find":["RU-SEM-MEMBER-COLLECTION-EQUATION"]},
+    {"id":"ru_heading_terminal_period","text":"## Книги как сборники правил.\nОбычный текст.","must_find":["RU-NORM-HEADING-PERIOD"]},
+    {"id":"ru_heading_without_period_clean","text":"## Книги как сборники правил\nОбычный текст.","must_not_find":["RU-NORM-HEADING-PERIOD"]},
+    {"id":"ru_latin_word_in_russian","text":"Для остатка запускаем prompt только при необходимости.","must_find":["RU-LEX-LATIN-IN-RUSSIAN"]},
+    {"id":"ru_capitalized_brand_negative","text":"Репозиторий хранится на GitHub и открыт для чтения.","must_not_find":["RU-LEX-LATIN-IN-RUSSIAN"]},
+    {"id":"ru_everyday_jargon_visible","register":"everyday","text":"Потом проверим пайплайн и покажем результат пользователю.","must_find":["RU-REGISTER-JARGON-TERM"]},
+    {"id":"ru_general_jargon_not_default","text":"Потом проверим пайплайн и покажем результат пользователю.","must_not_find":["RU-REGISTER-JARGON-TERM"]},
+    {"id":"ru_inline_code_is_not_prose","text":"Запустите `prompt` как параметр тестовой команды.","must_not_find":["RU-LEX-LATIN-IN-RUSSIAN","RU-REGISTER-JARGON-TERM"]},
+    {"id":"ru_url_is_not_prose","text":"Документация находится на https://example.com/prompt и доступна всем.","must_not_find":["RU-LEX-LATIN-IN-RUSSIAN","RU-REGISTER-JARGON-TERM"]}
+  ]
+}
