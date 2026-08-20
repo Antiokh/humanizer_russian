@@ -1,6 +1,8 @@
 # External-source reproducibility gap
 
-Status: `CLOSED` for `EXT-01` … `EXT-14` metadata as of 2026-08-20.
+Status: `CLOSED` for `EXT-01` … `EXT-14` metadata as of 2026-08-20 (`Europe/Belgrade`).
+
+The audit/access date is a local calendar date in `Europe/Belgrade`. The closing commits were created shortly after local midnight, so their GitHub UTC timestamps may still fall on 2026-08-19; this is not a future-dated access claim.
 
 The primary-book study remains fully covered and reproducibly located by `SRC:L…` locators. This note concerns only the **secondary external verification registry** used to calibrate historical/editorial claims.
 
