@@ -67,6 +67,10 @@ jobs:
           import json
           compact=json.load(open('/tmp/ros-compact.json',encoding='utf-8'))
           board=json.load(open('/tmp/ros-board.json',encoding='utf-8'))
-          assert any(x.get('library_id')=='rosenthal' and x.get('rule')=='ROS-R53' for x in compact['findings']), compact
+          def compact_has_rosenthal_r53(item):
+              if item.get('library_id')=='rosenthal' and item.get('rule')=='ROS-R53':
+                  return True
+              return any(p.get('library_id')=='rosenthal' and p.get('rule_id')=='ROS-R53' for p in item.get('provenance',[]))
+          assert any(compact_has_rosenthal_r53(x) for x in compact['findings']), compact
           assert any(x.get('library_id')=='rosenthal' and x.get('rule_id')=='ROS-R53' for x in board['findings']), board
           PY

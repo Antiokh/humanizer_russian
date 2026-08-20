@@ -1,0 +1,2609 @@
+{
+  "schema_version": 1,
+  "evals": [
+    {
+      "id": "GOLUB-R01-POS",
+      "rule_id": "GOLUB-R01",
+      "kind": "positive",
+      "text": "В отчёте три абзаца повторяют один и тот же вывод разными общими словами.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R01-NEG",
+      "rule_id": "GOLUB-R01",
+      "kind": "natural_negative",
+      "text": "Краткое резюме повторяет вывод раздела для читателя, который читает только summary.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R01-BOUND",
+      "rule_id": "GOLUB-R01",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R01-INT",
+      "rule_id": "GOLUB-R01",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R02-POS",
+      "rule_id": "GOLUB-R02",
+      "kind": "positive",
+      "text": "Мы заранее спланировали план работ.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R02-NEG",
+      "rule_id": "GOLUB-R02",
+      "kind": "natural_negative",
+      "text": "Мы снова повторили термин в определении, чтобы сохранить однозначность.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R02-BOUND",
+      "rule_id": "GOLUB-R02",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R02-INT",
+      "rule_id": "GOLUB-R02",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R03-POS",
+      "rule_id": "GOLUB-R03",
+      "kind": "positive",
+      "text": "Главная суть аргумента уже сформулирована выше.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R03-NEG",
+      "rule_id": "GOLUB-R03",
+      "kind": "natural_negative",
+      "text": "Период времени выбран для явного противопоставления периоду колебаний.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R03-BOUND",
+      "rule_id": "GOLUB-R03",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R03-INT",
+      "rule_id": "GOLUB-R03",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R04-POS",
+      "rule_id": "GOLUB-R04",
+      "kind": "positive",
+      "text": "Исследователь исследовал исследование.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R04-NEG",
+      "rule_id": "GOLUB-R04",
+      "kind": "natural_negative",
+      "text": "Следователь расследовал дело; повтор корня здесь не является механическим дефектом.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R04-BOUND",
+      "rule_id": "GOLUB-R04",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R04-INT",
+      "rule_id": "GOLUB-R04",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R05-POS",
+      "rule_id": "GOLUB-R05",
+      "kind": "positive",
+      "text": "В каждом соседнем предложении случайно повторено длинное название без нужды.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R05-NEG",
+      "rule_id": "GOLUB-R05",
+      "kind": "natural_negative",
+      "text": "Я помню этот день. Я помню этот голос. Я помню эту паузу.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R05-BOUND",
+      "rule_id": "GOLUB-R05",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R05-INT",
+      "rule_id": "GOLUB-R05",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R06-POS",
+      "rule_id": "GOLUB-R06",
+      "kind": "positive",
+      "text": "Вопрос был поставлен в вопросительной форме и этот вопрос вызвал вопросы.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R06-NEG",
+      "rule_id": "GOLUB-R06",
+      "kind": "natural_negative",
+      "text": "Термин API повторяется, потому что синоним создал бы двусмысленность.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R06-BOUND",
+      "rule_id": "GOLUB-R06",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R06-INT",
+      "rule_id": "GOLUB-R06",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R07-POS",
+      "rule_id": "GOLUB-R07",
+      "kind": "positive",
+      "text": "На совещании обсудили о запуске — пропущен объект/глагольная связь.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R07-NEG",
+      "rule_id": "GOLUB-R07",
+      "kind": "natural_negative",
+      "text": "Я взял красную папку, а она — синюю.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R07-BOUND",
+      "rule_id": "GOLUB-R07",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R07-INT",
+      "rule_id": "GOLUB-R07",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R08-POS",
+      "rule_id": "GOLUB-R08",
+      "kind": "positive",
+      "text": "Внимательно слушают ребята о новой экспедиции.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R08-NEG",
+      "rule_id": "GOLUB-R08",
+      "kind": "natural_negative",
+      "text": "После первой встречи — сразу домой: эллипсис понятен из ситуации.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R08-BOUND",
+      "rule_id": "GOLUB-R08",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R08-INT",
+      "rule_id": "GOLUB-R08",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R09-POS",
+      "rule_id": "GOLUB-R09",
+      "kind": "positive",
+      "text": "Все участники без исключения, кроме двоих, пришли.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R09-NEG",
+      "rule_id": "GOLUB-R09",
+      "kind": "natural_negative",
+      "text": "Почти все участники пришли, двое отсутствовали.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R09-BOUND",
+      "rule_id": "GOLUB-R09",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R09-INT",
+      "rule_id": "GOLUB-R09",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R10-POS",
+      "rule_id": "GOLUB-R10",
+      "kind": "positive",
+      "text": "Он опоздал благодаря аварии — без иронического намерения.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R10-NEG",
+      "rule_id": "GOLUB-R10",
+      "kind": "natural_negative",
+      "text": "Благодаря автоматизации время обработки сократилось.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R10-BOUND",
+      "rule_id": "GOLUB-R10",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R10-INT",
+      "rule_id": "GOLUB-R10",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R11-POS",
+      "rule_id": "GOLUB-R11",
+      "kind": "positive",
+      "text": "Он любит музыку, кофе и быстро бегать.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R11-NEG",
+      "rule_id": "GOLUB-R11",
+      "kind": "natural_negative",
+      "text": "Он любит музыку, книги и кино.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R11-BOUND",
+      "rule_id": "GOLUB-R11",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R11-INT",
+      "rule_id": "GOLUB-R11",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R12-POS",
+      "rule_id": "GOLUB-R12",
+      "kind": "positive",
+      "text": "Скорость новой системы выше старого сервера.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R12-NEG",
+      "rule_id": "GOLUB-R12",
+      "kind": "natural_negative",
+      "text": "Скорость новой системы выше скорости старой.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R12-BOUND",
+      "rule_id": "GOLUB-R12",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R12-INT",
+      "rule_id": "GOLUB-R12",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R13-POS",
+      "rule_id": "GOLUB-R13",
+      "kind": "positive",
+      "text": "Компания увеличила качество сервиса.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R13-NEG",
+      "rule_id": "GOLUB-R13",
+      "kind": "natural_negative",
+      "text": "Компания повысила качество сервиса.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R13-BOUND",
+      "rule_id": "GOLUB-R13",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R13-INT",
+      "rule_id": "GOLUB-R13",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R14-POS",
+      "rule_id": "GOLUB-R14",
+      "kind": "positive",
+      "text": "Одержать поражение.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R14-NEG",
+      "rule_id": "GOLUB-R14",
+      "kind": "natural_negative",
+      "text": "Потерпеть поражение.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R14-BOUND",
+      "rule_id": "GOLUB-R14",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R14-INT",
+      "rule_id": "GOLUB-R14",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R15-POS",
+      "rule_id": "GOLUB-R15",
+      "kind": "positive",
+      "text": "Докладчик остановился на вопросе, который давно стоял.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R15-NEG",
+      "rule_id": "GOLUB-R15",
+      "kind": "natural_negative",
+      "text": "Банк стоит на берегу — контекст однозначен.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R15-BOUND",
+      "rule_id": "GOLUB-R15",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R15-INT",
+      "rule_id": "GOLUB-R15",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R16-POS",
+      "rule_id": "GOLUB-R16",
+      "kind": "positive",
+      "text": "Он увидел косу.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R16-NEG",
+      "rule_id": "GOLUB-R16",
+      "kind": "natural_negative",
+      "text": "Он заплёл длинную косу.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R16-BOUND",
+      "rule_id": "GOLUB-R16",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R16-INT",
+      "rule_id": "GOLUB-R16",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R17-POS",
+      "rule_id": "GOLUB-R17",
+      "kind": "positive",
+      "text": "Он занял главную роль в фильме «Анна Каренина», имея в виду роль Анны.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R17-NEG",
+      "rule_id": "GOLUB-R17",
+      "kind": "natural_negative",
+      "text": "Актриса сыграла заглавную роль в фильме «Анна Каренина».",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R17-BOUND",
+      "rule_id": "GOLUB-R17",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R17-INT",
+      "rule_id": "GOLUB-R17",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R18-POS",
+      "rule_id": "GOLUB-R18",
+      "kind": "positive",
+      "text": "Заменить «сказать» на «изречь» в бытовом диалоге только ради неповтора.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R18-NEG",
+      "rule_id": "GOLUB-R18",
+      "kind": "natural_negative",
+      "text": "Повторить термин вместо неточного синонима.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R18-BOUND",
+      "rule_id": "GOLUB-R18",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R18-INT",
+      "rule_id": "GOLUB-R18",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R19-POS",
+      "rule_id": "GOLUB-R19",
+      "kind": "positive",
+      "text": "Решение не быстрое, а квадратное.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R19-NEG",
+      "rule_id": "GOLUB-R19",
+      "kind": "natural_negative",
+      "text": "Решение не быстрое, а медленное.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R19-BOUND",
+      "rule_id": "GOLUB-R19",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R19-INT",
+      "rule_id": "GOLUB-R19",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R20-POS",
+      "rule_id": "GOLUB-R20",
+      "kind": "positive",
+      "text": "В юридическом заключении: «этот тип наворотил делов».",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R20-NEG",
+      "rule_id": "GOLUB-R20",
+      "kind": "natural_negative",
+      "text": "В реплике персонажа: «ну и наворотил делов».",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R20-BOUND",
+      "rule_id": "GOLUB-R20",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R20-INT",
+      "rule_id": "GOLUB-R20",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R21-POS",
+      "rule_id": "GOLUB-R21",
+      "kind": "positive",
+      "text": "Инструкция для всей страны использует непояснённый локальный диалектизм.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R21-NEG",
+      "rule_id": "GOLUB-R21",
+      "kind": "natural_negative",
+      "text": "Герой деревенской прозы говорит диалектно.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R21-BOUND",
+      "rule_id": "GOLUB-R21",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R21-INT",
+      "rule_id": "GOLUB-R21",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R22-POS",
+      "rule_id": "GOLUB-R22",
+      "kind": "positive",
+      "text": "Публичная памятка новичку: «просто задеплойте в прод».",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R22-NEG",
+      "rule_id": "GOLUB-R22",
+      "kind": "natural_negative",
+      "text": "Внутренний чат команды: «задеплой в прод после ревью».",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R22-BOUND",
+      "rule_id": "GOLUB-R22",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R22-INT",
+      "rule_id": "GOLUB-R22",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R23-POS",
+      "rule_id": "GOLUB-R23",
+      "kind": "positive",
+      "text": "Современный интерфейс без стилизации: «извольте активировать учётную запись».",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R23-NEG",
+      "rule_id": "GOLUB-R23",
+      "kind": "natural_negative",
+      "text": "В историческом романе чиновник пишет «сего числа».",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R23-BOUND",
+      "rule_id": "GOLUB-R23",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R23-INT",
+      "rule_id": "GOLUB-R23",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R24-POS",
+      "rule_id": "GOLUB-R24",
+      "kind": "positive",
+      "text": "Пометить «луноход» как подозрительный неологизм сегодня.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R24-NEG",
+      "rule_id": "GOLUB-R24",
+      "kind": "natural_negative",
+      "text": "Новый технический термин введён и объяснён.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R24-BOUND",
+      "rule_id": "GOLUB-R24",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R24-INT",
+      "rule_id": "GOLUB-R24",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R25-POS",
+      "rule_id": "GOLUB-R25",
+      "kind": "positive",
+      "text": "«Имплементировать имплементацию» в тексте для широкой аудитории.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R25-NEG",
+      "rule_id": "GOLUB-R25",
+      "kind": "natural_negative",
+      "text": "Webhook отправляет событие после деплоя.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R25-BOUND",
+      "rule_id": "GOLUB-R25",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R25-INT",
+      "rule_id": "GOLUB-R25",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R26-POS",
+      "rule_id": "GOLUB-R26",
+      "kind": "positive",
+      "text": "Памятка пациенту без объяснения использует узкий специальный термин.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R26-NEG",
+      "rule_id": "GOLUB-R26",
+      "kind": "natural_negative",
+      "text": "Архитектурный документ для разработчиков говорит об идемпотентности.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R26-BOUND",
+      "rule_id": "GOLUB-R26",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R26-INT",
+      "rule_id": "GOLUB-R26",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R27-POS",
+      "rule_id": "GOLUB-R27",
+      "kind": "positive",
+      "text": "В целях дальнейшего улучшения качества следует повысить эффективность.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R27-NEG",
+      "rule_id": "GOLUB-R27",
+      "kind": "natural_negative",
+      "text": "Закон вступает в силу 1 января.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R27-BOUND",
+      "rule_id": "GOLUB-R27",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R27-INT",
+      "rule_id": "GOLUB-R27",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R28-POS",
+      "rule_id": "GOLUB-R28",
+      "kind": "positive",
+      "text": "Дружеское сообщение: «осуществляю прибытие к тебе».",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R28-NEG",
+      "rule_id": "GOLUB-R28",
+      "kind": "natural_negative",
+      "text": "В договоре: «в случае неисполнения обязательства».",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R28-BOUND",
+      "rule_id": "GOLUB-R28",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R28-INT",
+      "rule_id": "GOLUB-R28",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R29-POS",
+      "rule_id": "GOLUB-R29",
+      "kind": "positive",
+      "text": "Команда осуществила работу по проверке.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R29-NEG",
+      "rule_id": "GOLUB-R29",
+      "kind": "natural_negative",
+      "text": "Команда работала ночью — конкретнее сказать нельзя без новых фактов.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R29-BOUND",
+      "rule_id": "GOLUB-R29",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R29-INT",
+      "rule_id": "GOLUB-R29",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R30-POS",
+      "rule_id": "GOLUB-R30",
+      "kind": "positive",
+      "text": "Команда осуществила проведение проверки.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R30-NEG",
+      "rule_id": "GOLUB-R30",
+      "kind": "natural_negative",
+      "text": "Проверка заняла два часа.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R30-BOUND",
+      "rule_id": "GOLUB-R30",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R30-INT",
+      "rule_id": "GOLUB-R30",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R31-POS",
+      "rule_id": "GOLUB-R31",
+      "kind": "positive",
+      "text": "План повышения качества контроля обработки обращений.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R31-NEG",
+      "rule_id": "GOLUB-R31",
+      "kind": "natural_negative",
+      "text": "Руководитель отдела продаж компании выступил первым.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R31-BOUND",
+      "rule_id": "GOLUB-R31",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R31-INT",
+      "rule_id": "GOLUB-R31",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R32-POS",
+      "rule_id": "GOLUB-R32",
+      "kind": "positive",
+      "text": "Произошло нежелательное событие — вместо описания фактической аварии в отчёте.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R32-NEG",
+      "rule_id": "GOLUB-R32",
+      "kind": "natural_negative",
+      "text": "Умер — заменить на «ушёл из жизни» в соболезновании может быть уместно.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R32-BOUND",
+      "rule_id": "GOLUB-R32",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R32-INT",
+      "rule_id": "GOLUB-R32",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R33-POS",
+      "rule_id": "GOLUB-R33",
+      "kind": "positive",
+      "text": "Анна сказала Ольге, что она ошиблась.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R33-NEG",
+      "rule_id": "GOLUB-R33",
+      "kind": "natural_negative",
+      "text": "Анна вошла. Она сразу села.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R33-BOUND",
+      "rule_id": "GOLUB-R33",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R33-INT",
+      "rule_id": "GOLUB-R33",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R34-POS",
+      "rule_id": "GOLUB-R34",
+      "kind": "positive",
+      "text": "Велосипед разбил трамвай — при намерении сообщить обратное.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R34-NEG",
+      "rule_id": "GOLUB-R34",
+      "kind": "natural_negative",
+      "text": "Эту книгу я уже читал — маркированный объект в начале функционален.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R34-BOUND",
+      "rule_id": "GOLUB-R34",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R34-INT",
+      "rule_id": "GOLUB-R34",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R35-POS",
+      "rule_id": "GOLUB-R35",
+      "kind": "positive",
+      "text": "Он поднял свою руку и положил её на свою голову.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R35-NEG",
+      "rule_id": "GOLUB-R35",
+      "kind": "natural_negative",
+      "text": "Он взял свою книгу, а не её книгу.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R35-BOUND",
+      "rule_id": "GOLUB-R35",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R35-INT",
+      "rule_id": "GOLUB-R35",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R36-POS",
+      "rule_id": "GOLUB-R36",
+      "kind": "positive",
+      "text": "Пять учеников занимается — в нейтральном контексте без собирательного фокуса.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R36-NEG",
+      "rule_id": "GOLUB-R36",
+      "kind": "natural_negative",
+      "text": "Большинство участников поддержало решение.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R36-BOUND",
+      "rule_id": "GOLUB-R36",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R36-INT",
+      "rule_id": "GOLUB-R36",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R37-POS",
+      "rule_id": "GOLUB-R37",
+      "kind": "positive",
+      "text": "Эта круглый сирота.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R37-NEG",
+      "rule_id": "GOLUB-R37",
+      "kind": "natural_negative",
+      "text": "Он круглый сирота.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R37-BOUND",
+      "rule_id": "GOLUB-R37",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R37-INT",
+      "rule_id": "GOLUB-R37",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R38-POS",
+      "rule_id": "GOLUB-R38",
+      "kind": "positive",
+      "text": "Автоматически не склонять любое название после слова «город».",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R38-NEG",
+      "rule_id": "GOLUB-R38",
+      "kind": "natural_negative",
+      "text": "В городе Москве — нормативная форма.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R38-BOUND",
+      "rule_id": "GOLUB-R38",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R38-INT",
+      "rule_id": "GOLUB-R38",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R39-POS",
+      "rule_id": "GOLUB-R39",
+      "kind": "positive",
+      "text": "Уверенность о победе.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R39-NEG",
+      "rule_id": "GOLUB-R39",
+      "kind": "natural_negative",
+      "text": "Уверенность в победе.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R39-BOUND",
+      "rule_id": "GOLUB-R39",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R39-INT",
+      "rule_id": "GOLUB-R39",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R40-POS",
+      "rule_id": "GOLUB-R40",
+      "kind": "positive",
+      "text": "Согласно приказа директора встреча переносится.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R40-NEG",
+      "rule_id": "GOLUB-R40",
+      "kind": "natural_negative",
+      "text": "Согласно приказу директора встреча переносится.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R40-BOUND",
+      "rule_id": "GOLUB-R40",
+      "kind": "boundary",
+      "text": "Согласно данным отчёта — уже дательный множественного числа; не флагать по окончанию.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R40-INT",
+      "rule_id": "GOLUB-R40",
+      "kind": "intentional",
+      "text": "Цитируемую историческую канцелярскую формулу не исправлять внутри цитаты.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R41-POS",
+      "rule_id": "GOLUB-R41",
+      "kind": "positive",
+      "text": "Оплатить за проезд можно картой.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R41-NEG",
+      "rule_id": "GOLUB-R41",
+      "kind": "natural_negative",
+      "text": "Заплатить за проезд можно картой.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R41-BOUND",
+      "rule_id": "GOLUB-R41",
+      "kind": "boundary",
+      "text": "Оплатить за друга счёт — «за друга» может обозначать лицо, а не объект оплаты; не флагать этим правилом.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R41-INT",
+      "rule_id": "GOLUB-R41",
+      "kind": "intentional",
+      "text": "В прямой цитате просторечную форму сохранять.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R42-POS",
+      "rule_id": "GOLUB-R42",
+      "kind": "positive",
+      "text": "Линтер объявляет «скучаю по вам» ошибкой.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R42-NEG",
+      "rule_id": "GOLUB-R42",
+      "kind": "natural_negative",
+      "text": "Я скучаю по вам.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R42-BOUND",
+      "rule_id": "GOLUB-R42",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R42-INT",
+      "rule_id": "GOLUB-R42",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R43-POS",
+      "rule_id": "GOLUB-R43",
+      "kind": "positive",
+      "text": "Благодаря аварии поезд опоздал — нейтральный отчёт.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R43-NEG",
+      "rule_id": "GOLUB-R43",
+      "kind": "natural_negative",
+      "text": "Благодаря помощи коллег проект завершили.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R43-BOUND",
+      "rule_id": "GOLUB-R43",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R43-INT",
+      "rule_id": "GOLUB-R43",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R44-POS",
+      "rule_id": "GOLUB-R44",
+      "kind": "positive",
+      "text": "Этот вариант более лучше предыдущего.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R44-NEG",
+      "rule_id": "GOLUB-R44",
+      "kind": "natural_negative",
+      "text": "Этот вариант намного лучше предыдущего.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R44-BOUND",
+      "rule_id": "GOLUB-R44",
+      "kind": "boundary",
+      "text": "«Более чем лучше» имеет другую синтаксическую структуру и не должно ловиться простым шаблоном.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R44-INT",
+      "rule_id": "GOLUB-R44",
+      "kind": "intentional",
+      "text": "В цитате речевой ошибки персонажа форму сохранять.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R45-POS",
+      "rule_id": "GOLUB-R45",
+      "kind": "positive",
+      "text": "Кто в этом виноватый? — в нейтральной нормативной речи.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R45-NEG",
+      "rule_id": "GOLUB-R45",
+      "kind": "natural_negative",
+      "text": "Кто в этом виноват?",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R45-BOUND",
+      "rule_id": "GOLUB-R45",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R45-INT",
+      "rule_id": "GOLUB-R45",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R46-POS",
+      "rule_id": "GOLUB-R46",
+      "kind": "positive",
+      "text": "С тысяча семьсот восемьдесят пять книгами.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R46-NEG",
+      "rule_id": "GOLUB-R46",
+      "kind": "natural_negative",
+      "text": "С тысячью семьюстами восемьюдесятью пятью книгами.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R46-BOUND",
+      "rule_id": "GOLUB-R46",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R46-INT",
+      "rule_id": "GOLUB-R46",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R47-POS",
+      "rule_id": "GOLUB-R47",
+      "kind": "positive",
+      "text": "У мальчика новый туфель.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R47-NEG",
+      "rule_id": "GOLUB-R47",
+      "kind": "natural_negative",
+      "text": "У мальчика новая туфля.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R47-BOUND",
+      "rule_id": "GOLUB-R47",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R47-INT",
+      "rule_id": "GOLUB-R47",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R48-POS",
+      "rule_id": "GOLUB-R48",
+      "kind": "positive",
+      "text": "Красное чернило.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R48-NEG",
+      "rule_id": "GOLUB-R48",
+      "kind": "natural_negative",
+      "text": "Красные чернила.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R48-BOUND",
+      "rule_id": "GOLUB-R48",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R48-INT",
+      "rule_id": "GOLUB-R48",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R49-POS",
+      "rule_id": "GOLUB-R49",
+      "kind": "positive",
+      "text": "Автоматически склонять любую фамилию на -ко.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R49-NEG",
+      "rule_id": "GOLUB-R49",
+      "kind": "natural_negative",
+      "text": "Передайте привет Лидии Петровне.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R49-BOUND",
+      "rule_id": "GOLUB-R49",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R49-INT",
+      "rule_id": "GOLUB-R49",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R50-POS",
+      "rule_id": "GOLUB-R50",
+      "kind": "positive",
+      "text": "Я победю в финале.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R50-NEG",
+      "rule_id": "GOLUB-R50",
+      "kind": "natural_negative",
+      "text": "Я смогу победить в финале.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R50-BOUND",
+      "rule_id": "GOLUB-R50",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R50-INT",
+      "rule_id": "GOLUB-R50",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R51-POS",
+      "rule_id": "GOLUB-R51",
+      "kind": "positive",
+      "text": "Объявить «выздоровят» невозможной формой.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R51-NEG",
+      "rule_id": "GOLUB-R51",
+      "kind": "natural_negative",
+      "text": "Они скоро выздоровеют.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R51-BOUND",
+      "rule_id": "GOLUB-R51",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R51-INT",
+      "rule_id": "GOLUB-R51",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R52-POS",
+      "rule_id": "GOLUB-R52",
+      "kind": "positive",
+      "text": "Лежащая книга на столе прочитана.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R52-NEG",
+      "rule_id": "GOLUB-R52",
+      "kind": "natural_negative",
+      "text": "Книга, лежащая на столе, прочитана.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R52-BOUND",
+      "rule_id": "GOLUB-R52",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R52-INT",
+      "rule_id": "GOLUB-R52",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R53-POS",
+      "rule_id": "GOLUB-R53",
+      "kind": "positive",
+      "text": "Спрыгнув с трамвая, у пассажира слетела калоша.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R53-NEG",
+      "rule_id": "GOLUB-R53",
+      "kind": "natural_negative",
+      "text": "Спрыгнув с трамвая, пассажир потерял калошу.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R53-BOUND",
+      "rule_id": "GOLUB-R53",
+      "kind": "boundary",
+      "text": "Подъезжая к станции, нужно заранее приготовить билет — допустимость зависит от инфинитивной безличной конструкции и семантического субъекта.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R53-INT",
+      "rule_id": "GOLUB-R53",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R54-POS",
+      "rule_id": "GOLUB-R54",
+      "kind": "positive",
+      "text": "Три вложенных оборота разрывают связи между участниками.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R54-NEG",
+      "rule_id": "GOLUB-R54",
+      "kind": "natural_negative",
+      "text": "Подойдя к окну, он открыл форточку.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R54-BOUND",
+      "rule_id": "GOLUB-R54",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R54-INT",
+      "rule_id": "GOLUB-R54",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R55-POS",
+      "rule_id": "GOLUB-R55",
+      "kind": "positive",
+      "text": "Полученный вчера лежит документ на столе.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R55-NEG",
+      "rule_id": "GOLUB-R55",
+      "kind": "natural_negative",
+      "text": "Полученный вчера документ лежит на столе.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R55-BOUND",
+      "rule_id": "GOLUB-R55",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R55-INT",
+      "rule_id": "GOLUB-R55",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R56-POS",
+      "rule_id": "GOLUB-R56",
+      "kind": "positive",
+      "text": "Он ушёл, закрыв дверь, потому что до этого дверь уже была закрыта другим.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R56-NEG",
+      "rule_id": "GOLUB-R56",
+      "kind": "natural_negative",
+      "text": "Закрыв дверь, он ушёл.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R56-BOUND",
+      "rule_id": "GOLUB-R56",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R56-INT",
+      "rule_id": "GOLUB-R56",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R57-POS",
+      "rule_id": "GOLUB-R57",
+      "kind": "positive",
+      "text": "Мы хотим ускорить запуск, снижение затрат и чтобы ошибок стало меньше.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R57-NEG",
+      "rule_id": "GOLUB-R57",
+      "kind": "natural_negative",
+      "text": "Мы хотим ускорить запуск, снизить затраты и сократить ошибки.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R57-BOUND",
+      "rule_id": "GOLUB-R57",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R57-INT",
+      "rule_id": "GOLUB-R57",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R58-POS",
+      "rule_id": "GOLUB-R58",
+      "kind": "positive",
+      "text": "Любить и заботиться о детях.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R58-NEG",
+      "rule_id": "GOLUB-R58",
+      "kind": "natural_negative",
+      "text": "Любить детей и заботиться о них.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R58-BOUND",
+      "rule_id": "GOLUB-R58",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R58-INT",
+      "rule_id": "GOLUB-R58",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R59-POS",
+      "rule_id": "GOLUB-R59",
+      "kind": "positive",
+      "text": "Он не только быстро написал, но и отчёт.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R59-NEG",
+      "rule_id": "GOLUB-R59",
+      "kind": "natural_negative",
+      "text": "Он не только быстро написал отчёт, но и сразу его проверил.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R59-BOUND",
+      "rule_id": "GOLUB-R59",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R59-INT",
+      "rule_id": "GOLUB-R59",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R60-POS",
+      "rule_id": "GOLUB-R60",
+      "kind": "positive",
+      "text": "Петухи давно пропели и играют на рожке.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R60-NEG",
+      "rule_id": "GOLUB-R60",
+      "kind": "natural_negative",
+      "text": "Петухи давно пропели, и пастухи играют на рожке.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R60-BOUND",
+      "rule_id": "GOLUB-R60",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R60-INT",
+      "rule_id": "GOLUB-R60",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R61-POS",
+      "rule_id": "GOLUB-R61",
+      "kind": "positive",
+      "text": "Я видел брата друга, который приехал вчера.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R61-NEG",
+      "rule_id": "GOLUB-R61",
+      "kind": "natural_negative",
+      "text": "Я видел друга, который приехал вчера.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R61-BOUND",
+      "rule_id": "GOLUB-R61",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R61-INT",
+      "rule_id": "GOLUB-R61",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R62-POS",
+      "rule_id": "GOLUB-R62",
+      "kind": "positive",
+      "text": "Дом, который стоит у реки, которая течёт к городу, который…",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R62-NEG",
+      "rule_id": "GOLUB-R62",
+      "kind": "natural_negative",
+      "text": "Человек, который звонил утром, оставил сообщение.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R62-BOUND",
+      "rule_id": "GOLUB-R62",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R62-INT",
+      "rule_id": "GOLUB-R62",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R63-POS",
+      "rule_id": "GOLUB-R63",
+      "kind": "positive",
+      "text": "Предложение на 80 слов с четырьмя вложенными референтами.",
+      "expected": "METRIC"
+    },
+    {
+      "id": "GOLUB-R63-NEG",
+      "rule_id": "GOLUB-R63",
+      "kind": "natural_negative",
+      "text": "Длинный период с прозрачной параллельной структурой.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R63-BOUND",
+      "rule_id": "GOLUB-R63",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R63-INT",
+      "rule_id": "GOLUB-R63",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R64-POS",
+      "rule_id": "GOLUB-R64",
+      "kind": "positive",
+      "text": "Перечень механически разрублен на пять бессвязных фрагментов.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R64-NEG",
+      "rule_id": "GOLUB-R64",
+      "kind": "natural_negative",
+      "text": "Он обещал прийти. Не пришёл.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R64-BOUND",
+      "rule_id": "GOLUB-R64",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R64-INT",
+      "rule_id": "GOLUB-R64",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R65-POS",
+      "rule_id": "GOLUB-R65",
+      "kind": "positive",
+      "text": "Решение было принято — когда ответственность конкретного лица является главным фактом.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R65-NEG",
+      "rule_id": "GOLUB-R65",
+      "kind": "natural_negative",
+      "text": "Окно было разбито ночью; кто разбил, неизвестно.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R65-BOUND",
+      "rule_id": "GOLUB-R65",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R65-INT",
+      "rule_id": "GOLUB-R65",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R66-POS",
+      "rule_id": "GOLUB-R66",
+      "kind": "positive",
+      "text": "Автоматически объявлять разговорную словарную форму грамматической ошибкой.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R66-NEG",
+      "rule_id": "GOLUB-R66",
+      "kind": "natural_negative",
+      "text": "Разговорная форма в диалоге персонажа.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R66-BOUND",
+      "rule_id": "GOLUB-R66",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R66-INT",
+      "rule_id": "GOLUB-R66",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R67-POS",
+      "rule_id": "GOLUB-R67",
+      "kind": "positive",
+      "text": "Ласкательный суффикс в сухом техническом отчёте без иронии.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R67-NEG",
+      "rule_id": "GOLUB-R67",
+      "kind": "natural_negative",
+      "text": "«Домик» в детском рассказе.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R67-BOUND",
+      "rule_id": "GOLUB-R67",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R67-INT",
+      "rule_id": "GOLUB-R67",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R68-POS",
+      "rule_id": "GOLUB-R68",
+      "kind": "positive",
+      "text": "В нейтральном API-документе «маленький запросик» без намерения.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R68-NEG",
+      "rule_id": "GOLUB-R68",
+      "kind": "natural_negative",
+      "text": "Бабушка сказала: «внучек, садись».",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R68-BOUND",
+      "rule_id": "GOLUB-R68",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R68-INT",
+      "rule_id": "GOLUB-R68",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R69-POS",
+      "rule_id": "GOLUB-R69",
+      "kind": "positive",
+      "text": "Техническая инструкция случайно строит три конфликтующие метафоры.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R69-NEG",
+      "rule_id": "GOLUB-R69",
+      "kind": "natural_negative",
+      "text": "В эссе один образ последовательно организует абзац.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R69-BOUND",
+      "rule_id": "GOLUB-R69",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R69-INT",
+      "rule_id": "GOLUB-R69",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R70-POS",
+      "rule_id": "GOLUB-R70",
+      "kind": "positive",
+      "text": "«Уникальный неповторимый инновационный продукт» без доказуемой функции.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R70-NEG",
+      "rule_id": "GOLUB-R70",
+      "kind": "natural_negative",
+      "text": "«Красна девица» в фольклорной стилизации.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R70-BOUND",
+      "rule_id": "GOLUB-R70",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R70-INT",
+      "rule_id": "GOLUB-R70",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R71-POS",
+      "rule_id": "GOLUB-R71",
+      "kind": "positive",
+      "text": "Интерфейс быстрый, как юридическая ответственность.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R71-NEG",
+      "rule_id": "GOLUB-R71",
+      "kind": "natural_negative",
+      "text": "Снег блестит, как стекло.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R71-BOUND",
+      "rule_id": "GOLUB-R71",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R71-INT",
+      "rule_id": "GOLUB-R71",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R72-POS",
+      "rule_id": "GOLUB-R72",
+      "kind": "positive",
+      "text": "Мы заложили фундамент стратегии, которая поплыла по рельсам.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R72-NEG",
+      "rule_id": "GOLUB-R72",
+      "kind": "natural_negative",
+      "text": "Стратегия дала трещину — последовательный образ.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R72-BOUND",
+      "rule_id": "GOLUB-R72",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R72-INT",
+      "rule_id": "GOLUB-R72",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R73-POS",
+      "rule_id": "GOLUB-R73",
+      "kind": "positive",
+      "text": "Вся улица решила — когда неясно, речь о жителях или учреждениях.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R73-NEG",
+      "rule_id": "GOLUB-R73",
+      "kind": "natural_negative",
+      "text": "Зал аплодировал.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R73-BOUND",
+      "rule_id": "GOLUB-R73",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R73-INT",
+      "rule_id": "GOLUB-R73",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R74-POS",
+      "rule_id": "GOLUB-R74",
+      "kind": "positive",
+      "text": "В сухом протоколе «сервер обиделся и отказался отвечать» без метафорического тона.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R74-NEG",
+      "rule_id": "GOLUB-R74",
+      "kind": "natural_negative",
+      "text": "Ветер стучится в окно — художественный контекст.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R74-BOUND",
+      "rule_id": "GOLUB-R74",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R74-INT",
+      "rule_id": "GOLUB-R74",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R75-POS",
+      "rule_id": "GOLUB-R75",
+      "kind": "positive",
+      "text": "В официальном отчёте «миллион обращений» при фактических 120 без сигнала фигуральности.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R75-NEG",
+      "rule_id": "GOLUB-R75",
+      "kind": "natural_negative",
+      "text": "Я сто раз тебе говорил — разговорная гипербола.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R75-BOUND",
+      "rule_id": "GOLUB-R75",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R75-INT",
+      "rule_id": "GOLUB-R75",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R76-POS",
+      "rule_id": "GOLUB-R76",
+      "kind": "positive",
+      "text": "«Северная жемчужина отрасли» без понятного референта.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R76-NEG",
+      "rule_id": "GOLUB-R76",
+      "kind": "natural_negative",
+      "text": "Солнце русской поэзии — в контексте Пушкина.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R76-BOUND",
+      "rule_id": "GOLUB-R76",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R76-INT",
+      "rule_id": "GOLUB-R76",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R77-POS",
+      "rule_id": "GOLUB-R77",
+      "kind": "positive",
+      "text": "Корень проблемы всплыл на поверхность и сошёл с рельсов.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R77-NEG",
+      "rule_id": "GOLUB-R77",
+      "kind": "natural_negative",
+      "text": "Образ моря последовательно развивается весь абзац.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R77-BOUND",
+      "rule_id": "GOLUB-R77",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R77-INT",
+      "rule_id": "GOLUB-R77",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R78-POS",
+      "rule_id": "GOLUB-R78",
+      "kind": "positive",
+      "text": "Это сыграло львиную роль.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R78-NEG",
+      "rule_id": "GOLUB-R78",
+      "kind": "natural_negative",
+      "text": "Пародийное смешение двух клише в сатире.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R78-BOUND",
+      "rule_id": "GOLUB-R78",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R78-INT",
+      "rule_id": "GOLUB-R78",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R79-POS",
+      "rule_id": "GOLUB-R79",
+      "kind": "positive",
+      "text": "Скопление сходных согласных делает нейтральную фразу трудно произносимой.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R79-NEG",
+      "rule_id": "GOLUB-R79",
+      "kind": "natural_negative",
+      "text": "Технический термин сложен фонетически, но точен и нужен.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R79-BOUND",
+      "rule_id": "GOLUB-R79",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R79-INT",
+      "rule_id": "GOLUB-R79",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R80-POS",
+      "rule_id": "GOLUB-R80",
+      "kind": "positive",
+      "text": "Случайная внутренняя рифма превращает серьёзную фразу в комическую.",
+      "expected": "METRIC"
+    },
+    {
+      "id": "GOLUB-R80-NEG",
+      "rule_id": "GOLUB-R80",
+      "kind": "natural_negative",
+      "text": "Шуршат камыши — намеренная звукопись.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R80-BOUND",
+      "rule_id": "GOLUB-R80",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R80-INT",
+      "rule_id": "GOLUB-R80",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R81-POS",
+      "rule_id": "GOLUB-R81",
+      "kind": "positive",
+      "text": "Автоматически удалить повтор шипящих из поэтической строки.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R81-NEG",
+      "rule_id": "GOLUB-R81",
+      "kind": "natural_negative",
+      "text": "Шорох и шипение намеренно поддержаны фонетикой.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R81-BOUND",
+      "rule_id": "GOLUB-R81",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R81-INT",
+      "rule_id": "GOLUB-R81",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R82-POS",
+      "rule_id": "GOLUB-R82",
+      "kind": "positive",
+      "text": "Механически переставить «Люблю я пышное природы увяданье» в SVO.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R82-NEG",
+      "rule_id": "GOLUB-R82",
+      "kind": "natural_negative",
+      "text": "Инверсия поддерживает стиховой ритм и фокус.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R82-BOUND",
+      "rule_id": "GOLUB-R82",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R82-INT",
+      "rule_id": "GOLUB-R82",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R83-POS",
+      "rule_id": "GOLUB-R83",
+      "kind": "positive",
+      "text": "Линтер предлагает удалить второе «мы» из анафоры.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R83-NEG",
+      "rule_id": "GOLUB-R83",
+      "kind": "natural_negative",
+      "text": "Мы помним. Мы знаем. Мы отвечаем.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R83-BOUND",
+      "rule_id": "GOLUB-R83",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R83-INT",
+      "rule_id": "GOLUB-R83",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R84-POS",
+      "rule_id": "GOLUB-R84",
+      "kind": "positive",
+      "text": "Три предложения повторяют одну схему без различий в логической функции.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R84-NEG",
+      "rule_id": "GOLUB-R84",
+      "kind": "natural_negative",
+      "text": "Параллельные строки строят контраст.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R84-BOUND",
+      "rule_id": "GOLUB-R84",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R84-INT",
+      "rule_id": "GOLUB-R84",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R85-POS",
+      "rule_id": "GOLUB-R85",
+      "kind": "positive",
+      "text": "Официальный документ дословно сохраняет разговорные обрывы без задачи.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R85-NEG",
+      "rule_id": "GOLUB-R85",
+      "kind": "natural_negative",
+      "text": "Расшифровка интервью сохраняет естественные разговорные частицы.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R85-BOUND",
+      "rule_id": "GOLUB-R85",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R85-INT",
+      "rule_id": "GOLUB-R85",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R86-POS",
+      "rule_id": "GOLUB-R86",
+      "kind": "positive",
+      "text": "Считать современное общеупотребительное заимствование ошибкой только из-за происхождения.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R86-NEG",
+      "rule_id": "GOLUB-R86",
+      "kind": "natural_negative",
+      "text": "Точный освоенный термин в современной речи.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R86-BOUND",
+      "rule_id": "GOLUB-R86",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R86-INT",
+      "rule_id": "GOLUB-R86",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R87-POS",
+      "rule_id": "GOLUB-R87",
+      "kind": "positive",
+      "text": "Сделать hard gate по ударению только на основании учебника 1988 года.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R87-NEG",
+      "rule_id": "GOLUB-R87",
+      "kind": "natural_negative",
+      "text": "Современный орфоэпический словарь подтверждает конкретную форму.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R87-BOUND",
+      "rule_id": "GOLUB-R87",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R87-INT",
+      "rule_id": "GOLUB-R87",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R88-POS",
+      "rule_id": "GOLUB-R88",
+      "kind": "positive",
+      "text": "Формально согласованная, но неестественная калькированная коллокация.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R88-NEG",
+      "rule_id": "GOLUB-R88",
+      "kind": "natural_negative",
+      "text": "Необычная, но естественная авторская фраза.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R88-BOUND",
+      "rule_id": "GOLUB-R88",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R88-INT",
+      "rule_id": "GOLUB-R88",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R89-POS",
+      "rule_id": "GOLUB-R89",
+      "kind": "positive",
+      "text": "Это важно для успеха. Это играет важную роль в успешном результате.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R89-NEG",
+      "rule_id": "GOLUB-R89",
+      "kind": "natural_negative",
+      "text": "Тезис повторён в выводе после длинного доказательства.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R89-BOUND",
+      "rule_id": "GOLUB-R89",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R89-INT",
+      "rule_id": "GOLUB-R89",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R90-POS",
+      "rule_id": "GOLUB-R90",
+      "kind": "positive",
+      "text": "Осуществление реализации процесса повышения эффективности взаимодействия.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R90-NEG",
+      "rule_id": "GOLUB-R90",
+      "kind": "natural_negative",
+      "text": "Управление доступом — устоявшийся термин.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R90-BOUND",
+      "rule_id": "GOLUB-R90",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R90-INT",
+      "rule_id": "GOLUB-R90",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R91-POS",
+      "rule_id": "GOLUB-R91",
+      "kind": "positive",
+      "text": "Решение осуществляет обеспечение безопасности.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R91-NEG",
+      "rule_id": "GOLUB-R91",
+      "kind": "natural_negative",
+      "text": "Это является следствием закона — связка может быть логически нужна.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R91-BOUND",
+      "rule_id": "GOLUB-R91",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R91-INT",
+      "rule_id": "GOLUB-R91",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R92-POS",
+      "rule_id": "GOLUB-R92",
+      "kind": "positive",
+      "text": "Каждый из пяти абзацев начинается одинаковой трёхчастной формулой без композиционной задачи.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R92-NEG",
+      "rule_id": "GOLUB-R92",
+      "kind": "natural_negative",
+      "text": "Параллелизм намеренно строит аргумент.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R92-BOUND",
+      "rule_id": "GOLUB-R92",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R92-INT",
+      "rule_id": "GOLUB-R92",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    },
+    {
+      "id": "GOLUB-R93-POS",
+      "rule_id": "GOLUB-R93",
+      "kind": "positive",
+      "text": "Компания обновила систему. Компания затем проверила систему компании.",
+      "expected": "REVIEW"
+    },
+    {
+      "id": "GOLUB-R93-NEG",
+      "rule_id": "GOLUB-R93",
+      "kind": "natural_negative",
+      "text": "Имя повторено после смены возможного референта.",
+      "expected": "KEEP"
+    },
+    {
+      "id": "GOLUB-R93-BOUND",
+      "rule_id": "GOLUB-R93",
+      "kind": "boundary",
+      "text": "Пограничный случай решается по смыслу и регистру, не по одному surface trigger.",
+      "expected": "CONTEXT"
+    },
+    {
+      "id": "GOLUB-R93-INT",
+      "rule_id": "GOLUB-R93",
+      "kind": "intentional",
+      "text": "Авторское/риторическое употребление сохраняется, если функция подтверждается контекстом.",
+      "expected": "KEEP_IF_INTENTIONAL"
+    }
+  ]
+}

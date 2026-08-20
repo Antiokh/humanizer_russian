@@ -1,0 +1,2953 @@
+{
+  "schema_version": 1,
+  "map": [
+    {
+      "eval_id": "GOLUB-R01-POS",
+      "rule_id": "GOLUB-R01",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R01-NEG",
+      "rule_id": "GOLUB-R01",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R01-BOUND",
+      "rule_id": "GOLUB-R01",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R01-INT",
+      "rule_id": "GOLUB-R01",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R02-POS",
+      "rule_id": "GOLUB-R02",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R02-NEG",
+      "rule_id": "GOLUB-R02",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R02-BOUND",
+      "rule_id": "GOLUB-R02",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R02-INT",
+      "rule_id": "GOLUB-R02",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R03-POS",
+      "rule_id": "GOLUB-R03",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R03-NEG",
+      "rule_id": "GOLUB-R03",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R03-BOUND",
+      "rule_id": "GOLUB-R03",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R03-INT",
+      "rule_id": "GOLUB-R03",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R04-POS",
+      "rule_id": "GOLUB-R04",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R04-NEG",
+      "rule_id": "GOLUB-R04",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R04-BOUND",
+      "rule_id": "GOLUB-R04",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R04-INT",
+      "rule_id": "GOLUB-R04",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R05-POS",
+      "rule_id": "GOLUB-R05",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R05-NEG",
+      "rule_id": "GOLUB-R05",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R05-BOUND",
+      "rule_id": "GOLUB-R05",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R05-INT",
+      "rule_id": "GOLUB-R05",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R06-POS",
+      "rule_id": "GOLUB-R06",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R06-NEG",
+      "rule_id": "GOLUB-R06",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R06-BOUND",
+      "rule_id": "GOLUB-R06",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R06-INT",
+      "rule_id": "GOLUB-R06",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R07-POS",
+      "rule_id": "GOLUB-R07",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R07-NEG",
+      "rule_id": "GOLUB-R07",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R07-BOUND",
+      "rule_id": "GOLUB-R07",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R07-INT",
+      "rule_id": "GOLUB-R07",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R08-POS",
+      "rule_id": "GOLUB-R08",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R08-NEG",
+      "rule_id": "GOLUB-R08",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R08-BOUND",
+      "rule_id": "GOLUB-R08",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R08-INT",
+      "rule_id": "GOLUB-R08",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R09-POS",
+      "rule_id": "GOLUB-R09",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R09-NEG",
+      "rule_id": "GOLUB-R09",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R09-BOUND",
+      "rule_id": "GOLUB-R09",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R09-INT",
+      "rule_id": "GOLUB-R09",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R10-POS",
+      "rule_id": "GOLUB-R10",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-46.xhtml#id45"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R10-NEG",
+      "rule_id": "GOLUB-R10",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-46.xhtml#id45"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R10-BOUND",
+      "rule_id": "GOLUB-R10",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-46.xhtml#id45"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R10-INT",
+      "rule_id": "GOLUB-R10",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-46.xhtml#id45"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R11-POS",
+      "rule_id": "GOLUB-R11",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R11-NEG",
+      "rule_id": "GOLUB-R11",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R11-BOUND",
+      "rule_id": "GOLUB-R11",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R11-INT",
+      "rule_id": "GOLUB-R11",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R12-POS",
+      "rule_id": "GOLUB-R12",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-20.xhtml#id19"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R12-NEG",
+      "rule_id": "GOLUB-R12",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-20.xhtml#id19"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R12-BOUND",
+      "rule_id": "GOLUB-R12",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-20.xhtml#id19"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R12-INT",
+      "rule_id": "GOLUB-R12",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-20.xhtml#id19"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R13-POS",
+      "rule_id": "GOLUB-R13",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R13-NEG",
+      "rule_id": "GOLUB-R13",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R13-BOUND",
+      "rule_id": "GOLUB-R13",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R13-INT",
+      "rule_id": "GOLUB-R13",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R14-POS",
+      "rule_id": "GOLUB-R14",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-4.xhtml#id3"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R14-NEG",
+      "rule_id": "GOLUB-R14",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-4.xhtml#id3"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R14-BOUND",
+      "rule_id": "GOLUB-R14",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-4.xhtml#id3"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R14-INT",
+      "rule_id": "GOLUB-R14",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-4.xhtml#id3"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R15-POS",
+      "rule_id": "GOLUB-R15",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-5.xhtml#id4"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R15-NEG",
+      "rule_id": "GOLUB-R15",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-5.xhtml#id4"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R15-BOUND",
+      "rule_id": "GOLUB-R15",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-5.xhtml#id4"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R15-INT",
+      "rule_id": "GOLUB-R15",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-5.xhtml#id4"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R16-POS",
+      "rule_id": "GOLUB-R16",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-6.xhtml#id5"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R16-NEG",
+      "rule_id": "GOLUB-R16",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-6.xhtml#id5"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R16-BOUND",
+      "rule_id": "GOLUB-R16",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-6.xhtml#id5"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R16-INT",
+      "rule_id": "GOLUB-R16",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-6.xhtml#id5"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R17-POS",
+      "rule_id": "GOLUB-R17",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-7.xhtml#id6"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R17-NEG",
+      "rule_id": "GOLUB-R17",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-7.xhtml#id6"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R17-BOUND",
+      "rule_id": "GOLUB-R17",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-7.xhtml#id6"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R17-INT",
+      "rule_id": "GOLUB-R17",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-7.xhtml#id6"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R18-POS",
+      "rule_id": "GOLUB-R18",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-8.xhtml#id7"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R18-NEG",
+      "rule_id": "GOLUB-R18",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-8.xhtml#id7"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R18-BOUND",
+      "rule_id": "GOLUB-R18",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-8.xhtml#id7"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R18-INT",
+      "rule_id": "GOLUB-R18",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-8.xhtml#id7"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R19-POS",
+      "rule_id": "GOLUB-R19",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-9.xhtml#id8"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R19-NEG",
+      "rule_id": "GOLUB-R19",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-9.xhtml#id8"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R19-BOUND",
+      "rule_id": "GOLUB-R19",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-9.xhtml#id8"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R19-INT",
+      "rule_id": "GOLUB-R19",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-9.xhtml#id8"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R20-POS",
+      "rule_id": "GOLUB-R20",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-10.xhtml#id9"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R20-NEG",
+      "rule_id": "GOLUB-R20",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-10.xhtml#id9"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R20-BOUND",
+      "rule_id": "GOLUB-R20",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-10.xhtml#id9"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R20-INT",
+      "rule_id": "GOLUB-R20",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-10.xhtml#id9"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R21-POS",
+      "rule_id": "GOLUB-R21",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-11.xhtml#id10"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R21-NEG",
+      "rule_id": "GOLUB-R21",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-11.xhtml#id10"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R21-BOUND",
+      "rule_id": "GOLUB-R21",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-11.xhtml#id10"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R21-INT",
+      "rule_id": "GOLUB-R21",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-11.xhtml#id10"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R22-POS",
+      "rule_id": "GOLUB-R22",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-12.xhtml#id11"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R22-NEG",
+      "rule_id": "GOLUB-R22",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-12.xhtml#id11"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R22-BOUND",
+      "rule_id": "GOLUB-R22",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-12.xhtml#id11"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R22-INT",
+      "rule_id": "GOLUB-R22",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-12.xhtml#id11"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R23-POS",
+      "rule_id": "GOLUB-R23",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-13.xhtml#id12"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R23-NEG",
+      "rule_id": "GOLUB-R23",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-13.xhtml#id12"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R23-BOUND",
+      "rule_id": "GOLUB-R23",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-13.xhtml#id12"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R23-INT",
+      "rule_id": "GOLUB-R23",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-13.xhtml#id12"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R24-POS",
+      "rule_id": "GOLUB-R24",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-14.xhtml#id13"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R24-NEG",
+      "rule_id": "GOLUB-R24",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-14.xhtml#id13"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R24-BOUND",
+      "rule_id": "GOLUB-R24",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-14.xhtml#id13"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R24-INT",
+      "rule_id": "GOLUB-R24",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-14.xhtml#id13"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R25-POS",
+      "rule_id": "GOLUB-R25",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-15.xhtml#id14"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R25-NEG",
+      "rule_id": "GOLUB-R25",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-15.xhtml#id14"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R25-BOUND",
+      "rule_id": "GOLUB-R25",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-15.xhtml#id14"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R25-INT",
+      "rule_id": "GOLUB-R25",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-15.xhtml#id14"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R26-POS",
+      "rule_id": "GOLUB-R26",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-15.xhtml#id14"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R26-NEG",
+      "rule_id": "GOLUB-R26",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-15.xhtml#id14"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R26-BOUND",
+      "rule_id": "GOLUB-R26",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-15.xhtml#id14"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R26-INT",
+      "rule_id": "GOLUB-R26",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9",
+        "STYLE:ch1-15.xhtml#id14"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R27-POS",
+      "rule_id": "GOLUB-R27",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R27-NEG",
+      "rule_id": "GOLUB-R27",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R27-BOUND",
+      "rule_id": "GOLUB-R27",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R27-INT",
+      "rule_id": "GOLUB-R27",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R28-POS",
+      "rule_id": "GOLUB-R28",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R28-NEG",
+      "rule_id": "GOLUB-R28",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R28-BOUND",
+      "rule_id": "GOLUB-R28",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R28-INT",
+      "rule_id": "GOLUB-R28",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R29-POS",
+      "rule_id": "GOLUB-R29",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R29-NEG",
+      "rule_id": "GOLUB-R29",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R29-BOUND",
+      "rule_id": "GOLUB-R29",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R29-INT",
+      "rule_id": "GOLUB-R29",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R30-POS",
+      "rule_id": "GOLUB-R30",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R30-NEG",
+      "rule_id": "GOLUB-R30",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R30-BOUND",
+      "rule_id": "GOLUB-R30",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R30-INT",
+      "rule_id": "GOLUB-R30",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R31-POS",
+      "rule_id": "GOLUB-R31",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R31-NEG",
+      "rule_id": "GOLUB-R31",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R31-BOUND",
+      "rule_id": "GOLUB-R31",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R31-INT",
+      "rule_id": "GOLUB-R31",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R32-POS",
+      "rule_id": "GOLUB-R32",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R32-NEG",
+      "rule_id": "GOLUB-R32",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R32-BOUND",
+      "rule_id": "GOLUB-R32",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R32-INT",
+      "rule_id": "GOLUB-R32",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R33-POS",
+      "rule_id": "GOLUB-R33",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-35.xhtml#id34"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R33-NEG",
+      "rule_id": "GOLUB-R33",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-35.xhtml#id34"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R33-BOUND",
+      "rule_id": "GOLUB-R33",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-35.xhtml#id34"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R33-INT",
+      "rule_id": "GOLUB-R33",
+      "source_locator": [
+        "GOOD:ch1-3.xhtml#id5",
+        "STYLE:ch1-35.xhtml#id34"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R34-POS",
+      "rule_id": "GOLUB-R34",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-37.xhtml#id36"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R34-NEG",
+      "rule_id": "GOLUB-R34",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-37.xhtml#id36"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R34-BOUND",
+      "rule_id": "GOLUB-R34",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-37.xhtml#id36"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R34-INT",
+      "rule_id": "GOLUB-R34",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-37.xhtml#id36"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R35-POS",
+      "rule_id": "GOLUB-R35",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-35.xhtml#id34"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R35-NEG",
+      "rule_id": "GOLUB-R35",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-35.xhtml#id34"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R35-BOUND",
+      "rule_id": "GOLUB-R35",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-35.xhtml#id34"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R35-INT",
+      "rule_id": "GOLUB-R35",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-35.xhtml#id34"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R36-POS",
+      "rule_id": "GOLUB-R36",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-38.xhtml#id37"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R36-NEG",
+      "rule_id": "GOLUB-R36",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-38.xhtml#id37"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R36-BOUND",
+      "rule_id": "GOLUB-R36",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-38.xhtml#id37"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R36-INT",
+      "rule_id": "GOLUB-R36",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-38.xhtml#id37"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R37-POS",
+      "rule_id": "GOLUB-R37",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-39.xhtml#id38"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R37-NEG",
+      "rule_id": "GOLUB-R37",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-39.xhtml#id38"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R37-BOUND",
+      "rule_id": "GOLUB-R37",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-39.xhtml#id38"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R37-INT",
+      "rule_id": "GOLUB-R37",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-39.xhtml#id38"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R38-POS",
+      "rule_id": "GOLUB-R38",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-40.xhtml#id39"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R38-NEG",
+      "rule_id": "GOLUB-R38",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-40.xhtml#id39"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R38-BOUND",
+      "rule_id": "GOLUB-R38",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-40.xhtml#id39"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R38-INT",
+      "rule_id": "GOLUB-R38",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-40.xhtml#id39"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R39-POS",
+      "rule_id": "GOLUB-R39",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R39-NEG",
+      "rule_id": "GOLUB-R39",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R39-BOUND",
+      "rule_id": "GOLUB-R39",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R39-INT",
+      "rule_id": "GOLUB-R39",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R40-POS",
+      "rule_id": "GOLUB-R40",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R40-NEG",
+      "rule_id": "GOLUB-R40",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R40-BOUND",
+      "rule_id": "GOLUB-R40",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R40-INT",
+      "rule_id": "GOLUB-R40",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R41-POS",
+      "rule_id": "GOLUB-R41",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R41-NEG",
+      "rule_id": "GOLUB-R41",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R41-BOUND",
+      "rule_id": "GOLUB-R41",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R41-INT",
+      "rule_id": "GOLUB-R41",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R42-POS",
+      "rule_id": "GOLUB-R42",
+      "source_locator": [
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R42-NEG",
+      "rule_id": "GOLUB-R42",
+      "source_locator": [
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R42-BOUND",
+      "rule_id": "GOLUB-R42",
+      "source_locator": [
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R42-INT",
+      "rule_id": "GOLUB-R42",
+      "source_locator": [
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R43-POS",
+      "rule_id": "GOLUB-R43",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R43-NEG",
+      "rule_id": "GOLUB-R43",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R43-BOUND",
+      "rule_id": "GOLUB-R43",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R43-INT",
+      "rule_id": "GOLUB-R43",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-41.xhtml#id40"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R44-POS",
+      "rule_id": "GOLUB-R44",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R44-NEG",
+      "rule_id": "GOLUB-R44",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R44-BOUND",
+      "rule_id": "GOLUB-R44",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R44-INT",
+      "rule_id": "GOLUB-R44",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R45-POS",
+      "rule_id": "GOLUB-R45",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R45-NEG",
+      "rule_id": "GOLUB-R45",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R45-BOUND",
+      "rule_id": "GOLUB-R45",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R45-INT",
+      "rule_id": "GOLUB-R45",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-33.xhtml#id32"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R46-POS",
+      "rule_id": "GOLUB-R46",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-34.xhtml#id33"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R46-NEG",
+      "rule_id": "GOLUB-R46",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-34.xhtml#id33"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R46-BOUND",
+      "rule_id": "GOLUB-R46",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-34.xhtml#id33"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R46-INT",
+      "rule_id": "GOLUB-R46",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-34.xhtml#id33"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R47-POS",
+      "rule_id": "GOLUB-R47",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R47-NEG",
+      "rule_id": "GOLUB-R47",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R47-BOUND",
+      "rule_id": "GOLUB-R47",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R47-INT",
+      "rule_id": "GOLUB-R47",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R48-POS",
+      "rule_id": "GOLUB-R48",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-31.xhtml#id30"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R48-NEG",
+      "rule_id": "GOLUB-R48",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-31.xhtml#id30"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R48-BOUND",
+      "rule_id": "GOLUB-R48",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-31.xhtml#id30"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R48-INT",
+      "rule_id": "GOLUB-R48",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-31.xhtml#id30"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R49-POS",
+      "rule_id": "GOLUB-R49",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-32.xhtml#id31"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R49-NEG",
+      "rule_id": "GOLUB-R49",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-32.xhtml#id31"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R49-BOUND",
+      "rule_id": "GOLUB-R49",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-32.xhtml#id31"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R49-INT",
+      "rule_id": "GOLUB-R49",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-32.xhtml#id31"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R50-POS",
+      "rule_id": "GOLUB-R50",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R50-NEG",
+      "rule_id": "GOLUB-R50",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R50-BOUND",
+      "rule_id": "GOLUB-R50",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R50-INT",
+      "rule_id": "GOLUB-R50",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R51-POS",
+      "rule_id": "GOLUB-R51",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R51-NEG",
+      "rule_id": "GOLUB-R51",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R51-BOUND",
+      "rule_id": "GOLUB-R51",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R51-INT",
+      "rule_id": "GOLUB-R51",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R52-POS",
+      "rule_id": "GOLUB-R52",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R52-NEG",
+      "rule_id": "GOLUB-R52",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R52-BOUND",
+      "rule_id": "GOLUB-R52",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R52-INT",
+      "rule_id": "GOLUB-R52",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R53-POS",
+      "rule_id": "GOLUB-R53",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R53-NEG",
+      "rule_id": "GOLUB-R53",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R53-BOUND",
+      "rule_id": "GOLUB-R53",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R53-INT",
+      "rule_id": "GOLUB-R53",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R54-POS",
+      "rule_id": "GOLUB-R54",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R54-NEG",
+      "rule_id": "GOLUB-R54",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R54-BOUND",
+      "rule_id": "GOLUB-R54",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R54-INT",
+      "rule_id": "GOLUB-R54",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R55-POS",
+      "rule_id": "GOLUB-R55",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R55-NEG",
+      "rule_id": "GOLUB-R55",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R55-BOUND",
+      "rule_id": "GOLUB-R55",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R55-INT",
+      "rule_id": "GOLUB-R55",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-42.xhtml#id41"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R56-POS",
+      "rule_id": "GOLUB-R56",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R56-NEG",
+      "rule_id": "GOLUB-R56",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R56-BOUND",
+      "rule_id": "GOLUB-R56",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R56-INT",
+      "rule_id": "GOLUB-R56",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-43.xhtml#id42"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R57-POS",
+      "rule_id": "GOLUB-R57",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R57-NEG",
+      "rule_id": "GOLUB-R57",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R57-BOUND",
+      "rule_id": "GOLUB-R57",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R57-INT",
+      "rule_id": "GOLUB-R57",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R58-POS",
+      "rule_id": "GOLUB-R58",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R58-NEG",
+      "rule_id": "GOLUB-R58",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R58-BOUND",
+      "rule_id": "GOLUB-R58",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R58-INT",
+      "rule_id": "GOLUB-R58",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R59-POS",
+      "rule_id": "GOLUB-R59",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R59-NEG",
+      "rule_id": "GOLUB-R59",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R59-BOUND",
+      "rule_id": "GOLUB-R59",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R59-INT",
+      "rule_id": "GOLUB-R59",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R60-POS",
+      "rule_id": "GOLUB-R60",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R60-NEG",
+      "rule_id": "GOLUB-R60",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R60-BOUND",
+      "rule_id": "GOLUB-R60",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R60-INT",
+      "rule_id": "GOLUB-R60",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R61-POS",
+      "rule_id": "GOLUB-R61",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R61-NEG",
+      "rule_id": "GOLUB-R61",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R61-BOUND",
+      "rule_id": "GOLUB-R61",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R61-INT",
+      "rule_id": "GOLUB-R61",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R62-POS",
+      "rule_id": "GOLUB-R62",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R62-NEG",
+      "rule_id": "GOLUB-R62",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R62-BOUND",
+      "rule_id": "GOLUB-R62",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R62-INT",
+      "rule_id": "GOLUB-R62",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R63-POS",
+      "rule_id": "GOLUB-R63",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R63-NEG",
+      "rule_id": "GOLUB-R63",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R63-BOUND",
+      "rule_id": "GOLUB-R63",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R63-INT",
+      "rule_id": "GOLUB-R63",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R64-POS",
+      "rule_id": "GOLUB-R64",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R64-NEG",
+      "rule_id": "GOLUB-R64",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R64-BOUND",
+      "rule_id": "GOLUB-R64",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R64-INT",
+      "rule_id": "GOLUB-R64",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-46.xhtml#id45",
+        "STYLE:ch1-47.xhtml#id46"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R65-POS",
+      "rule_id": "GOLUB-R65",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R65-NEG",
+      "rule_id": "GOLUB-R65",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R65-BOUND",
+      "rule_id": "GOLUB-R65",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R65-INT",
+      "rule_id": "GOLUB-R65",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R66-POS",
+      "rule_id": "GOLUB-R66",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R66-NEG",
+      "rule_id": "GOLUB-R66",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R66-BOUND",
+      "rule_id": "GOLUB-R66",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R66-INT",
+      "rule_id": "GOLUB-R66",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-30.xhtml#id29",
+        "STYLE:ch1-36.xhtml#id35"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R67-POS",
+      "rule_id": "GOLUB-R67",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R67-NEG",
+      "rule_id": "GOLUB-R67",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R67-BOUND",
+      "rule_id": "GOLUB-R67",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R67-INT",
+      "rule_id": "GOLUB-R67",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R68-POS",
+      "rule_id": "GOLUB-R68",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R68-NEG",
+      "rule_id": "GOLUB-R68",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R68-BOUND",
+      "rule_id": "GOLUB-R68",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R68-INT",
+      "rule_id": "GOLUB-R68",
+      "source_locator": [
+        "STYLE:ch1-29.xhtml#id28"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R69-POS",
+      "rule_id": "GOLUB-R69",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R69-NEG",
+      "rule_id": "GOLUB-R69",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R69-BOUND",
+      "rule_id": "GOLUB-R69",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R69-INT",
+      "rule_id": "GOLUB-R69",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R70-POS",
+      "rule_id": "GOLUB-R70",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-19.xhtml#id18"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R70-NEG",
+      "rule_id": "GOLUB-R70",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-19.xhtml#id18"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R70-BOUND",
+      "rule_id": "GOLUB-R70",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-19.xhtml#id18"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R70-INT",
+      "rule_id": "GOLUB-R70",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-19.xhtml#id18"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R71-POS",
+      "rule_id": "GOLUB-R71",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-20.xhtml#id19"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R71-NEG",
+      "rule_id": "GOLUB-R71",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-20.xhtml#id19"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R71-BOUND",
+      "rule_id": "GOLUB-R71",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-20.xhtml#id19"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R71-INT",
+      "rule_id": "GOLUB-R71",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-20.xhtml#id19"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R72-POS",
+      "rule_id": "GOLUB-R72",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R72-NEG",
+      "rule_id": "GOLUB-R72",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R72-BOUND",
+      "rule_id": "GOLUB-R72",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R72-INT",
+      "rule_id": "GOLUB-R72",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R73-POS",
+      "rule_id": "GOLUB-R73",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-22.xhtml#id21"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R73-NEG",
+      "rule_id": "GOLUB-R73",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-22.xhtml#id21"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R73-BOUND",
+      "rule_id": "GOLUB-R73",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-22.xhtml#id21"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R73-INT",
+      "rule_id": "GOLUB-R73",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-22.xhtml#id21"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R74-POS",
+      "rule_id": "GOLUB-R74",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-23.xhtml#id22"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R74-NEG",
+      "rule_id": "GOLUB-R74",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-23.xhtml#id22"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R74-BOUND",
+      "rule_id": "GOLUB-R74",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-23.xhtml#id22"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R74-INT",
+      "rule_id": "GOLUB-R74",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-23.xhtml#id22"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R75-POS",
+      "rule_id": "GOLUB-R75",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-24.xhtml#id23"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R75-NEG",
+      "rule_id": "GOLUB-R75",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-24.xhtml#id23"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R75-BOUND",
+      "rule_id": "GOLUB-R75",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-24.xhtml#id23"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R75-INT",
+      "rule_id": "GOLUB-R75",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-24.xhtml#id23"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R76-POS",
+      "rule_id": "GOLUB-R76",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-25.xhtml#id24"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R76-NEG",
+      "rule_id": "GOLUB-R76",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-25.xhtml#id24"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R76-BOUND",
+      "rule_id": "GOLUB-R76",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-25.xhtml#id24"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R76-INT",
+      "rule_id": "GOLUB-R76",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-25.xhtml#id24"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R77-POS",
+      "rule_id": "GOLUB-R77",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R77-NEG",
+      "rule_id": "GOLUB-R77",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R77-BOUND",
+      "rule_id": "GOLUB-R77",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R77-INT",
+      "rule_id": "GOLUB-R77",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-21.xhtml#id20"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R78-POS",
+      "rule_id": "GOLUB-R78",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R78-NEG",
+      "rule_id": "GOLUB-R78",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R78-BOUND",
+      "rule_id": "GOLUB-R78",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R78-INT",
+      "rule_id": "GOLUB-R78",
+      "source_locator": [
+        "GOOD:ch1-14.xhtml#id11",
+        "STYLE:ch1-18.xhtml#id17"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R79-POS",
+      "rule_id": "GOLUB-R79",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-26.xhtml#id25"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R79-NEG",
+      "rule_id": "GOLUB-R79",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-26.xhtml#id25"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R79-BOUND",
+      "rule_id": "GOLUB-R79",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-26.xhtml#id25"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R79-INT",
+      "rule_id": "GOLUB-R79",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-26.xhtml#id25"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R80-POS",
+      "rule_id": "GOLUB-R80",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R80-NEG",
+      "rule_id": "GOLUB-R80",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R80-BOUND",
+      "rule_id": "GOLUB-R80",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R80-INT",
+      "rule_id": "GOLUB-R80",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R81-POS",
+      "rule_id": "GOLUB-R81",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R81-NEG",
+      "rule_id": "GOLUB-R81",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R81-BOUND",
+      "rule_id": "GOLUB-R81",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R81-INT",
+      "rule_id": "GOLUB-R81",
+      "source_locator": [
+        "GOOD:ch1-17.xhtml#id13",
+        "STYLE:ch1-27.xhtml#id26"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R82-POS",
+      "rule_id": "GOLUB-R82",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-37.xhtml#id36"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R82-NEG",
+      "rule_id": "GOLUB-R82",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-37.xhtml#id36"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R82-BOUND",
+      "rule_id": "GOLUB-R82",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-37.xhtml#id36"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R82-INT",
+      "rule_id": "GOLUB-R82",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-37.xhtml#id36"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R83-POS",
+      "rule_id": "GOLUB-R83",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R83-NEG",
+      "rule_id": "GOLUB-R83",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R83-BOUND",
+      "rule_id": "GOLUB-R83",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R83-INT",
+      "rule_id": "GOLUB-R83",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R84-POS",
+      "rule_id": "GOLUB-R84",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R84-NEG",
+      "rule_id": "GOLUB-R84",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R84-BOUND",
+      "rule_id": "GOLUB-R84",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R84-INT",
+      "rule_id": "GOLUB-R84",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R85-POS",
+      "rule_id": "GOLUB-R85",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R85-NEG",
+      "rule_id": "GOLUB-R85",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R85-BOUND",
+      "rule_id": "GOLUB-R85",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R85-INT",
+      "rule_id": "GOLUB-R85",
+      "source_locator": [
+        "GOOD:ch1-9.xhtml#id9"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R86-POS",
+      "rule_id": "GOLUB-R86",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R86-NEG",
+      "rule_id": "GOLUB-R86",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R86-BOUND",
+      "rule_id": "GOLUB-R86",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R86-INT",
+      "rule_id": "GOLUB-R86",
+      "source_locator": [
+        "GOOD:ch1-8.xhtml#id8"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R87-POS",
+      "rule_id": "GOLUB-R87",
+      "source_locator": [
+        "STYLE:ch1-28.xhtml#id27"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R87-NEG",
+      "rule_id": "GOLUB-R87",
+      "source_locator": [
+        "STYLE:ch1-28.xhtml#id27"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R87-BOUND",
+      "rule_id": "GOLUB-R87",
+      "source_locator": [
+        "STYLE:ch1-28.xhtml#id27"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R87-INT",
+      "rule_id": "GOLUB-R87",
+      "source_locator": [
+        "STYLE:ch1-28.xhtml#id27"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R88-POS",
+      "rule_id": "GOLUB-R88",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R88-NEG",
+      "rule_id": "GOLUB-R88",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R88-BOUND",
+      "rule_id": "GOLUB-R88",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R88-INT",
+      "rule_id": "GOLUB-R88",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-3.xhtml#id2"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R89-POS",
+      "rule_id": "GOLUB-R89",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R89-NEG",
+      "rule_id": "GOLUB-R89",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R89-BOUND",
+      "rule_id": "GOLUB-R89",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R89-INT",
+      "rule_id": "GOLUB-R89",
+      "source_locator": [
+        "GOOD:ch1-2.xhtml#id4",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R90-POS",
+      "rule_id": "GOLUB-R90",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R90-NEG",
+      "rule_id": "GOLUB-R90",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R90-BOUND",
+      "rule_id": "GOLUB-R90",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R90-INT",
+      "rule_id": "GOLUB-R90",
+      "source_locator": [
+        "GOOD:ch1-10.xhtml#id10",
+        "STYLE:ch1-44.xhtml#id43"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R91-POS",
+      "rule_id": "GOLUB-R91",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R91-NEG",
+      "rule_id": "GOLUB-R91",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R91-BOUND",
+      "rule_id": "GOLUB-R91",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R91-INT",
+      "rule_id": "GOLUB-R91",
+      "source_locator": [
+        "GOOD:ch1-4.xhtml#id6",
+        "STYLE:ch1-16.xhtml#id15"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R92-POS",
+      "rule_id": "GOLUB-R92",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R92-NEG",
+      "rule_id": "GOLUB-R92",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R92-BOUND",
+      "rule_id": "GOLUB-R92",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R92-INT",
+      "rule_id": "GOLUB-R92",
+      "source_locator": [
+        "GOOD:ch1-16.xhtml#id12",
+        "STYLE:ch1-45.xhtml#id44"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R93-POS",
+      "rule_id": "GOLUB-R93",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R93-NEG",
+      "rule_id": "GOLUB-R93",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R93-BOUND",
+      "rule_id": "GOLUB-R93",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    },
+    {
+      "eval_id": "GOLUB-R93-INT",
+      "rule_id": "GOLUB-R93",
+      "source_locator": [
+        "GOOD:ch1-1.xhtml#id3",
+        "STYLE:ch1-17.xhtml#id16"
+      ]
+    }
+  ]
+}
