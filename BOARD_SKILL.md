@@ -64,13 +64,16 @@ After mechanics, load only the relevant cards from:
 - `references/russian-language.md`;
 - `references/russian-rki-grammar.md`.
 
-The RKI cards are source-neutral Russian-core diagnostics. Their study provenance is retained in `studies/velichko-kniga-o-grammatike/`; there is no Velichko reviewer vote.
+The RKI cards are source-neutral Russian-core diagnostics. Their study provenance is retained in `studies/velichko-kniga-o-grammatike/`; there is no Velichko reviewer vote. When Velichko confirms or refines a phenomenon already present in the Russian core, enrich the existing `RU-*` card instead of creating a second source-neutral rule for the same `phenomenon_id`.
 
 In particular review:
 
-- `RU-NORM-GERUND-SUBJECT-ATTACHMENT` / `RU-NORM-GERUND-SUBJECT-CONTROL` — shared semantic subject, including the normative impersonal+infinitive case and grammaticalized/prepositional exceptions such as `исходя из`;
+- `RU-NORM-GERUND-SUBJECT-ATTACHMENT` — shared semantic subject, including the normative impersonal + infinitive case when the gerund and infinitive have the same controller;
+- `RU-NATIVE-GERUND-GRAMMATICALIZED-GUARD` — distinguish a free gerund from grammaticalized/prepositional uses such as `исходя из`; do not turn a partial list into an unconditional whitelist;
+- `RU-NATIVE-GERUND-OBJECT-INFINITIVE-ATTACHMENT` — when a matrix subject and the controller of an object infinitive compete, resolve who performs the gerundial action before editing;
 - `RU-NATIVE-GERUND-FRAME-POSITION` — background/frame gerunds often work preposed, while a gerund tied to the second conjunct or preparing an antithesis/vector shift should stay close to that conjunct; this is information structure, not a universal positional norm;
-- `RU-NORM-PARTICIPLE-HEAD-ATTACHMENT` and `RU-NATIVE-PARTICIPLE-TEMPORAL-FIT` — keep attachment/agreement clear, then preserve relative time and register when choosing compression;
+- `RU-NORM-PARTICIPLE-HEAD-ATTACHMENT` and `RU-NORM-PARTICIPLE-AGREEMENT` — identify the true head first, then agree the participle with that head rather than the nearest noun;
+- `RU-NATIVE-PARTICIPLE-TEMPORAL-FIT` — preserve relative time and register after structural checks;
 - `RU-NATIVE-PARTICIPIAL-COMPRESSION` — consider a natural participial phrase instead of reflexively expanding everything into `который + глагол`;
 - `RU-RKI-VALENCY-FRAME-FIT` — resolve lexical sense and participant role before changing case/preposition or copying a frame through nominalization;
 - `RU-NATIVE-SUBJECT-REALIZATION` — compare overt nominative subject with indefinite-personal, impersonal and dative-infinitive Russian models without deleting a functional subject;
