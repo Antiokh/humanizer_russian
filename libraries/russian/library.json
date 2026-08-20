@@ -12,7 +12,8 @@
   "status": "OPERATIONAL",
   "references": [
     "references/russian-language.md",
-    "references/russian-core-rules.md"
+    "docs/russian-error-priorities.md",
+    "libraries/russian/rules.json"
   ],
-  "notes": "Нормативные правила становятся guardrails; употребление и регистр остаются неблокирующими review findings."
+  "notes": "Нормативные правила становятся guardrails; употребление, РКИ-похожие интерференции и регистр остаются неблокирующими review findings, если не подтверждены как NORM."
 }
