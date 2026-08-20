@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "source": "Rosenthal — А как лучше сказать?",
+  "cases": [
+    {"id":"double-comparative-more-better","text":"Этот вариант более лучше предыдущего.","must_find":["ROS-R53"]},
+    {"id":"double-comparative-more-prettier","text":"Новая схема выглядит более красивее старой.","must_find":["ROS-R53"]},
+    {"id":"analytic-comparative-clean","text":"Новая схема выглядит более красивой.","must_not_find":["ROS-R53"]},
+    {"id":"synthetic-comparative-clean","text":"Новая схема выглядит красивее старой.","must_not_find":["ROS-R53"]},
+    {"id":"samyi-luchshii-register-boundary","text":"Это мой самый лучший друг.","must_not_find":["ROS-R53"]},
+    {"id":"quote-metalinguistic","text":"Форму «более лучше» обсуждают как пример языковой аномалии.","must_not_find":["ROS-R53"]},
+    {"id":"code-double-comparative","text":"```text\nболее лучше\n```","must_not_find":["ROS-R53"]},
+    {"id":"by-separate-predications","text":"Что было бы, если бы команда отказалась?","model_preservation":["ROS-R54"]},
+    {"id":"by-same-predication","text":"Нужно, чтобы команда согласилась бы на перенос.","model_review":["ROS-R54"]},
+    {"id":"functional-parceling","text":"Он всё проверил. Дважды.","model_preservation":["ROS-R56"]},
+    {"id":"functional-anaphora","text":"Мы проверяем факты. Мы проверяем связи. Мы проверяем вывод.","model_preservation":["ROS-R58"]},
+    {"id":"functional-loanword","text":"API возвращает JSON после успешной проверки.","model_preservation":["ROS-R51"]}
+  ]
+}

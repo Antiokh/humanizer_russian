@@ -12,7 +12,7 @@ on:
       - 'scripts/validate_rosenthal.py'
       - 'scripts/benchmark_rosenthal.py'
       - 'tests/rosenthal_cases.json'
-      - 'studies/rosenthal-pravopisanie-literaturnaya-pravka/**'
+      - 'studies/rosenthal-*/**'
       - 'references/rosenthal.md'
       - '.github/workflows/rosenthal-quality.yml'
 
@@ -28,26 +28,42 @@ jobs:
         run: python -m pip install --disable-pip-version-check jsonschema
       - name: Compile Python
         run: python -m compileall -q scripts
+      - name: Validate architecture
+        run: python scripts/validate_architecture.py
       - name: Validate knowledge libraries
         run: python scripts/validate_libraries.py
-      - name: Validate Rosenthal study and library
+      - name: Validate cumulative Rosenthal study and library
         run: python scripts/validate_rosenthal.py
+      - name: Core linter self-test
+        run: python scripts/lint.py --self-test
       - name: Rosenthal adapter self-test
         run: python scripts/lint_rosenthal.py --self-test
+      - name: Compact benchmark
+        run: python scripts/benchmark_lint.py
+      - name: Editorial Board benchmark
+        run: python scripts/benchmark_board.py
       - name: Rosenthal deterministic benchmark
         run: python scripts/benchmark_rosenthal.py
-      - name: Smoke-test Rosenthal compact and board routing
+      - name: Validate JSON
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          for p in pathlib.Path('.').rglob('*.json'):
+              json.loads(p.read_text(encoding='utf-8'))
+          print('all json: OK')
+          PY
+      - name: Smoke-test Rosenthal cycle 2 compact and board routing
         run: |
           set +e
-          python scripts/check.py --extended --json <<< 'Согласно приказа директора документ вступает в силу.' >/tmp/ros-compact.json
+          python scripts/check.py --extended --json <<< 'Этот вариант более лучше предыдущего.' >/tmp/ros-compact.json
           compact_status=$?
           set -e
           test "$compact_status" -eq 1
-          python scripts/review.py --libraries rosenthal --format json <<< 'Согласно приказа директора документ вступает в силу.' >/tmp/ros-board.json
+          python scripts/review.py --libraries rosenthal --format json <<< 'Этот вариант более лучше предыдущего.' >/tmp/ros-board.json
           python - <<'PY'
           import json
           compact=json.load(open('/tmp/ros-compact.json',encoding='utf-8'))
           board=json.load(open('/tmp/ros-board.json',encoding='utf-8'))
-          assert any(x.get('library_id')=='rosenthal' and x.get('rule')=='ROS-R44' for x in compact['findings']), compact
-          assert any(x.get('library_id')=='rosenthal' and x.get('rule_id')=='ROS-R44' for x in board['findings']), board
+          assert any(x.get('library_id')=='rosenthal' and x.get('rule')=='ROS-R53' for x in compact['findings']), compact
+          assert any(x.get('library_id')=='rosenthal' and x.get('rule_id')=='ROS-R53' for x in board['findings']), board
           PY

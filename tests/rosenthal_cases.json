@@ -1,14 +1,21 @@
 {
-  "version": 1,
-  "source": "D. E. Rosenthal — Справочник по правописанию и литературной правке",
-  "cases": [
+  "version":2,
+  "source":"D. E. Rosenthal cumulative library — cycles 1–2",
+  "cases":[
     {"id":"soglasno-order-genitive","text":"Согласно приказа директора документ вступает в силу.","must_find":["ROS-R44"]},
     {"id":"soglasno-adjective-genitive","text":"Согласно действующего федерального закона срок изменён.","must_find":["ROS-R44"]},
     {"id":"soglasno-dative","text":"Согласно приказу директора документ вступает в силу.","must_not_find":["ROS-R44"]},
     {"id":"soglasno-ambiguous-surface","text":"Согласно инструкции документ вступает в силу.","must_not_find":["ROS-R44"]},
     {"id":"mixed-correlative","text":"Система не только хранит данные, а также проверяет подписи.","must_find":["ROS-R30"]},
     {"id":"canonical-correlative","text":"Система не только хранит данные, но и проверяет подписи.","must_not_find":["ROS-R30"]},
-    {"id":"quoted-meta","text":"Форма «согласно приказа» приведена как исторический пример.","clean":true},
-    {"id":"code-fence","text":"```text\nСогласно приказа директора.\n```","clean":true}
+    {"id":"double-more-better","text":"Этот вариант более лучше предыдущего.","must_find":["ROS-R53"]},
+    {"id":"double-more-prettier","text":"Новая версия более красивее старой.","must_find":["ROS-R53"]},
+    {"id":"analytic-comparative","text":"Новая версия более красивая.","must_not_find":["ROS-R53"]},
+    {"id":"synthetic-comparative","text":"Новая версия красивее старой.","must_not_find":["ROS-R53"]},
+    {"id":"samyi-luchshii-boundary","text":"Это мой самый лучший друг.","must_not_find":["ROS-R53"]},
+    {"id":"positive-adjective-boundary","text":"Нам нужен более ранний поезд.","must_not_find":["ROS-R53"]},
+    {"id":"quoted-meta","text":"Форма «более лучше» приведена как метаязыковой пример.","clean":true},
+    {"id":"code-fence","text":"```text\nСогласно приказа директора.\nболее лучше\n```","clean":true},
+    {"id":"markdown-heading","text":"# Более лучше как поисковый запрос","clean":true}
   ]
 }
