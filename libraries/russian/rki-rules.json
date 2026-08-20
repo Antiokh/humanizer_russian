@@ -52,18 +52,18 @@
       "phenomenon_id": "norm.quantifier_predicate_number",
       "project_class": "NORM",
       "automation_level": "MODEL_ONLY",
-      "scope": "Predicate number with subject groups headed by много, немного, мало, немало, столько, сколько",
-      "source_locator": "studies/velichko-kniga-o-grammatike/rules-01-12.md; current verification in studies/velichko-kniga-o-grammatike/claims.md",
+      "scope": "Predicate number with subject groups containing много, немного, мало, немало, столько, сколько",
+      "source_locator": "studies/velichko-kniga-o-grammatike/rules-01-12.md (VEL-R12); current-reference conflict recorded in studies/velichko-kniga-o-grammatike/claims.md",
       "study_rule_ids": ["VEL-R12"],
-      "operation": "use_singular_predicate_with_quantifier_head_when_structure_is_confirmed",
-      "guard": "Текущая норма подтверждает единственное число для много/немного/мало/немало/столько/сколько. Не расширять это правило на несколько, количественные числительные и приблизительные группы: там возможна семантическая вариативность. Нужен морфосинтаксический разбор, а не поиск слова regex-ом."
+      "operation": "choose_singular_or_plural_by_formal_vs_semantic_agreement",
+      "guard": "Не вводить singular-only запрет. Письмовник Грамоты, следуя академической «Русской грамматике», предписывает для много/немного/мало/немало/столько/сколько формальное единственное число; при этом ответы Грамоты № 322014 (2025), № 320220 (2024) и № 298593 (2018) признают нормативным и множественное число как согласование по смыслу, особенно при активных лицах. Единственное число часто остаётся формальным/предпочтительным вариантом, множественное само по себе не ошибка. Нужны морфосинтаксис и контекст."
     },
     {
       "rule_id": "RU-NATIVE-QUANTITATIVE-AGREEMENT-FOCUS",
       "phenomenon_id": "russian.quantitative_agreement_focus",
       "project_class": "NATIVE_USAGE",
       "automation_level": "MODEL_ONLY",
-      "scope": "Predicate number with quantitative groups and NOM + с + INSTR subject structures outside the narrow hard quantifier set",
+      "scope": "Predicate number with quantitative groups and NOM + с + INSTR subject structures outside the narrow quantifier-reference conflict",
       "source_locator": "studies/velichko-kniga-o-grammatike/rules-13-24.md",
       "study_rule_ids": ["VEL-R13", "VEL-R14"],
       "operation": "choose_agreement_that_matches_collective_vs_individuated_participants",
