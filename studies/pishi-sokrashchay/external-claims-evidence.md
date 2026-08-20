@@ -93,7 +93,10 @@ Primary/empirical sources are preferred below; review/meta-analytic sources are 
 - Hartwig M, Bond CF. *Why do lie-catchers fail? A lens model meta-analysis of human lie judgments*. 2011. DOI: https://doi.org/10.1037/a0023589
 - Bond CF, DePaulo BM. *Accuracy of deception judgments*. 2006. PubMed: https://pubmed.ncbi.nlm.nih.gov/16859438/
 - Sackett PR et al. *Revisiting meta-analytic estimates of validity in personnel selection*. 2022. DOI: https://doi.org/10.1037/apl0000994
-- Levashina-related interview evidence: Wilhelmy et al./interview impression-management meta-analysis, PubMed: https://pubmed.ncbi.nlm.nih.gov/28261135/
+- Peck JA, Levashina J. *Impression Management and Interview and Job Performance Ratings: A Meta-Analysis of Research Design with Tactics in Mind*. 2017. DOI: https://doi.org/10.3389/fpsyg.2017.00201; PubMed: https://pubmed.ncbi.nlm.nih.gov/28261135/
+- Higgins ET. *Promotion and Prevention: Regulatory Focus as a Motivational Principle*. 1998. DOI: https://doi.org/10.1016/S0065-2601(08)60381-0
+- Eisend M, Tarrahi F. *The Effectiveness of Advertising: A Meta-Meta-Analysis of Advertising Inputs and Outcomes*. 2016. DOI: https://doi.org/10.1080/00913367.2016.1185981
+- Peters E, Västfjäll D, Slovic P, Mertz CK, Mazzocco K, Dickert S. *Numeracy and Decision Making*. 2006. DOI: https://doi.org/10.1111/j.1467-9280.2006.01720.x; PubMed: https://pubmed.ncbi.nlm.nih.gov/16683928/
 
 ## Policy conclusion
 
