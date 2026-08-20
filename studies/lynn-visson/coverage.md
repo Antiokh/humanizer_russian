@@ -4,6 +4,8 @@ Source fingerprint: `45cd09d0101caa90effa2f7943d4ddf45659536857ae548910fccad144c
 
 Status: **VERIFIED / AUDITED / OPERATIONAL** for the supplied EPUB.
 
+Content-bearing sections: **55/55 VERIFIED**.
+
 | # | Locator | Section | Status | Operational relevance |
 |---:|---|---|---|---|
 | 1 | `index_split_002.xhtml#calibre_toc_2` | Предисловие | VERIFIED | rules/claims/evidence |
