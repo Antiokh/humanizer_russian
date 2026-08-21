@@ -1,0 +1,23 @@
+name: document-preservation
+
+on:
+  push:
+    branches:
+      - main
+      - agent/**
+      - feature/**
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  corpus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Enforce document-level default baseline
+        run: python scripts/benchmark_documents.py

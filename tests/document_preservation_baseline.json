@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "suite": "humanizer_russian-document-preservation-v1",
+  "policy": "Observed/audited DEFAULT Compact baseline. Update only after reviewing changed document findings; this is a regression snapshot, not a universal quality score.",
+  "aggregate": {
+    "finding_count": 2,
+    "compact_row_count": 2,
+    "by_library": {
+      "ilyakhov": 1,
+      "russian": 1
+    },
+    "by_class": {
+      "EDITING": 1,
+      "NORM": 1
+    },
+    "by_automation": {
+      "DEFAULT_MECHANICAL": 2
+    },
+    "by_rule": {
+      "ILY-M01": 1,
+      "RU-NORM-HEADING-PERIOD": 1
+    }
+  },
+  "cases": [
+    {
+      "id": "neutral-clean",
+      "default": {
+        "finding_count": 0,
+        "compact_row_count": 0,
+        "by_library": {},
+        "by_class": {},
+        "by_automation": {},
+        "by_rule": {},
+        "compact_rules": []
+      }
+    },
+    {
+      "id": "technical-clean",
+      "default": {
+        "finding_count": 0,
+        "compact_row_count": 0,
+        "by_library": {},
+        "by_class": {},
+        "by_automation": {},
+        "by_rule": {},
+        "compact_rules": []
+      }
+    },
+    {
+      "id": "dialogue-clean",
+      "default": {
+        "finding_count": 0,
+        "compact_row_count": 0,
+        "by_library": {},
+        "by_class": {},
+        "by_automation": {},
+        "by_rule": {},
+        "compact_rules": []
+      }
+    },
+    {
+      "id": "rhetoric-clean",
+      "default": {
+        "finding_count": 0,
+        "compact_row_count": 0,
+        "by_library": {},
+        "by_class": {},
+        "by_automation": {},
+        "by_rule": {},
+        "compact_rules": []
+      }
+    },
+    {
+      "id": "literary-clean",
+      "default": {
+        "finding_count": 0,
+        "compact_row_count": 0,
+        "by_library": {},
+        "by_class": {},
+        "by_automation": {},
+        "by_rule": {},
+        "compact_rules": []
+      }
+    },
+    {
+      "id": "official-clean",
+      "default": {
+        "finding_count": 0,
+        "compact_row_count": 0,
+        "by_library": {},
+        "by_class": {},
+        "by_automation": {},
+        "by_rule": {},
+        "compact_rules": []
+      }
+    },
+    {
+      "id": "markdown-clean",
+      "default": {
+        "finding_count": 0,
+        "compact_row_count": 0,
+        "by_library": {},
+        "by_class": {},
+        "by_automation": {},
+        "by_rule": {},
+        "compact_rules": []
+      }
+    },
+    {
+      "id": "heading-clean",
+      "default": {
+        "finding_count": 0,
+        "compact_row_count": 0,
+        "by_library": {},
+        "by_class": {},
+        "by_automation": {},
+        "by_rule": {},
+        "compact_rules": []
+      }
+    },
+    {
+      "id": "heading-defect",
+      "default": {
+        "finding_count": 1,
+        "compact_row_count": 1,
+        "by_library": {
+          "russian": 1
+        },
+        "by_class": {
+          "NORM": 1
+        },
+        "by_automation": {
+          "DEFAULT_MECHANICAL": 1
+        },
+        "by_rule": {
+          "RU-NORM-HEADING-PERIOD": 1
+        },
+        "compact_rules": [
+          "RU-NORM-HEADING-PERIOD"
+        ]
+      }
+    },
+    {
+      "id": "nominalization-clean",
+      "default": {
+        "finding_count": 0,
+        "compact_row_count": 0,
+        "by_library": {},
+        "by_class": {},
+        "by_automation": {},
+        "by_rule": {},
+        "compact_rules": []
+      }
+    },
+    {
+      "id": "nominalization-defect",
+      "default": {
+        "finding_count": 1,
+        "compact_row_count": 1,
+        "by_library": {
+          "ilyakhov": 1
+        },
+        "by_class": {
+          "EDITING": 1
+        },
+        "by_automation": {
+          "DEFAULT_MECHANICAL": 1
+        },
+        "by_rule": {
+          "ILY-M01": 1
+        },
+        "compact_rules": [
+          "ILY-M01"
+        ]
+      }
+    }
+  ]
+}
