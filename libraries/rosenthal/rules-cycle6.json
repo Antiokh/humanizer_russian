@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "library_id": "rosenthal",
+  "source_cycle": 6,
+  "source_title": "Справочник по русскому языку. Практическая стилистика",
+  "source_fingerprint_sha256": "99c8cca2ecc144ab617c08b3187ed5ef772a8e2ce858a23d00c69e06366a25a5",
+  "rule_count": 1,
+  "rules": [
+    {
+      "rule_id": "ROS-R79",
+      "phenomenon_id": "author.free_indirect_speech_dual_voice",
+      "project_class": "AUTHOR",
+      "automation_level": "MODEL_ONLY",
+      "source_book": "Справочник по русскому языку. Практическая стилистика",
+      "source_locator": "§105",
+      "provenance": "SOURCE_DIRECT",
+      "current_status": "CURRENT_USAGE",
+      "operation": "preserve_free_indirect_dual_voice",
+      "guard": "Несобственно-прямую речь определять только при устойчивой привязке к персонажу: грамматическая рамка повествователя сочетается с лексикой, оценкой, интонацией или внутренним вопросом персонажа. Не считать любой вопрос, восклицание или смену лица таким приемом; при намеренной двуплановости не нормализовать текст автоматически в прямую или косвенную речь."
+    }
+  ],
+  "automation_counts": {
+    "HARD_GATE": 0,
+    "DEFAULT_MECHANICAL": 0,
+    "EXTENDED_SOFT": 0,
+    "METRIC_ONLY": 0,
+    "MODEL_ONLY": 1
+  }
+}

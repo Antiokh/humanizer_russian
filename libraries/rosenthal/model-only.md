@@ -1,8 +1,8 @@
 # Rosenthal MODEL_ONLY residue
 
-This file is a compact routing reference. Canonical rule cards live in `rules.json` (cycle 1), `rules-cycle2.json` (cycle 2), `rules-cycle3.json` (cycle 3), and `rules-cycle5.json` (cycle 5). **Cycle 4 adds no new rule identities** and is routed through `provenance-cycle4.json`; full studies are not loaded into ordinary runtime.
+This file is a compact routing reference. Canonical rule cards live in `rules.json` (cycle 1), `rules-cycle2.json` (cycle 2), `rules-cycle3.json` (cycle 3), `rules-cycle5.json` (cycle 5), and `rules-cycle6.json` (cycle 6). **Cycle 4 adds no new rule identities** and is routed through `provenance-cycle4.json`; full studies are not loaded into ordinary runtime.
 
-Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`, `ROS-R44`, `ROS-R53`. `ROS-R10` remains metric-only. Cycles 3–5 deliberately add no new mechanical finding.
+Mechanical surfaces currently emitted by `scripts/lint_rosenthal.py`: `ROS-R30`, `ROS-R44`, `ROS-R53`. `ROS-R10` remains metric-only. Cycles 3–6 deliberately add no new mechanical finding.
 
 ## Cycle 2 contextual rules
 
@@ -43,4 +43,12 @@ The 1997 fifth edition «Справочник по правописанию и �
 
 Cycle 5 comes from the supplied DOCX «Справочник по русскому языку: орфография и пунктуация». Exact edition metadata is not recoverable from the supplied file. Concrete mandatory orthography and punctuation remain owned by current `russian/NORM`; the new Rosenthal cards cover only contextual choice and preservation boundaries.
 
-Cycle-1 MODEL_ONLY rules remain canonical in `libraries/rosenthal/rules.json`. Do not infer blanket bans or automatic normalization of nominalization, passive, repetition, long sentences, participles, gerunds, colloquial markers, loanwords, tropes, rhetorical figures, paragraphing, ellipsis, spoken reduction, punctuation variation, authorial punctuation, conversational syntax, or adjacent same-form verbs.
+## Cycle 6 contextual rule
+
+| Rule | Phenomenon |
+|---|---|
+| `ROS-R79` | `author.free_indirect_speech_dual_voice` |
+
+The 2001 «Практическая стилистика» enriches 64 existing Rosenthal rules and adds only `R79`. It stays MODEL_ONLY because identifying несобственно-прямую речь requires discourse perspective, character anchoring and separation of narrator grammar from character lexicon/evaluation/intonation. A question or exclamation inside narration is not sufficient.
+
+Cycle-1 MODEL_ONLY rules remain canonical in `libraries/rosenthal/rules.json`. Do not infer blanket bans or automatic normalization of nominalization, passive, repetition, long sentences, participles, gerunds, colloquial markers, loanwords, tropes, rhetorical figures, paragraphing, ellipsis, spoken reduction, punctuation variation, authorial punctuation, conversational syntax, adjacent same-form verbs, or free indirect discourse.
