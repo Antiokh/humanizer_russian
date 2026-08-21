@@ -23,7 +23,7 @@ Current registered libraries:
 - Visson;
 - Rosenthal.
 
-Visson reuses the already audited `evals/lynn-visson.json` + `evals/lynn-visson-map.json` pair. Rosenthal uses a compact project-authored synthetic suite mapped to canonical `ROS-R*` rules across the integrated source cycles. The Rosenthal suite is intentionally preservation-heavy: historical/source-period advice never becomes current `NORM` merely because a model agrees with it.
+Visson keeps the older `evals/lynn-visson.json` + `evals/lynn-visson-map.json` pair as a research positive/negative/boundary fixture. Those files are not user-prompt model evals. The live-model harness uses the separate project-authored `evals/visson-context.json` + `evals/visson-context-map.json` runtime pair. Rosenthal likewise uses a compact project-authored synthetic suite mapped to canonical `ROS-R*` rules across the integrated source cycles. Both runtime suites are deliberately preservation-heavy; historical/source-period advice never becomes current `NORM` merely because a model agrees with it.
 
 ## How one case runs
 
