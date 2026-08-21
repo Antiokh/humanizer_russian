@@ -1,0 +1,45 @@
+name: materialize-readme-header
+
+on:
+  push:
+    branches:
+      - docs/add-readme-header
+    paths:
+      - .github/workflows/materialize-readme-header.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Materialize image and update README
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat assets/.header/chunk{00..10} | tr -d '\r\n' | base64 -d > assets/editorial-board.webp
+          echo "771dfcf115afa93ed34eb88ee878ef7c92eabadfc7a8c3fc700d26e37a68f371  assets/editorial-board.webp" | sha256sum -c -
+
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("README.md")
+          text = path.read_text(encoding="utf-8")
+          image = '<p align="center">\n  <img src="assets/editorial-board.webp" alt="Редакционная коллегия humanizer_russian" width="100%">\n</p>\n\n'
+          if "assets/editorial-board.webp" not in text:
+              text = image + text
+              path.write_text(text, encoding="utf-8")
+          PY
+
+          rm -rf assets/.header
+          rm -f .github/workflows/materialize-readme-header.yml
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md assets/editorial-board.webp
+          git add -u
+          git commit -m "Add editorial board header to README"
+          git push
