@@ -17,34 +17,6 @@ LIBRARIES = ROOT / "libraries"
 REVIEWERS = ROOT / "reviewers"
 STYLES = ROOT / "styles"
 
-DEFAULT_MECHANICAL_RULES = {
-    "repeated common element in contrast",
-    "parcellated enumeration",
-    "ascii hyphen used as dash",
-}
-
-PHENOMENON_MAP = {
-    "repeated common element in contrast": "native.redundant_shared_material",
-    "parcellated enumeration": "native.parcellated_enumeration",
-    "ascii hyphen used as dash": "typography.ascii_hyphen_as_dash",
-    "possessive overexplication candidate": "native.possessive_overexplication",
-    "repeated sentence start": "native.repeated_sentence_start",
-    "repeated explicit context candidate": "native.repeated_explicit_context",
-    "context undercompression candidate": "native.context_undercompression",
-    "repeated contrast formula": "style.repeated_contrast_formula",
-    "anglo-rhetorical question/answer cluster": "ai_calque.qa_cluster",
-    "short-fragment cluster": "style.short_fragment_cluster",
-    "high dash density": "style.high_dash_density",
-}
-
-LEGACY_PROJECT_CLASSES = {
-    "ARTIFACT": "ARTIFACT",
-    "NATIVE_WARNING": "NATIVE_USAGE",
-    "STYLE_WARNING": "EDITING",
-    "EDITING_SUGGESTION": "EDITING",
-    "AI_PATTERN": "AI_CALQUE",
-}
-
 COMPACT_KIND_BY_PROJECT_CLASS = {
     "ARTIFACT": "ARTIFACT",
     "NORM": "LANGUAGE_ERROR",
@@ -107,47 +79,6 @@ def import_path(relative: str):
     return module
 
 
-def legacy_project_class(kind: str) -> str:
-    try:
-        return LEGACY_PROJECT_CLASSES[kind]
-    except KeyError as exc:
-        raise ValueError(f"unsupported legacy finding kind: {kind!r}") from exc
-
-
-def normalize_legacy(finding: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
-    rule = finding["rule"]
-    kind = finding["kind"]
-    automation = "HARD_GATE" if kind == "ARTIFACT" else (
-        "DEFAULT_MECHANICAL" if rule in DEFAULT_MECHANICAL_RULES else "EXTENDED_SOFT"
-    )
-    phenomenon = PHENOMENON_MAP.get(rule)
-    if not phenomenon and rule.startswith("calque: "):
-        phenomenon = f"ai_calque.{slug(rule[8:])}"
-    if not phenomenon:
-        phenomenon = f"legacy.{slug(rule)}"
-    project_class = legacy_project_class(kind)
-    reviewer_id = None if project_class == "ARTIFACT" else manifest.get("reviewer_id")
-    out = {
-        "rule_id": f"{manifest['source_namespace']}-{slug(rule)}",
-        "phenomenon_id": phenomenon,
-        "library_id": manifest["id"],
-        "source_namespace": manifest["source_namespace"],
-        "reviewer_id": reviewer_id,
-        "project_class": project_class,
-        "automation_level": automation,
-        "verdict": "CHANGE" if automation == "HARD_GATE" else "REVIEW",
-        "line": finding.get("line", 0),
-        "excerpt": finding.get("excerpt", ""),
-        "reason": finding.get("note", ""),
-        "operation": None,
-        "confidence": None,
-        "legacy_rule": rule,
-        "legacy_kind": kind,
-    }
-    validate_normalized_finding(out, manifest["id"])
-    return out
-
-
 def normalize_review_v1(item: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
     out = dict(item)
     out.setdefault("line", 0)
@@ -163,11 +94,7 @@ def normalize_review_v1(item: dict[str, Any], manifest: dict[str, Any]) -> dict[
 
 
 def _call_review(module: Any, text: str, context: dict[str, Any] | None) -> dict[str, Any]:
-    """Pass optional runtime context only to adapters that declare it.
-
-    Existing book adapters keep their one-argument ``review(text)`` contract;
-    context-aware project libraries may opt into ``review(text, context=...)``.
-    """
+    """Pass optional runtime context only to adapters that declare it."""
     params = inspect.signature(module.review).parameters
     if "context" in params:
         return module.review(text, context=context or {})
@@ -181,13 +108,13 @@ def run_library(
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     module = import_path(manifest["linter_path"])
     adapter = manifest["adapter"]
-    if adapter == "legacy_lint_v1":
-        findings, metrics = module.lint(text)
-        return [normalize_legacy(item, manifest) for item in findings], metrics
-    if adapter == "review_v1":
-        result = _call_review(module, text, context)
-        return [normalize_review_v1(item, manifest) for item in result.get("findings", [])], result.get("metrics", {})
-    raise ValueError(f"unsupported adapter: {adapter}")
+    if adapter != "review_v1":
+        raise ValueError(f"unsupported adapter: {adapter}; operational libraries must use review_v1")
+    result = _call_review(module, text, context)
+    return [
+        normalize_review_v1(item, manifest)
+        for item in result.get("findings", [])
+    ], result.get("metrics", {})
 
 
 def run_libraries(
@@ -214,8 +141,9 @@ def run_libraries(
 def compact_shape(item: dict[str, Any]) -> dict[str, Any]:
     """Stable compact shape compatible with the existing check/benchmark interface."""
     project_class = item.get("project_class")
-    if item.get("legacy_kind"):
-        kind = item["legacy_kind"]
+    display_kind = item.get("display_kind")
+    if display_kind:
+        kind = display_kind
     else:
         try:
             kind = COMPACT_KIND_BY_PROJECT_CLASS[project_class]
@@ -224,7 +152,7 @@ def compact_shape(item: dict[str, Any]) -> dict[str, Any]:
     return {
         "kind": kind,
         "line": item.get("line", 0),
-        "rule": item.get("legacy_rule") or item["rule_id"],
+        "rule": item.get("display_rule") or item["rule_id"],
         "excerpt": item.get("excerpt", ""),
         "note": item.get("reason", ""),
         "library_id": item.get("library_id"),

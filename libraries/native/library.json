@@ -6,7 +6,7 @@
   "source_type": "project_core",
   "source_branch": "main",
   "reviewer_id": "native",
-  "adapter": "legacy_lint_v1",
+  "adapter": "review_v1",
   "linter_path": "scripts/lint_native.py",
   "enabled_by_default": true,
   "status": "OPERATIONAL",
@@ -14,5 +14,5 @@
     "references/native-russian.md",
     "references/russian-language.md"
   ],
-  "notes": "Legacy native/core adapter filters source-specific library findings so reviewer provenance remains correct. New book layers use review_v1."
+  "notes": "Native/core emits normalized findings directly through review_v1 while preserving the established Compact display surface and filtering source-specific findings."
 }
