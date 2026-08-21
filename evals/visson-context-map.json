@@ -1,0 +1,18 @@
+{
+  "suite": "humanizer_russian-visson-context-v1",
+  "library_id": "visson",
+  "cases": [
+    {"id": "visson-context-01", "rules": ["VISSON-NATIVE-IMPERSONAL-DATIVE"], "counterexample": false},
+    {"id": "visson-context-02", "rules": ["VISSON-NATIVE-WORD-ORDER-INFO"], "counterexample": true},
+    {"id": "visson-context-03", "rules": ["VISSON-NATIVE-ACTIVE-PASSIVE"], "counterexample": false},
+    {"id": "visson-context-04", "rules": ["VISSON-NATIVE-ACTIVE-PASSIVE"], "counterexample": true},
+    {"id": "visson-context-05", "rules": ["VISSON-NATIVE-BORROW-LEND-ROLE"], "counterexample": false},
+    {"id": "visson-context-06", "rules": ["VISSON-NATIVE-PROBLEM-ISSUE"], "counterexample": false},
+    {"id": "visson-context-07", "rules": ["VISSON-NATIVE-MODAL-NEGATION"], "counterexample": false},
+    {"id": "visson-context-08", "rules": ["VISSON-NATIVE-REFERENCE-WE-WITH"], "counterexample": false},
+    {"id": "visson-context-09", "rules": ["VISSON-NATIVE-POSSESSIVE-OMISSION"], "counterexample": false},
+    {"id": "visson-context-10", "rules": ["VISSON-EDIT-DIRECTNESS-PRAGMATICS"], "counterexample": false},
+    {"id": "visson-context-11", "rules": ["VISSON-CALQUE-ACTUAL-AKTUALNY"], "counterexample": false},
+    {"id": "visson-context-12", "rules": ["VISSON-CALQUE-MEETING-MITING"], "counterexample": false}
+  ]
+}
