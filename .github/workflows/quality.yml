@@ -64,8 +64,11 @@ jobs:
       - name: Linter self-test
         run: python scripts/lint.py --self-test
 
-      - name: Native library provenance self-test
+      - name: Native normalized adapter self-test
         run: python scripts/lint_native.py
+
+      - name: Native review_v1 parity benchmark
+        run: python scripts/benchmark_native_adapter.py
 
       - name: Russian language layer self-test
         run: python scripts/lint_russian.py
@@ -150,7 +153,7 @@ jobs:
           rslive = json.load(open('/tmp/chuk-rslive.json', encoding='utf-8'))
           assert any(item.get('library_id') == 'chukovsky' and item.get('phenomenon_id') == 'editing.metadiscourse_announcement' for item in compact['findings']), compact
           assert any(item.get('library_id') == 'chukovsky' and item.get('rule_id') == 'CHUK-R24' for item in board['findings']), board
-          assert not any(item.get('library_id') == 'native' and str(item.get('legacy_rule', '')).startswith('chukovsky:') for item in board['findings']), board
+          assert not any(item.get('library_id') == 'native' and str(item.get('display_rule', '')).startswith('chukovsky:') for item in board['findings']), board
           assert not any(str(key).startswith('chukovsky_') for key in board['metrics'].get('native', {})), board
           assert rslive['style']['id'] == 'rslive_content', rslive
           assert any(item.get('rule_id') == 'CHUK-R24' for item in rslive['findings']), rslive
