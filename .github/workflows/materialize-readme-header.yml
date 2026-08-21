@@ -1,11 +1,12 @@
 name: materialize-readme-header
 
 on:
-  push:
+  pull_request:
     branches:
-      - docs/add-readme-header
+      - main
     paths:
       - .github/workflows/materialize-readme-header.yml
+      - assets/.header/**
 
 permissions:
   contents: write
@@ -15,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: docs/add-readme-header
 
       - name: Materialize image and update README
         shell: bash
@@ -42,6 +45,4 @@ jobs:
           git add README.md assets/editorial-board.webp
           git add -u
           git commit -m "Add editorial board header to README"
-          git push
-
-# Trigger materialization after all chunks are present.
+          git push origin HEAD:docs/add-readme-header
