@@ -4,6 +4,7 @@
   "root_files": [
     "SKILL.md",
     "BOARD_SKILL.md",
+    "INSTALL.md",
     "LICENSE",
     "THIRD_PARTY_NOTICES.md",
     "skill-package.json"
