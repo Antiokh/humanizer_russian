@@ -43,3 +43,5 @@ jobs:
           git add -u
           git commit -m "Add editorial board header to README"
           git push
+
+# Trigger materialization after all chunks are present.
