@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Validate libraries, reviewers, styles and optional evidence providers."""
+"""Validate libraries, reviewers, styles, evidence providers and public capability snapshot."""
 from __future__ import annotations
 
 import json
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
+
+from generate_capabilities import JSON_PATH, MD_PATH, _check, build_snapshot, render_json, render_markdown
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_MODEL_EVAL_LIBRARIES = {
@@ -62,6 +64,17 @@ def _validate_model_eval_contract(lib: dict) -> bool:
     return True
 
 
+def _validate_capability_snapshot() -> None:
+    """Make volatile public inventory facts follow manifests instead of hand edits."""
+    snapshot = build_snapshot()
+    current = _check(JSON_PATH, render_json(snapshot))
+    current = _check(MD_PATH, render_markdown(snapshot)) and current
+    if not current:
+        raise SystemExit(
+            "generated capability snapshot is stale; run python scripts/generate_capabilities.py"
+        )
+
+
 def main() -> None:
     libraries = validate_dir("libraries/*/library.json", "schemas/library.schema.json")
     reviewers = validate_dir("reviewers/*.json", "schemas/reviewer.schema.json")
@@ -113,9 +126,12 @@ def main() -> None:
 
     if "neutral" not in {x["id"] for x in styles}:
         raise SystemExit("neutral style is required")
+
+    _validate_capability_snapshot()
     print(
         f"libraries: {len(libraries)}; reviewers: {len(reviewers)}; styles: {len(styles)}; "
-        f"evidence providers: {len(providers)}; model-eval libraries: {len(registered_model_eval)}; OK"
+        f"evidence providers: {len(providers)}; model-eval libraries: {len(registered_model_eval)}; "
+        "capability snapshot: current; OK"
     )
 
 
