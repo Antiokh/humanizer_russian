@@ -1,0 +1,94 @@
+name: gpt-package
+
+on:
+  pull_request:
+    paths:
+      - "scripts/package_gpt.py"
+      - "gpt/**"
+      - "references/**"
+      - "libraries/**"
+      - "reviewers/**"
+      - "styles/**"
+      - "profiles/**"
+      - "knowledge/**"
+      - "docs/capabilities.md"
+      - "docs/anti-calque.md"
+      - "docs/context-economy.md"
+      - "docs/contrast.md"
+      - "docs/author-layer.md"
+      - "BOARD_SKILL.md"
+      - "PROJECT_STATUS.md"
+      - ".github/workflows/gpt-package.yml"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/package_gpt.py"
+      - "gpt/**"
+      - "references/**"
+      - "libraries/**"
+      - "reviewers/**"
+      - "styles/**"
+      - "profiles/**"
+      - "knowledge/**"
+      - "docs/capabilities.md"
+      - "docs/anti-calque.md"
+      - "docs/context-economy.md"
+      - "docs/contrast.md"
+      - "docs/author-layer.md"
+      - "BOARD_SKILL.md"
+      - "PROJECT_STATUS.md"
+      - ".github/workflows/gpt-package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile packager
+        run: python3 -m py_compile scripts/package_gpt.py
+
+      - name: Build twice
+        run: |
+          python3 scripts/package_gpt.py --output /tmp/humanizer-russian-gpts-a.zip
+          python3 scripts/package_gpt.py --output /tmp/humanizer-russian-gpts-b.zip
+          cmp /tmp/humanizer-russian-gpts-a.zip /tmp/humanizer-russian-gpts-b.zip
+
+      - name: Inspect archive
+        run: python3 scripts/package_gpt.py --inspect /tmp/humanizer-russian-gpts-a.zip
+
+      - name: Validate GPT Builder layout
+        run: |
+          rm -rf /tmp/gpts-package
+          mkdir -p /tmp/gpts-package
+          unzip -q /tmp/humanizer-russian-gpts-a.zip -d /tmp/gpts-package
+          root=/tmp/gpts-package/humanizer-russian-gpts
+          test -f "$root/Instructions/INSTRUCTIONS.md"
+          test -f "$root/Instructions/GPT_BUILDER.md"
+          test -f "$root/Instructions/TESTS.md"
+          test -f "$root/Knowledge/00_INDEX.md"
+          count=$(find "$root/Knowledge" -maxdepth 1 -type f -name '*.md' | wc -l)
+          test "$count" -le 20
+          test "$count" -ge 13
+          ! grep -R "native-russian-user-context" "$root/Knowledge"
+          grep -q "PROJECT" "$root/Knowledge/13_CAPABILITIES_AND_STATUS.md"
+          grep -q "Custom GPT runtime boundary" "$root/Instructions/INSTRUCTIONS.md"
+
+      - name: Stage exact tested package
+        run: |
+          mkdir -p dist-ci
+          cp /tmp/humanizer-russian-gpts-a.zip dist-ci/humanizer-russian-gpts.zip
+          sha256sum dist-ci/humanizer-russian-gpts.zip
+          unzip -l dist-ci/humanizer-russian-gpts.zip
+
+      - name: Upload Custom GPT package
+        uses: actions/upload-artifact@v4
+        with:
+          name: humanizer-russian-gpts
+          path: dist-ci/humanizer-russian-gpts.zip
+          if-no-files-found: error
+          retention-days: 14
