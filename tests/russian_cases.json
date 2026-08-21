@@ -33,6 +33,11 @@
     {"id":"ru_perfective_career_negative","text":"После этого его карьера сломалась.","must_not_find":["RU-CALQUE-ABSTRACT-BREAK"]},
     {"id":"ru_lexicalized_break_voice_negative","text":"У подростка сейчас ломается голос.","must_not_find":["RU-CALQUE-ABSTRACT-BREAK","RU-NATIVE-BREAK-STATE-TRANSITION"]},
     {"id":"ru_inline_code_is_not_prose","text":"Запустите `prompt` как параметр тестовой команды.","must_not_find":["RU-LEX-LATIN-IN-RUSSIAN","RU-REGISTER-JARGON-TERM"]},
-    {"id":"ru_url_is_not_prose","text":"Документация находится на https://example.com/prompt и доступна всем.","must_not_find":["RU-LEX-LATIN-IN-RUSSIAN","RU-REGISTER-JARGON-TERM"]}
+    {"id":"ru_url_is_not_prose","text":"Документация находится на https://example.com/prompt и доступна всем.","must_not_find":["RU-LEX-LATIN-IN-RUSSIAN","RU-REGISTER-JARGON-TERM"]},
+    {"id":"ru_break_inline_code_is_not_prose","text":"Запустите `процесс ломается` как тестовую строку.","must_not_find":["RU-CALQUE-ABSTRACT-BREAK"]},
+    {"id":"ru_break_url_is_not_prose","text":"Пример: https://example.com/процесс-ломается","must_not_find":["RU-CALQUE-ABSTRACT-BREAK"]},
+    {"id":"ru_break_fenced_code_is_not_prose","text":"```text\nпроцесс ломается\n```","must_not_find":["RU-CALQUE-ABSTRACT-BREAK"]},
+    {"id":"ru_break_short_inner_fence_does_not_close","text":"````text\n```\nпроцесс ломается\n```\n````","must_not_find":["RU-CALQUE-ABSTRACT-BREAK"]},
+    {"id":"ru_break_prose_after_code_still_visible","text":"`процесс ломается`\nНа этом шаге процесс ломается.","must_find":["RU-CALQUE-ABSTRACT-BREAK"]}
   ]
 }

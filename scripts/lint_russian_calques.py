@@ -11,6 +11,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from russian_prose import mask_nonprose
+
 ABSTRACT_BREAK_SUBJECT = (
     r"(?:процесс(?:ы)?|логик(?:а|и)|сценари(?:й|и)|алгоритм(?:ы)?|"
     r"систем(?:а|ы)|интеграц(?:ия|ии)|автоматизац(?:ия|ии)|пайплайн(?:ы)?|"
@@ -103,19 +105,21 @@ def _finding(
 def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
     findings: list[dict[str, Any]] = []
     seen: set[tuple[str, int, int]] = set()
+    prose = mask_nonprose(text)
 
     for pattern in ABSTRACT_BREAK_PATTERNS:
-        for match in pattern.finditer(text):
+        for match in pattern.finditer(prose):
             key = ("abstract", *match.span())
             if key in seen:
                 continue
             seen.add(key)
+            excerpt = text[match.start():match.end()]
             findings.append(
                 _finding(
                     "RU-CALQUE-ABSTRACT-BREAK",
                     "russian.abstract_break_calque",
                     "AI_CALQUE",
-                    match.group(0),
+                    excerpt,
                     _line_no(text, match.start()),
                     (
                         "`Ломается/ломаться` описывает абстрактный процесс, логику, сценарий или "
@@ -129,8 +133,8 @@ def review(text: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
             )
 
     for pattern in PROGRESSIVE_BREAK_PATTERNS:
-        for match in pattern.finditer(text):
-            excerpt = match.group(0)
+        for match in pattern.finditer(prose):
+            excerpt = text[match.start():match.end()]
             if HABITUAL_CUE_RE.search(excerpt):
                 continue
             key = ("progressive", *match.span())
@@ -200,10 +204,27 @@ def self_test() -> None:
         "После обновления сломался сценарий обработки.",
         "Его карьера сломалась после скандала.",
         "Его карьера была сломана этим решением.",
+        "Запустите `процесс ломается` как тестовую строку.",
+        "См. https://example.com/процесс-ломается для примера.",
+        "<!-- процесс ломается --> Обычный текст.",
+        "```text\nпроцесс ломается\n```",
+        "````text\n```\nпроцесс ломается\n```\n````",
     ]
     for text in negatives:
         rows = review(text)["findings"]
         assert not rows, (text, rows)
+
+    mixed = review(
+        "`процесс ломается`\n"
+        "```text\n"
+        "процесс ломается\n"
+        "```\n"
+        "На этом шаге процесс ломается."
+    )["findings"]
+    abstract = [x for x in mixed if x["rule_id"] == "RU-CALQUE-ABSTRACT-BREAK"]
+    assert len(abstract) == 1, mixed
+    assert abstract[0]["line"] == 5, mixed
+    assert abstract[0]["excerpt"] == "процесс ломается", mixed
 
 
 if __name__ == "__main__":

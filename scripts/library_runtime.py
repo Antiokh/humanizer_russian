@@ -10,6 +10,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+from finding_contract import validate_normalized_finding
+
 ROOT = Path(__file__).resolve().parents[1]
 LIBRARIES = ROOT / "libraries"
 REVIEWERS = ROOT / "reviewers"
@@ -33,6 +35,23 @@ PHENOMENON_MAP = {
     "anglo-rhetorical question/answer cluster": "ai_calque.qa_cluster",
     "short-fragment cluster": "style.short_fragment_cluster",
     "high dash density": "style.high_dash_density",
+}
+
+LEGACY_PROJECT_CLASSES = {
+    "ARTIFACT": "ARTIFACT",
+    "NATIVE_WARNING": "NATIVE_USAGE",
+    "STYLE_WARNING": "EDITING",
+    "EDITING_SUGGESTION": "EDITING",
+    "AI_PATTERN": "AI_CALQUE",
+}
+
+COMPACT_KIND_BY_PROJECT_CLASS = {
+    "ARTIFACT": "ARTIFACT",
+    "NORM": "LANGUAGE_ERROR",
+    "NATIVE_USAGE": "NATIVE_WARNING",
+    "EDITING": "STYLE_WARNING",
+    "AI_CALQUE": "AI_PATTERN",
+    "AUTHOR": "STYLE_WARNING",
 }
 
 
@@ -89,12 +108,10 @@ def import_path(relative: str):
 
 
 def legacy_project_class(kind: str) -> str:
-    return {
-        "ARTIFACT": "ARTIFACT",
-        "NATIVE_WARNING": "NATIVE_USAGE",
-        "STYLE_WARNING": "EDITING",
-        "AI_PATTERN": "AI_CALQUE",
-    }.get(kind, "EDITING")
+    try:
+        return LEGACY_PROJECT_CLASSES[kind]
+    except KeyError as exc:
+        raise ValueError(f"unsupported legacy finding kind: {kind!r}") from exc
 
 
 def normalize_legacy(finding: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
@@ -110,7 +127,7 @@ def normalize_legacy(finding: dict[str, Any], manifest: dict[str, Any]) -> dict[
         phenomenon = f"legacy.{slug(rule)}"
     project_class = legacy_project_class(kind)
     reviewer_id = None if project_class == "ARTIFACT" else manifest.get("reviewer_id")
-    return {
+    out = {
         "rule_id": f"{manifest['source_namespace']}-{slug(rule)}",
         "phenomenon_id": phenomenon,
         "library_id": manifest["id"],
@@ -127,13 +144,11 @@ def normalize_legacy(finding: dict[str, Any], manifest: dict[str, Any]) -> dict[
         "legacy_rule": rule,
         "legacy_kind": kind,
     }
+    validate_normalized_finding(out, manifest["id"])
+    return out
 
 
 def normalize_review_v1(item: dict[str, Any], manifest: dict[str, Any]) -> dict[str, Any]:
-    required = {"rule_id", "phenomenon_id", "project_class", "automation_level", "verdict"}
-    missing = sorted(required - set(item))
-    if missing:
-        raise ValueError(f"{manifest['id']} finding missing fields: {', '.join(missing)}")
     out = dict(item)
     out.setdefault("line", 0)
     out.setdefault("excerpt", "")
@@ -143,6 +158,7 @@ def normalize_review_v1(item: dict[str, Any], manifest: dict[str, Any]) -> dict[
     out["library_id"] = manifest["id"]
     out["source_namespace"] = manifest["source_namespace"]
     out.setdefault("reviewer_id", manifest.get("reviewer_id"))
+    validate_normalized_finding(out, manifest["id"])
     return out
 
 
@@ -198,13 +214,13 @@ def run_libraries(
 def compact_shape(item: dict[str, Any]) -> dict[str, Any]:
     """Stable compact shape compatible with the existing check/benchmark interface."""
     project_class = item.get("project_class")
-    kind = item.get("legacy_kind") or {
-        "ARTIFACT": "ARTIFACT",
-        "NATIVE_USAGE": "NATIVE_WARNING",
-        "AI_CALQUE": "AI_PATTERN",
-        "EDITING": "STYLE_WARNING",
-        "NORM": "LANGUAGE_ERROR",
-    }.get(project_class, "STYLE_WARNING")
+    if item.get("legacy_kind"):
+        kind = item["legacy_kind"]
+    else:
+        try:
+            kind = COMPACT_KIND_BY_PROJECT_CLASS[project_class]
+        except KeyError as exc:
+            raise ValueError(f"unsupported compact project_class: {project_class!r}") from exc
     return {
         "kind": kind,
         "line": item.get("line", 0),
@@ -214,5 +230,7 @@ def compact_shape(item: dict[str, Any]) -> dict[str, Any]:
         "library_id": item.get("library_id"),
         "reviewer_id": item.get("reviewer_id"),
         "phenomenon_id": item.get("phenomenon_id"),
+        "project_class": project_class,
         "automation_level": item.get("automation_level"),
+        "verdict": item.get("verdict"),
     }

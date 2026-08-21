@@ -19,6 +19,13 @@ import re
 import sys
 from pathlib import Path
 
+from finding_contract import (
+    AUTOMATION_PRIORITY,
+    DEFAULT_VISIBLE_AUTOMATION_LEVELS,
+    EXTENDED_VISIBLE_AUTOMATION_LEVELS,
+    GUARDRAIL_CLASSES,
+    VERDICT_PRIORITY,
+)
 from library_runtime import compact_shape, run_libraries
 
 MECHANICAL_RULES = {
@@ -29,13 +36,12 @@ MECHANICAL_RULES = {
 
 
 def select_normalized(findings: list[dict], extended: bool = False) -> list[dict]:
-    if extended:
-        return [item for item in findings if item.get("automation_level") != "MODEL_ONLY"]
-    return [
-        item
-        for item in findings
-        if item.get("automation_level") in {"HARD_GATE", "DEFAULT_MECHANICAL"}
-    ]
+    allowed = (
+        EXTENDED_VISIBLE_AUTOMATION_LEVELS
+        if extended
+        else DEFAULT_VISIBLE_AUTOMATION_LEVELS
+    )
+    return [item for item in findings if item.get("automation_level") in allowed]
 
 
 def _normalized_excerpt(item: dict) -> str:
@@ -52,9 +58,19 @@ def _provenance(item: dict) -> dict:
         "library_id": item.get("library_id"),
         "source_namespace": item.get("source_namespace"),
         "reviewer_id": item.get("reviewer_id"),
+        "project_class": item.get("project_class"),
+        "automation_level": item.get("automation_level"),
         "verdict": item.get("verdict"),
         "operation": item.get("operation"),
     }
+
+
+def _provenance_key(item: dict) -> tuple[str, str, str]:
+    return (
+        str(item.get("library_id") or ""),
+        str(item.get("rule_id") or ""),
+        str(item.get("reviewer_id") or ""),
+    )
 
 
 def _group_compatible_surface(findings: list[dict]) -> list[list[dict]]:
@@ -96,6 +112,19 @@ def _group_compatible_surface(findings: list[dict]) -> list[list[dict]]:
     return [group["items"] for group in groups]
 
 
+def _compact_winner_key(item: dict) -> tuple[int, int, int, str, str, str]:
+    project_class = item.get("project_class")
+    guardrail_rank = 2 if project_class == "ARTIFACT" else 1 if project_class == "NORM" else 0
+    return (
+        guardrail_rank,
+        AUTOMATION_PRIORITY[item["automation_level"]],
+        VERDICT_PRIORITY[item["verdict"]],
+        str(project_class),
+        str(item.get("library_id") or ""),
+        str(item.get("rule_id") or ""),
+    )
+
+
 def compact_rows(findings: list[dict]) -> list[dict]:
     out: list[dict] = []
     for items in _group_compatible_surface(findings):
@@ -108,12 +137,20 @@ def compact_rows(findings: list[dict]) -> list[dict]:
             out.extend(compact_shape(item) for item in items)
             continue
 
-        row = compact_shape(items[0])
+        winner = max(items, key=_compact_winner_key)
+        row = compact_shape(winner)
         if len(items) > 1:
-            row["provenance"] = [_provenance(item) for item in items]
+            row["provenance"] = [
+                _provenance(item) for item in sorted(items, key=_provenance_key)
+            ]
             row["deduplicated_sources"] = len(items)
         out.append(row)
     return out
+
+
+def has_blocking_findings(findings: list[dict]) -> bool:
+    """Guard CLI exit behavior with normalized project classes, not lossy display kinds."""
+    return any(item.get("project_class") in GUARDRAIL_CLASSES for item in findings)
 
 
 def check_text(
@@ -178,7 +215,7 @@ def main() -> None:
             print(f"{item['kind']}{loc} [{item['rule']}]{source}: {item['excerpt']}{note}")
         print(json.dumps(metrics, ensure_ascii=False))
 
-    if any(item["kind"] in {"ARTIFACT", "LANGUAGE_ERROR"} for item in findings):
+    if has_blocking_findings(findings):
         raise SystemExit(1)
     if args.fail_on_findings and findings:
         raise SystemExit(2)
