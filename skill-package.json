@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "skill_name": "humanizer-russian",
+  "root_files": [
+    "SKILL.md",
+    "BOARD_SKILL.md",
+    "INSTALL.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "skill-package.json"
+  ],
+  "runtime_scripts": [
+    "scripts/check.py",
+    "scripts/finding_contract.py",
+    "scripts/library_runtime.py",
+    "scripts/lint.py",
+    "scripts/lint_native.py",
+    "scripts/lint_russian.py",
+    "scripts/lint_russian_all.py",
+    "scripts/lint_russian_calques.py",
+    "scripts/lint_russian_rki_metrics.py",
+    "scripts/lint_chukovsky.py",
+    "scripts/chukovsky_checks.py",
+    "scripts/lint_ilyakhov.py",
+    "scripts/lint_gal.py",
+    "scripts/lint_visson.py",
+    "scripts/lint_rosenthal.py",
+    "scripts/lint_golub.py",
+    "scripts/russian_prose.py",
+    "scripts/shared_russian_norm_surfaces.py",
+    "scripts/editorial_board.py",
+    "scripts/review.py",
+    "scripts/evidence_runtime.py",
+    "scripts/profile_author.py"
+  ],
+  "runtime_directories": [
+    "libraries",
+    "reviewers",
+    "styles",
+    "references",
+    "knowledge",
+    "profiles",
+    "schemas",
+    "evidence"
+  ],
+  "forbidden_prefixes": [
+    ".git/",
+    ".github/",
+    "docs/",
+    "evals/",
+    "gpt/",
+    "reviews/",
+    "studies/",
+    "tests/"
+  ],
+  "excluded_features": [
+    "development validators and benchmarks",
+    "source-study corpus",
+    "model-eval suites and live model-eval harness",
+    "CI workflows",
+    "external-review fixtures"
+  ]
+}
