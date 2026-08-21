@@ -10,10 +10,9 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from russian_prose import mask_nonprose
+
 CYRILLIC_WORD_RE = re.compile(r"[А-Яа-яЁё-]+")
-INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
-URL_RE = re.compile(r"https?://\S+|www\.\S+", re.I)
-FENCE_RE = re.compile(r"^(`{3,}|~{3,})")
 NOMINATIVE_PERSONAL_PRONOUN_RE = re.compile(r"(?<![А-Яа-яЁё-])(?:я|ты|он|она|оно|мы|вы|они)(?![А-Яа-яЁё-])", re.I)
 # Precision-first proxy: deliberately omit the productive short-participle -т
 # family because a bare final т also matches ordinary words such as документ
@@ -26,33 +25,7 @@ PREDSTAVLYAT_SOBOY_RE = re.compile(r"(?<![А-Яа-яЁё-])представля(
 
 
 def _visible_text(text: str) -> str:
-    lines: list[str] = []
-    fenced = False
-    fence_char: str | None = None
-    fence_len = 0
-    for raw in text.splitlines():
-        stripped = raw.lstrip()
-        fence = FENCE_RE.match(stripped)
-        if fence:
-            marker = fence.group(1)
-            if not fenced:
-                fenced = True
-                fence_char = marker[0]
-                fence_len = len(marker)
-            elif marker[0] == fence_char and len(marker) >= fence_len:
-                fenced = False
-                fence_char = None
-                fence_len = 0
-            # A shorter same-character marker remains content of the open fence;
-            # it must not expose following code as prose, and fence lines never
-            # contribute to language metrics themselves.
-            continue
-        if fenced:
-            continue
-        clean = INLINE_CODE_RE.sub(" ", raw)
-        clean = URL_RE.sub(" ", clean)
-        lines.append(clean)
-    return "\n".join(lines)
+    return mask_nonprose(text)
 
 
 def _per_1000(count: int, words: int) -> float:
