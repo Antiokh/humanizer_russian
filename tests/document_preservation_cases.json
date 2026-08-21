@@ -1,0 +1,21 @@
+{
+  "suite": "humanizer_russian-document-preservation-v1",
+  "version": 1,
+  "cases": [
+    {"id":"neutral-clean","genre":"neutral_explanatory","path":"tests/documents/neutral-clean.md","register":"general","expectation":"clean_default"},
+    {"id":"technical-clean","genre":"technical_professional","path":"tests/documents/technical-clean.md","register":"professional","expectation":"clean_default"},
+    {"id":"dialogue-clean","genre":"dialogue_transcript","path":"tests/documents/dialogue-clean.md","register":"everyday","expectation":"clean_default"},
+    {"id":"rhetoric-clean","genre":"public_rhetorical","path":"tests/documents/rhetoric-clean.md","register":"general","expectation":"clean_default"},
+    {"id":"literary-clean","genre":"literary_expressive","path":"tests/documents/literary-clean.md","register":"general","expectation":"clean_default"},
+    {"id":"official-clean","genre":"official_legal","path":"tests/documents/official-clean.md","register":"professional","expectation":"clean_default"},
+    {"id":"markdown-clean","genre":"markdown_code","path":"tests/documents/markdown-clean.md","register":"professional","expectation":"clean_default","must_not_find_default":["ASCII_DASH"]},
+    {"id":"heading-clean","genre":"injected_pair_clean","path":"tests/documents/heading-clean.md","register":"general","expectation":"clean_default"},
+    {"id":"heading-defect","genre":"injected_pair_defect","path":"tests/documents/heading-defect.md","register":"general","expectation":"positive_default","must_find_default":["RU-NORM-HEADING-PERIOD"]},
+    {"id":"nominalization-clean","genre":"injected_pair_clean","path":"tests/documents/nominalization-clean.md","register":"general","expectation":"clean_default"},
+    {"id":"nominalization-defect","genre":"llm_like_positive","path":"tests/documents/nominalization-defect.md","register":"general","expectation":"positive_default","must_find_default":["ILY-M01"]}
+  ],
+  "pairs": [
+    {"id":"heading-period","clean_id":"heading-clean","defect_id":"heading-defect","expected_added_rules":["RU-NORM-HEADING-PERIOD"]},
+    {"id":"nominalization-shell","clean_id":"nominalization-clean","defect_id":"nominalization-defect","expected_added_rules":["ILY-M01"]}
+  ]
+}
