@@ -23,6 +23,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          cat <<'SUMS' | sha256sum -c -
+          c853e5146184be297ec3934fe29c9242f872711b5505605a9418c3907b1496df  assets/.header/chunk00
+          6ccb54a7b717fda6f9bc3e533e48a67ec898ed54c563d2120e2255f407cb5094  assets/.header/chunk01
+          b29c800e42d72ead769f9d907591ea281c222bd73565a16246c82d649ba166b1  assets/.header/chunk02
+          9d1ec189334028bb4f40c57b941d8106cb63bd474101988f69356435191a1696  assets/.header/chunk03
+          799e4de4c49ab20cf16fce6f2e1effca280cf81a7e6a97fcb41873683667fe60  assets/.header/chunk04
+          0c535c75e7bd3f99ccb4e4ff5e74ae1f5016a5e95581bdcea9cb4e4d6cbbfbf1  assets/.header/chunk05
+          b392cd67a9a3d22e5d2aee907b93ecc8192e9b1d4fde184acf70ac7e662c07c6  assets/.header/chunk06
+          14d74fd3bb04954e1c5258225732a760e94ce4bd7e398032757ca1bda9a77cc3  assets/.header/chunk07
+          3be5f3f212ba242d48686f4002abd2d026678f5412a36901a1b2aa8282b75347  assets/.header/chunk08
+          81c49fcfb9daf3a493a8eda74b94dc412239bead031748d77eb267a4d751ab58  assets/.header/chunk09
+          040f4dc51fb17758ad0ddc76d8e627fd0118335f2367a3bb5566d05e32d8185e  assets/.header/chunk10
+          SUMS
+
           cat assets/.header/chunk{00..10} | tr -d '\r\n' | base64 -d > assets/editorial-board.webp
           echo "771dfcf115afa93ed34eb88ee878ef7c92eabadfc7a8c3fc700d26e37a68f371  assets/editorial-board.webp" | sha256sum -c -
 
