@@ -27,8 +27,8 @@ Source completeness is **not inferred** from these counts. Where a library has a
 
 | Provider | Status | Enabled by default |
 |---|---|---|
-| `current_usage` | `PLANNED` | no |
-| `discourse_lexicon` | `PLANNED` | no |
-| `normative_reference` | `PLANNED` | no |
-| `parsed_russian` | `PLANNED` | no |
-| `spoken_russian` | `PLANNED` | no |
+| `current_usage` | `PROJECT` | no |
+| `discourse_lexicon` | `PROJECT` | no |
+| `normative_reference` | `PROJECT` | no |
+| `parsed_russian` | `PROJECT` | no |
+| `spoken_russian` | `PROJECT` | no |
