@@ -12,21 +12,32 @@
 
 Скопируй `gpt/INSTRUCTIONS.md` в поле Instructions.
 
-## Runtime-файлы: минимальный набор
+## Runtime: больше не собирать вручную из трёх файлов
 
-Для обычной работы не нужно превращать Knowledge в свалку всех reference-файлов.
+Старый вариант `SKILL.md + scripts/check.py + scripts/lint.py` больше не является рабочей runtime-установкой. Текущий `check.py` использует normalized knowledge libraries и зависит от manifests, reviewers, source-specific linters и общих runtime-модулей.
 
-Минимум:
+Для Skills-compatible среды собирай поддерживаемый пакет:
 
-1. `SKILL.md`;
-2. `scripts/check.py`;
-3. `scripts/lint.py`.
+```bash
+python3 scripts/package_skill.py --output dist/humanizer-russian.zip
+```
 
-Если доступен Code Interpreter, `scripts/check.py` — первый runtime-pass.
+Проверка пакета без установки:
+
+```bash
+python3 scripts/install_skill.py \
+  dist/humanizer-russian.zip \
+  --dest-root /tmp/unused \
+  --inspect
+```
+
+Полный порядок описан в `INSTALL.md`. CI устанавливает этот ZIP в чистый каталог и запускает Compact/Editorial Board уже из установленной копии.
+
+Если конкретная поверхность Custom GPT не поддерживает переносимый Agent Skill как каталог с исполняемыми ресурсами, используй `gpt/INSTRUCTIONS.md` только как instruction layer. Не заявляй, что mechanical runtime выполнен, если код фактически не запускался.
 
 ## Source pack: подключать по задаче
 
-Дополнительные файлы нужны не всегда:
+Дополнительные reference-файлы для ручного/Knowledge-контекста нужны не всегда:
 
 - `references/russian-language.md` — когда спорим о норме;
 - `references/native-russian.md` — когда нужен глубокий разбор естественности;
@@ -69,6 +80,8 @@ python3 scripts/profile_author.py corpus/ -o profile.json
 
 Для mechanical runtime нужен инструмент исполнения кода. Web Search включай только если сама задача редактуры требует проверки текущих или спорных фактов.
 
+Незавершённые evidence providers имеют статус `PROJECT` и не могут быть включены. Не выдавай наличие manifest за рабочую интеграцию.
+
 ## Подсказки для начала разговора
 
 1. `Отредактируй текст. Сначала прогони mechanical check, потом правь только найденное и очевидные контекстные проблемы.`
@@ -82,8 +95,10 @@ python3 scripts/profile_author.py corpus/ -o profile.json
 
 - `python3 scripts/benchmark_lint.py`;
 - `python3 scripts/lint.py --self-test`;
+- `python3 scripts/benchmark_documents.py`;
+- clean-install workflow из `.github/workflows/skill-package.yml`;
 - `gpt/TESTS.md`;
-- `evals/russian-language.json` и `evals/nora-gal.json` как отдельные model-evals, а не замену mechanical tests;
+- model-evals отдельно от mechanical tests;
 - `profile_author.py` на небольшом корпусе с schema-validation.
 
 ## Автоматические блокеры результата
@@ -99,4 +114,4 @@ python3 scripts/profile_author.py corpus/ -o profile.json
 
 ## Обновление
 
-После изменения mechanical rule сначала добавь positive/negative regression cases в `tests/lint_cases.json`, затем меняй runtime-поведение. Reference-файл без теста не должен сам по себе превращаться в обязательное правило.
+После изменения mechanical rule сначала добавь positive/negative regression cases, затем меняй runtime-поведение. Reference-файл без теста не должен сам по себе превращаться в обязательное правило.
