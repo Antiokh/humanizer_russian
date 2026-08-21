@@ -19,5 +19,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Calibrate document-level default baseline
-        run: python scripts/benchmark_documents.py --print-baseline
+      - name: Enforce document-level default baseline
+        run: python scripts/benchmark_documents.py
