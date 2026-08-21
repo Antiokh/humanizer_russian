@@ -1,20 +1,22 @@
 # Project status
 
-## 2026-08-20 — eight-profile multi-library Russian editor operational
+## 2026-08-21 — eight-profile Russian editor operational
 
-The active canonical repository is `Antiokh/humanizer_russian`. The project name is **humanizer_russian**.
+Canonical repository: `Antiokh/humanizer_russian`.
 
-The current `main` combines:
+Current audited `main` before this documentation refresh: `c108a44794742f617ef91de1989cf7552d7ce463`.
 
-- two project-core reviewer profiles: **Russian language / norm and usage** and **Native Russian**;
-- six operational author/source libraries: **Nora Gal**, **Ilyakhov/Sarycheva**, **Chukovsky**, **Lynn Visson**, **D. E. Rosenthal**, and **I. B. Golub**;
-- the bounded A. V. Velichko RKI/grammar study integrated source-neutrally into the Russian core rather than exposed as a separate reviewer vote;
-- deterministic Compact checking and a provenance-preserving Editorial Board runtime;
-- optional external-evidence providers kept separate from reviewer votes;
-- deterministic regression suites, source-specific validation workflows, and opt-in research harnesses;
-- author-profile adaptation and a blind independent-philologist review protocol.
+The project currently combines:
 
-## Unified architecture
+- two project-core profiles: **Russian language / norm and usage** and **Native Russian**;
+- six author/source libraries: **Nora Gal**, **Ilyakhov/Sarycheva**, **Chukovsky**, **Lynn Visson**, **D. E. Rosenthal**, **I. B. Golub**;
+- the bounded A. V. Velichko RKI/grammar study integrated source-neutrally into the Russian core;
+- deterministic Compact checking and provenance-preserving Editorial Board review;
+- opt-in model-eval infrastructure for contextual rules;
+- optional evidence-provider architecture kept separate from reviewer votes;
+- deterministic source/library validation, preservation tests and external-review/corpus protocols.
+
+## Core policy
 
 Hard constraints:
 
@@ -26,30 +28,24 @@ Selection among valid variants:
 
 Consequences:
 
-- an editorial source cannot create a language error merely by authority;
-- current normative constraints outrank historical or stylistic recommendations;
-- natural Russian is chosen among normative variants using context and information structure;
+- editorial authority cannot create a language error by itself;
+- current norm outranks historical or stylistic advice;
+- native usage and information structure select among normative variants;
 - author voice is protected among normative variants;
-- detector-style signals are weak and never outrank semantics, norm or source-grounded editing;
-- a valid outcome can be **no change**.
+- detector-like signals remain weak diagnostics;
+- **no change** is a valid result.
 
-## Runtime
+## Product modes
 
-Compact default:
+Compact:
 
 ```bash
 python scripts/check.py text.md
-```
-
-This exposes only high-confidence/default-mechanical findings and technical artifacts from enabled libraries.
-
-Extended compact audit:
-
-```bash
 python scripts/check.py --extended text.md
+python scripts/check.py --register everyday text.md
 ```
 
-This adds lower-confidence mechanical/style candidates. Source-neutral `phenomenon_id` values allow compatible findings from several libraries to deduplicate while preserving provenance.
+Default Compact exposes only `HARD_GATE` and `DEFAULT_MECHANICAL` findings. `--extended` adds lower-confidence non-model mechanical/style candidates.
 
 Editorial Board:
 
@@ -57,11 +53,11 @@ Editorial Board:
 python scripts/review.py text.md --style neutral
 ```
 
-The board preserves reviewer identity, disagreement and source provenance. `SEMANTICS`, `NORM` and `ARTIFACT` guardrails remain outside stylistic voting. If author/source conclusions conflict, `SOURCE_CONFLICT` is preserved rather than resolved by choosing one source or averaging them away.
+Board preserves reviewer identity, provenance and disagreement. `SEMANTICS`, `NORM` and `ARTIFACT` guardrails stay outside stylistic voting. Real author/source disagreement remains `SOURCE_CONFLICT` rather than being averaged away.
 
-The default board currently has eight profiles:
+Default profiles:
 
-1. `russian` — current norm, syntax, punctuation, lexical fit, register and RKI-like interference;
+1. `russian` — current norm, syntax, punctuation, register and RKI-like interference;
 2. `native` — contextual economy, ellipsis, information structure and native-usage preferences;
 3. `gal` — Nora Gal;
 4. `ilyakhov` — Maxim Ilyakhov / Lyudmila Sarycheva;
@@ -70,102 +66,131 @@ The default board currently has eight profiles:
 7. `rosenthal` — D. E. Rosenthal;
 8. `golub` — I. B. Golub.
 
-Author names mean “evaluation by formalized source-derived principles”, not a real review, quotation, endorsement or personal opinion of the author.
+Author names mean evaluation by formalized source-derived principles, not a personal review, quotation or endorsement.
 
-## Current source-library snapshot
+## Source-library snapshot
 
-Exact operational counts live in each `libraries/<id>/library.json`; the current snapshot is:
+Exact canonical counts live in library/source indexes. Current audited snapshot:
 
 - **Nora Gal** — 42 audited book-derived rules: 3 `EXTENDED_SOFT`, 3 `METRIC_ONLY`, 36 `MODEL_ONLY`;
-- **Ilyakhov/Sarycheva** — 102 audited source rules: 9 `EXTENDED_SOFT`, 4 `METRIC_ONLY`, 89 `MODEL_ONLY`; `ILY-M01` is a separate project-derived `DEFAULT_MECHANICAL` subset rather than a direct author rule;
+- **Ilyakhov/Sarycheva** — 102 audited source rules: 9 `EXTENDED_SOFT`, 4 `METRIC_ONLY`, 89 `MODEL_ONLY`; `ILY-M01` is a separate project-derived default-mechanical subset;
 - **Chukovsky** — 38 audited rules: 7 `EXTENDED_SOFT`, 2 `METRIC_ONLY`, 29 `MODEL_ONLY`;
-- **Lynn Visson** — 39 operational rules derived from 72 atomic observations: 2 `DEFAULT_MECHANICAL`, 3 `EXTENDED_SOFT`, 2 `METRIC_ONLY`, 32 `MODEL_ONLY`;
-- **Rosenthal** — 74 cumulative rules across four fully read source cycles: 3 `EXTENDED_SOFT`, 1 `METRIC_ONLY`, 70 `MODEL_ONLY`. Cycle 4 adds provenance to existing phenomena rather than duplicate rule IDs or new mechanical detectors;
-- **Golub** — 93 deduplicated phenomena from two fully read books coauthored with D. E. Rosenthal: 3 narrow `DEFAULT_MECHANICAL` norm subsets, 1 `EXTENDED_SOFT`, 2 descriptive metrics, 87 contextual rules. The two books form one Golub source school and never become two votes inside that library.
+- **Lynn Visson** — 39 operational rules from 72 atomic observations: 2 `DEFAULT_MECHANICAL`, 3 `EXTENDED_SOFT`, 2 `METRIC_ONLY`, 32 `MODEL_ONLY`;
+- **Rosenthal** — **79 cumulative rules across six fully processed source cycles**: 3 `EXTENDED_SOFT`, 1 `METRIC_ONLY`, 75 `MODEL_ONLY`. Cycle 6 added one contextual AUTHOR rule (`ROS-R79`) and 64 provenance enrichments, with no new mechanical detector;
+- **Golub** — 93 deduplicated phenomena from two fully processed coauthored books: 3 narrow `DEFAULT_MECHANICAL` norm subsets, 1 `EXTENDED_SOFT`, 2 metrics, 87 contextual rules.
 
-All six author/source libraries are enabled by default and feed the same normalized library runtime.
+All six author/source libraries are enabled by default and use the normalized library runtime. The `native` project-core library still uses the legacy compatibility adapter; migration is tracked separately.
 
-## Russian core and the Velichko study
+## Russian core and Velichko
 
 The Russian core owns current norm and general Russian-usage rules. Normative findings may become guardrails; native-usage, register, RKI-like interference and calque findings remain non-blocking unless independently confirmed as `NORM`.
 
-The available 2004 Velichko fragment was studied as a bounded source and integrated into this core. Its useful grammar/RKI observations cover, among other things, valency and government, subject realization, event construal and aspect, passive/result-state distinctions, copular choice, participles, gerunds, quantitative agreement and introductory-word scope.
+The available Velichko source was incomplete. The physically present chapters 1–13 were studied and integrated; chapter bodies 14–44 were absent and are not reconstructed. The missing source boundary is now tracked explicitly rather than implied as full-book coverage.
 
-Velichko is deliberately **not** a ninth reviewer: the study contributes source-neutral Russian-core knowledge. Unavailable source chapters are not reconstructed or claimed as covered.
+The integrated material contributes source-neutral contextual knowledge about valency/government, subject realization, event construal/aspect, passive/result-state distinctions, copular choice, participles, gerunds, quantitative agreement and introductory-word scope.
+
+Velichko is not a ninth reviewer.
 
 ## Native-Russian layer
 
-The native layer is context-first rather than sentence-template-first:
+The native layer is context-first:
 
-- context economy and safe ellipsis;
-- repeated common material factored before synonym substitution;
-- Russian morphology allowed to carry relations instead of restoring English-like SVO;
-- word order selected by theme/rheme, contrast and strong positions rather than fixed SVO;
-- `не X, а Y` remains a normal Russian construction; repetition is reduced only when it adds no function;
-- pragmatic particles are preserved by discourse function;
-- parcellation is judged by function, not sentence length;
-- good natural Russian is a negative control: the editor must be able to leave it alone.
+- safe ellipsis and context economy;
+- factoring repeated common material before synonym substitution;
+- morphology allowed to carry relations instead of restoring English-like SVO;
+- word order by theme/rheme and contrast rather than a universal SVO template;
+- functional repetition and particles preserved;
+- participles/gerunds treated as normal Russian resources;
+- good natural Russian is a negative control and may be left unchanged.
+
+## Calques and event structure
+
+The Russian layer includes a narrow `break → ломаться` model. It distinguishes pre-failure process, event boundary and result rather than treating `ломается` as a general equivalent of English `is breaking`. These findings remain `REVIEW`, not hard language errors.
+
+A repository audit found that the calque sub-linter currently scans raw text rather than a shared prose-masked view; code/Markdown masking is tracked as an explicit bug tail.
 
 ## Source accumulation and deduplication
 
-Long-lived author branches remain the research branches for additional sources by the same author/school. New books do not automatically create new reviewer identities.
+Long-lived author/source branches accumulate later books from the same school. New books do not create extra reviewer votes automatically.
 
 When a later source repeats an existing phenomenon:
 
-- preserve the new source locator/provenance;
-- reuse the source-neutral `phenomenon_id` where the diagnostic question is genuinely the same;
-- do not duplicate mechanical detectors merely because another book states the same rule;
-- preserve `SOURCE_CONFLICT` when sources truly disagree;
-- never promote a historical prescription to current `NORM` by source authority alone.
+- preserve new source locator/provenance;
+- reuse the source-neutral `phenomenon_id` when the diagnostic mechanism is genuinely the same;
+- do not duplicate mechanical detectors;
+- preserve actual `SOURCE_CONFLICT`;
+- never promote historical prescription to current `NORM` by authority alone.
 
-Rosenthal is the clearest current example: four source cycles feed one long-lived library, while later cycles can enrich provenance without multiplying runtime rules.
+Rosenthal is now the strongest example: six source cycles feed one 79-rule library. Golub similarly deduplicates two books into one source school.
 
-Golub is similarly deduplicated across two coauthored books; shared mechanical surfaces with Rosenthal are factored into common Russian-norm surface logic rather than copied independently per author.
+## Contextual/model evals
 
-## Deterministic validation
+`scripts/run_model_evals.py` is manifest-driven. Candidate and judge are separated; candidate prompts do not receive expected answers. Live API calls remain opt-in and are not CI dependencies.
 
-Repository validation is split between the base `quality` workflow and focused source workflows.
+Current audit tail: Visson has an eval suite and map artifact but is missing the manifest map key required for discovery; Rosenthal has substantial contextual eval material but no runtime model-eval manifest contract yet. This is tracked in #48.
 
-The current workflow set includes:
+A green model run is calibration evidence only. It cannot create current `NORM`, `HARD_GATE` or a mechanical rule by itself.
 
-- base architecture/library/JSON validation and Compact/Editorial Board regressions;
-- bounded Velichko integration validation;
-- Gal, Chukovsky and Ilyakhov source/library benchmarks in the base quality workflow;
-- dedicated `visson-quality`, `rosenthal-quality` and `golub-quality` workflows;
-- separate external-evidence workflows where configured for Chukovsky and Ilyakhov;
-- offline tests for the live-model harness, NKRЯ replay runner and philologist-review protocol.
+## Evidence providers
 
-These deterministic tests validate software and study contracts. They do **not** substitute for live model results, corpus measurements or independent human linguistic review.
+Evidence is a separate axis, not a reviewer vote. Architecture exists for current usage, spoken Russian, discourse lexicon, normative reference and parsed Russian, with strict timeout/fail-open/default-off behavior.
 
-## External evidence and open blockers
+The provider families are still planned rather than operational. The recommended first real provider is a versioned current normative-reference source because historical editorial libraries repeatedly need modern norm verification. Tracked in #49 and cross-library contract work in #26.
 
-Optional corpus, dictionary and normative-reference evidence is kept separate from reviewer votes. Evidence can support, weaken or contextualize a claim; it does not become an additional member of the Editorial Board.
+## External validation blockers
 
-Three explicit external-validation issues remain open:
+Three pre-existing external-validation issues remain genuinely open:
 
-1. **#22** — run the live Nora Gal contextual/model benchmark with explicit API models and credentials;
-2. **#23** — run real NKRЯ corpus calibration for the remaining Gal empirical claims using authenticated exported queries and validated denominators;
-3. **#24** — obtain an independent qualified philologist review of the Russian-language boundary cases.
+1. **#22** — run live contextual/model calibration with explicit API models and credentials;
+2. **#23** — run real NKRЯ calibration for remaining Gal empirical claims with exported authenticated queries and validated denominators;
+3. **#24** — obtain independent qualified philologist review of the Russian-language boundary cases.
 
-Until those are completed, the project must not claim live-model calibration, completed NKRЯ measurement for those claims, or external philologist validation.
+Until completed, the project must not claim live-model validation, completed NKRЯ measurement for those claims or independent philologist validation.
 
-## Author profile
+## Audit tails opened 2026-08-21
 
-Author adaptation remains an internal layer. The profiler tracks discourse/self-repair markers, content n-grams, sentence starts, code-switching, sentence/paragraph distributions, punctuation habits, stance markers and explicit manual annotations.
+- **#48** — register Visson and Rosenthal in the generic model-eval harness;
+- **#49** — activate the first real opt-in normative evidence provider;
+- **#50** — extend the bounded Velichko study when missing chapters are legitimately available;
+- **#51** — synchronize long-lived source branches and prune obsolete merged refs;
+- **#52** — derive volatile public capability snapshots from manifests to stop documentation drift;
+- **#53** — mask code/structural Markdown before Russian calque/event-structure checks;
+- **#54** — migrate `native` from `legacy_lint_v1` to `review_v1` after parity testing.
 
-Errors remain separate from voice and are not imitated by default. Source paths are not emitted by the canonical profile output.
+Roadmap #26 was also refreshed: generic model eval is now marked completed; cross-library evidence contract remains open.
+
+## Branch state discovered by audit
+
+At audited main `c108a447...`:
+
+- `rosenthal` was identical to main;
+- `golub` was behind 48 commits;
+- `velichko` behind 83;
+- `visson` behind 137;
+- `ilyakhov` behind 146;
+- `chukovsky` behind 158;
+- `gal` behind 168;
+- all were ahead by 0.
+
+This is not lost work—the source changes are merged into main—but it leaves long-lived source branches stale for the next cycle. Cleanup/synchronization is #51.
 
 ## Deliberately not active architecture
 
-- detector-driven hard bans;
-- pseudo `AI score` thresholds;
+- detector-driven hard bans or pseudo AI scores;
 - grammatical degradation to look human;
 - historical editorial authority promoted directly to `NORM`;
-- automatic stop-word deletion;
-- one universal SVO/word-order template;
 - blanket bans on passive, participles, gerunds, borrowings, long sentences, rhetorical questions or parcellation;
 - majority vote of editorial sources treated as linguistic truth;
-- model-judge evals treated as the primary deterministic correctness signal;
+- model judges treated as primary deterministic correctness signals;
 - corpus page counts treated as prevalence without a validated denominator.
 
-The next high-value progress is therefore not another generic style heuristic. It is either a carefully integrated new source cycle or one of the three real external-validation steps above.
+## Recommended priority
+
+1. Fix #53 first: it is a direct false-positive risk in default mechanical output.
+2. Close #48: the generic model-eval architecture already exists; this is bounded integration debt.
+3. Complete #26 item 4 and #49 together if a minimal evidence contract emerges naturally.
+4. Do #51 branch hygiene before the next source-book cycle.
+5. Do #54 as architecture cleanup after behavior is frozen by parity tests.
+6. #50 depends on obtaining the missing legitimate source; do not block other work on it.
+
+The next high-value progress is hardening precision and reproducibility, not adding generic stylistic heuristics.
