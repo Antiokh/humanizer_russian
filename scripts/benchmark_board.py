@@ -73,10 +73,13 @@ def evidence_contract_failures() -> list[str]:
     ):
         failures.append(f"evidence-vs-vote separation failed: {group}")
 
-    unavailable = run_review("Обычный текст.", evidence_ids=["current_usage"])
-    statuses = {x["provider_id"]: x["status"] for x in unavailable["evidence_status"]}
-    if statuses.get("current_usage") != "UNAVAILABLE":
-        failures.append(f"planned evidence fail-open contract failed: {statuses}")
+    try:
+        run_review("Обычный текст.", evidence_ids=["current_usage"])
+    except ValueError as exc:
+        if "project-only" not in str(exc) or "current_usage" not in str(exc):
+            failures.append(f"project-only evidence rejection is unclear: {exc}")
+    else:
+        failures.append("project-only evidence provider current_usage was selectable")
     return failures
 
 

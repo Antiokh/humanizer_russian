@@ -26,7 +26,7 @@
     ],
     "evidence_provider_count": 5,
     "evidence_status_counts": {
-      "PLANNED": 5
+      "PROJECT": 5
     }
   },
   "libraries": [
@@ -248,27 +248,27 @@
   "evidence_providers": [
     {
       "id": "current_usage",
-      "status": "PLANNED",
+      "status": "PROJECT",
       "enabled_by_default": false
     },
     {
       "id": "discourse_lexicon",
-      "status": "PLANNED",
+      "status": "PROJECT",
       "enabled_by_default": false
     },
     {
       "id": "normative_reference",
-      "status": "PLANNED",
+      "status": "PROJECT",
       "enabled_by_default": false
     },
     {
       "id": "parsed_russian",
-      "status": "PLANNED",
+      "status": "PROJECT",
       "enabled_by_default": false
     },
     {
       "id": "spoken_russian",
-      "status": "PLANNED",
+      "status": "PROJECT",
       "enabled_by_default": false
     }
   ]

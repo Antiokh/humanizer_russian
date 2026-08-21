@@ -1,0 +1,40 @@
+name: evidence-runtime
+
+on:
+  push:
+    branches:
+      - main
+      - agent/**
+      - feature/**
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  activation-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Evidence runtime self-test
+        run: python scripts/evidence_runtime.py --self-test
+      - name: Project-only provider must not be selectable
+        run: |
+          set +e
+          printf '%s' 'Тест.' | python scripts/review.py --evidence normative_reference --format json >/tmp/out.json 2>/tmp/error.txt
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          grep -F 'project-only evidence providers cannot be enabled: normative_reference' /tmp/error.txt
+      - name: All means all operational providers only
+        run: |
+          printf '%s' 'Тест.' | python scripts/review.py --evidence all --format json >/tmp/all.json
+          python - <<'PY'
+          import json
+          report = json.load(open('/tmp/all.json', encoding='utf-8'))
+          assert report['evidence'] == [], report
+          assert report['evidence_status'] == [], report
+          PY

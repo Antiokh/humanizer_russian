@@ -7,7 +7,7 @@
     "schema_version": {"const": 1},
     "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
     "display_name": {"type": "string", "minLength": 1},
-    "status": {"enum": ["PLANNED", "OPERATIONAL", "DISABLED"]},
+    "status": {"enum": ["PROJECT", "OPERATIONAL", "DISABLED"]},
     "evidence_type": {"enum": ["CORPUS_USAGE", "SPOKEN_USAGE", "LEXICAL_PRAGMATICS", "NORMATIVE_REFERENCE", "PARSED_CORPUS", "RESEARCH_EVIDENCE"]},
     "adapter": {"const": "evidence_v1"},
     "enabled_by_default": {"type": "boolean"},
@@ -19,6 +19,19 @@
     "capabilities": {"type": "array", "items": {"type": "string"}},
     "references": {"type": "array", "items": {"type": "string"}}
   },
-  "allOf": [{"if": {"properties": {"status": {"const": "OPERATIONAL"}}, "required": ["status"]}, "then": {"required": ["module_path"]}}],
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "OPERATIONAL"}}, "required": ["status"]},
+      "then": {"required": ["module_path"]}
+    },
+    {
+      "if": {"properties": {"status": {"const": "PROJECT"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "enabled_by_default": {"const": false}
+        }
+      }
+    }
+  ],
   "additionalProperties": false
 }

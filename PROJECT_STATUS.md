@@ -1,14 +1,20 @@
 # Project status
 
-`humanizer_russian` is an operational Russian-language editing system with two product modes over one shared set of knowledge libraries: fast mechanical Compact checking and provenance-preserving Editorial Board review.
+## 2026-08-21 — eight-profile Russian editor operational
 
-Volatile inventory facts are generated from repository manifests and rule indexes instead of being maintained in this document by hand:
+Canonical repository: `Antiokh/humanizer_russian`.
 
-- human-readable snapshot: [`docs/capabilities.md`](docs/capabilities.md);
-- machine-readable snapshot: [`docs/capabilities.json`](docs/capabilities.json);
-- generator/checker: [`scripts/generate_capabilities.py`](scripts/generate_capabilities.py).
+Volatile inventory facts are generated from repository manifests and rule indexes. See [`docs/capabilities.md`](docs/capabilities.md) for the human-readable snapshot and [`docs/capabilities.json`](docs/capabilities.json) for the machine-readable form. `scripts/validate_libraries.py` fails CI when those checked-in generated files drift from their sources.
 
-`python scripts/validate_libraries.py` fails when the checked-in snapshot no longer matches the manifests, rules or evidence-provider states.
+The project currently combines:
+
+- two project-core profiles: **Russian language / norm and usage** and **Native Russian**;
+- six author/source libraries: **Nora Gal**, **Ilyakhov/Sarycheva**, **Chukovsky**, **Lynn Visson**, **D. E. Rosenthal**, **I. B. Golub**;
+- the bounded A. V. Velichko RKI/grammar study integrated source-neutrally into the Russian core;
+- deterministic Compact checking and provenance-preserving Editorial Board review;
+- opt-in model-eval infrastructure for contextual rules;
+- optional evidence-provider architecture kept separate from reviewer votes;
+- deterministic source/library validation, preservation tests and external-review/corpus protocols.
 
 ## Core policy
 
@@ -22,11 +28,11 @@ Selection among valid variants:
 
 Consequences:
 
-- editorial authority does not create a language error by itself;
+- editorial authority cannot create a language error by itself;
 - current norm outranks historical or stylistic advice;
 - native usage and information structure select among normative variants;
 - author voice is protected among normative variants;
-- detector-like signals are diagnostics, not optimization targets;
+- detector-like signals remain weak diagnostics;
 - **no change** is a valid result.
 
 ## Product modes
@@ -39,7 +45,7 @@ python scripts/check.py --extended text.md
 python scripts/check.py --register everyday text.md
 ```
 
-Default Compact exposes only `HARD_GATE` and `DEFAULT_MECHANICAL` findings. `--extended` adds explicitly allowed lower-confidence mechanical/style candidates; metric-only and model-only signals are not leaked into that surface.
+Default Compact exposes only `HARD_GATE` and `DEFAULT_MECHANICAL` findings. `--extended` adds lower-confidence non-model mechanical/style candidates.
 
 Editorial Board:
 
@@ -47,15 +53,13 @@ Editorial Board:
 python scripts/review.py text.md --style neutral
 ```
 
-Board preserves reviewer identity, provenance and real disagreement. `NORM` and technical artifact guardrails remain outside stylistic voting. Evidence providers are a separate axis and never become reviewer votes.
+Board preserves reviewer identity, provenance and disagreement. `SEMANTICS`, `NORM` and `ARTIFACT` guardrails stay outside stylistic voting. Real author/source disagreement remains `SOURCE_CONFLICT` rather than being averaged away.
 
-The exact current set of enabled profiles, adapters, rule counts, automation levels and model-eval registrations is generated in [`docs/capabilities.md`](docs/capabilities.md).
+All operational libraries use the normalized `review_v1` runtime contract. Exact enabled-library/reviewer inventory is generated in the capability snapshot rather than copied here.
 
-## Runtime architecture
+## Runtime precision
 
-All operational knowledge libraries now use the normalized `review_v1` contract. The shared runtime validates finding values at the library boundary rather than accepting unknown classes, automation levels or verdicts and silently downgrading them.
-
-Compact deduplication is severity-aware and deterministic. Compatible findings on the same phenomenon/surface retain complete provenance while a stronger guardrail cannot be hidden by library order. CLI blocking behavior is derived from normalized project classes rather than legacy display labels.
+Compact deduplication preserves the strongest compatible guardrail/severity and is order-invariant. Normalized findings are validated against one contract for project class, automation level, verdict and hard-gate legality before they can enter Compact or Board.
 
 Russian prose-oriented mechanical checks share a length-preserving masker for fenced code, inline code, URLs, Markdown link targets and HTML comments. This keeps line/span mapping stable while preventing prose rules from firing solely on non-prose payloads.
 
@@ -87,7 +91,9 @@ A green model run is calibration evidence only. It cannot create current `NORM`,
 
 Evidence is kept separate from reviewer opinion. Provider state is generated in [`docs/capabilities.md`](docs/capabilities.md).
 
-The next evidence milestone is #49: activate one real, versioned, opt-in current normative-reference provider with explicit provenance and fail-open behavior. A frequency or corpus signal cannot substitute for normative evidence.
+All currently unfinished provider families are explicitly `PROJECT`: they remain visible as roadmap scaffolds but are not runtime-selectable. `--evidence auto` and `--evidence all` consider only `OPERATIONAL` providers, and an explicit attempt to select a `PROJECT` provider is rejected rather than simulated as an unavailable feature.
+
+The next evidence milestone is #49: promote one real, versioned, opt-in current normative-reference provider to `OPERATIONAL` only after its source, rights/terms, version/provenance, query contract and calibration are real. A frequency or corpus signal cannot substitute for normative evidence.
 
 ## Validation still requiring external resources
 
