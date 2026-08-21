@@ -2,18 +2,92 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "review-report.schema.json",
   "type": "object",
-  "required": ["schema_version", "mode", "style", "reviewers", "findings", "metrics", "evidence_request", "evidence", "evidence_status", "board"],
+  "required": [
+    "schema_version",
+    "mode",
+    "style",
+    "reviewers",
+    "findings",
+    "metrics",
+    "evidence_request",
+    "evidence",
+    "evidence_status",
+    "board"
+  ],
   "properties": {
     "schema_version": {"const": 1},
     "mode": {"const": "editorial_board"},
-    "style": {"type": "object", "required": ["id", "display_name"]},
+    "style": {
+      "type": "object",
+      "required": ["id", "display_name"]
+    },
     "reviewers": {"type": "object"},
-    "findings": {"type": "array", "items": {"type": "object", "required": ["rule_id", "phenomenon_id", "library_id", "project_class", "automation_level", "verdict"]}},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rule_id",
+          "phenomenon_id",
+          "library_id",
+          "project_class",
+          "automation_level",
+          "verdict"
+        ],
+        "properties": {
+          "rule_id": {"type": "string", "minLength": 1},
+          "phenomenon_id": {"type": "string", "minLength": 1},
+          "library_id": {"type": "string", "minLength": 1},
+          "source_namespace": {"type": "string", "minLength": 1},
+          "reviewer_id": {"type": ["string", "null"]},
+          "project_class": {
+            "enum": ["ARTIFACT", "NORM", "NATIVE_USAGE", "EDITING", "AI_CALQUE", "AUTHOR"]
+          },
+          "automation_level": {
+            "enum": ["HARD_GATE", "DEFAULT_MECHANICAL", "EXTENDED_SOFT", "METRIC_ONLY", "MODEL_ONLY"]
+          },
+          "verdict": {"enum": ["CHANGE", "KEEP", "REVIEW"]},
+          "line": {"type": "integer", "minimum": 0},
+          "excerpt": {"type": "string"},
+          "reason": {"type": "string"},
+          "operation": {"type": ["string", "null"]}
+        },
+        "additionalProperties": true
+      }
+    },
     "metrics": {"type": "object"},
     "evidence_request": {},
-    "evidence": {"type": "array", "items": {"type": "object", "required": ["provider_id", "phenomenon_id", "evidence_type", "direction", "target_scope", "reason"]}},
-    "evidence_status": {"type": "array", "items": {"type": "object", "required": ["provider_id", "status", "elapsed_ms", "evidence_count", "message"], "properties": {"provider_id": {"type": "string"}, "status": {"enum": ["OK", "UNAVAILABLE", "TIMEOUT", "DISABLED"]}, "elapsed_ms": {"type": "number", "minimum": 0}, "evidence_count": {"type": "integer", "minimum": 0}, "message": {"type": "string"}}, "additionalProperties": true}},
-    "board": {"type": "object", "required": ["guardrails", "groups", "summary"], "properties": {"guardrails": {"type": "array"}, "groups": {"type": "array"}, "summary": {"type": "object"}}}
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["provider_id", "phenomenon_id", "evidence_type", "direction", "target_scope", "reason"]
+      }
+    },
+    "evidence_status": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["provider_id", "status", "elapsed_ms", "evidence_count", "message"],
+        "properties": {
+          "provider_id": {"type": "string"},
+          "status": {"enum": ["OK", "UNAVAILABLE", "TIMEOUT", "DISABLED"]},
+          "elapsed_ms": {"type": "number", "minimum": 0},
+          "evidence_count": {"type": "integer", "minimum": 0},
+          "message": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "board": {
+      "type": "object",
+      "required": ["guardrails", "groups", "summary"],
+      "properties": {
+        "guardrails": {"type": "array"},
+        "groups": {"type": "array"},
+        "summary": {"type": "object"}
+      }
+    }
   },
   "additionalProperties": true
 }
