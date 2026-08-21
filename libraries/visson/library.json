@@ -15,6 +15,7 @@
   "rules_path": "libraries/visson/rules.json",
   "model_only_reference": "libraries/visson/model-only.md",
   "model_eval_path": "evals/lynn-visson.json",
+  "model_eval_map_path": "evals/lynn-visson-map.json",
   "references": [
     "studies/lynn-visson/source.md",
     "studies/lynn-visson/coverage.md",
