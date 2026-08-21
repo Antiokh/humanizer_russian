@@ -14,7 +14,8 @@
   "source_version": "epub-sha256:45cd09d0101caa90effa2f7943d4ddf45659536857ae548910fccad144c806ca",
   "rules_path": "libraries/visson/rules.json",
   "model_only_reference": "libraries/visson/model-only.md",
-  "model_eval_path": "evals/lynn-visson.json",
+  "model_eval_path": "evals/visson-context.json",
+  "model_eval_map_path": "evals/visson-context-map.json",
   "references": [
     "studies/lynn-visson/source.md",
     "studies/lynn-visson/coverage.md",
@@ -30,7 +31,9 @@
     "libraries/visson/rules.json",
     "libraries/visson/model-only.md",
     "evals/lynn-visson.json",
-    "evals/lynn-visson-map.json"
+    "evals/lynn-visson-map.json",
+    "evals/visson-context.json",
+    "evals/visson-context-map.json"
   ],
-  "notes": "39 operational rules derived from 72 atomic observations: 0 HARD_GATE, 2 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 2 METRIC_ONLY, 32 MODEL_ONLY. Compact receives only high-precision default signals unless --extended; Editorial Board retains Visson provenance and contextual residue. Cultural/pragmatic generalizations are kept as claims, not lint rules."
+  "notes": "39 operational rules derived from 72 atomic observations: 0 HARD_GATE, 2 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 2 METRIC_ONLY, 32 MODEL_ONLY. The legacy lynn-visson eval pair remains a research positive/negative/boundary fixture; the manifest-driven live-model harness uses a separate project-authored synthetic runtime suite."
 }

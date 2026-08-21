@@ -1,0 +1,18 @@
+{
+  "suite": "humanizer_russian-rosenthal-context-v1",
+  "library_id": "rosenthal",
+  "cases": [
+    {"id": "rosenthal-01", "rules": ["ROS-R48"], "counterexample": false},
+    {"id": "rosenthal-02", "rules": ["ROS-R50"], "counterexample": true},
+    {"id": "rosenthal-03", "rules": ["ROS-R51"], "counterexample": false},
+    {"id": "rosenthal-04", "rules": ["ROS-R51"], "counterexample": true},
+    {"id": "rosenthal-05", "rules": ["ROS-R55", "ROS-R56", "ROS-R58"], "counterexample": true},
+    {"id": "rosenthal-06", "rules": ["ROS-R62"], "counterexample": false},
+    {"id": "rosenthal-07", "rules": ["ROS-R65"], "counterexample": false},
+    {"id": "rosenthal-08", "rules": ["ROS-R68"], "counterexample": false},
+    {"id": "rosenthal-09", "rules": ["ROS-R69"], "counterexample": false},
+    {"id": "rosenthal-10", "rules": ["ROS-R75", "ROS-R76"], "counterexample": true},
+    {"id": "rosenthal-11", "rules": ["ROS-R78"], "counterexample": true},
+    {"id": "rosenthal-12", "rules": ["ROS-R79"], "counterexample": true}
+  ]
+}

@@ -12,15 +12,18 @@ A participating knowledge library declares in `libraries/<id>/library.json`:
 - `model_eval_map_path` — case → canonical rule/source traceability;
 - `rules_path` — canonical runtime rules.
 
-The harness discovers only libraries with a complete declared contract. This makes missing registration visible instead of guessing file names.
+The harness discovers only libraries with a complete declared contract. `scripts/validate_libraries.py` also rejects half-registered libraries and guards the intended operational registration set against silent disappearance.
 
-Current audit status:
+Current registered libraries:
 
-- Gal, Chukovsky, Ilyakhov and Golub have complete manifest-driven model-eval contracts;
-- Visson has an eval suite and map artifact but is missing the manifest map key, so generic discovery does not include it yet;
-- Rosenthal has extensive derived study eval material but no compact runtime model-eval manifest contract yet.
+- Gal;
+- Chukovsky;
+- Ilyakhov/Sarycheva;
+- Golub;
+- Visson;
+- Rosenthal.
 
-The last two gaps are tracked in issue #48.
+Visson keeps the older `evals/lynn-visson.json` + `evals/lynn-visson-map.json` pair as a research positive/negative/boundary fixture. Those files are not user-prompt model evals. The live-model harness uses the separate project-authored `evals/visson-context.json` + `evals/visson-context-map.json` runtime pair. Rosenthal likewise uses a compact project-authored synthetic suite mapped to canonical `ROS-R*` rules across the integrated source cycles. Both runtime suites are deliberately preservation-heavy; historical/source-period advice never becomes current `NORM` merely because a model agrees with it.
 
 ## How one case runs
 
@@ -53,14 +56,17 @@ python scripts/run_model_evals.py --library gal --dry-run --model YOUR_MODEL
 python scripts/run_model_evals.py --library chukovsky --dry-run --model YOUR_MODEL
 python scripts/run_model_evals.py --library ilyakhov --dry-run --model YOUR_MODEL
 python scripts/run_model_evals.py --library golub --dry-run --model YOUR_MODEL
+python scripts/run_model_evals.py --library visson --dry-run --model YOUR_MODEL
+python scripts/run_model_evals.py --library rosenthal --dry-run --model YOUR_MODEL
 ```
 
-The offline self-test verifies the registered libraries, including:
+The offline self-test iterates over every registered library and verifies:
 
 - eval ↔ traceability-map joining;
 - rule existence/provenance;
 - `MODEL_ONLY` selection;
 - no expectation leakage into candidate instructions;
+- dry-run provenance construction;
 - `store: false` request construction;
 - strict JSON-schema judge request construction;
 - Responses `output_text` extraction;
@@ -84,12 +90,12 @@ Full contextual run:
 
 ```bash
 python scripts/run_model_evals.py \
-  --library chukovsky \
+  --library rosenthal \
   --model YOUR_CANDIDATE_MODEL \
   --judge-model YOUR_JUDGE_MODEL \
   --scope model-only \
   --continue-on-error \
-  --output eval-results/chukovsky-model-only.json
+  --output eval-results/rosenthal-model-only.json
 ```
 
 Use different candidate and judge models when practical. If the same model is used for both roles, the report records that weaker evidence boundary.
