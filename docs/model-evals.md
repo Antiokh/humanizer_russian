@@ -1,29 +1,41 @@
 # Live model evaluation
 
-`humanizer_russian` separates deterministic surface checks from contextual model behavior. The deterministic CI suite does **not** prove that the 36 Nora Gal `MODEL_ONLY` rules work in a live model. `scripts/run_model_evals.py` is the opt-in harness for that second layer.
+`humanizer_russian` separates deterministic surface checks from contextual model behavior. Deterministic CI proves software/routing contracts; it does **not** prove that `MODEL_ONLY` linguistic/editorial rules are handled correctly by a live model.
 
-## What it measures
+`scripts/run_model_evals.py` is the opt-in, manifest-driven harness for that second layer.
 
-The harness reads:
+## Library contract
 
-- `evals/nora-gal.json` — original project prompts and explicit expectations;
-- `evals/nora-gal-map.json` — rule/source traceability;
-- `libraries/gal/rules/*.json` — canonical rule cards and guards.
+A participating knowledge library declares in `libraries/<id>/library.json`:
 
-For each selected case it makes two independent API calls:
+- `model_eval_path` — synthetic/project eval suite;
+- `model_eval_map_path` — case → canonical rule/source traceability;
+- `rules_path` — canonical runtime rules.
 
-1. **candidate** — receives the user prompt, project hard constraints and only the mapped Gal rule cards. It does **not** receive the eval expectations;
+The harness discovers only libraries with a complete declared contract. This makes missing registration visible instead of guessing file names.
+
+Current audit status:
+
+- Gal, Chukovsky, Ilyakhov and Golub have complete manifest-driven model-eval contracts;
+- Visson has an eval suite and map artifact but is missing the manifest map key, so generic discovery does not include it yet;
+- Rosenthal has extensive derived study eval material but no compact runtime model-eval manifest contract yet.
+
+The last two gaps are tracked in issue #48.
+
+## How one case runs
+
+For each selected case the harness makes two independent API calls:
+
+1. **candidate** — receives the user prompt, project hard constraints and only the mapped source-derived rule cards. It does **not** receive expected answers or counterexample labels;
 2. **judge** — receives the prompt, candidate answer and explicit expectations, then returns a strict structured judgment.
 
-The default scope is `model-only`: a case is selected only when at least one mapped Gal rule has `automation_level=MODEL_ONLY`. `--scope all` runs the complete 45-case suite, including mechanical/metric preservation cases.
+The default scope is `model-only`: a case is selected when at least one mapped rule has `automation_level=MODEL_ONLY`. `--scope all` includes all mapped suite cases, including preservation/mechanical boundary cases where the library provides them.
 
-This is a model benchmark, not a normative truth oracle. Results remain model-, prompt- and snapshot-dependent. A judge disagreement is evidence for calibration, not permission to promote an editorial rule to `NORM`.
+This is calibration, not a normative truth oracle. Results remain model-, prompt- and snapshot-dependent. Model/judge agreement cannot turn a book recommendation into current `NORM` and cannot substitute for deterministic precision evidence required by mechanical rules.
 
 ## API contract
 
-The harness uses the OpenAI Responses API directly over HTTPS and reads `OPENAI_API_KEY` only from the environment. It sends `store: false` and never writes the API key to output. Candidate model IDs are supplied explicitly rather than hard-coded, because model availability changes over time.
-
-OpenAI's current official API documentation describes the Responses API as the primary text-generation interface and documents Structured Outputs under `text.format` with `type: json_schema`. API keys should be kept in environment variables rather than embedded in source code.
+The harness uses the OpenAI Responses API directly over HTTPS and reads `OPENAI_API_KEY` only from the environment. It sends `store: false` and never writes the API key to reports. Candidate and judge model IDs are supplied explicitly rather than hard-coded.
 
 Official references:
 
@@ -31,102 +43,88 @@ Official references:
 - `https://platform.openai.com/docs/api-reference/responses`
 - `https://platform.openai.com/docs/api-reference/models`
 
-## Offline checks
+## Discover / dry-run
 
-No API key or network call:
+No API key or live cost:
 
 ```bash
 python scripts/run_model_evals.py --self-test
-python scripts/run_model_evals.py --dry-run --model YOUR_MODEL
-python scripts/run_model_evals.py --dry-run --model YOUR_MODEL --scope all
+python scripts/run_model_evals.py --library gal --dry-run --model YOUR_MODEL
+python scripts/run_model_evals.py --library chukovsky --dry-run --model YOUR_MODEL
+python scripts/run_model_evals.py --library ilyakhov --dry-run --model YOUR_MODEL
+python scripts/run_model_evals.py --library golub --dry-run --model YOUR_MODEL
 ```
 
-The self-test verifies:
+The offline self-test verifies the registered libraries, including:
 
 - eval ↔ traceability-map joining;
-- `MODEL_ONLY` case selection;
-- no expectation leakage into the candidate prompt;
+- rule existence/provenance;
+- `MODEL_ONLY` selection;
+- no expectation leakage into candidate instructions;
 - `store: false` request construction;
 - strict JSON-schema judge request construction;
 - Responses `output_text` extraction;
-- judge/overall consistency rules.
+- consistency between per-expectation and overall verdicts.
 
 ## Live run
 
-Minimal smoke run:
+Minimal smoke run for one registered library:
 
 ```bash
 export OPENAI_API_KEY='...'
 python scripts/run_model_evals.py \
+  --library gal \
   --model YOUR_CANDIDATE_MODEL \
   --judge-model YOUR_JUDGE_MODEL \
   --limit 3 \
   --output eval-results/gal-smoke.json
 ```
 
-One case:
-
-```bash
-python scripts/run_model_evals.py \
-  --model YOUR_CANDIDATE_MODEL \
-  --judge-model YOUR_JUDGE_MODEL \
-  --case gal-34 \
-  --output eval-results/gal-34.json
-```
-
 Full contextual run:
 
 ```bash
 python scripts/run_model_evals.py \
+  --library chukovsky \
   --model YOUR_CANDIDATE_MODEL \
   --judge-model YOUR_JUDGE_MODEL \
   --scope model-only \
   --continue-on-error \
-  --output eval-results/gal-model-only.json
+  --output eval-results/chukovsky-model-only.json
 ```
 
-Full 45-case run:
+Use different candidate and judge models when practical. If the same model is used for both roles, the report records that weaker evidence boundary.
 
-```bash
-python scripts/run_model_evals.py \
-  --model YOUR_CANDIDATE_MODEL \
-  --judge-model YOUR_JUDGE_MODEL \
-  --scope all \
-  --continue-on-error \
-  --output eval-results/gal-all.json
-```
+## Report contract
 
-Use different candidate and judge models for stronger evidence when practical. If they are the same, the report records `self_judged: true`; such a result should be treated as weaker evidence.
+Reports include library/source context and per-case rule provenance together with:
+
+- requested and returned candidate/judge model IDs;
+- response IDs;
+- token usage returned by the API;
+- candidate text;
+- per-expectation `PASS` / `FAIL` / `UNCERTAIN` judgments;
+- semantic/norm violation flags;
+- API/transport/parser failures.
+
+Raw local result files belong under `eval-results/`, which is ignored by Git. Do not commit raw output automatically; review it case by case and source-control only conclusions useful for calibration.
 
 ## Exit codes
 
-- `0` — all completed judgments are `PASS` and there are no API/parser failures;
+- `0` — all completed judgments pass and there are no API/parser failures;
 - `1` — at least one completed case is `FAIL` or `UNCERTAIN`;
 - `2` — API/transport/structured-output parsing failed for at least one case.
 
 `--continue-on-error` controls whether the runner continues after an API/parser failure. It does not convert failures into passes.
 
-## Result handling
-
-Local result files belong under `eval-results/`, which is ignored by Git. A report records:
-
-- candidate and judge model IDs returned by the API;
-- response IDs;
-- token usage reported by the API;
-- candidate text;
-- per-expectation verdicts and reasons;
-- semantic/norm violation flags;
-- transport/parser failures.
-
-Do not commit raw benchmark output automatically. Review it first. Only aggregate findings that are useful for project calibration should become source-controlled research notes.
-
 ## Promotion policy
 
-A green model run is not enough to promote a rule from `MODEL_ONLY` to `EXTENDED_SOFT` or `DEFAULT_MECHANICAL`. Promotion still requires:
+A green model run is never enough to promote a rule to mechanical runtime. Promotion still requires:
 
-1. a mechanically observable surface proxy;
-2. positive cases;
-3. natural negatives;
-4. boundary and intentional counterexamples;
+1. a defensible observable surface or parser-backed signal;
+2. true positives;
+3. natural negative controls;
+4. boundary and intentional-use counterexamples;
 5. acceptable false-positive behavior on real Russian text;
-6. no conflict with `SEMANTICS`, `NORM`, `AUTHOR` or `NATIVE_USAGE`.
+6. no conflict with `USER_INTENT`, `SEMANTICS`, `NORM`, `AUTHOR` or `NATIVE_USAGE`.
+
+If those conditions cannot be met, the correct state is still `MODEL_ONLY`.
