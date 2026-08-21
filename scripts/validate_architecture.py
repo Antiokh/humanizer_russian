@@ -33,6 +33,8 @@ REQUIRED_FILES = [
     "scripts/check.py",
     "scripts/finding_contract.py",
     "scripts/lint.py",
+    "scripts/lint_native.py",
+    "scripts/benchmark_native_adapter.py",
     "scripts/lint_russian.py",
     "scripts/library_runtime.py",
     "scripts/evidence_runtime.py",
@@ -77,6 +79,8 @@ BOARD_MARKERS = [
 QUALITY_MARKERS = [
     "python -m compileall -q scripts",
     "python scripts/lint.py --self-test",
+    "python scripts/lint_native.py",
+    "python scripts/benchmark_native_adapter.py",
     "python scripts/lint_russian.py",
     "python scripts/benchmark_lint.py",
     "python scripts/benchmark_lint.py tests/russian_cases.json",
@@ -109,6 +113,22 @@ def _finding_schema_failures() -> list[str]:
     return failures
 
 
+def _adapter_contract_failures() -> list[str]:
+    failures: list[str] = []
+    for path in sorted((ROOT / "libraries").glob("*/library.json")):
+        if path.parent.name.startswith("_"):
+            continue
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        if manifest.get("source_type") == "project_core" and manifest.get("adapter") != "review_v1":
+            failures.append(
+                f"project core {manifest.get('id', path.parent.name)} must use review_v1, got {manifest.get('adapter')!r}"
+            )
+    runtime = read("scripts/library_runtime.py")
+    if "legacy_lint_v1" in runtime or "normalize_legacy" in runtime:
+        failures.append("shared library runtime reintroduced legacy adapter compatibility")
+    return failures
+
+
 def main() -> None:
     failures: list[str] = []
     for path in REQUIRED_FILES:
@@ -138,6 +158,7 @@ def main() -> None:
         if "humanizer+ru" in contributing:
             failures.append("CONTRIBUTING.md reintroduced deprecated project name humanizer+ru")
         failures.extend(_finding_schema_failures())
+        failures.extend(_adapter_contract_failures())
 
     if failures:
         print("ARCHITECTURE CONTRACT FAILED")
