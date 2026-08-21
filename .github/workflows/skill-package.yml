@@ -1,0 +1,97 @@
+name: skill-package
+
+on:
+  push:
+    branches:
+      - main
+      - agent/**
+      - feature/**
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  package-install-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile packaging tools
+        run: python -m py_compile scripts/package_skill.py scripts/install_skill.py
+
+      - name: Build deterministic skill package twice
+        run: |
+          python scripts/package_skill.py --output /tmp/humanizer-russian-a.zip --json >/tmp/package-a.json
+          python scripts/package_skill.py --output /tmp/humanizer-russian-b.zip --json >/tmp/package-b.json
+          cmp /tmp/humanizer-russian-a.zip /tmp/humanizer-russian-b.zip
+          python scripts/install_skill.py /tmp/humanizer-russian-a.zip --dest-root /tmp/unused --inspect >/tmp/inspect.json
+
+      - name: Install into clean skills root
+        run: python scripts/install_skill.py /tmp/humanizer-russian-a.zip --dest-root /tmp/skills
+
+      - name: Reject accidental development payload
+        run: |
+          root=/tmp/skills/humanizer-russian
+          test -f "$root/SKILL.md"
+          test -f "$root/scripts/check.py"
+          test -f "$root/libraries/russian/library.json"
+          test -f "$root/evidence/normative_reference/provider.json"
+          for path in .github docs evals gpt reviews studies tests; do
+            test ! -e "$root/$path"
+          done
+          test ! -e "$root/scripts/run_model_evals.py"
+          test ! -e "$root/scripts/benchmark_lint.py"
+
+      - name: Smoke-test installed Compact runtime
+        working-directory: /tmp/skills/humanizer-russian
+        run: |
+          printf '%s' 'Командой осуществляется проведение проверки.' | python scripts/check.py --json >/tmp/installed-check.json
+          python - <<'PY'
+          import json
+          report = json.load(open('/tmp/installed-check.json', encoding='utf-8'))
+          assert any(item.get('rule') == 'ILY-M01' for item in report['findings']), report
+          PY
+
+      - name: Smoke-test installed Editorial Board runtime
+        working-directory: /tmp/skills/humanizer-russian
+        run: |
+          printf '%s' 'Это ошибка не в расчёте, а в исходных данных.' | python scripts/review.py --format json >/tmp/installed-board.json
+          python - <<'PY'
+          import json
+          report = json.load(open('/tmp/installed-board.json', encoding='utf-8'))
+          assert report['mode'] == 'editorial_board', report
+          assert report['libraries'] == 'default', report
+          PY
+
+      - name: Project-only evidence stays impossible to enable after install
+        working-directory: /tmp/skills/humanizer-russian
+        run: |
+          set +e
+          printf '%s' 'Тест.' | python scripts/review.py --evidence normative_reference --format json >/tmp/project-evidence.json 2>/tmp/project-evidence.err
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          grep -F 'project-only evidence providers cannot be enabled: normative_reference' /tmp/project-evidence.err
+
+      - name: Smoke-test installed author profiler
+        working-directory: /tmp/skills/humanizer-russian
+        run: |
+          mkdir -p /tmp/author-corpus
+          printf '%s\n' 'Первый небольшой документ.' >/tmp/author-corpus/a.txt
+          printf '%s\n' 'Второй небольшой документ.' >/tmp/author-corpus/b.txt
+          python scripts/profile_author.py /tmp/author-corpus -o /tmp/author-profile.json
+          python - <<'PY'
+          import json
+          profile = json.load(open('/tmp/author-profile.json', encoding='utf-8'))
+          assert profile['version'] == 1, profile
+          assert profile['corpus']['documents'] == 2, profile
+          PY
+
+      - name: Validate installed directory against Agent Skills reference implementation
+        run: |
+          python -m pip install --disable-pip-version-check 'skills-ref @ git+https://github.com/agentskills/agentskills.git@69ef37e9424c0a7ea9dd2293b559e43ec8176379#subdirectory=skills-ref'
+          skills-ref validate /tmp/skills/humanizer-russian
