@@ -4,7 +4,7 @@
   "source_namespace": "IW",
   "status": "CURATED_PRIMARY_SOURCE_SUPPLEMENT",
   "scope": "Public editorial materials by Maxim Ilyakhov and official Glavred/Bureau pages that extend, narrow, or exemplify the audited book model.",
-  "coverage_note": "This is a curated high-yield supplement, not a claim that every Ilyakhov/Bureau article has been exhaustively audited. The 2017 author index alone contains 100 selected articles out of 142 written for editors that year.",
+  "coverage_note": "This is a curated high-yield supplement, not a claim that every Ilyakhov/Bureau article has been exhaustively audited. The 2017 author index contains 100 selected articles out of 142 written for editors that year; the current Bureau author index is registered separately as a discovery surface.",
   "sources": [
     {"id":"IW-S01","title":"Паразиты времени","url":"https://maximilyahov.ru/blog/all/parazity-vremeni/","kind":"AUTHOR_PRIMARY","year":2014,"topics":["time_wrappers","evidence","generalization"]},
     {"id":"IW-S02","title":"Семь вопросов о работе с Главредом","url":"https://maximilyahov.ru/blog/all/glvrd-7/","kind":"AUTHOR_PRIMARY","year":2015,"topics":["stopwords","tool_limits","quality_score"]},
@@ -26,6 +26,9 @@
     {"id":"IW-S18","title":"Все прилагательные из этого списка у вас в стоп-словах","url":"https://bureau.ru/bb/soviet/20141116/","kind":"AUTHOR_ADVICE","year":2014,"topics":["stopwords","terms","evaluation","context"]},
     {"id":"IW-S19","title":"О проекте Главред","url":"https://glvrd.ru/about/","kind":"SERVICE_DOC","topics":["rule_taxonomy","tool_limits","stopwords"]},
     {"id":"IW-S20","title":"API Главреда","url":"https://glvrd.ru/api/","kind":"SERVICE_DOC","topics":["external_checker","recommendations"]},
-    {"id":"IW-S21","title":"Historical community stop-word list","url":"https://github.com/miripiruni/stop-words/blob/master/list.txt","kind":"THIRD_PARTY_ACKNOWLEDGED","year":2014,"topics":["stopword_candidates"],"provenance_note":"The list was assembled by a reader from Ilyakhov's materials and linked in comments under IW-S01. Ilyakhov thanked the author for collecting it. It is not represented as an official or current export of the Glavred rule database."}
+    {"id":"IW-S21","title":"Historical community stop-word list","url":"https://github.com/miripiruni/stop-words/blob/master/list.txt","kind":"THIRD_PARTY_ACKNOWLEDGED","year":2014,"topics":["stopword_candidates"],"provenance_note":"The list was assembled by a reader from Ilyakhov's materials and linked in comments under IW-S01. Ilyakhov thanked the author for collecting it. It is not represented as an official or current export of the Glavred rule database."},
+    {"id":"IW-S22","title":"То, что раньше считалось профессиональной нормой, теперь считается признаком нейросетей","url":"https://bureau.ru/soviet/20260816/","kind":"AUTHOR_ADVICE","year":2026,"topics":["ai_detection","typography","normal_russian","anti_cargo_cult"],"provenance_note":"Current advice directly rejects degrading normal punctuation and constructions merely to avoid looking machine-generated."},
+    {"id":"IW-S23","title":"Советы Максима Ильяхова","url":"https://bureau.ru/soviet/ilyahov/","kind":"AUTHOR_INDEX","year":2026,"topics":["editorial_corpus_index","discovery"],"provenance_note":"Current Bureau author index; registered for discovery only. Presence in the index does not mean each linked advice has been audited."},
+    {"id":"IW-S24","title":"Справочник Главреда","url":"https://soviet.glvrd.ru/","kind":"SERVICE_INDEX","year":2026,"topics":["stopwords","information_style","editorial_training","discovery"],"provenance_note":"Current Glavred handbook/index surface. Registered as a discovery source rather than a fully audited rule corpus."}
   ]
 }
