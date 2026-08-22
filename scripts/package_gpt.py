@@ -40,7 +40,7 @@ def read_text(path: Path) -> str:
 
 def skill_version() -> str:
     text = read_text(ROOT / "SKILL.md")
-    match = re.search(r"(?m)^version:\s*[\"']?([^\"'\n]+)", text)
+    match = re.search(r"(?m)^\s*version:\s*[\"']?([^\"'\n]+)", text)
     return match.group(1).strip() if match else "unversioned"
 
 
