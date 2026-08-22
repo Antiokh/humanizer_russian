@@ -13,6 +13,7 @@
   "references": [
     "libraries/ilyakhov/README.md",
     "libraries/ilyakhov/rules.json",
+    "libraries/ilyakhov/web-rules.json",
     "references/ilyakhov.md",
     "references/ilyakhov-web.md",
     "studies/pishi-sokrashchay/README.md",
@@ -33,5 +34,5 @@
   "model_only_reference": "references/ilyakhov.md",
   "model_eval_path": "evals/ilyakhov.json",
   "model_eval_map_path": "evals/ilyakhov-map.json",
-  "notes": "The canonical book model remains 102 audited source rules plus project-derived ILY-M01. Public Ilyakhov/Bureau/Glavred materials are registered as a separate supplemental provenance layer in references/ilyakhov-web.md and studies/ilyakhov-web/. Three new web-only MODEL_ONLY cards (IW-R01..IW-R03) are intentionally not represented as book-derived ILY-R rules. The historical community stop-word list is REFERENCE_ONLY: it was acknowledged by Ilyakhov in a 2014 comment but is not treated as an official/current Glavred export or executable ban-list. External claim evidence and corpus calibration remain research artifacts only; none can silently promote a source rule to current NORM/HARD_GATE."
+  "notes": "The canonical book model remains 102 audited source rules plus project-derived ILY-M01. Public Ilyakhov/Bureau/Glavred materials are registered as a separate supplemental provenance layer in libraries/ilyakhov/web-rules.json, references/ilyakhov-web.md and studies/ilyakhov-web/. Three new web-only MODEL_ONLY cards (IW-R01..IW-R03) are intentionally not represented as book-derived ILY-R rules. The historical community stop-word list is REFERENCE_ONLY: it was acknowledged by Ilyakhov in a 2014 comment but is not treated as an official/current Glavred export or executable ban-list. External claim evidence and corpus calibration remain research artifacts only; none can silently promote a source rule to current NORM/HARD_GATE."
 }
