@@ -2,6 +2,7 @@
   "schema_version": 1,
   "library_id": "ilyakhov",
   "source_namespace": "IW",
+  "source_index": "libraries/ilyakhov/web-sources.json",
   "status": "SUPPLEMENTAL_MODEL_ONLY",
   "description": "Web-only editorial cards derived from public materials by Maxim Ilyakhov. These cards supplement but do not change the canonical ILY-R01..ILY-R102 book identities or their automation counts.",
   "rules": [
@@ -23,9 +24,9 @@
       "project_class": "NATIVE_USAGE",
       "automation_level": "MODEL_ONLY",
       "verdict": "REVIEW",
-      "source_ids": ["IW-S02", "IW-S03", "IW-S04", "IW-S09", "IW-S19"],
-      "trigger": "A stylistic rule or tool recommendation has been applied mechanically and the result is less natural, precise or readable Russian.",
-      "operation": "Compare the edited form with a natural contextual alternative and restore functional pronouns, connective material, syntax or rhythm.",
+      "source_ids": ["IW-S02", "IW-S03", "IW-S04", "IW-S09", "IW-S19", "IW-S22"],
+      "trigger": "A stylistic rule, tool recommendation or detector-avoidance heuristic has been applied mechanically and the result is less natural, precise or readable Russian.",
+      "operation": "Compare the edited form with a natural contextual alternative and restore functional pronouns, connective material, punctuation, syntax or rhythm. Never damage normal Russian merely to make a text look less machine-generated.",
       "guard": "Do not use anti-dogmatism to excuse empty corporate filler or real language errors.",
       "interacts_with": ["ILY-R04", "ILY-R05", "ILY-R06", "ILY-R07", "ILY-R08"]
     },
