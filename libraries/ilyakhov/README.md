@@ -14,10 +14,11 @@ The source EPUB is not stored in the public repository.
 
 The supplement is deliberately kept separate from the book namespace:
 
+- `libraries/ilyakhov/web-sources.json` — portable curated source/provenance index;
+- `libraries/ilyakhov/web-rules.json` — structured supplemental model-only cards;
 - `references/ilyakhov-web.md` — compact operational guidance from public web materials;
-- `studies/ilyakhov-web/source-index.json` — curated source/provenance index;
 - `studies/ilyakhov-web/integration-matrix.md` — duplicate / extension / narrowing / new-rule mapping against the book core;
-- `studies/ilyakhov-web/stopword-corpus.json` — stop-word provenance and candidate groups.
+- `studies/ilyakhov-web/stopword-corpus.json` — research-only stop-word provenance and candidate groups.
 
 The web study is **curated**, not represented as an exhaustive audit of every article Ilyakhov has published. The author's own 2017 index alone identifies 100 selected editor-facing articles from 142 written that year. High-yield sources are integrated first and carry explicit URLs and source kinds.
 
@@ -83,9 +84,10 @@ Book core:
 
 Web supplement:
 
+- `libraries/ilyakhov/web-sources.json` — source URLs and classes, included in installable runtime packages;
+- `libraries/ilyakhov/web-rules.json` — `IW-R01`—`IW-R03` structured cards;
 - `references/ilyakhov-web.md` — runtime/model reference;
-- `studies/ilyakhov-web/source-index.json` — source URLs and classes;
 - `studies/ilyakhov-web/integration-matrix.md` — relationship to canonical book rules;
-- `studies/ilyakhov-web/stopword-corpus.json` — stop-list provenance and non-ban policy.
+- `studies/ilyakhov-web/stopword-corpus.json` — research provenance and non-ban policy.
 
 The reviewer profile represents the formalized system of the sources. User-facing output should say “По системе Максима Ильяхова и Людмилы Сарычевой” for the book core, and distinguish supplemental public material when provenance matters; never imply that either author personally reviewed the text.
