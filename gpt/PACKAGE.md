@@ -1,30 +1,30 @@
 # Custom GPT package
 
-`humanizer_russian` has two separate distribution formats:
+`humanizer_russian` has two distribution formats:
 
-- Agent Skill package: `dist/humanizer-russian.zip` from `scripts/package_skill.py`;
-- Custom GPT package: `dist/humanizer-russian-gpts.zip` from `scripts/package_gpt.py`.
+- Agent Skill: `dist/humanizer-russian.zip` from `scripts/package_skill.py`;
+- full Custom GPT package: `dist/humanizer-russian-gpts.zip` from `scripts/package_gpt_runtime.py`.
 
-They are not interchangeable.
+The Custom GPT build reuses the existing Knowledge bundler, then adds a self-contained Code Interpreter runtime generated from the same `skill-package.json` allowlist as the Agent Skill package.
 
 ## Build
 
 ```bash
-python3 scripts/package_gpt.py --output dist/humanizer-russian-gpts.zip
+python3 scripts/package_gpt_runtime.py --output dist/humanizer-russian-gpts.zip
 ```
 
 Optional unpacked copy:
 
 ```bash
-python3 scripts/package_gpt.py \
+python3 scripts/package_gpt_runtime.py \
   --output dist/humanizer-russian-gpts.zip \
   --directory dist/humanizer-russian-gpts
 ```
 
-Inspect an existing archive:
+Inspect:
 
 ```bash
-python3 scripts/package_gpt.py --inspect dist/humanizer-russian-gpts.zip
+python3 scripts/package_gpt_runtime.py --inspect dist/humanizer-russian-gpts.zip
 ```
 
 ## Archive layout
@@ -51,31 +51,60 @@ humanizer-russian-gpts/
 │   ├── 11_EDITORIAL_BOARD.md
 │   ├── 12_STYLES.md
 │   ├── 13_CAPABILITIES_AND_STATUS.md
-│   └── 14_ADDITIONAL_REFERENCE.md  # only when needed
+│   └── 14_ADDITIONAL_REFERENCE.md  # when needed
+├── Runtime/
+│   └── humanizer_runtime.py
 ├── README.md
 ├── LICENSE
 ├── THIRD_PARTY_NOTICES.md
 └── _manifest.json
 ```
 
-## GPT Builder
+## What to upload to GPT Builder
 
-1. Paste the contents of `Instructions/INSTRUCTIONS.md` into the GPT **Instructions** field.
-2. Upload every Markdown file from `Knowledge/` into GPT **Knowledge**.
-3. Copy the suggested name, description, capabilities and setup notes from `Instructions/GPT_BUILDER.md`.
-4. Copy conversation starters from `Instructions/CONVERSATION_STARTERS.md` if desired.
-5. Run the cases from `Instructions/TESTS.md` in Preview before publishing.
+1. Paste `Instructions/INSTRUCTIONS.md` into **Instructions**.
+2. Upload every `.md` file from `Knowledge/`.
+3. Upload `Runtime/humanizer_runtime.py`.
+4. Enable **Code Interpreter & Data Analysis**.
+5. Copy conversation starters if desired.
+6. Run `humanizer_runtime.py verify` and the Preview cases from `Instructions/TESTS.md` before publishing.
 
-The packager keeps the Knowledge upload set at 20 files or fewer. It combines source references, canonical normalized rule libraries, reviewer definitions, style profiles, corrections and capability status into text-forward Markdown bundles.
+The current package uses 15 Knowledge files + 1 runtime file = **16 GPT uploads**, below the 20-file GPT limit.
 
-## Runtime boundary
+## Runtime contents
 
-Custom GPT Knowledge is reference material. This archive intentionally does not pretend to install the Python mechanical runtime. The generated Instructions explicitly forbid claiming that `check.py`, Editorial Board runtime code or evidence providers ran unless a real external execution surface/action actually executed them.
+`humanizer_runtime.py` is generated; it is not a second handwritten implementation. It embeds the deterministic Agent Skill ZIP produced from `skill-package.json`, so it carries the supported runtime scripts and data together:
 
-Evidence providers with status `PROJECT` remain unavailable.
+- `check.py`, `review.py`, `lint.py`;
+- all current `lint_*` entrypoints for Russian, native usage, Chukovsky, Ilyakhov, Gal, Visson, Rosenthal and Golub;
+- Editorial Board and author-profile runtime;
+- normalized libraries, reviewers, styles, references, schemas and evidence runtime data included by the Agent Skill allowlist.
 
-## Excluded material
+The launcher verifies the embedded ZIP hash, can verify every embedded file against the Agent Skill manifest, and compiles every embedded Python file.
 
-The GPT package excludes CI, evals, development tests, source-study corpora, executable scripts, schemas used only for runtime validation, and `references/native-russian-user-context.md`.
+## Runtime commands
 
-The Agent Skill package remains the correct distribution when executable runtime behavior is required.
+```bash
+python3 humanizer_runtime.py verify
+python3 humanizer_runtime.py list
+python3 humanizer_runtime.py check --json text.md
+python3 humanizer_runtime.py check --extended --json text.md
+```
+
+Additional commands listed by `list` expose the packaged review/lint entrypoints.
+
+## Truthfulness boundary
+
+The GPT may say that a mechanical pass ran only after Code Interpreter actually executed `humanizer_runtime.py`. Knowledge-only reasoning is not a deterministic run.
+
+Evidence providers marked `PROJECT` remain unavailable even though the generic evidence runtime module is present in the embedded Agent Skill payload.
+
+## CI guarantees
+
+The GPT package workflow must:
+
+- build the final archive twice and byte-compare it;
+- keep the total GPT-upload set at 20 files or fewer;
+- run `humanizer_runtime.py verify`;
+- compare packaged-runtime `check --json` output and exit code against the repository's direct `scripts/check.py` for both mechanical and extended modes;
+- upload the exact tested ZIP as the workflow artifact.
