@@ -4,14 +4,15 @@
 
 This pass integrates a curated set of high-yield public materials into the existing `ilyakhov` editorial library. It does **not** claim exhaustive coverage of Maxim Ilyakhov's entire blog, Bureau advice archive or the live Glavred rule database.
 
-Portable source provenance lives in `libraries/ilyakhov/web-sources.json`. The current index contains 21 sources:
+Portable source provenance lives in `libraries/ilyakhov/web-sources.json`. The current index contains 24 sources/discovery surfaces:
 
 - author-primary blog materials;
 - author advice on Bureau pages;
-- official Glavred service documentation;
+- official Glavred service documentation and handbook index;
+- author/Bureau discovery indexes;
 - one historical third-party stop-word list, explicitly marked `THIRD_PARTY_ACKNOWLEDGED`.
 
-The author's 2017 index states that it selects 100 editor-facing articles out of 142 written that year. That index is registered as a discovery surface, not as proof that all 100 linked articles were individually audited in this pass.
+The author's 2017 index states that it selects 100 editor-facing articles out of 142 written that year. The current Bureau author page indexes hundreds more advices. Those indexes are registered as discovery surfaces, not as proof that every linked item was individually audited in this pass.
 
 ## Main result
 
@@ -27,10 +28,12 @@ Most useful web material does not justify creating new independent rules. It nar
 Three genuinely useful supplemental cards remain after deduplication:
 
 - `IW-R01` — stated corporate value requires an operational consequence/trade-off;
-- `IW-R02` — anti-editorial cargo cult;
+- `IW-R02` — anti-editorial cargo cult, including detector-driven damage to normal Russian;
 - `IW-R03` — figure-of-speech function test.
 
 All three are `MODEL_ONLY`. None is `NORM`, `HARD_GATE` or `DEFAULT_MECHANICAL`.
+
+The August 2026 Bureau advice on normal punctuation and constructions being misread as AI output directly reinforces `IW-R02`: typography and valid Russian syntax must not be degraded merely to appear less machine-generated.
 
 ## Mechanical changes
 
@@ -58,7 +61,8 @@ Official Glavred documentation says its maintained database includes rules, stop
 - uncertainty can be honest and meaningful;
 - a metaphor can be the point of literary/personal/rhetorical prose;
 - official/legal nominalization can be functional;
-- a high tool score does not imply a good text.
+- a high tool or detector score does not imply a good text;
+- normal dashes, quotation marks and valid constructions must not be mutilated to mimic a presumed human surface.
 
 ## Attribution boundary
 
@@ -69,7 +73,7 @@ Official Glavred documentation says its maintained database includes rules, stop
 Not promoted in this pass:
 
 - crawl/classification of the full author/Bureau archive;
-- systematic audit of all 100 articles in the 2017 author index;
+- systematic audit of all 100 articles in the 2017 author index and the current Bureau author index;
 - a separate audit of the current interactive «Пиши, сокращай» edition;
 - direct Glavred API benchmarking against local findings;
 - calibration of individual historical stop-list tokens on a natural corpus.
