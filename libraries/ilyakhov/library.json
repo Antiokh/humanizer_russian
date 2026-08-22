@@ -25,7 +25,8 @@
     "studies/pishi-sokrashchay/external-evidence-2026.json",
     "studies/pishi-sokrashchay/corpus-calibration.md",
     "studies/ilyakhov-web/stopword-corpus.json",
-    "studies/ilyakhov-web/integration-matrix.md"
+    "studies/ilyakhov-web/integration-matrix.md",
+    "studies/ilyakhov-web/audit.md"
   ],
   "source_status": "OPERATIONAL_FOR_INTEGRATION",
   "source_version": "User-provided EPUB core plus provenance-separated public-web supplement; exact publisher/publication date/print-equivalent edition of the EPUB is not established",
