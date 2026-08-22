@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """Precision-first Ilyakhov/Sarycheva knowledge-library adapter.
 
-The complete source model lives in studies/pishi-sokrashchay/. This module
-implements only the mechanically defensible residue:
+The complete book source model lives in studies/pishi-sokrashchay/. Public web
+material is tracked separately in studies/ilyakhov-web/ and may only widen an
+existing mechanical surface when the mapping and false-positive boundary remain
+defensible.
+
+This module implements only the mechanically defensible residue:
 
 - ILY-M01: one project-derived DEFAULT_MECHANICAL operator;
 - nine source EXTENDED_SOFT candidates;
-- four descriptive METRIC_ONLY signals.
+- four descriptive METRIC_ONLY signals;
+- web-backed expansions of the existing R21 metric and R85 candidate lexicon.
 
 All consumers use review_v1. ``lint()`` is retained only as a small internal /
 calibration compatibility surface and is not a second runtime implementation.
@@ -69,9 +74,14 @@ INTENSIFIER_RE = re.compile(
     r"исключительно|по[- ]настоящему|действительно|безусловно|несомненно)\b",
     re.I,
 )
+# R21 is metric-only. The web supplement broadens only the candidate inventory,
+# not the verdict surface. Deliberately omit generic «сейчас»: it very often
+# carries real temporal meaning and is too noisy even for a useful metric.
 PRESENT_TIME_RE = re.compile(
-    r"\b(?:в\s+настоящее\s+время|на\s+сегодняшний\s+день|"
-    r"в\s+текущий\s+момент|на\s+данный\s+момент|в\s+современных\s+условиях)\b",
+    r"\b(?:в\s+настоящее\s+время|в\s+настоящий\s+момент|на\s+сегодняшний\s+день|"
+    r"в\s+текущий\s+момент|на\s+данный\s+момент|в\s+современных\s+условиях|"
+    r"в\s+наши\s+дни|в\s+последнее\s+время|в\s+современной\s+России|"
+    r"до\s+недавнего\s+времени)\b",
     re.I,
 )
 TEMPORAL_CONTRAST_RE = re.compile(
@@ -105,11 +115,15 @@ GENERIC_BENEFIT_PATTERNS = [
         r"\bвысококвалифицированн\w*\b",
         r"\bиндивидуальн\w*\s+подход\w*\b",
         r"\bширок\w*\s+спектр\w*\b",
+        r"\bполн\w*\s+спектр\w*\b",
+        r"\bкомплексн\w*\s+подход\w*\b",
         r"\bвысок\w*\s+качеств\w*\b",
         r"\bэффективн\w*\s+решени\w*\b",
         r"\bкоманд\w*\s+профессионал\w*\b",
         r"\bмноголетн\w*\s+опыт\w*\b",
         r"\bнад[её]жн\w*\s+партн[её]р\w*\b",
+        r"\bкратчайш\w*\s+срок\w*\b",
+        r"\bбыстр\w*\s+и\s+качественн\w*\b",
     ]
 ]
 STATE_PREDICATE_RE = re.compile(
@@ -282,7 +296,7 @@ def lint(text: str) -> tuple[list[dict], dict]:
             generic_benefit_clusters += 1
             _add(
                 findings, prose, "ilyakhov: generic-benefit cluster", sent, pos,
-                "PS-R85: in self-presentation/commercial prose, prefer supported specificity; a broad slogan may still be functional as a secondary layer",
+                "PS-R85 + public Ilyakhov/Bureau examples: in self-presentation/commercial prose, prefer supported specificity; a broad slogan may still be functional as a secondary layer",
             )
 
     correlative_spans: list[int] = []
@@ -367,10 +381,23 @@ def self_test() -> None:
     assert "ILY-R76" in _ids("99% всех людей выбирают этот вариант.")
     assert "ILY-R85" in _ids("Предлагаем эффективные решения, индивидуальный подход и высокое качество.")
 
-    # R21 stays metric-only after corpus calibration.
+    # Web-backed corporate examples extend R85 but still require a cluster.
+    assert "ILY-R85" in _ids("Предлагаем полный спектр услуг, комплексный подход и кратчайшие сроки.")
+    assert "ILY-R85" not in _ids("Для миграции используем комплексный подход из двух этапов.")
+    assert "ILY-R85" not in _ids("Оказываем полный спектр лабораторных анализов, перечисленный в приложении.")
+
+    # R21 stays metric-only after corpus calibration; web sources broaden only
+    # its inventory, never promote a time word into a finding.
     result = review("В настоящее время компания выпускает три модели.")
     assert result["metrics"]["ilyakhov_present_time_wrappers"] == 1, result
     assert "ILY-R21" not in {x["rule_id"] for x in result["findings"]}, result
+    result = review("В наши дни компания выпускает три модели.")
+    assert result["metrics"]["ilyakhov_present_time_wrappers"] == 1, result
+    assert result["metrics"]["ilyakhov_present_time_wrappers_without_local_contrast"] == 1, result
+    result = review("В прошлом выпускали одну модель, а в наши дни — три.")
+    assert result["metrics"]["ilyakhov_present_time_wrappers"] == 1, result
+    assert result["metrics"]["ilyakhov_present_time_wrappers_without_local_contrast"] == 0, result
+    assert not _ids("Сейчас сервер перезагружается."), review("Сейчас сервер перезагружается.")
 
     # Native-Russian controls must not be mechanically 'fixed'.
     for safe in [
