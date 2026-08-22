@@ -37,13 +37,13 @@ def first_rule(result: dict, rule_id: str) -> dict:
 
 def validate_web_supplement(manifest: dict) -> None:
     web_rules = load(LIB / "web-rules.json")
-    source_index = load(WEB_STUDY / "source-index.json")
+    source_index = load(LIB / "web-sources.json")
     stopwords = load(WEB_STUDY / "stopword-corpus.json")
 
     required_refs = {
         "libraries/ilyakhov/web-rules.json",
+        "libraries/ilyakhov/web-sources.json",
         "references/ilyakhov-web.md",
-        "studies/ilyakhov-web/source-index.json",
         "studies/ilyakhov-web/stopword-corpus.json",
         "studies/ilyakhov-web/integration-matrix.md",
     }
