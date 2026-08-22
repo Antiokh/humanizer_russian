@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "study": "ilyakhov-web",
+  "status": "CURATED_PRIMARY_SOURCE_SUPPLEMENT",
+  "scope": "Public editorial materials by Maxim Ilyakhov and official Glavred/Bureau pages that extend, narrow, or exemplify the audited book model.",
+  "coverage_note": "This is a curated high-yield supplement, not a claim that every Ilyakhov/Bureau article has been exhaustively audited. The 2017 author index alone contains 100 selected articles out of 142 written for editors that year.",
+  "sources": [
+    {"id":"IW-S01","title":"Паразиты времени","url":"https://maximilyahov.ru/blog/all/parazity-vremeni/","kind":"AUTHOR_PRIMARY","year":2014,"topics":["time_wrappers","evidence","generalization"]},
+    {"id":"IW-S02","title":"Семь вопросов о работе с Главредом","url":"https://maximilyahov.ru/blog/all/glvrd-7/","kind":"AUTHOR_PRIMARY","year":2015,"topics":["stopwords","tool_limits","quality_score"]},
+    {"id":"IW-S03","title":"Новые стоп-слова и вес правил","url":"https://maximilyahov.ru/blog/all/glvrd-rules-nov-2016/","kind":"AUTHOR_PRIMARY","year":2016,"topics":["stopwords","rule_weights","pronouns"]},
+    {"id":"IW-S04","title":"Штампы информационного стиля","url":"https://maximilyahov.ru/blog/all/glvrd-cliches/","kind":"AUTHOR_PRIMARY","topics":["cargo_cult","pronouns","naturalness","templates"]},
+    {"id":"IW-S05","title":"Что-то, как-то, какой-то, тот или иной","url":"https://maximilyahov.ru/blog/all/chto-to-kak-to-kakoy-to/","kind":"AUTHOR_PRIMARY","year":2013,"topics":["indefiniteness","stopwords","specificity"]},
+    {"id":"IW-S06","title":"Ценности компании","url":"https://maximilyahov.ru/blog/all/cennosti-kompanii/","kind":"AUTHOR_PRIMARY","topics":["corporate_values","evidence","tradeoffs"]},
+    {"id":"IW-S07","title":"Для красного словца","url":"https://maximilyahov.ru/blog/all/figure-of-speech/","kind":"AUTHOR_PRIMARY","topics":["figurative_language","cliches","evidence","register"]},
+    {"id":"IW-S08","title":"Редактору на каникулы: 100 главных статей","url":"https://maximilyahov.ru/blog/all/2017-100/","kind":"AUTHOR_INDEX","year":2017,"topics":["editorial_corpus_index"]},
+    {"id":"IW-S09","title":"Чеклист для редактора","url":"https://maximilyahov.ru/blog/all/the-checklist/","kind":"AUTHOR_PRIMARY","topics":["reader_task","evidence","examples","structure","anti_cargo_cult"]},
+    {"id":"IW-S10","title":"Как поступать с такими корпоративными штампами?","url":"https://bureau.ru/soviet/20141012/","kind":"AUTHOR_ADVICE","year":2014,"topics":["corporate_cliches","specificity","limitations"]},
+    {"id":"IW-S11","title":"Хотим немного редакторской магии","url":"https://bureau.ru/soviet/20140504/","kind":"AUTHOR_ADVICE","year":2014,"topics":["cliches","nominalization","specificity"]},
+    {"id":"IW-S12","title":"Расскажите о клише и устойчивых выражениях","url":"https://bureau.ru/soviet/20131117/","kind":"AUTHOR_ADVICE","year":2013,"topics":["cliches","information_gain","stylization"]},
+    {"id":"IW-S13","title":"В чём криминал?","url":"https://bureau.ru/soviet/20140914/","kind":"AUTHOR_ADVICE","year":2014,"topics":["possessive_pronouns","contrast","naturalness"]},
+    {"id":"IW-S14","title":"Не можем определиться с написанием лаконичного текста для сайта","url":"https://bureau.ru/soviet/20130728/","kind":"AUTHOR_ADVICE","year":2013,"topics":["brevity","specificity","proof"]},
+    {"id":"IW-S15","title":"Как доказать руководителю отдела, что мой текст лучше?","url":"https://bureau.ru/soviet/20130630/","kind":"AUTHOR_ADVICE","year":2013,"topics":["reader_interest","specificity"]},
+    {"id":"IW-S16","title":"Как правильно написать продающий текст о преимуществах работы с нами?","url":"https://bureau.ru/soviet/20120812/","kind":"AUTHOR_ADVICE","year":2012,"topics":["self_presentation","proof","credentials"]},
+    {"id":"IW-S17","title":"Как лучше всего писать, если вы не владеете точными данными?","url":"https://bureau.ru/soviet/20140803/","kind":"AUTHOR_ADVICE","year":2014,"topics":["uncertainty","sources","unsupported_claims"]},
+    {"id":"IW-S18","title":"Все прилагательные из этого списка у вас в стоп-словах","url":"https://bureau.ru/bb/soviet/20141116/","kind":"AUTHOR_ADVICE","year":2014,"topics":["stopwords","terms","evaluation","context"]},
+    {"id":"IW-S19","title":"О проекте Главред","url":"https://glvrd.ru/about/","kind":"SERVICE_DOC","topics":["rule_taxonomy","tool_limits","stopwords"]},
+    {"id":"IW-S20","title":"API Главреда","url":"https://glvrd.ru/api/","kind":"SERVICE_DOC","topics":["external_checker","recommendations"]},
+    {"id":"IW-S21","title":"Historical community stop-word list","url":"https://github.com/miripiruni/stop-words/blob/master/list.txt","kind":"THIRD_PARTY_ACKNOWLEDGED","year":2014,"topics":["stopword_candidates"],"provenance_note":"The list was assembled by a reader from Ilyakhov's materials and linked in comments under IW-S01. Ilyakhov thanked the author for collecting it. It is not represented as an official or current export of the Glavred rule database."}
+  ]
+}
