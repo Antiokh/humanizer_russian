@@ -3,7 +3,7 @@ name: gpt-package
 on:
   pull_request:
     paths:
-      - "scripts/package_gpt.py"
+      - "scripts/**"
       - "gpt/**"
       - "references/**"
       - "libraries/**"
@@ -11,18 +11,23 @@ on:
       - "styles/**"
       - "profiles/**"
       - "knowledge/**"
+      - "schemas/**"
+      - "evidence/**"
       - "docs/capabilities.md"
       - "docs/anti-calque.md"
       - "docs/context-economy.md"
       - "docs/contrast.md"
       - "docs/author-layer.md"
       - "BOARD_SKILL.md"
+      - "SKILL.md"
+      - "INSTALL.md"
+      - "skill-package.json"
       - "PROJECT_STATUS.md"
       - ".github/workflows/gpt-package.yml"
   push:
     branches: [main]
     paths:
-      - "scripts/package_gpt.py"
+      - "scripts/**"
       - "gpt/**"
       - "references/**"
       - "libraries/**"
@@ -30,12 +35,17 @@ on:
       - "styles/**"
       - "profiles/**"
       - "knowledge/**"
+      - "schemas/**"
+      - "evidence/**"
       - "docs/capabilities.md"
       - "docs/anti-calque.md"
       - "docs/context-economy.md"
       - "docs/contrast.md"
       - "docs/author-layer.md"
       - "BOARD_SKILL.md"
+      - "SKILL.md"
+      - "INSTALL.md"
+      - "skill-package.json"
       - "PROJECT_STATUS.md"
       - ".github/workflows/gpt-package.yml"
   workflow_dispatch:
@@ -49,19 +59,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compile packager
-        run: python3 -m py_compile scripts/package_gpt.py
-
-      - name: Build twice
+      - name: Compile packagers
         run: |
-          python3 scripts/package_gpt.py --output /tmp/humanizer-russian-gpts-a.zip
-          python3 scripts/package_gpt.py --output /tmp/humanizer-russian-gpts-b.zip
+          python3 -m py_compile scripts/package_gpt.py
+          python3 -m py_compile scripts/package_skill.py
+          python3 -m py_compile scripts/package_gpt_runtime.py
+
+      - name: Build full package twice
+        run: |
+          python3 scripts/package_gpt_runtime.py --output /tmp/humanizer-russian-gpts-a.zip
+          python3 scripts/package_gpt_runtime.py --output /tmp/humanizer-russian-gpts-b.zip
           cmp /tmp/humanizer-russian-gpts-a.zip /tmp/humanizer-russian-gpts-b.zip
 
       - name: Inspect archive
-        run: python3 scripts/package_gpt.py --inspect /tmp/humanizer-russian-gpts-a.zip
+        run: python3 scripts/package_gpt_runtime.py --inspect /tmp/humanizer-russian-gpts-a.zip
 
-      - name: Validate GPT Builder layout
+      - name: Validate GPT Builder layout and upload count
         run: |
           rm -rf /tmp/gpts-package
           mkdir -p /tmp/gpts-package
@@ -71,12 +84,53 @@ jobs:
           test -f "$root/Instructions/GPT_BUILDER.md"
           test -f "$root/Instructions/TESTS.md"
           test -f "$root/Knowledge/00_INDEX.md"
-          count=$(find "$root/Knowledge" -maxdepth 1 -type f -name '*.md' | wc -l)
-          test "$count" -le 20
-          test "$count" -ge 13
+          test -f "$root/Runtime/humanizer_runtime.py"
+          knowledge_count=$(find "$root/Knowledge" -maxdepth 1 -type f -name '*.md' | wc -l)
+          runtime_count=$(find "$root/Runtime" -maxdepth 1 -type f | wc -l)
+          upload_count=$((knowledge_count + runtime_count))
+          test "$knowledge_count" -ge 13
+          test "$runtime_count" -eq 1
+          test "$upload_count" -le 20
           ! grep -R "native-russian-user-context" "$root/Knowledge"
           grep -q "PROJECT" "$root/Knowledge/13_CAPABILITIES_AND_STATUS.md"
-          grep -q "Custom GPT runtime boundary" "$root/Instructions/INSTRUCTIONS.md"
+          grep -q "humanizer_runtime.py" "$root/Instructions/INSTRUCTIONS.md"
+          grep -q "Code Interpreter" "$root/Instructions/GPT_BUILDER.md"
+
+      - name: Verify packaged runtime integrity
+        run: |
+          runtime=/tmp/gpts-package/humanizer-russian-gpts/Runtime/humanizer_runtime.py
+          python3 -m py_compile "$runtime"
+          python3 "$runtime" verify | tee /tmp/runtime-verify.json
+          python3 "$runtime" list | tee /tmp/runtime-list.json
+          grep -q 'lint-gal' /tmp/runtime-list.json
+          grep -q 'lint-visson' /tmp/runtime-list.json
+          grep -q 'lint-rosenthal' /tmp/runtime-list.json
+          grep -q 'lint-golub' /tmp/runtime-list.json
+          grep -q 'editorial-board' /tmp/runtime-list.json
+
+      - name: Compare packaged checker with repository checker
+        run: |
+          runtime=/tmp/gpts-package/humanizer-russian-gpts/Runtime/humanizer_runtime.py
+          cat > /tmp/gpt-runtime-sample.md <<'EOF'
+          Это ошибка в расчёте, а ошибка в исходных данных.
+          Мы реализовали осуществление проверки и получили результат.
+          EOF
+
+          compare_mode() {
+            suffix="$1"
+            shift
+            set +e
+            python3 scripts/check.py "$@" --json /tmp/gpt-runtime-sample.md > "/tmp/direct-$suffix.json"
+            direct_rc=$?
+            python3 "$runtime" check "$@" --json /tmp/gpt-runtime-sample.md > "/tmp/runtime-$suffix.json"
+            runtime_rc=$?
+            set -e
+            test "$direct_rc" -eq "$runtime_rc"
+            cmp "/tmp/direct-$suffix.json" "/tmp/runtime-$suffix.json"
+          }
+
+          compare_mode mechanical
+          compare_mode extended --extended
 
       - name: Stage exact tested package
         run: |
