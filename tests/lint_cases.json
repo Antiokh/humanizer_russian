@@ -205,6 +205,18 @@
       "mode": "extended",
       "text": "Это не ошибка, а предупреждение.",
       "must_not_find": ["repeated contrast formula"]
+    },
+    {
+      "id": "extended-ilyakhov-web-corporate-cluster",
+      "mode": "extended",
+      "text": "Предлагаем полный спектр услуг, комплексный подход и кратчайшие сроки.",
+      "must_find": ["ILY-R85"]
+    },
+    {
+      "id": "extended-ilyakhov-web-single-candidate-safe",
+      "mode": "extended",
+      "text": "Для миграции используем комплексный подход из двух этапов.",
+      "must_not_find": ["ILY-R85"]
     }
   ]
 }

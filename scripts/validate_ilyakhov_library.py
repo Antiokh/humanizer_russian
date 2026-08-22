@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 LIB = ROOT / "libraries" / "ilyakhov"
+WEB_STUDY = ROOT / "studies" / "ilyakhov-web"
 
 
 def require(condition: bool, message: str) -> None:
@@ -32,6 +33,47 @@ def first_rule(result: dict, rule_id: str) -> dict:
     rows = [x for x in result.get("findings", []) if x.get("rule_id") == rule_id]
     require(len(rows) == 1, f"expected exactly one {rule_id} finding, got {rows}")
     return rows[0]
+
+
+def validate_web_supplement(manifest: dict) -> None:
+    web_rules = load(LIB / "web-rules.json")
+    source_index = load(LIB / "web-sources.json")
+    stopwords = load(WEB_STUDY / "stopword-corpus.json")
+
+    required_refs = {
+        "libraries/ilyakhov/web-rules.json",
+        "libraries/ilyakhov/web-sources.json",
+        "references/ilyakhov-web.md",
+        "studies/ilyakhov-web/stopword-corpus.json",
+        "studies/ilyakhov-web/integration-matrix.md",
+    }
+    require(required_refs <= set(manifest.get("references", [])), "web supplement files must be registered in library references")
+
+    sources = source_index.get("sources", [])
+    source_ids = [item.get("id") for item in sources]
+    require(len(sources) >= 20, f"expected a substantial curated web source index, got {len(sources)}")
+    require(len(source_ids) == len(set(source_ids)), "duplicate Ilyakhov web source ids")
+    require(all(str(item.get("url", "")).startswith("https://") for item in sources), "all web sources must use explicit HTTPS URLs")
+    require("IW-S21" in source_ids, "historical stop-word list provenance source is missing")
+    historical = next(item for item in sources if item["id"] == "IW-S21")
+    require(historical.get("kind") == "THIRD_PARTY_ACKNOWLEDGED", "historical stop list must not be presented as an author/official source")
+    require("not represented as an official" in historical.get("provenance_note", ""), "historical stop-list caveat is missing")
+
+    require(web_rules.get("source_namespace") == "IW", "web supplement must use a distinct IW namespace")
+    cards = web_rules.get("rules", [])
+    require([x.get("rule_id") for x in cards] == ["IW-R01", "IW-R02", "IW-R03"], "unexpected web-rule identity set")
+    require(all(x.get("automation_level") == "MODEL_ONLY" for x in cards), "web-only rules must remain MODEL_ONLY")
+    require(all(x.get("verdict") == "REVIEW" for x in cards), "web-only rules must remain REVIEW guidance")
+    require(all(x.get("project_class") in {"EDITING", "NATIVE_USAGE"} for x in cards), "web-only rules cannot become NORM")
+    for card in cards:
+        refs = card.get("source_ids", [])
+        require(refs and set(refs) <= set(source_ids), f"{card.get('rule_id')}: unknown or empty web source ids")
+
+    require(stopwords.get("status") == "REFERENCE_ONLY", "historical stopword corpus must remain REFERENCE_ONLY")
+    require(stopwords.get("official_current_glavred_export_found") is False, "do not claim a current official stop-list export")
+    policy = str(stopwords.get("runtime_policy", "")).lower()
+    require("never" in policy and "automatic" in policy, "stopword runtime policy must prohibit automatic rewrites")
+    require(len(stopwords.get("curated_candidate_groups", {})) >= 6, "stopword candidate taxonomy is unexpectedly thin")
 
 
 def main() -> None:
@@ -121,6 +163,8 @@ def main() -> None:
             f"shared phenomenon mismatch: {ily_id} / {chuk_id}",
         )
 
+    validate_web_supplement(manifest)
+
     module = import_linter()
     module.self_test()
     default = module.review("Было осуществлено проведение проверки.")
@@ -134,7 +178,16 @@ def main() -> None:
     require(row["automation_level"] == "EXTENDED_SOFT", f"ILY-R62 automation mismatch: {row}")
     require(row["verdict"] == "REVIEW", f"ILY-R62 verdict mismatch: {row}")
 
-    print("Ilyakhov library: 102 source rules + ILY-M01; routing/provenance OK")
+    corporate = module.review("Предлагаем полный спектр услуг, комплексный подход и кратчайшие сроки.")
+    row = first_rule(corporate, "ILY-R85")
+    require(row["automation_level"] == "EXTENDED_SOFT", f"web-backed R85 automation mismatch: {row}")
+    require(row["verdict"] == "REVIEW", f"web-backed R85 verdict mismatch: {row}")
+
+    time_metric = module.review("В наши дни компания выпускает три модели.")
+    require(time_metric["metrics"]["ilyakhov_present_time_wrappers"] == 1, f"web-backed R21 metric missing: {time_metric}")
+    require(not any(x["rule_id"] == "ILY-R21" for x in time_metric["findings"]), "R21 must remain metric-only")
+
+    print("Ilyakhov library: 102 book rules + ILY-M01 + 3 provenance-separated web MODEL_ONLY cards; routing/provenance OK")
 
 
 if __name__ == "__main__":

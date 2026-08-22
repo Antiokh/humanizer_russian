@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "library_id": "ilyakhov",
+  "source_namespace": "IW",
+  "source_index": "libraries/ilyakhov/web-sources.json",
+  "status": "SUPPLEMENTAL_MODEL_ONLY",
+  "description": "Web-only editorial cards derived from public materials by Maxim Ilyakhov. These cards supplement but do not change the canonical ILY-R01..ILY-R102 book identities or their automation counts.",
+  "rules": [
+    {
+      "rule_id": "IW-R01",
+      "phenomenon_id": "editing.stated_value_requires_operational_consequence",
+      "project_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "verdict": "REVIEW",
+      "source_ids": ["IW-S06"],
+      "trigger": "A company or organization states a value mainly as self-evaluation without showing what changes in practice.",
+      "operation": "Look for an observable behavior, procedure, limitation or trade-off caused by the stated value; surface only evidence already supplied.",
+      "guard": "A concise values list can be legitimate when operational examples live elsewhere; never fabricate a company practice.",
+      "interacts_with": ["ILY-R15", "ILY-R16", "ILY-R17", "ILY-R85"]
+    },
+    {
+      "rule_id": "IW-R02",
+      "phenomenon_id": "editing.anti_editorial_cargo_cult",
+      "project_class": "NATIVE_USAGE",
+      "automation_level": "MODEL_ONLY",
+      "verdict": "REVIEW",
+      "source_ids": ["IW-S02", "IW-S03", "IW-S04", "IW-S09", "IW-S19", "IW-S22"],
+      "trigger": "A stylistic rule, tool recommendation or detector-avoidance heuristic has been applied mechanically and the result is less natural, precise or readable Russian.",
+      "operation": "Compare the edited form with a natural contextual alternative and restore functional pronouns, connective material, punctuation, syntax or rhythm. Never damage normal Russian merely to make a text look less machine-generated.",
+      "guard": "Do not use anti-dogmatism to excuse empty corporate filler or real language errors.",
+      "interacts_with": ["ILY-R04", "ILY-R05", "ILY-R06", "ILY-R07", "ILY-R08"]
+    },
+    {
+      "rule_id": "IW-R03",
+      "phenomenon_id": "editing.figure_of_speech_function_test",
+      "project_class": "EDITING",
+      "automation_level": "MODEL_ONLY",
+      "verdict": "REVIEW",
+      "source_ids": ["IW-S07", "IW-S08"],
+      "trigger": "Decorative or metaphorical language in informational or persuasive prose may replace rather than carry a meaningful claim.",
+      "operation": "Check genre fit, freshness/non-cliche status and whether a meaningful proposition remains under the image.",
+      "guard": "Literary, personal, comic and rhetorical prose may use imagery as a primary function; never flatten author voice merely to imitate information style.",
+      "interacts_with": ["ILY-R19", "ILY-R20", "ILY-R23"]
+    }
+  ]
+}

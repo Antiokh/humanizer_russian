@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "library_id": "ilyakhov",
+  "status": "REFERENCE_ONLY",
+  "policy": "Stop-word membership is a diagnostic candidate, never an automatic error or rewrite instruction.",
+  "current_official_machine_readable_full_list_found": false,
+  "sources": [
+    {
+      "id": "IW-STOP-OFFICIAL-POSTER",
+      "url": "https://glvrd.ru/lvk/",
+      "kind": "OFFICIAL_REFERENCE_ARTIFACT",
+      "description": "Official Glavred shop page describes a 60×90 cm stop-word reference poster containing 760 stop words. The page does not expose those 760 entries as a machine-readable current database export."
+    },
+    {
+      "id": "IW-STOP-LIVE-DATABASE",
+      "url": "https://glvrd.ru/about/",
+      "kind": "OFFICIAL_SERVICE_DOC",
+      "description": "Glavred says its live database contains rules, stop words, examples and links and is continuously updated. Therefore the historical poster/list cannot be treated as the current complete database."
+    },
+    {
+      "id": "IW-STOP-API",
+      "url": "https://glvrd.ru/api/",
+      "kind": "OFFICIAL_SERVICE_DOC",
+      "description": "The current paid API returns recommendations for checked text. Public documentation does not expose an enumerate-all-current-rules or flat stop-word export."
+    },
+    {
+      "id": "IW-STOP-COMMUNITY-2014",
+      "url": "https://github.com/miripiruni/stop-words/blob/master/list.txt",
+      "kind": "THIRD_PARTY_ACKNOWLEDGED",
+      "description": "Historical list assembled by a reader from Ilyakhov's materials and acknowledged by Ilyakhov in comments under 'Паразиты времени'. Useful for candidate discovery, but not an official/current Glavred export."
+    }
+  ]
+}

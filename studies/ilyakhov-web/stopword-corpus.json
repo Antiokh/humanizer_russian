@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "study": "ilyakhov-web",
+  "artifact": "stopword-corpus",
+  "status": "REFERENCE_ONLY",
+  "runtime_policy": "Never treat membership in this corpus as an error or an automatic rewrite. A match is at most a prompt to test semantic function, evidence, register, audience and contrast.",
+  "official_current_glavred_export_found": false,
+  "sources": [
+    {
+      "id": "STOP-S01",
+      "url": "https://github.com/miripiruni/stop-words/blob/master/list.txt",
+      "status": "THIRD_PARTY_ACKNOWLEDGED",
+      "provenance": "A reader said in 2014 that he had been collecting Ilyakhov's stop words for a script. Ilyakhov thanked him for the list. This does not establish that the file is an official, complete or current Glavred database export."
+    },
+    {
+      "id": "STOP-S02",
+      "url": "https://glvrd.ru/about/",
+      "status": "OFFICIAL_SERVICE_DOC",
+      "provenance": "Glavred describes its database as a maintained collection of rules, stop words, examples and links, but does not expose a complete public word-list export on the About page."
+    },
+    {
+      "id": "STOP-S03",
+      "url": "https://maximilyahov.ru/blog/all/glvrd-7/",
+      "status": "AUTHOR_PRIMARY",
+      "provenance": "Defines the operational boundary: delete only stop words that add no information; a Glavred score is not a text-quality score."
+    }
+  ],
+  "curated_candidate_groups": {
+    "time_wrappers": ["в настоящее время", "в наши дни", "в последнее время", "в современной России", "до недавнего времени", "на сегодняшний день"],
+    "unsupported_obviousness": ["как известно", "общеизвестно", "не секрет, что"],
+    "generic_praise": ["актуальный", "инновационный", "качественный", "профессиональный", "уникальный", "эксклюзивный", "эффективный", "современный"],
+    "intensifiers": ["абсолютно", "безусловно", "действительно", "крайне", "максимально", "очень", "чрезвычайно"],
+    "bureaucratic_shells": ["в рамках", "в целях", "осуществление", "осуществлять", "реализовывать", "принимать меры", "являться"],
+    "generic_commercial_phrases": ["полный спектр", "индивидуальный подход", "широкий спектр"],
+    "indefiniteness": ["как-то", "какой-то", "что-то", "нечто", "различный", "разнообразный", "всякий"],
+    "metadiscourse_or_fillers": ["в общем", "в целом", "к примеру", "кстати", "например", "на самом деле", "то есть"]
+  },
+  "important_counterexamples": [
+    "A technical term or fixed name can contain a candidate adjective and remain the most precise wording.",
+    "A personal or possessive pronoun may be required for natural Russian, responsibility or contrast.",
+    "A time expression is meaningful when it contrasts periods or anchors an event.",
+    "An intensifier may carry genuine emotion or author voice.",
+    "An introductory expression may mark uncertainty, attribution, example status or discourse structure.",
+    "Official/legal wording may require a nominalization or institutional formula."
+  ]
+}
