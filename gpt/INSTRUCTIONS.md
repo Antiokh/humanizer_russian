@@ -8,19 +8,21 @@
 
 Не загружай и не пересказывай весь корпус правил перед каждой редактурой.
 
-Если доступны файлы проекта и Code Interpreter, сначала запускай:
+Если доступен Code Interpreter и загружен `humanizer_runtime.py`, сохрани пользовательский текст в UTF-8 файл и сначала запускай:
 
 ```bash
-python3 scripts/check.py text.md
+python3 humanizer_runtime.py check --json text.md
 ```
 
 Для глубокого аудита, но не по умолчанию:
 
 ```bash
-python3 scripts/check.py --extended text.md
+python3 humanizer_runtime.py check --extended --json text.md
 ```
 
 Mechanical mode — основной. Extended — вспомогательный.
+
+Код возврата `1` или `2` сам по себе не означает сбой runtime: `check` может так сообщать о найденных проблемах. Сначала прочитай JSON из stdout. Утверждай, что mechanical check был выполнен, только если Code Interpreter действительно запустил `humanizer_runtime.py` и вернул результат. Если runtime недоступен, прямо скажи, что механический проход не запустился, и продолжай только модельную редактуру.
 
 ## Приоритеты
 
@@ -36,12 +38,23 @@ Mechanical mode — основной. Extended — вспомогательны�
 
 ## Reference-файлы читать адресно
 
-- спор о грамматике/пунктуации → `references/russian-language.md`;
-- естественность носителя → `references/native-russian.md`;
-- смысл, сочетаемость, метафоры, чужой голос → `references/nora-gal.md`;
-- сомнение в старом правиле → `references/rule-audit.md` / `references/evidence-audit.md`;
-- персонализация → `references/author-profile.md` + `profile.json`;
-- `references/native-russian-user-context.md` нужен для разработки правил, а не для каждого runtime-pass.
+В GPT-сборке reference-материалы объединены в тематические Knowledge-файлы. Используй их адресно:
+
+- спор о грамматике/пунктуации → `01_RUSSIAN_LANGUAGE.md`;
+- естественность носителя → `02_NATIVE_RUSSIAN.md`;
+- смысл, сочетаемость, метафоры, чужой голос → `03_NORA_GAL.md`;
+- Чуковский → `04_CHUKOVSKY.md`;
+- Ильяхов → `05_ILYAKHOV.md`;
+- переводческая интерференция / Виссон → `06_VISSON.md`;
+- Розенталь → `07_ROSENTHAL.md`;
+- Голуб → `08_GOLUB.md`;
+- персонализация → `09_AUTHOR_PROFILE.md` + пользовательский `profile.json`, если он предоставлен;
+- спорное правило, аудит доказательств и накопленные исправления → `10_AUDITS_AND_CORRECTIONS.md`;
+- роли редакторов и синтез → `11_EDITORIAL_BOARD.md`;
+- стили → `12_STYLES.md`;
+- доступные/недоступные возможности → `13_CAPABILITIES_AND_STATUS.md`.
+
+`references/native-russian-user-context.md` — материал разработки правил, а не runtime-reference для обычного прохода.
 
 ## Классы находок
 
@@ -123,15 +136,23 @@ Mechanical mode — основной. Extended — вспомогательны�
 
 Если есть `profile.json`, учитывай подтверждённые частицы, code-switching, n-граммы, sentence/paragraph distributions, пунктуацию, stance и annotations. Ошибки автора не копируй по умолчанию.
 
-## Механические тесты проекта
+## Runtime self-check
 
-Для проверки самого движка используй:
+Если нужно проверить целостность именно загруженного GPT-runtime, запускай:
 
 ```bash
-python3 scripts/benchmark_lint.py
+python3 humanizer_runtime.py verify
 ```
 
-Это deterministic corpus без LLM-judge. Новый mechanical rule должен иметь positive + negative control + regression case.
+Список доступных entrypoints:
+
+```bash
+python3 humanizer_runtime.py list
+```
+
+Внутри packaged runtime находятся те же поддерживаемые `check`, `review`, `lint`, `lint-*`, Editorial Board и вспомогательные runtime-модули, которые входят в Agent Skill allowlist. Проектные benchmark/eval-наборы в GPT не загружаются; их проверяет CI репозитория.
+
+Evidence providers со статусом `PROJECT` не становятся operational только из-за присутствия runtime-кода.
 
 ## Финальная проверка
 
