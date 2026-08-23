@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Build a deterministic Custom GPT package from the current repository.
+"""Собирает детерминированный пакет Custom GPT из текущего репозитория.
 
-The package is intentionally different from the Agent Skill package:
-- Instructions/ contains text to configure GPT Builder.
-- Knowledge/ contains <=20 text-forward files suitable for GPT Knowledge upload.
-- executable runtime scripts are not included, because GPT Knowledge is reference
-  material rather than an installation mechanism for the Python runtime.
+Пакет намеренно отличается от пакета Agent Skill:
+- Instructions/ содержит текст для настройки GPT Builder;
+- Knowledge/ содержит не более 20 текстовых файлов для загрузки в GPT Knowledge;
+- исполняемые скрипты рабочего контура сюда не входят: GPT Knowledge служит
+  справочным материалом, а не способом установки Python-кода.
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ MAX_KNOWLEDGE_FILES = 20
 FIXED_ZIP_TIME = (1980, 1, 1, 0, 0, 0)
 
 REFERENCE_EXCLUDE = {
-    "native-russian-user-context.md",  # development/source-study material
+    "native-russian-user-context.md",  # материал разработки и исследования источников
 }
 
 
@@ -70,17 +70,20 @@ def format_source(path: Path) -> str:
         body = f"```json\n{text.rstrip()}\n```\n"
     else:
         body = f"```text\n{text.rstrip()}\n```\n"
-    return f"\n---\n\n## Source: `{rel}`\n\n{body}"
+    return f"\n---\n\n## Источник: `{rel}`\n\n{body}"
 
 
 def write_bundle(path: Path, title: str, purpose: str, sources: Iterable[Path]) -> list[str]:
-    unique = sorted({p.resolve(): p for p in sources}.values(), key=lambda p: p.relative_to(ROOT).as_posix())
+    unique = sorted(
+        {p.resolve(): p for p in sources}.values(),
+        key=lambda p: p.relative_to(ROOT).as_posix(),
+    )
     rels = [p.relative_to(ROOT).as_posix() for p in unique]
     body = [
         f"# {title}\n\n",
-        "Generated from the canonical `humanizer_russian` repository.\n\n",
-        f"Purpose: {purpose}\n\n",
-        "Use this file as reference material. Behavioral priorities and workflow live in `Instructions/INSTRUCTIONS.md`.\n",
+        "Сгенерировано из канонического репозитория `humanizer_russian`.\n\n",
+        f"Назначение: {purpose}\n\n",
+        "Используйте этот файл как справочный материал. Приоритеты поведения и рабочий процесс заданы в `Instructions/INSTRUCTIONS.md`.\n",
     ]
     for src in unique:
         body.append(format_source(src))
@@ -109,16 +112,16 @@ def select_refs(refs: list[Path], *needles: str) -> list[Path]:
 
 def make_instructions(out: Path) -> None:
     source = read_text(ROOT / "gpt" / "INSTRUCTIONS.md")
-    boundary = """# Custom GPT runtime boundary\n\nThis package configures a Custom GPT. Files in `Knowledge/` are reference material, not an installed Python runtime.\n\n- Do not claim that `scripts/check.py`, `review.py`, a mechanical linter, or an evidence provider was executed unless an actual external runtime/action executed it and returned a result.\n- In this package, canonical mechanical rules are included as knowledge so they can inform model review, but that is not equivalent to deterministic execution.\n- Evidence providers marked `PROJECT` remain unavailable and must not be presented as operational.\n- Preserve the user's facts and intent before style optimization.\n\nThe knowledge bundle filenames used by this package are listed in `Knowledge/00_INDEX.md`.\n\n---\n\n"""
+    boundary = """# Граница рабочего контура Custom GPT\n\nЭтот пакет настраивает Custom GPT. Файлы в `Knowledge/` — справочный материал, а не установленный Python-runtime.\n\n- Не утверждай, что `scripts/check.py`, `review.py`, механический линтер или провайдер доказательств были запущены, если реальный внешний рабочий контур или Action не выполнил их и не вернул результат.\n- Канонические механические правила включены в пакет как знания и могут использоваться при модельном ревью, но это не равнозначно детерминированному запуску.\n- Провайдеры доказательств со статусом `PROJECT` остаются недоступными и не должны представляться как рабочие.\n- Сохраняй факты и намерение пользователя до стилевой оптимизации.\n\nИмена справочных пакетов перечислены в `Knowledge/00_INDEX.md`.\n\n---\n\n"""
     out.write_text(boundary + source, encoding="utf-8")
 
 
 def builder_guide() -> str:
-    return """# GPT Builder setup\n\n## Name\n\n`humanizer_russian · Русский редактор`\n\n## Description\n\nРусский редактор: естественный русский без кальки с английского, с сохранением смысла, нормы, жанра и авторского голоса.\n\n## What to upload\n\n1. Open the GPT editor.\n2. Paste the entire contents of `Instructions/INSTRUCTIONS.md` into the GPT **Instructions** field.\n3. Upload every `.md` file from `Knowledge/` into **Knowledge**. Do not upload the `Instructions/` files as Knowledge.\n4. Keep **Code Interpreter & Data Analysis** enabled when you want the GPT to edit or return user files.\n5. Enable **Web Search** only when current facts or a disputed/current language norm need external verification.\n6. Test in Preview using `Instructions/TESTS.md`.\n\n## Important boundary\n\nThis Custom GPT package is the model/instruction/knowledge build. It does not install the repository's deterministic Python runtime. A GPT Action or another actual execution surface is required before the GPT may truthfully say that `check.py` or an evidence provider ran.\n\n## Updating\n\nRebuild this archive from the repository instead of hand-copying reference files. The builder groups canonical libraries into a GPT-compatible set that stays below the Knowledge file-count limit.\n"""
+    return """# Настройка GPT Builder\n\n## Название\n\n`humanizer_russian · Русский редактор`\n\n## Описание\n\nРусский редактор: естественный русский без кальки с английского, с сохранением смысла, нормы, жанра и авторского голоса.\n\n## Что загрузить\n\n1. Откройте редактор GPT.\n2. Вставьте всё содержимое `Instructions/INSTRUCTIONS.md` в поле GPT **Instructions**.\n3. Загрузите каждый `.md` из `Knowledge/` в раздел **Knowledge**. Файлы из `Instructions/` не загружайте как Knowledge.\n4. Оставьте **Code Interpreter & Data Analysis** включённым, если GPT должен редактировать или возвращать пользовательские файлы.\n5. Включайте **Web Search** только когда нужны актуальные факты или внешняя проверка спорной либо изменившейся языковой нормы.\n6. Проверьте сборку в Preview по `Instructions/TESTS.md`.\n\n## Важная граница\n\nЭтот пакет Custom GPT содержит модель, инструкции и знания. Он не устанавливает детерминированный Python-runtime репозитория. Чтобы GPT мог правдиво сказать, что `check.py` или провайдер доказательств действительно запускался, нужен GPT Action или другая реальная среда выполнения.\n\n## Обновление\n\nПересобирайте архив из репозитория, а не копируйте справочные файлы вручную. Сборщик объединяет канонические библиотеки в совместимый с GPT набор, не превышающий лимит файлов Knowledge.\n"""
 
 
 def conversation_starters() -> str:
-    return """# Conversation starters\n\n1. Отредактируй текст: сохрани смысл и голос автора, убери кальки и неестественные конструкции.\n2. Проведи глубокий аудит русского текста: норма, естественность, редактура и возможные AI-кальки.\n3. Переведи на русский так, чтобы результат звучал как оригинальный русский текст, а не перевод с английского.\n4. Сравни исходник и редактуру и покажи только изменения, которые действительно улучшают текст.\n"""
+    return """# Заготовки начала диалога\n\n1. Отредактируй текст: сохрани смысл и голос автора, убери кальки и неестественные конструкции.\n2. Проведи глубокий аудит русского текста: норма, естественность, редактура и возможные AI-кальки.\n3. Переведи на русский так, чтобы результат звучал как оригинальный русский текст, а не перевод с английского.\n4. Сравни исходник и редактуру и покажи только изменения, которые действительно улучшают текст.\n"""
 
 
 def build_directory(dest: Path) -> dict:
@@ -131,7 +134,9 @@ def build_directory(dest: Path) -> dict:
 
     make_instructions(instructions / "INSTRUCTIONS.md")
     (instructions / "GPT_BUILDER.md").write_text(builder_guide(), encoding="utf-8")
-    (instructions / "CONVERSATION_STARTERS.md").write_text(conversation_starters(), encoding="utf-8")
+    (instructions / "CONVERSATION_STARTERS.md").write_text(
+        conversation_starters(), encoding="utf-8"
+    )
     shutil.copy2(ROOT / "gpt" / "TESTS.md", instructions / "TESTS.md")
 
     refs = reference_files()
@@ -147,87 +152,88 @@ def build_directory(dest: Path) -> dict:
 
     bundle(
         "01_RUSSIAN_LANGUAGE.md",
-        "Russian language norm and mechanical rules",
-        "Norm, punctuation/grammar surfaces, RKI-derived checks, and canonical Russian library metadata.",
+        "Норма русского языка и механические правила",
+        "Норма, пунктуационные и грамматические поверхности, проверки из РКИ и метаданные канонической русской библиотеки.",
         select_refs(refs, "russian-language")
         + all_files("libraries/russian")
         + existing(["docs/anti-calque.md"]),
     )
     bundle(
         "02_NATIVE_RUSSIAN.md",
-        "Native Russian usage",
-        "Natural information structure, context economy, contrast, particles, ellipsis, and anti-calque guidance.",
+        "Живое русское употребление",
+        "Естественная информационная структура, контекстная экономия, противопоставление, частицы, эллипсис и рекомендации против кальки.",
         select_refs(refs, "native-russian")
         + all_files("libraries/native")
         + existing(["docs/context-economy.md", "docs/contrast.md"]),
     )
     bundle(
         "03_NORA_GAL.md",
-        "Nora Gal editorial layer",
-        "Semantic and literary editing guidance plus canonical Gal rule metadata and provenance maps.",
+        "Редакторский слой Норы Галь",
+        "Семантическая и литературная редактура, канонические метаданные правил Галь и карты происхождения.",
         select_refs(refs, "nora-gal") + all_files("libraries/gal"),
     )
     bundle(
         "04_CHUKOVSKY.md",
-        "Korney Chukovsky editorial layer",
-        "Russian prose and style guidance derived from the Chukovsky library.",
+        "Редакторский слой Корнея Чуковского",
+        "Рекомендации по русской прозе и стилю, полученные из библиотеки Чуковского.",
         select_refs(refs, "chukovsky") + all_files("libraries/chukovsky"),
     )
     bundle(
         "05_ILYAKHOV.md",
-        "Maxim Ilyakhov editing layer",
-        "Information-style heuristics, with warnings kept distinct from hard language errors.",
+        "Редакторский слой Максима Ильяхова",
+        "Эвристики информационного стиля, где предупреждения отделены от жёстких языковых ошибок.",
         select_refs(refs, "ilyakhov") + all_files("libraries/ilyakhov"),
     )
     bundle(
         "06_VISSON.md",
-        "Lynn Visson translation layer",
-        "Russian/English translation interference, information structure, and Visson-derived checks.",
+        "Переводческий слой Линн Виссон",
+        "Русско-английская интерференция, информационная структура и проверки, производные от Виссон.",
         select_refs(refs, "visson") + all_files("libraries/visson"),
     )
     bundle(
         "07_ROSENTHAL.md",
-        "Rosenthal normative/editorial layer",
-        "Rosenthal-derived Russian norm and stylistic checks.",
+        "Нормативный и редакторский слой Розенталя",
+        "Проверки нормы русского языка и стилистики, производные от Розенталя.",
         select_refs(refs, "rosenthal") + all_files("libraries/rosenthal"),
     )
     bundle(
         "08_GOLUB.md",
-        "Golub stylistics layer",
-        "Russian stylistics, lexical and syntactic editing checks from the Golub library.",
+        "Стилистический слой Голуб",
+        "Русская стилистика, лексические и синтаксические редакторские проверки из библиотеки Голуб.",
         select_refs(refs, "golub") + all_files("libraries/golub"),
     )
     bundle(
         "09_AUTHOR_PROFILE.md",
-        "Author profile and idiollect",
-        "How to preserve a confirmed author voice without copying mistakes.",
+        "Авторский профиль и идиолект",
+        "Как сохранять подтверждённый авторский голос, не копируя ошибки.",
         select_refs(refs, "author-profile")
         + all_files("profiles")
         + existing(["docs/author-layer.md"]),
     )
     bundle(
         "10_AUDITS_AND_CORRECTIONS.md",
-        "Rule audit, evidence audit, and corrections",
-        "Regression knowledge, disputed-rule handling, evidence boundaries, and accumulated corrections.",
+        "Аудит правил, доказательств и исправлений",
+        "Регрессионные знания, работа со спорными правилами, границы доказательств и накопленные исправления.",
         select_refs(refs, "rule-audit", "evidence-audit")
         + existing(["knowledge/corrections.md"]),
     )
     bundle(
         "11_EDITORIAL_BOARD.md",
-        "Editorial Board",
-        "Reviewer roles and board-level synthesis guidance.",
-        existing(["BOARD_SKILL.md"]) + [p for p in all_files("reviewers") if p.name != "_template.json"],
+        "Редакционная коллегия",
+        "Роли рецензентов и правила синтеза на уровне редколлегии.",
+        existing(["BOARD_SKILL.md"])
+        + [p for p in all_files("reviewers") if p.name != "_template.json"],
     )
     bundle(
         "12_STYLES.md",
-        "Style profiles",
-        "Available style profiles and their constraints.",
+        "Редакционные стили",
+        "Доступные профили стиля и их ограничения.",
         all_files("styles"),
     )
     bundle(
         "13_CAPABILITIES_AND_STATUS.md",
-        "Capabilities and project status",
-        "What is operational, diagnostic, or PROJECT-only; prevents the GPT from claiming unavailable integrations.",
+        "Возможности и статус проекта",
+        "Что действительно работает, что является диагностикой, а что остаётся только PROJECT; не даёт GPT заявлять о недоступных интеграциях.",
         existing(["docs/capabilities.md", "PROJECT_STATUS.md"]),
     )
 
@@ -235,16 +241,16 @@ def build_directory(dest: Path) -> dict:
     if leftovers:
         bundle(
             "14_ADDITIONAL_REFERENCE.md",
-            "Additional runtime reference",
-            "Reference material not covered by a dedicated editorial library bundle.",
+            "Дополнительные справочные материалы рабочего контура",
+            "Справочные материалы, не вошедшие в отдельный пакет редакторской библиотеки.",
             leftovers,
         )
 
     knowledge_files = sorted(knowledge.glob("*.md"))
     index_lines = [
-        "# humanizer_russian Knowledge index\n\n",
-        "Upload every `.md` file in this directory to the GPT Knowledge section.\n\n",
-        "The files are reference material. Instructions and workflow rules live in `Instructions/INSTRUCTIONS.md`.\n\n",
+        "# Индекс Knowledge humanizer_russian\n\n",
+        "Загрузите каждый `.md` из этого каталога в раздел GPT Knowledge.\n\n",
+        "Эти файлы служат справочными материалами. Инструкции и правила рабочего процесса находятся в `Instructions/INSTRUCTIONS.md`.\n\n",
     ]
     for p in knowledge_files:
         index_lines.append(f"- `{p.name}`\n")
@@ -253,26 +259,35 @@ def build_directory(dest: Path) -> dict:
     knowledge_files = sorted(knowledge.glob("*.md"))
     if len(knowledge_files) > MAX_KNOWLEDGE_FILES:
         raise RuntimeError(
-            f"Knowledge file limit exceeded: {len(knowledge_files)} > {MAX_KNOWLEDGE_FILES}"
+            f"Превышен лимит файлов Knowledge: {len(knowledge_files)} > {MAX_KNOWLEDGE_FILES}"
         )
 
-    if any("native-russian-user-context" in p.read_text(encoding="utf-8") for p in knowledge_files):
-        raise RuntimeError("development-only native-russian-user-context leaked into GPT Knowledge")
+    if any(
+        "native-russian-user-context" in p.read_text(encoding="utf-8")
+        for p in knowledge_files
+    ):
+        raise RuntimeError(
+            "материал разработки native-russian-user-context попал в GPT Knowledge"
+        )
 
-    root_readme = f"""# humanizer_russian — Custom GPT package\n\nVersion: `{skill_version()}`\n\nThis archive is for configuring a **Custom GPT (GPTs)**, not for installing the Agent Skill runtime.\n\n- Paste `Instructions/INSTRUCTIONS.md` into the GPT Instructions field.\n- Upload all `{len(knowledge_files)}` Markdown files from `Knowledge/` into GPT Knowledge.\n- Use `Instructions/GPT_BUILDER.md` for the remaining Builder settings.\n- Use `Instructions/TESTS.md` in Preview before publishing.\n\nThe package intentionally excludes executable scripts, CI, evals, source-study corpora, and PROJECT evidence runtime code. Canonical rule data needed for model-based review is embedded into the Knowledge bundles.\n"""
+    root_readme = f"""# humanizer_russian — пакет Custom GPT\n\nВерсия: `{skill_version()}`\n\nЭтот архив предназначен для настройки **Custom GPT (GPTs)**, а не для установки рабочего контура Agent Skill.\n\n- Вставьте `Instructions/INSTRUCTIONS.md` в поле GPT Instructions.\n- Загрузите все {len(knowledge_files)} файлов Markdown из `Knowledge/` в GPT Knowledge.\n- Остальные настройки Builder описаны в `Instructions/GPT_BUILDER.md`.\n- Перед публикацией проверьте сборку в Preview по `Instructions/TESTS.md`.\n\nПакет намеренно исключает исполняемые скрипты, CI, наборы проверок, корпуса исследования источников и код провайдеров доказательств со статусом PROJECT. Канонические данные правил, нужные для модельного ревью, встроены в пакеты Knowledge.\n"""
     (dest / "README.md").write_text(root_readme, encoding="utf-8")
     shutil.copy2(ROOT / "LICENSE", dest / "LICENSE")
     if (ROOT / "THIRD_PARTY_NOTICES.md").exists():
         shutil.copy2(ROOT / "THIRD_PARTY_NOTICES.md", dest / "THIRD_PARTY_NOTICES.md")
 
     inventory = []
-    for p in sorted(x for x in dest.rglob("*") if x.is_file() and x.name != "_manifest.json"):
+    for p in sorted(
+        x for x in dest.rglob("*") if x.is_file() and x.name != "_manifest.json"
+    ):
         data = p.read_bytes()
-        inventory.append({
-            "path": p.relative_to(dest).as_posix(),
-            "sha256": sha256_bytes(data),
-            "size": len(data),
-        })
+        inventory.append(
+            {
+                "path": p.relative_to(dest).as_posix(),
+                "sha256": sha256_bytes(data),
+                "size": len(data),
+            }
+        )
 
     manifest = {
         "schema_version": 1,
@@ -292,13 +307,20 @@ def build_directory(dest: Path) -> dict:
 
 def zip_directory(source: Path, output: Path) -> str:
     output.parent.mkdir(parents=True, exist_ok=True)
-    with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+    with zipfile.ZipFile(
+        output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+    ) as zf:
         for path in sorted(p for p in source.rglob("*") if p.is_file()):
             rel = Path(PACKAGE_ROOT) / path.relative_to(source)
             info = zipfile.ZipInfo(rel.as_posix(), FIXED_ZIP_TIME)
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o100644 << 16
-            zf.writestr(info, path.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+            zf.writestr(
+                info,
+                path.read_bytes(),
+                compress_type=zipfile.ZIP_DEFLATED,
+                compresslevel=9,
+            )
     return sha256_bytes(output.read_bytes())
 
 
@@ -306,10 +328,10 @@ def inspect_zip(path: Path) -> dict:
     with zipfile.ZipFile(path, "r") as zf:
         names = zf.namelist()
         if not names:
-            raise RuntimeError("empty archive")
+            raise RuntimeError("архив пуст")
         prefix = PACKAGE_ROOT + "/"
         if any(not name.startswith(prefix) for name in names):
-            raise RuntimeError("archive contains files outside package root")
+            raise RuntimeError("архив содержит файлы за пределами корня пакета")
         required = {
             f"{PACKAGE_ROOT}/Instructions/INSTRUCTIONS.md",
             f"{PACKAGE_ROOT}/Instructions/GPT_BUILDER.md",
@@ -319,16 +341,17 @@ def inspect_zip(path: Path) -> dict:
         }
         missing = sorted(required - set(names))
         if missing:
-            raise RuntimeError(f"missing required archive files: {missing}")
+            raise RuntimeError(f"в архиве нет обязательных файлов: {missing}")
         knowledge = [
-            n for n in names
+            n
+            for n in names
             if n.startswith(f"{PACKAGE_ROOT}/Knowledge/") and n.endswith(".md")
         ]
         if len(knowledge) > MAX_KNOWLEDGE_FILES:
-            raise RuntimeError("archive exceeds Custom GPT Knowledge file limit")
+            raise RuntimeError("архив превышает лимит файлов Custom GPT Knowledge")
         manifest = json.loads(zf.read(f"{PACKAGE_ROOT}/_manifest.json"))
         if manifest["knowledge_file_count"] != len(knowledge):
-            raise RuntimeError("manifest knowledge count does not match archive")
+            raise RuntimeError("число файлов Knowledge в манифесте не совпадает с архивом")
     return {
         "archive": str(path),
         "sha256": sha256_bytes(path.read_bytes()),
@@ -344,18 +367,26 @@ def main() -> int:
         "--output",
         type=Path,
         default=ROOT / "dist" / "humanizer-russian-gpts.zip",
-        help="ZIP archive output path",
+        help="путь к выходному ZIP-архиву",
     )
     parser.add_argument(
         "--directory",
         type=Path,
-        help="optional directory to keep the unpacked package",
+        help="необязательный каталог, в котором оставить распакованный пакет",
     )
-    parser.add_argument("--inspect", type=Path, help="inspect an existing GPT package and exit")
+    parser.add_argument(
+        "--inspect",
+        type=Path,
+        help="проверить существующий пакет GPT и завершить работу",
+    )
     args = parser.parse_args()
 
     if args.inspect:
-        print(json.dumps(inspect_zip(args.inspect), ensure_ascii=False, indent=2, sort_keys=True))
+        print(
+            json.dumps(
+                inspect_zip(args.inspect), ensure_ascii=False, indent=2, sort_keys=True
+            )
+        )
         return 0
 
     with tempfile.TemporaryDirectory(prefix="humanizer-russian-gpts-") as td:
