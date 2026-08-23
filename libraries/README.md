@@ -1,31 +1,31 @@
-# Knowledge libraries
+# Библиотеки знаний
 
-`humanizer_russian` treats books/editorial systems as pluggable knowledge libraries.
+`humanizer_russian` рассматривает книги и редакторские системы как подключаемые библиотеки знаний.
 
-A library lives in `libraries/<id>/library.json`. Two product modes consume the same libraries: compact `scripts/check.py` and editorial board `scripts/review.py`.
+Библиотека описывается в `libraries/<id>/library.json`. Одни и те же библиотеки используют два режима продукта: компактный `scripts/check.py` и редколлегия `scripts/review.py`.
 
-## Libraries are not evidence providers
+## Библиотеки — не источники дополнительных данных
 
-Books/editorial systems answer **what this system recommends** and produce reviewer findings.
+Книги и редакторские системы отвечают на вопрос **что рекомендует эта система** и создают находки рецензента.
 
-Corpora, dictionaries, current normative references and parsed datasets answer **what evidence is available**. They belong under `evidence/`, never become reviewer votes, and are optional/off by default. See `evidence/README.md`.
+Корпуса, словари, современные нормативные справочники и синтаксически разобранные наборы данных отвечают на вопрос **какие дополнительные данные доступны**. Они находятся в `evidence/`, никогда не становятся голосами рецензентов и по умолчанию выключены. См. `evidence/README.md`.
 
-## Runtime contract
+## Контракт рабочего контура
 
-Operational libraries use the normalized `review_v1` adapter. A finding contains `rule_id`, source-neutral `phenomenon_id`, project class, automation level, verdict, excerpt/location, reason and optional operation. Project-core libraries are guarded by CI against silently returning to a legacy adapter.
+Рабочие библиотеки используют нормализованный адаптер `review_v1`. Находка содержит `rule_id`, независимый от источника `phenomenon_id`, класс проекта, уровень автоматизации, вердикт, фрагмент или позицию, объяснение и необязательную операцию. CI следит, чтобы библиотеки проектного ядра не возвращались незаметно к устаревшему адаптеру.
 
-A linter may keep an older standalone CLI or internal surface implementation for compatibility, but the shared library runtime accepts normalized findings only. Compatibility translation belongs at that library boundary, not in `scripts/library_runtime.py`.
+Линтер может сохранять старый отдельный интерфейс командной строки или внутреннюю поверхностную реализацию ради совместимости, но общий рабочий контур библиотек принимает только нормализованные находки. Преобразование для совместимости должно происходить на границе конкретной библиотеки, а не в `scripts/library_runtime.py`.
 
-## Add a book
+## Добавление книги
 
-1. Keep research in a long-lived author branch.
-2. Complete source study and mechanical-feasibility pass.
-3. Add a source-specific linter where justified.
-4. Add `libraries/<id>/library.json` and `reviewers/<id>.json`.
-5. Add deterministic positive/negative/boundary tests.
-6. Run library/lint/board validators.
-7. Merge to `main`; keep the author branch.
+1. Ведите исследование в долгоживущей авторской ветке.
+2. Завершите исследование источника и оценку пригодности правил для механической проверки.
+3. Добавьте специализированный линтер источника там, где это обосновано.
+4. Добавьте `libraries/<id>/library.json` и `reviewers/<id>.json`.
+5. Добавьте детерминированные положительные, отрицательные и пограничные тесты.
+6. Запустите валидаторы библиотеки, линтера и редколлегии.
+7. Слейте изменения в `main`; авторскую ветку сохраните.
 
-Two libraries may disagree. Preserve that disagreement. Book namespaces indicate provenance, not severity.
+Две библиотеки могут не соглашаться друг с другом. Это расхождение нужно сохранять. Пространства имён книг показывают происхождение правила, а не его строгость.
 
-Evidence may use the same `phenomenon_id` to contextualize a finding, but remains a separate report field and does not enter `reviewer_verdicts`.
+Дополнительные данные могут использовать тот же `phenomenon_id`, чтобы уточнить находку, но остаются отдельным полем отчёта и не попадают в `reviewer_verdicts`.
