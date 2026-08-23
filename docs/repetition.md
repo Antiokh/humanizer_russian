@@ -1,27 +1,27 @@
-# Repetition
+# Повтор
 
-Repetition is not automatically bad. The editor distinguishes redundant repetition of information from intentional repetition as rhetoric.
+Повтор сам по себе не плох. Редактор должен отличать избыточное повторение уже известной информации от намеренного риторического повтора.
 
-## Decision order
+## Порядок решений
 
-When two nearby phrases repeat a word/structure:
+Если две соседние фразы повторяют слово или конструкцию:
 
-1. Can the repeated material be omitted?
-2. Can it be factored as common material?
-3. Can a pronoun/zero element preserve an unambiguous link?
-4. Can the sentence be restructured naturally?
-5. Only then: is there a genuinely precise synonym?
+1. Можно ли опустить повтор?
+2. Можно ли вынести общий материал?
+3. Сохранит ли местоимение или нулевой элемент однозначную связь?
+4. Можно ли естественно перестроить фразу?
+5. И только потом: существует ли действительно точный синоним?
 
-Do not choose a weaker synonym merely to increase lexical variation.
+Не нужно брать более слабый синоним только ради лексического разнообразия.
 
-## Preserve functional repetition
+## Сохранять функциональный повтор
 
 > Никогда. Никогда больше.
 
 > Платил. Платил молча.
 
-These may be intentional rhythm/pressure and should not be rewritten automatically.
+Такой повтор может создавать намеренный ритм или давление и не должен переписываться автоматически.
 
-## Linter policy
+## Политика линтера
 
-A repeated common element can produce `NATIVE_WARNING`, not `LANGUAGE_ERROR`. Contextual review decides whether the repetition is redundant or functional.
+Повтор общего элемента может давать `NATIVE_WARNING`, но не `LANGUAGE_ERROR`. Только контекстная проверка определяет, избыточен повтор или выполняет функцию.
