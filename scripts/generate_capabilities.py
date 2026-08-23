@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Generate deterministic public capability snapshots from repository manifests.
+"""Генерирует детерминированные публичные снимки возможностей из манифестов.
 
-The generated files deliberately contain only facts that the repository encodes
-machine-readably. Narrative claims such as "fully read" are never inferred from
-rule counts; source_status is copied verbatim from the owning manifest when it
-exists.
+Сгенерированные файлы содержат только факты, которые репозиторий хранит
+в машиночитаемом виде. Нарративные утверждения вроде «полностью прочитано»
+не выводятся из числа правил; source_status копируется дословно из манифеста
+владельца, если это поле есть.
 """
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ def load(path: Path) -> dict[str, Any]:
 
 
 def _rule_inventory(path: Path) -> dict[str, Any]:
-    """Collect rule cards from a direct rules file or a grouped rules index."""
+    """Собирает карточки правил из прямого файла правил или сгруппированного индекса."""
     seen_paths: set[Path] = set()
     source_rules: list[dict[str, Any]] = []
     project_derived_rules: list[dict[str, Any]] = []
@@ -47,12 +47,12 @@ def _rule_inventory(path: Path) -> dict[str, Any]:
         derived = payload.get("project_derived_rules", [])
         if direct:
             if not isinstance(direct, list):
-                raise ValueError(f"{current.relative_to(ROOT)}: rules must be a list")
+                raise ValueError(f"{current.relative_to(ROOT)}: rules должен быть списком")
             source_rules.extend(direct)
         if derived:
             if not isinstance(derived, list):
                 raise ValueError(
-                    f"{current.relative_to(ROOT)}: project_derived_rules must be a list"
+                    f"{current.relative_to(ROOT)}: project_derived_rules должен быть списком"
                 )
             project_derived_rules.extend(derived)
         for relative in payload.get("groups", []):
@@ -64,29 +64,29 @@ def _rule_inventory(path: Path) -> dict[str, Any]:
     missing_ids = [item for item, rule_id in zip(all_rules, ids) if not rule_id]
     duplicates = sorted(rule_id for rule_id, count in Counter(ids).items() if count > 1)
     if missing_ids:
-        raise ValueError(f"{path.relative_to(ROOT)}: rule without rule_id")
+        raise ValueError(f"{path.relative_to(ROOT)}: правило без rule_id")
     if duplicates:
         raise ValueError(
-            f"{path.relative_to(ROOT)}: duplicate rule IDs: {', '.join(duplicates)}"
+            f"{path.relative_to(ROOT)}: дублирующиеся идентификаторы правил: {', '.join(duplicates)}"
         )
 
     automation = Counter(str(item.get("automation_level") or "") for item in all_rules)
     unknown = sorted(level for level in automation if level not in AUTOMATION_LEVELS)
     if unknown:
         raise ValueError(
-            f"{path.relative_to(ROOT)}: unknown automation levels: {', '.join(unknown)}"
+            f"{path.relative_to(ROOT)}: неизвестные уровни автоматизации: {', '.join(unknown)}"
         )
 
     root_payload = load(path)
     declared = root_payload.get("total_rule_count", root_payload.get("rule_count"))
     if declared is not None and not isinstance(declared, int):
-        raise ValueError(f"{path.relative_to(ROOT)}: declared rule count must be integer")
+        raise ValueError(f"{path.relative_to(ROOT)}: объявленное число правил должно быть целым")
     actual_count = len(all_rules)
     source_count = len(source_rules)
     if declared is not None and declared not in {actual_count, source_count}:
         raise ValueError(
-            f"{path.relative_to(ROOT)}: declared rule count {declared} does not match "
-            f"source={source_count} or total={actual_count}"
+            f"{path.relative_to(ROOT)}: объявлено {declared} правил, но это не совпадает "
+            f"ни с числом правил источника {source_count}, ни с общим числом {actual_count}"
         )
 
     return {
@@ -95,7 +95,9 @@ def _rule_inventory(path: Path) -> dict[str, Any]:
         "project_derived_rule_count": len(project_derived_rules),
         "declared_rule_count": declared,
         "source_cycles": root_payload.get("source_cycles"),
-        "automation_counts": {level: automation.get(level, 0) for level in AUTOMATION_LEVELS},
+        "automation_counts": {
+            level: automation.get(level, 0) for level in AUTOMATION_LEVELS
+        },
     }
 
 
@@ -114,14 +116,17 @@ def build_snapshot() -> dict[str, Any]:
                 "source_type": manifest["source_type"],
                 "reviewer_id": manifest["reviewer_id"],
                 "adapter": manifest["adapter"],
-                "enabled_by_default": bool(manifest.get("enabled_by_default", False)),
+                "enabled_by_default": bool(
+                    manifest.get("enabled_by_default", False)
+                ),
                 "status": manifest.get("status"),
                 "source_status": manifest.get("source_status"),
                 "rules_path": rules_path,
                 "rules": inventory,
                 "model_eval": {
                     "registered": bool(
-                        manifest.get("model_eval_path") and manifest.get("model_eval_map_path")
+                        manifest.get("model_eval_path")
+                        and manifest.get("model_eval_map_path")
                     ),
                     "suite_path": manifest.get("model_eval_path"),
                     "map_path": manifest.get("model_eval_map_path"),
@@ -141,7 +146,9 @@ def build_snapshot() -> dict[str, Any]:
     active_reviewer_ids = sorted({item["reviewer_id"] for item in enabled})
     missing_profiles = sorted(set(active_reviewer_ids) - set(reviewer_profiles))
     if missing_profiles:
-        raise ValueError(f"missing reviewer profiles: {', '.join(missing_profiles)}")
+        raise ValueError(
+            f"нет профилей активных рецензентов: {', '.join(missing_profiles)}"
+        )
 
     providers: list[dict[str, Any]] = []
     for path in sorted((ROOT / "evidence").glob("*/provider.json")):
