@@ -1,25 +1,25 @@
-# Migration scope
+# Границы миграции
 
-The migration carries forward the work developed for `humanizer+ru`, not every historical file from the old fork.
+Миграция переносит работу, сделанную для `humanizer+ru`, а не все исторические файлы старого форка.
 
-Included:
+Перенесены:
 
-- Nora Gal semantic layer;
-- normative Russian references;
-- native-usage layer;
-- old-rule/evidence audits;
-- author profile tooling;
-- linter;
-- evals;
-- GPT configuration;
-- feedback log;
-- CI and project documentation.
+- семантический слой Норы Галь;
+- нормативные справочники русского языка;
+- слой живого употребления;
+- аудиты старых правил и доказательств;
+- инструменты авторского профиля;
+- линтер;
+- проверочные наборы;
+- конфигурация GPT;
+- журнал обратной связи;
+- CI и документация проекта.
 
-Not copied as active sources:
+Не перенесены как действующие источники:
 
-- the old authoritative `patterns.md` with detector-driven hard bans;
-- old upstream evals whose assertions conflict with the new architecture;
-- fork-specific changelog/history;
-- banner/promotional image assets.
+- старый авторитетный `patterns.md` с жёсткими запретами, ориентированными на детекторы;
+- старые проверки исходного проекта, чьи ожидания противоречат новой архитектуре;
+- специфичные для форка журнал изменений и история;
+- баннеры и рекламные изображения.
 
-Historical material remains available in `Antiokh/humanizer--ru` and its closed/open PR history. Reintroduce old rules only after reclassification and review.
+Исторические материалы остаются доступными в `Antiokh/humanizer--ru` и истории его PR. Возвращать старые правила можно только после повторной классификации и ревью.
