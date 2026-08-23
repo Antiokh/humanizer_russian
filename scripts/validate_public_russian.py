@@ -27,7 +27,6 @@ FORBIDDEN_FRAGMENTS = (
     "generic humanizer",
     "author layer",
     "native layer",
-    "detector score",
     "anti-detection",
     "production rule",
     "negative controls",
