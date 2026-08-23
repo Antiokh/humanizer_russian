@@ -1,17 +1,17 @@
-# Voice preservation
+# Сохранение авторского голоса
 
-A cleaner sentence is not automatically a better sentence if it stops sounding like the author.
+Более гладкая фраза не обязательно лучше, если после правки она перестаёт звучать как автор.
 
-Preserve when functional:
+Сохранять, когда это выполняет функцию:
 
-- strong vocabulary and profanity;
-- irony and sarcasm;
-- self-corrections;
-- parentheses/side remarks;
-- sentence fragments;
-- pragmatic particles;
-- preferred professional anglicisms;
-- intentional repetition;
-- real epistemic hedges.
+- сильную лексику и мат;
+- иронию и сарказм;
+- самопоправки;
+- скобки и побочные замечания;
+- фрагменты предложений;
+- прагматические частицы;
+- привычные автору профессиональные англицизмы;
+- намеренный повтор;
+- реальные маркеры неуверенности.
 
-Do not inject these features generically to make text look human. Author-specific features should come from the source text or corpus/profile.
+Не нужно искусственно добавлять эти признаки в любой текст ради «человечности». Авторские особенности должны следовать из исходного текста, корпуса или профиля.
