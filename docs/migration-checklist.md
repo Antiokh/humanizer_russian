@@ -1,21 +1,21 @@
-# Migration checklist
+# Чек-лист миграции
 
-- [x] Independent repository created.
-- [x] GPL-3.0 repository license preserved.
-- [x] MIT notice for inherited material preserved in `THIRD_PARTY_NOTICES.md`.
-- [x] Nora Gal semantic layer migrated.
-- [x] NORM/NATIVE_USAGE architecture migrated.
-- [x] 34-rule audit migrated.
-- [x] evidence audit migrated.
-- [x] author-profile framework, schema and profiler migrated.
-- [x] linter migrated with `NATIVE_WARNING` non-gating.
-- [x] Russian and Nora Gal evals migrated.
-- [x] Custom GPT instructions/setup/tests migrated.
-- [x] owner corrections log migrated.
-- [x] CI workflow migrated.
-- [x] detailed migration notes for old PR #1 and PR #2 preserved in the new repository.
-- [x] migration comments posted to old PR #1 and PR #2.
-- [x] old PR #1 and PR #2 closed without merge; `humanizer--ru/main` remains unchanged by these feature lines.
-- [ ] verify CI on an independent-repo pull request.
-- [ ] delete old development branch refs from `humanizer--ru` in GitHub UI (branch deletion is not exposed by the current integration): `agent/add-nora-gal-language-patterns`, `agent/russian-language-layer`, `humanizer_russian`.
-- [ ] delete temporary migration branches from this repository when no longer needed: `migration-test`, `migration-test-2`, `migration-test-3`, `ci-validation`.
+- [x] Создан самостоятельный репозиторий.
+- [x] Сохранена лицензия репозитория GPL-3.0.
+- [x] Уведомление MIT для унаследованных материалов сохранено в `THIRD_PARTY_NOTICES.md`.
+- [x] Перенесён семантический слой Норы Галь.
+- [x] Перенесена архитектура `NORM` / `NATIVE_USAGE`.
+- [x] Перенесён аудит 34 правил.
+- [x] Перенесён аудит доказательств.
+- [x] Перенесены методика авторского профиля, схема и профилировщик.
+- [x] Перенесён линтер; `NATIVE_WARNING` остаётся неблокирующим.
+- [x] Перенесены проверки русского языка и Норы Галь.
+- [x] Перенесены инструкции, настройка и тесты Custom GPT.
+- [x] Перенесён журнал исправлений владельца.
+- [x] Перенесён workflow CI.
+- [x] Подробные заметки о миграции старых PR #1 и PR #2 сохранены в новом репозитории.
+- [x] В старых PR #1 и PR #2 оставлены комментарии о миграции.
+- [x] Старые PR #1 и PR #2 закрыты без слияния; эти ветки не изменили `humanizer--ru/main`.
+- [ ] Проверить CI на pull request в самостоятельном репозитории.
+- [ ] Удалить старые ветки разработки из `humanizer--ru` через интерфейс GitHub, поскольку текущая интеграция не даёт удалять ссылки на ветки: `agent/add-nora-gal-language-patterns`, `agent/russian-language-layer`, `humanizer_russian`.
+- [ ] Удалить временные миграционные ветки этого репозитория, когда они больше не понадобятся: `migration-test`, `migration-test-2`, `migration-test-3`, `ci-validation`.
