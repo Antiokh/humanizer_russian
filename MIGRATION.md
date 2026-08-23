@@ -1,72 +1,72 @@
-# Migration history
+# История миграции
 
-`humanizer_russian` is an independent repository for the Russian humanizer/editor project.
+`humanizer_russian` — самостоятельный репозиторий русского хуманайзера и редактора.
 
-It was separated from `Antiokh/humanizer--ru` on 2026-08-19 after the Russian-language work had grown beyond a small compatibility fork.
+Он был отделён от `Antiokh/humanizer--ru` 19 августа 2026 года, когда русскоязычная часть проекта переросла небольшой совместимый форк.
 
-## Source lines that were consolidated
+## Объединённые направления разработки
 
-### Nora Gal semantic layer
+### Семантический слой Норы Галь
 
-The earlier line introduced semantic/literary checks for abstraction, voice, metaphor conflicts, collocation and translated syntax. These remain contextual semantic checks rather than regex hard bans.
+Раннее направление добавило семантические и литературные проверки абстрактности, голоса, конфликтов метафор, сочетаемости и переводного синтаксиса. Они остаются контекстными семантическими проверками, а не жёсткими запретами по регулярным выражениям.
 
-### Russian-first / native-usage layer
+### Русское ядро и слой живого употребления
 
-The project now separates:
+Проект теперь разделяет:
 
-- `USER_INTENT` — task/function preservation;
-- `SEMANTICS` — factual and logical preservation;
-- `NORM` — grammatical and punctuation constraints;
-- `NATIVE_USAGE` — natural choices made by Russian native speakers among valid forms;
-- `AUTHOR` — corpus-derived idiolect;
-- `EDITING` / `AI_CALQUE` — later editorial passes;
-- detector score — diagnostic only, never optimization target.
+- `USER_INTENT` — сохранение задачи и функции текста;
+- `SEMANTICS` — сохранение фактов и логики;
+- `NORM` — грамматические и пунктуационные ограничения;
+- `NATIVE_USAGE` — естественный выбор носителя русского среди правильных вариантов;
+- `AUTHOR` — идиолект, подтверждённый корпусом автора;
+- `EDITING` / `AI_CALQUE` — последующие редакторские проходы;
+- оценку детектора — только как диагностический сигнал, никогда как цель оптимизации.
 
-## Runtime change: mechanical first
+## Изменение рабочего контура: сначала механика
 
-After migration the project moved away from treating large context files as the primary runtime engine.
+После миграции проект отказался от подхода, в котором большие контекстные файлы служили основным движком каждой проверки.
 
-Default check:
+Обычная проверка:
 
 ```bash
 python scripts/check.py text.md
 ```
 
-Deep heuristic audit:
+Глубокий эвристический аудит:
 
 ```bash
 python scripts/check.py --extended text.md
 ```
 
-The full surface linter still exists in `scripts/lint.py`, but `check.py` exposes only the higher-precision subset by default.
+Полный поверхностный линтер по-прежнему находится в `scripts/lint.py`, но `check.py` по умолчанию показывает только более точное подмножество проверок.
 
-## Testing change
+## Изменение тестирования
 
-Primary linter correctness is now tested deterministically:
+Корректность основного линтера теперь проверяется детерминированно:
 
 ```bash
 python scripts/benchmark_lint.py
 ```
 
-Corpus: `tests/lint_cases.json`.
+Корпус: `tests/lint_cases.json`.
 
-This benchmark uses positive and negative controls without LLM judges, web calls or reference-file retrieval. Context/model evals remain for behavior that is genuinely semantic and cannot be settled by regex/statistical checks.
+Этот прогон использует положительные и отрицательные примеры без LLM-судей, веб-запросов и чтения справочных файлов. Контекстные и модельные проверки остаются для поведения, которое действительно зависит от смысла и не может быть надёжно решено регулярным выражением или статистикой.
 
-## Review feedback incorporated
+## Учтённые замечания ревью
 
-- author-profile sentence/n-gram/paragraph statistics preserve document boundaries;
-- source filesystem paths are not written to `profile.json`;
-- profiler and schema use one contract;
-- generated profiles are validated in CI;
-- `NATIVE_WARNING` is non-gating;
-- repeated common material is checked in Russian contrasts;
-- native-language evals include no-op/good-human controls;
-- runtime reference loading is selective rather than mandatory.
+- статистика предложений, n-грамм и абзацев в профиле автора сохраняет границы документов;
+- пути исходных файлов в файловой системе не записываются в `profile.json`;
+- профилировщик и схема используют один контракт;
+- созданные профили валидируются в CI;
+- `NATIVE_WARNING` не блокирует результат;
+- повтор общего материала проверяется в русских противопоставлениях;
+- проверки живого языка содержат контрольные примеры, где хороший человеческий текст не нужно менять;
+- справочные материалы рабочего контура загружаются выборочно, а не обязательно.
 
-## Why this is not a compatibility fork
+## Почему это не совместимый форк
 
-Future architecture does not need to preserve detector-driven assumptions of the old fork. Old rules may be reintroduced only after reclassification and testing.
+Будущая архитектура не обязана сохранять предположения старого форка, построенные вокруг детекторов. Старые правила можно вернуть только после новой классификации и тестирования.
 
-## Policy for future rules
+## Политика для новых правил
 
-A rule is promoted to default mechanical runtime only after it has a deterministic positive case and a natural negative control. Rules with high context dependence remain extended/contextual.
+Правило попадает в основной механический режим только после детерминированного положительного примера и естественного отрицательного контроля. Правила с высокой зависимостью от контекста остаются расширенными или контекстными.
