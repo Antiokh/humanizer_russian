@@ -1,8 +1,8 @@
-# Do not synthesize human errors
+# Не имитировать человеческие ошибки
 
-Human-written corpora contain typos, missing commas, broken government and speech-recognition artifacts. That does not make deliberate error injection a valid generic humanization technique.
+В человеческих корпусах встречаются опечатки, пропущенные запятые, ошибки управления и артефакты распознавания речи. Это не делает намеренное добавление ошибок нормальным способом «очеловечивания» текста.
 
-Default:
+По умолчанию:
 
 ```json
 {
@@ -11,4 +11,4 @@ Default:
 }
 ```
 
-A raw-voice imitation mode may exist only when explicitly requested and separated from ordinary editing.
+Режим имитации сырого авторского голоса допустим только по прямой просьбе и должен быть отделён от обычной редактуры.
