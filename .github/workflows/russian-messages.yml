@@ -1,4 +1,4 @@
-name: russian-messages
+name: Русский человекочитаемый слой
 
 on:
   pull_request:
@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   validate:
+    name: Проверка русских сообщений
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
