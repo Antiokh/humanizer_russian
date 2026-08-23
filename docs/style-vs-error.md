@@ -1,17 +1,17 @@
-# Error versus preference
+# Ошибка и предпочтение
 
-A humanizer must not collapse these categories:
+Хуманайзер не должен смешивать эти категории:
 
-- `LANGUAGE_ERROR`: violates Russian norm;
-- `NATIVE_WARNING`: grammatical but potentially synthetic in context;
-- `STYLE_WARNING`: a stylistic choice may be weak/repetitive;
-- `AI_PATTERN`: probabilistic association with machine/translation behavior;
-- `AUTHOR_MISMATCH`: inconsistent with a corpus-derived voice.
+- `LANGUAGE_ERROR` — нарушение нормы русского языка;
+- `NATIVE_WARNING` — грамматически допустимая, но потенциально искусственная в контексте форма;
+- `STYLE_WARNING` — возможно слабый или навязчиво повторяющийся стилистический выбор;
+- `AI_PATTERN` — вероятностная связь с машинной или переводной организацией текста;
+- `AUTHOR_MISMATCH` — несовпадение с голосом, подтверждённым корпусом автора.
 
-Example:
+Пример:
 
 > Это не ошибка в расчёте, а ошибка в исходных данных.
 
-This is not a language error. It can still receive a native-use suggestion to factor `ошибка` once.
+Это не языковая ошибка. При этом слой живого русского может предложить вынести слово `ошибка` за противопоставление.
 
-That distinction prevents detector/editing preferences from being mislabeled as grammar.
+Такое разделение не даёт выдавать предпочтения детекторов и редакторские советы за грамматику.
