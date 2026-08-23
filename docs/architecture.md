@@ -1,54 +1,54 @@
-# Architecture
+# Архитектура
 
-`humanizer+ru` is organized around two hard constraints and several preference layers.
+`humanizer_russian` строится вокруг жёстких ограничений и нескольких слоёв предпочтений.
 
-## Hard constraints
+## Жёсткие ограничения
 
-### SEMANTICS
+### `SEMANTICS`
 
-Preserve facts, referents, causality, negation, scope and degree of certainty. A stylistically better sentence that changes these is a failed edit.
+Сохранять факты, референты, причинность, отрицание, область действия и степень уверенности. Стилистически более красивое предложение, которое меняет что-то из этого, считается неудачной правкой.
 
-### NORM
+### `NORM`
 
-Stay within valid Russian orthography, punctuation, agreement, government and syntax unless the user explicitly requests nonstandard stylization.
+Оставаться в пределах нормальной русской орфографии, пунктуации, согласования, управления и синтаксиса, если пользователь явно не просит о ненормативной стилизации.
 
-## Preference layers
+## Слои предпочтений
 
-### AUTHOR
+### `AUTHOR`
 
-When a reliable corpus/profile exists, prefer the author's established idiom, register, particles, jargon, rhythm and discourse habits.
+Если есть надёжный корпус или профиль, предпочитать подтверждённые особенности автора: лексику, регистр, частицы, жаргон, ритм и дискурсивные привычки.
 
-### NATIVE_USAGE
+### `NATIVE_USAGE`
 
-Among grammatically valid variants, prefer the one that sounds natural to a Russian native speaker in the current context. This layer handles unnecessary repetition, contextual economy, information structure and marked word order.
+Среди грамматически допустимых вариантов выбирать тот, который естественнее звучит для носителя русского в данном контексте. Этот слой отвечает за лишний повтор, контекстную экономию, информационную структуру и маркированный порядок слов.
 
-### EDITING
+### `EDITING`
 
-Improve clarity, density and concrete wording without inventing facts. Nora Gal and information-style methods primarily operate here and at the semantic boundary.
+Улучшать ясность, плотность и конкретность формулировок, не придумывая факты. Методы Норы Галь и информационного стиля в основном работают здесь и на границе со смыслом.
 
-### AI_CALQUE
+### `AI_CALQUE`
 
-Remove observable translation/LLM patterns: possessive over-explicitness, SVO lock, slogan rhetoric, literal collocations and locally self-contained sentence chains.
+Убирать наблюдаемые переводные и машинные схемы: избыточные притяжательные местоимения, жёсткий порядок SVO, слоганную риторику, буквальные сочетания и цепочки предложений, каждое из которых заново называет весь контекст.
 
-### Detector score
+### Оценка детектора
 
-External diagnostic only. It must never override a higher layer.
+Только внешний диагностический сигнал. Он никогда не должен отменять более высокий слой.
 
-## Conflict rule
+## Правило конфликта
 
-A lower layer may not improve its own metric by degrading a higher layer.
+Нижний слой не может улучшать собственную метрику ценой ухудшения верхнего.
 
-Examples:
+Примеры:
 
-- deleting an em dash to satisfy a detector while worsening Russian punctuation is forbidden;
-- splitting `не X, а Y` into two fragments solely because the pattern is associated with LLMs is forbidden;
-- removing `же` as a stop-word when it encodes disagreement with prior context is forbidden;
-- imitating a corpus author's missing commas to appear human is disabled by default.
+- нельзя удалять тире ради оценки детектора, если от этого становится хуже русская пунктуация;
+- нельзя дробить `не X, а Y` на два фрагмента только потому, что такой шаблон связывают с LLM;
+- нельзя удалять `же` как стоп-слово, если оно выражает несогласие с предыдущим контекстом;
+- имитация пропущенных запятых из корпуса автора ради «человечности» по умолчанию выключена.
 
-## Why NATIVE_USAGE is separate from NORM
+## Почему `NATIVE_USAGE` отделён от `NORM`
 
-`Это не ошибка в расчёте, а ошибка в исходных данных` can be grammatically acceptable while sounding unnecessarily synthetic because the common word `ошибка` is repeated.
+`Это не ошибка в расчёте, а ошибка в исходных данных` может быть грамматически допустимо, но звучать излишне синтетически из-за повтора общего слова `ошибка`.
 
-`Это ошибка не в расчёте, а в исходных данных` stays inside the same norm but is often more natural.
+`Это ошибка не в расчёте, а в исходных данных` остаётся в пределах той же нормы, но часто звучит естественнее.
 
-That distinction is central to the project: normative sources determine what is allowed; native usage selects among allowed forms; author data can then override the generic preference when the author's actual voice supports another choice.
+Это различие принципиально для проекта: нормативные источники определяют допустимые варианты; живое употребление выбирает среди них; подтверждённые данные об авторе могут затем переопределить общее предпочтение, если его реальный голос требует другого решения.
