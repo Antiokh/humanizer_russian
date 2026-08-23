@@ -1,31 +1,31 @@
-# Native rule template
+# Шаблон правила живого русского
 
-Use this template for new `NATIVE-*` rules.
+Используйте этот шаблон для новых правил `NATIVE-*`.
 
 ```md
 ## NATIVE-...
 
-Phenomenon:
+Явление:
 
-Why it sounds synthetic:
+Почему звучит синтетически:
 
-Context where the rule applies:
+Контекст, в котором действует правило:
 
-Synthetic candidate:
+Синтетический кандидат:
 
-Natural alternatives:
+Естественные варианты:
 
-Counterexample where the candidate must be preserved:
+Контрпример, где кандидат нужно сохранить:
 
-Interaction with NORM:
+Взаимодействие с NORM:
 
-Interaction with AUTHOR:
+Взаимодействие с AUTHOR:
 
-Detection: deterministic candidate / model-only / corpus metric
+Обнаружение: детерминированный кандидат / только модель / корпусная метрика
 
-Confidence: observation / corpus-backed / philologist-reviewed
+Уверенность: наблюдение / подтверждено корпусом / проверено филологом
 
-Eval IDs:
+Идентификаторы проверок:
 ```
 
-Do not promote the rule to `NORM-*` without a source that actually supports a normative claim.
+Не повышайте правило до `NORM-*` без источника, который действительно подтверждает нормативное утверждение.
