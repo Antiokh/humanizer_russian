@@ -1,17 +1,17 @@
-# humanizer+ru+user
+# Авторский слой
 
-The author layer is an optional extension of generic Russian humanization.
+Авторский слой — необязательное расширение общего русского редактора.
 
-Generic behavior:
+Общее поведение:
 
 `SEMANTICS + NORM → NATIVE_USAGE → EDITING → AI_CALQUE`
 
-With a reliable corpus:
+При наличии надёжного корпуса:
 
-`SEMANTICS + NORM → AUTHOR-informed NATIVE_USAGE → EDITING → AI_CALQUE`
+`SEMANTICS + NORM → NATIVE_USAGE с учётом AUTHOR → EDITING → AI_CALQUE`
 
-The profile should capture observable language behavior: particles, jargon, code-switching, ellipsis, rhythm, self-repairs, punctuation tendencies, contrast strategies and stance markers.
+Профиль должен фиксировать наблюдаемое языковое поведение: частицы, жаргон, переключение языков, эллипсис, ритм, самокоррекции, пунктуационные привычки, способы противопоставления и маркеры авторской позиции.
 
-It should not diagnose personality, infer private traits without evidence or imitate mistakes by default.
+Он не должен диагностировать личность, выводить частные свойства без подтверждения или по умолчанию имитировать ошибки.
 
-The current profiler is deliberately statistical and uses regex proxies. Semantic author-style conclusions should be supported by corpus examples and preferably separated by genre.
+Текущий профилировщик намеренно статистический и использует приближённые проверки на регулярных выражениях. Семантические выводы об авторском стиле должны подтверждаться примерами из корпуса и по возможности разделяться по жанрам.
