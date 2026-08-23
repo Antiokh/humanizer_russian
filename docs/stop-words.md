@@ -1,15 +1,15 @@
-# Stop words and particles
+# Стоп-слова и частицы
 
-A stop-word list is a review aid, not a deletion algorithm.
+Список стоп-слов — повод проверить текст, а не алгоритм удаления.
 
-Words such as `же`, `ведь`, `всё-таки`, `просто`, `очень`, `вот`, `ну` may carry pragmatic meaning, emphasis, concession, reference to prior discourse or author voice.
+Слова `же`, `ведь`, `всё-таки`, `просто`, `очень`, `вот`, `ну` могут передавать прагматический смысл, усиление, уступку, отсылку к предыдущему контексту или авторский голос.
 
-Compare:
+Сравните:
 
 > Я говорил.
 
 > Я же говорил.
 
-Removing `же` preserves a proposition but changes the communicative act.
+Удаление `же` сохраняет пропозиционное содержание, но меняет коммуникативный акт.
 
-Information-style editing therefore asks what the word does in context before removing it.
+Поэтому информационная редактура сначала выясняет, что слово делает в контексте, и только потом решает, нужно ли его убирать.

@@ -1,18 +1,18 @@
-# Eval philosophy
+# Философия проверок
 
-The project does not optimize for one canonical rewrite. Russian often permits several valid arrangements with different information structure and register.
+Проект не оптимизируется под единственную каноническую правку. Русский часто допускает несколько правильных вариантов с разной информационной структурой и регистром.
 
-Evaluate functions:
+Оценивайте функции:
 
-- factual preservation;
-- normative correctness;
-- contextual economy without ambiguity;
-- natural information structure;
-- preservation of intentional rhetorical devices;
-- absence of invented specificity;
-- compatibility with author profile when supplied;
-- reduction of formulaic/calqued behavior without detector-driven damage.
+- сохранение фактов;
+- нормативную правильность;
+- контекстную экономию без двусмысленности;
+- естественную информационную структуру;
+- сохранение намеренных риторических приёмов;
+- отсутствие выдуманной конкретики;
+- совместимость с профилем автора, если он предоставлен;
+- уменьшение шаблонности и калек без ущерба ради детектора.
 
-Every positive heuristic should have counterexamples where the surface pattern is intentional and must remain.
+У каждой положительной эвристики должны быть контрпримеры, где внешне похожая конструкция используется намеренно и должна остаться.
 
-A model judge should see the source, task, candidate and expectations. It should not be forced to reproduce a reference sentence verbatim.
+Модель-судья должна видеть исходник, задачу, вариант кандидата и ожидания. От неё не требуется дословно воспроизводить эталонное предложение.

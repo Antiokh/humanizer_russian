@@ -1,8 +1,8 @@
-# Lynn Visson source map
+# Карта источника Линн Виссон
 
-EPUB SHA-256: `45cd09d0101caa90effa2f7943d4ddf45659536857ae548910fccad144c806ca`.
+SHA-256 EPUB: `45cd09d0101caa90effa2f7943d4ddf45659536857ae548910fccad144c806ca`.
 
-Operational locators:
+Рабочие указатели:
 - `preface` → epub:index_split_002.xhtml#calibre_toc_2 (Предисловие)
 - `ch1` → epub:index_split_003.xhtml#calibre_toc_3 (Глава I. Как выразить русскую душу?)
 - `ch2` → epub:index_split_005.xhtml#calibre_toc_4 (Глава II. Язык оптимистов и политкорректность)
@@ -42,4 +42,4 @@ Operational locators:
 - `false` → epub:index_split_052.xhtml#calibre_toc_170 (19. Ложные друзья переводчика)
 - `ch9` → epub:index_split_055.xhtml#calibre_toc_11 (Глава IX. Перевод бессловесного языка)
 
-Full sequential coverage is recorded in `studies/lynn-visson/coverage.md`; rule-level locators live in `libraries/visson/rules.json`.
+Полное последовательное покрытие зафиксировано в `studies/lynn-visson/coverage.md`; указатели на уровне правил находятся в `libraries/visson/rules.json`.

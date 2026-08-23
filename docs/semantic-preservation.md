@@ -1,14 +1,14 @@
-# Semantic preservation invariants
+# Инварианты сохранения смысла
 
-Editing must preserve:
+При редактуре нужно сохранять:
 
-- factual claims and numbers;
-- who did what to whom;
-- negation and contrast scope;
-- causality versus correlation;
-- chronology;
-- modality and degree of confidence;
-- quoted versus authorial statements;
-- explicit unknowns.
+- фактические утверждения и числа;
+- кто, что и по отношению к кому сделал;
+- область действия отрицания и противопоставления;
+- различие между причинностью и корреляцией;
+- хронологию;
+- модальность и степень уверенности;
+- различие между цитатой и утверждением автора;
+- явно обозначенную неизвестность.
 
-A more natural sentence that silently strengthens `возможно` into a fact or replaces an unknown cause with a plausible cause is a failed edit regardless of style quality.
+Более естественная фраза всё равно является плохой правкой, если она незаметно превращает `возможно` в факт или подменяет неизвестную причину правдоподобной догадкой.

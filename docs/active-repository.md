@@ -1,7 +1,7 @@
-# Active repository
+# Активный репозиторий
 
-As of 2026-08-19, active development of **humanizer+ru** is in:
+С 19 августа 2026 года активная разработка **humanizer_russian** ведётся в:
 
 `Antiokh/humanizer_russian`
 
-`Antiokh/humanizer--ru` remains the minimal historical compatibility fork and is no longer the development base for the Nora Gal, NATIVE_USAGE or author-profile layers.
+`Antiokh/humanizer--ru` остаётся минимальным историческим форком совместимости и больше не является базой разработки для Норы Галь, слоя `NATIVE_USAGE` или профиля автора.

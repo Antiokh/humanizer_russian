@@ -1,12 +1,12 @@
-# Ellipsis and zero elements
+# Эллипсис и нулевые элементы
 
-Humanizer must distinguish several mechanisms that all reduce overt repetition:
+Редактор должен различать несколько механизмов, которые внешне уменьшают повтор:
 
-- contextual ellipsis: omitted material recoverable from discourse;
-- zero/implicit subject in constructions where Russian permits it;
-- grammatical compression via non-finite forms;
-- ordinary lexical omission of a repeated noun/predicate.
+- контекстный эллипсис: пропущенное восстанавливается из предтекста;
+- нулевой или невыраженный субъект в конструкциях, где русский это допускает;
+- грамматическое сжатие с помощью неличных форм;
+- обычное лексическое опущение повторного существительного или сказуемого.
 
-Do not treat these as one grammar rule.
+Не нужно сводить их к одному грамматическому правилу.
 
-The practical editing rule is simpler: do not restore material solely for local sentence completeness when Russian morphology/context already make the relation clear. Conversely, do not omit material if ambiguity or genre risk increases.
+Практическое редакторское правило проще: не восстанавливать слова только ради локальной полноты предложения, если русская морфология и контекст уже однозначно показывают связь. И наоборот, не опускать слова, если из-за этого растёт двусмысленность или риск для выбранного жанра.

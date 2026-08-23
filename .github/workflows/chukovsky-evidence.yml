@@ -1,4 +1,4 @@
-name: chukovsky-evidence
+name: Доказательства Чуковского
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Compile evidence validator
+      - name: Скомпилировать валидатор доказательств
         run: python -m compileall -q scripts/validate_chukovsky_evidence.py
-      - name: Validate Chukovsky external evidence provenance
+      - name: Проверить происхождение внешних доказательств Чуковского
         run: python scripts/validate_chukovsky_evidence.py

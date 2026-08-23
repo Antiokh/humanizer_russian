@@ -1,4 +1,4 @@
-name: quality
+name: Качество
 
 on:
   push:
@@ -28,109 +28,109 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install validation dependency
+      - name: Установить зависимость для валидации
         run: python -m pip install --disable-pip-version-check jsonschema
 
-      - name: Compile Python
+      - name: Скомпилировать Python
         run: python -m compileall -q scripts
 
-      - name: Validate architecture contract
+      - name: Проверить архитектурный контракт
         run: python scripts/validate_architecture.py
 
-      - name: Validate knowledge libraries
+      - name: Проверить библиотеки знаний
         run: python scripts/validate_libraries.py
 
-      - name: Validate Velichko bounded study and integration
+      - name: Проверить ограниченное исследование Величко и интеграцию
         run: python scripts/validate_velichko_study.py
 
-      - name: Validate Chukovsky study and integration matrix
+      - name: Проверить исследование Чуковского и матрицу интеграции
         run: python scripts/validate_chukovsky_study.py
 
-      - name: Validate Chukovsky dual-runtime library routing
+      - name: Проверить маршрутизацию библиотеки Чуковского в двух режимах
         run: python scripts/validate_chukovsky_library.py
 
-      - name: Validate Ilyakhov source study
+      - name: Проверить исследование источника Ильяхова
         run: python scripts/validate_pishi_study.py
 
-      - name: Validate Ilyakhov dual-runtime library routing
+      - name: Проверить маршрутизацию библиотеки Ильяхова в двух режимах
         run: python scripts/validate_ilyakhov_library.py
 
-      - name: Validate Nora Gal study and library routing
+      - name: Проверить исследование и библиотеку Норы Галь
         run: python scripts/validate_nora_gal.py
 
-      - name: Validate Nora Gal external evidence dispositions
+      - name: Проверить решения по внешним доказательствам Норы Галь
         run: python scripts/validate_gal_evidence.py
 
-      - name: Linter self-test
+      - name: Самотест линтера
         run: python scripts/lint.py --self-test
 
-      - name: Native normalized adapter self-test
+      - name: Самотест нормализованного адаптера живого русского
         run: python scripts/lint_native.py
 
-      - name: Native review_v1 parity benchmark
+      - name: Бенчмарк соответствия адаптера живого русского review_v1
         run: python scripts/benchmark_native_adapter.py
 
-      - name: Russian language layer self-test
+      - name: Самотест русского языкового слоя
         run: python scripts/lint_russian.py
 
-      - name: Russian RKI distribution metrics self-test
+      - name: Самотест распределительных метрик РКИ
         run: python scripts/lint_russian_rki_metrics.py
 
-      - name: Chukovsky normalized adapter self-test
+      - name: Самотест нормализованного адаптера Чуковского
         run: python scripts/lint_chukovsky.py
 
-      - name: Ilyakhov normalized adapter self-test
+      - name: Самотест нормализованного адаптера Ильяхова
         run: python scripts/lint_ilyakhov.py
 
-      - name: Nora Gal normalized adapter self-test
+      - name: Самотест нормализованного адаптера Норы Галь
         run: python scripts/lint_gal.py --self-test
 
-      - name: Nora Gal live-model harness offline self-test
+      - name: Офлайн-самотест модельного контура Норы Галь
         run: python scripts/run_model_evals.py --self-test
 
-      - name: NKRЯ query replay offline self-test
+      - name: Офлайн-самотест повторного запуска запроса НКРЯ
         run: python scripts/run_ruscorpora_query.py --self-test
 
-      - name: Philologist blind-packet export self-test
+      - name: Самотест экспорта слепого пакета для филолога
         run: python scripts/export_philologist_packet.py --self-test
 
-      - name: Philologist review contract self-test
+      - name: Самотест контракта филологического ревью
         run: python scripts/validate_philologist_review.py --self-test
 
-      - name: Deterministic mechanical linter benchmark
+      - name: Детерминированный бенчмарк механического линтера
         run: python scripts/benchmark_lint.py
 
-      - name: Russian language compact benchmark
+      - name: Бенчмарк Compact для русского языкового слоя
         run: python scripts/benchmark_lint.py tests/russian_cases.json
 
-      - name: Nora Gal compact integration benchmark
+      - name: Бенчмарк интеграции Норы Галь в Compact
         run: python scripts/benchmark_lint.py tests/gal_compact_cases.json
 
-      - name: Velichko bounded integration benchmark
+      - name: Бенчмарк ограниченной интеграции Величко
         run: python scripts/benchmark_velichko.py
 
-      - name: Chukovsky source-linter self-test
+      - name: Самотест линтера источника Чуковского
         run: python scripts/chukovsky_checks.py
 
-      - name: Chukovsky deterministic extended benchmark
+      - name: Детерминированный расширенный бенчмарк Чуковского
         run: python scripts/benchmark_chukovsky.py
 
-      - name: Ilyakhov deterministic source benchmark
+      - name: Детерминированный бенчмарк источника Ильяхова
         run: python scripts/benchmark_ilyakhov.py
 
-      - name: Nora Gal deterministic source and dual-runtime benchmark
+      - name: Детерминированный бенчмарк источника и двух режимов Норы Галь
         run: python scripts/benchmark_gal.py
 
-      - name: Deterministic editorial board benchmark
+      - name: Детерминированный бенчмарк редколлегии
         run: python scripts/benchmark_board.py
 
-      - name: Russian language editorial-board benchmark
+      - name: Бенчмарк редколлегии для русского языкового слоя
         run: python scripts/benchmark_board.py tests/russian_board_cases.json
 
-      - name: Nora Gal editorial-board integration benchmark
+      - name: Бенчмарк интеграции Норы Галь в редколлегию
         run: python scripts/benchmark_board.py tests/gal_board_cases.json
 
-      - name: Smoke-test board JSON output
+      - name: Проверить JSON-вывод редколлегии
         run: |
           printf '%s' 'Это не ошибка в расчёте, а ошибка в исходных данных.' | python scripts/review.py --format json >/tmp/board.json
           python - <<'PY'
@@ -141,7 +141,7 @@ jobs:
           assert report['board']['groups'], report
           PY
 
-      - name: Smoke-test Chukovsky in compact and board runtimes
+      - name: Проверить Чуковского в Compact и редколлегии
         run: |
           printf '%s' 'Следует отметить, что резервная копия завершилась в 03:10.' | python scripts/check.py --extended --json >/tmp/chuk-compact.json
           printf '%s' 'Следует отметить, что резервная копия завершилась в 03:10.' | python scripts/review.py --libraries native,chukovsky --format json >/tmp/chuk-board.json
@@ -159,7 +159,7 @@ jobs:
           assert any(item.get('rule_id') == 'CHUK-R24' for item in rslive['findings']), rslive
           PY
 
-      - name: Smoke-test Ilyakhov in compact and board runtimes
+      - name: Проверить Ильяхова в Compact и редколлегии
         run: |
           printf '%s' 'Осуществляется проведение проверки.' | python scripts/check.py --json >/tmp/ily-default.json
           printf '%s' 'В данной статье мы рассмотрим три способа резервного копирования.' | python scripts/check.py --extended --json >/tmp/ily-extended.json
@@ -181,7 +181,7 @@ jobs:
           assert any(item.get('rule_id') == 'ILY-R62' for item in rslive['findings']), rslive
           PY
 
-      - name: Smoke-test and validate author profiler
+      - name: Проверить и провалидировать профилировщик автора
         run: |
           tmpdir="$(mktemp -d)"
           printf '%s' 'Документ без точки' > "$tmpdir/one.txt"
@@ -213,7 +213,7 @@ jobs:
           assert "точки новый" not in ngrams
           PY
 
-      - name: Validate JSON fixtures
+      - name: Проверить JSON-фикстуры
         run: |
           python - <<'PY'
           import json
@@ -225,7 +225,7 @@ jobs:
               print(path)
           PY
 
-      - name: Publish Velichko branch quality status
+      - name: Опубликовать статус качества ветки Величко
         if: always() && github.ref_name == 'velichko'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -236,7 +236,7 @@ jobs:
             failure) state=failure ;;
             *) state=error ;;
           esac
-          payload=$(printf '{"state":"%s","context":"quality/velichko","description":"Full repository quality workflow: %s"}' "$state" "$JOB_STATUS")
+          payload=$(printf '{"state":"%s","context":"quality/velichko","description":"Полная проверка качества репозитория: %s"}' "$state" "$JOB_STATUS")
           curl --fail-with-body -sS \
             -X POST \
             -H "Authorization: Bearer $GH_TOKEN" \

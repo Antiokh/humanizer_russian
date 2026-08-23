@@ -1,4 +1,4 @@
-name: rosenthal-quality
+name: Качество Розенталя
 
 on:
   push:
@@ -22,43 +22,43 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - name: Install validation dependency
+      - name: Установить зависимость для валидации
         run: python -m pip install --disable-pip-version-check jsonschema
-      - name: Compile Python
+      - name: Скомпилировать Python
         run: python -m compileall -q scripts
-      - name: Validate architecture
+      - name: Проверить архитектуру
         run: python scripts/validate_architecture.py
-      - name: Validate knowledge libraries
+      - name: Проверить библиотеки знаний
         run: python scripts/validate_libraries.py
-      - name: Validate cumulative Rosenthal study and library
+      - name: Проверить накопительное исследование и библиотеку Розенталя
         run: python scripts/validate_rosenthal.py
-      - name: Core linter self-test
+      - name: Самотест основного линтера
         run: python scripts/lint.py --self-test
-      - name: Rosenthal adapter self-test
+      - name: Самотест адаптера Розенталя
         run: python scripts/lint_rosenthal.py --self-test
-      - name: Compact benchmark
+      - name: Бенчмарк Compact
         run: python scripts/benchmark_lint.py
-      - name: Editorial Board benchmark
+      - name: Бенчмарк редколлегии
         run: python scripts/benchmark_board.py
-      - name: Rosenthal deterministic benchmark
+      - name: Детерминированный бенчмарк Розенталя
         run: python scripts/benchmark_rosenthal.py
-      - name: Rosenthal cycle 3 preservation benchmark
+      - name: Бенчмарк сохранения для цикла 3 Розенталя
         run: python scripts/benchmark_rosenthal_cycle3.py
-      - name: Rosenthal cycle 4 provenance/preservation benchmark
+      - name: Бенчмарк происхождения и сохранения для цикла 4 Розенталя
         run: python scripts/benchmark_rosenthal_cycle4.py
-      - name: Rosenthal cycle 5 punctuation preservation benchmark
+      - name: Бенчмарк сохранения пунктуации для цикла 5 Розенталя
         run: python scripts/benchmark_rosenthal_cycle5.py
-      - name: Rosenthal cycle 6 free-indirect/provenance benchmark
+      - name: Бенчмарк несобственно-прямой речи и происхождения для цикла 6 Розенталя
         run: python scripts/benchmark_rosenthal_cycle6.py
-      - name: Validate JSON
+      - name: Проверить JSON
         run: |
           python - <<'PY'
           import json, pathlib
           for p in pathlib.Path('.').rglob('*.json'):
               json.loads(p.read_text(encoding='utf-8'))
-          print('all json: OK')
+          print('Все JSON: OK')
           PY
-      - name: Smoke-test cumulative Rosenthal compact and board routing
+      - name: Проверить маршрутизацию накопительной библиотеки Розенталя в Compact и редколлегии
         run: |
           set +e
           python scripts/check.py --extended --json <<< 'Этот вариант более лучше предыдущего.' >/tmp/ros-compact.json

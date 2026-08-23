@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "example_provider",
-  "display_name": "Example evidence provider",
+  "display_name": "Пример провайдера доказательств",
   "status": "PROJECT",
   "evidence_type": "CORPUS_USAGE",
   "adapter": "evidence_v1",
@@ -9,7 +9,7 @@
   "network_required": true,
   "failure_policy": "SKIP",
   "timeout_ms": 800,
-  "description": "Project template only. It cannot be enabled until a real provider is implemented, audited and promoted to OPERATIONAL.",
+  "description": "Только проектный шаблон. Его нельзя включать, пока реальный провайдер не будет реализован, проверен и переведён в статус OPERATIONAL.",
   "capabilities": [],
   "references": []
 }

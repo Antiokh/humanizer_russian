@@ -1,4 +1,4 @@
-name: evidence-runtime
+name: Слой доказательств
 
 on:
   push:
@@ -19,17 +19,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Evidence runtime self-test
+      - name: Запустить самотест слоя доказательств
         run: python scripts/evidence_runtime.py --self-test
-      - name: Project-only provider must not be selectable
+      - name: Проектный провайдер нельзя выбрать
         run: |
           set +e
           printf '%s' 'Тест.' | python scripts/review.py --evidence normative_reference --format json >/tmp/out.json 2>/tmp/error.txt
           rc=$?
           set -e
           test "$rc" -ne 0
-          grep -F 'project-only evidence providers cannot be enabled: normative_reference' /tmp/error.txt
-      - name: All means all operational providers only
+          grep -F 'проектные провайдеры доказательств нельзя включить: normative_reference' /tmp/error.txt
+      - name: all выбирает только рабочие провайдеры
         run: |
           printf '%s' 'Тест.' | python scripts/review.py --evidence all --format json >/tmp/all.json
           python - <<'PY'

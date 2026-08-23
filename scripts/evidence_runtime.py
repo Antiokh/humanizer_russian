@@ -43,9 +43,9 @@ def evidence_globally_enabled():
 def _safe_module_path(relative):
     path = (ROOT / relative).resolve()
     if ROOT != path and ROOT not in path.parents:
-        raise ValueError(f"evidence module escapes repository root: {relative}")
+        raise ValueError(f"модуль доказательств выходит за пределы репозитория: {relative}")
     if not path.is_file():
-        raise FileNotFoundError(f"evidence module missing: {relative}")
+        raise FileNotFoundError(f"модуль доказательств не найден: {relative}")
     return path
 
 
@@ -53,7 +53,7 @@ def _import_module(relative):
     path = _safe_module_path(relative)
     spec = importlib.util.spec_from_file_location("humanizer_evidence_" + path.stem, path)
     if spec is None or spec.loader is None:
-        raise RuntimeError(f"cannot import evidence module: {relative}")
+        raise RuntimeError(f"не удалось импортировать модуль доказательств: {relative}")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -63,7 +63,7 @@ def normalize_evidence(item, manifest):
     required = {"phenomenon_id", "direction", "target_scope", "reason"}
     missing = sorted(required - set(item))
     if missing:
-        raise ValueError(f"{manifest['id']} evidence missing fields: {', '.join(missing)}")
+        raise ValueError(f"{manifest['id']}: в доказательстве нет полей: {', '.join(missing)}")
     out = dict(item)
     out["provider_id"] = manifest["id"]
     out.setdefault("evidence_type", manifest["evidence_type"])
@@ -80,11 +80,11 @@ def _worker(module_path, text, context, timeout_ms, out_queue):
         module = _import_module(module_path)
         if not hasattr(module, "collect"):
             raise AttributeError(
-                f"{module_path} must export collect(text, context=..., timeout_ms=...)"
+                f"{module_path} должен экспортировать collect(text, context=..., timeout_ms=...)"
             )
         result = module.collect(text, context=context, timeout_ms=timeout_ms)
         if not isinstance(result, dict):
-            raise TypeError("evidence collect() must return a dict")
+            raise TypeError("collect() провайдера доказательств должен возвращать dict")
         out_queue.put({"ok": True, "result": result})
     except BaseException as exc:
         out_queue.put(
@@ -119,11 +119,11 @@ def run_provider(manifest, text, context=None, *, hard_timeout_ms=None):
             pid,
             "UNAVAILABLE",
             started,
-            message=f"status={manifest.get('status')}; provider is not runtime-eligible",
+            message=f"status={manifest.get('status')}; провайдер недоступен для выполнения",
         )
     module_path = manifest.get("module_path")
     if not module_path:
-        return [], _status(pid, "UNAVAILABLE", started, message="module_path is not configured")
+        return [], _status(pid, "UNAVAILABLE", started, message="module_path не настроен")
     timeout_ms = max(25, int(hard_timeout_ms or manifest.get("timeout_ms", 800)))
     ctx = _ctx()
     q = ctx.Queue(maxsize=1)
@@ -137,14 +137,14 @@ def run_provider(manifest, text, context=None, *, hard_timeout_ms=None):
     if proc.is_alive():
         proc.terminate()
         proc.join(0.2)
-        return [], _status(pid, "TIMEOUT", started, message=f"hard timeout {timeout_ms} ms")
+        return [], _status(pid, "TIMEOUT", started, message=f"жёсткий тайм-аут: {timeout_ms} мс")
     try:
         payload = q.get(timeout=0.1)
     except queue.Empty:
         payload = {
             "ok": False,
             "error_type": "ProviderProcessError",
-            "message": f"provider process exited with code {proc.exitcode} without a result",
+            "message": f"процесс провайдера завершился с кодом {proc.exitcode}, не вернув результат",
         }
     if not payload.get("ok"):
         status = _status(
@@ -178,7 +178,7 @@ def _resolve_requested(provider_ids):
 
     missing = sorted(set(provider_ids) - set(by_id))
     if missing:
-        raise ValueError(f"unknown evidence providers: {', '.join(missing)}")
+        raise ValueError(f"неизвестные провайдеры доказательств: {', '.join(missing)}")
 
     requested = [by_id[x] for x in provider_ids]
     project_only = sorted(m["id"] for m in requested if m.get("status") == "PROJECT")
@@ -189,12 +189,12 @@ def _resolve_requested(provider_ids):
     )
     if project_only:
         raise ValueError(
-            "project-only evidence providers cannot be enabled: "
+            "проектные провайдеры доказательств нельзя включить: "
             + ", ".join(project_only)
         )
     if unavailable:
         raise ValueError(
-            "non-operational evidence providers cannot be enabled: "
+            "нерабочие провайдеры доказательств нельзя включить: "
             + ", ".join(unavailable)
         )
     return requested
@@ -211,7 +211,7 @@ def run_evidence(text, provider_ids, *, context=None, budget_ms=None):
                 "status": "DISABLED",
                 "elapsed_ms": 0.0,
                 "evidence_count": 0,
-                "message": "disabled by HUMANIZER_EVIDENCE",
+                "message": "отключено через HUMANIZER_EVIDENCE",
             }
             for m in manifests
         ]
@@ -231,7 +231,7 @@ def run_evidence(text, provider_ids, *, context=None, budget_ms=None):
                     "status": "TIMEOUT",
                     "elapsed_ms": 0.0,
                     "evidence_count": 0,
-                    "message": f"global evidence budget {budget_ms} ms exhausted",
+                    "message": f"общий бюджет доказательств {budget_ms} мс исчерпан",
                 }
             )
             continue
@@ -260,9 +260,9 @@ def _self_test():
     try:
         _resolve_requested(["normative_reference"])
     except ValueError as exc:
-        assert "project-only" in str(exc) and "normative_reference" in str(exc), exc
+        assert "проектные провайдеры" in str(exc) and "normative_reference" in str(exc), exc
     else:
-        raise AssertionError("project-only provider was selectable")
+        raise AssertionError("проектный провайдер оказался доступен для выбора")
     assert all(m["status"] == "OPERATIONAL" for m in _resolve_requested("all"))
     assert all(m["status"] == "OPERATIONAL" for m in _resolve_requested("auto"))
 
@@ -287,7 +287,7 @@ def _self_test():
     }
     items, status = run_provider(slow, "текст")
     assert items == [] and status["status"] == "TIMEOUT", status
-    print("evidence runtime self-test: OK; PROJECT providers are not selectable")
+    print("Самотест слоя доказательств: OK; провайдеры PROJECT недоступны для выбора")
 
 
 if __name__ == "__main__":

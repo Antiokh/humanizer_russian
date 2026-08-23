@@ -1,184 +1,184 @@
-# Independent philologist review packet
+# Пакет для независимого филологического ревью
 
-This packet is for an external specialist in contemporary Russian grammar, syntax, stylistics and/or editing. Its purpose is to audit the project's boundary between **language norm**, **marked but acceptable Russian**, **native-speaker preference**, **editorial preference**, **author-dependent choice**, and questions that require more context or corpus evidence.
+Этот пакет предназначен для внешнего специалиста по современной русской грамматике, синтаксису, стилистике и/или редактуре. Его задача — проверить границу между **языковой нормой**, **маркированным, но допустимым русским**, **предпочтением носителей**, **редакторским предпочтением**, **авторски зависимым выбором** и случаями, где нужен дополнительный контекст или корпусные данные.
 
-It is **not** an AI-detector review. The reviewer should not answer “does this look AI-generated?” and should not optimize text to fool a detector. The project treats detector evidence as a separate, weak layer.
+Это **не** проверка AI-детектором. Рецензент не должен отвечать на вопрос «похоже ли это на текст ИИ?» и не должен оптимизировать текст ради обхода детектора. Проект рассматривает такие сигналы как отдельный слабый слой.
 
-## Architecture being reviewed
+## Проверяемая архитектура
 
-Hard constraints:
+Жёсткие ограничения:
 
 `USER_INTENT + SEMANTICS + NORM`
 
-Selection among variants that satisfy those constraints:
+Выбор среди вариантов, удовлетворяющих этим ограничениям:
 
 `AUTHOR > NATIVE_USAGE > EDITING > AI_CALQUE > detector score`
 
-The key distinction is deliberate:
+Ключевое разделение сделано намеренно:
 
-- `NORM` asks whether a construction is linguistically acceptable/correct in contemporary Russian and should be supported by an appropriate normative/grammatical source when classified as an error;
-- `NATIVE_USAGE` asks which acceptable variant is more natural in the specified context;
-- `EDITING` asks whether an acceptable formulation is clearer, more economical, more precise or better fitted to genre/function;
-- `AUTHOR` protects a confirmed individual voice among normative variants;
-- `SEMANTICS` blocks edits that change fact, referent, causality, thesis or degree of certainty.
+- `NORM` отвечает на вопрос, допустима ли конструкция в современном русском; если она объявляется ошибкой, это должно подтверждаться подходящим нормативным или грамматическим источником;
+- `NATIVE_USAGE` отвечает на вопрос, какой из допустимых вариантов естественнее в заданном контексте;
+- `EDITING` отвечает на вопрос, можно ли допустимую формулировку сделать яснее, экономнее, точнее или лучше приспособить к жанру и функции;
+- `AUTHOR` защищает подтверждённый индивидуальный голос среди нормативных вариантов;
+- `SEMANTICS` блокирует правки, меняющие факт, референт, причинность, тезис или степень уверенности.
 
-The reviewer is specifically asked to detect places where the project accidentally turns a stylistic preference into a language rule, or conversely treats a real normative problem as mere style.
+От рецензента особенно требуется находить места, где проект случайно превращает стилистическое предпочтение в языковое правило или, наоборот, считает реальную нормативную проблему всего лишь стилем.
 
-## Independence protocol
+## Протокол независимости
 
-The first pass should be blind to the project's own answer.
+Первый проход должен выполняться вслепую относительно позиции проекта.
 
-Do **not** send `reviews/philologist-cases.json` directly to the reviewer: that internal registry contains `project_position`, `rule_ids` and `phenomena` for traceability.
+Не отправляйте рецензенту напрямую `reviews/philologist-cases.json`: внутренний реестр содержит `project_position`, `rule_ids` и `phenomena`, нужные для трассировки.
 
-Generate the blind packet instead:
+Вместо этого сформируйте слепой пакет:
 
 ```bash
 python scripts/export_philologist_packet.py --format md --output /tmp/philologist-review.md
 ```
 
-or:
+или:
 
 ```bash
 python scripts/export_philologist_packet.py --format json --output /tmp/philologist-review.json
 ```
 
-The exporter is self-tested so the blind packet contains no `project_position` and no `GAL-*`, `CHUK-*` or `ILY-*` rule IDs.
+Экспортёр имеет самотест, который проверяет, что в слепом пакете нет `project_position` и идентификаторов правил `GAL-*`, `CHUK-*` или `ILY-*`.
 
-After the reviewer completes the first pass, the project may disclose the internal positions and source mappings for a second-pass discussion. Do not overwrite the first-pass answers; preserve both if the reviewer changes a judgment after seeing the project rationale.
+После завершения первого прохода проект может раскрыть внутренние позиции и привязки к источникам для второго обсуждения. Не перезаписывайте ответы первого прохода: если после знакомства с аргументацией проекта мнение изменилось, сохраняйте обе версии.
 
-## Requested primary classification
+## Основная классификация
 
-Choose one per case:
+Для каждого случая выберите ровно один класс:
 
-- `LANGUAGE_ERROR` — a real error/non-normative construction. A normative or grammatical source is required.
-- `NORMATIVE_VARIANT` — an ordinary acceptable variant with no independent reason to prefer a rewrite.
-- `MARKED_BUT_ACCEPTABLE` — acceptable Russian, but marked by register, order, prosody, rhetoric or other conditions.
-- `NATIVE_PREFERENCE` — several variants are acceptable, but one is systematically more natural for a native speaker in the specified context.
-- `EDITING_PREFERENCE` — not a language issue; a contextual editorial operation may improve clarity, precision, economy or structure.
-- `AUTHOR_DEPENDENT` — the right choice materially depends on established author/character voice.
-- `NEEDS_CONTEXT` — the supplied context is insufficient to choose responsibly.
-- `NEEDS_CORPUS` — an empirical usage/frequency claim is needed before classifying the preference.
-- `NEEDS_NORM_SOURCE` — the reviewer suspects a normative boundary but will not call it an error without checking an appropriate source.
+- `LANGUAGE_ERROR` — настоящая ошибка или ненормативная конструкция. Нужен нормативный или грамматический источник.
+- `NORMATIVE_VARIANT` — обычный допустимый вариант без самостоятельной причины предпочесть правку.
+- `MARKED_BUT_ACCEPTABLE` — допустимый русский, но маркированный регистром, порядком слов, просодией, риторикой или другими условиями.
+- `NATIVE_PREFERENCE` — несколько вариантов допустимы, но один систематически естественнее для носителя в заданном контексте.
+- `EDITING_PREFERENCE` — это не языковая ошибка; контекстная редакторская операция может улучшить ясность, точность, экономию или структуру.
+- `AUTHOR_DEPENDENT` — правильный выбор существенно зависит от установленного голоса автора или персонажа.
+- `NEEDS_CONTEXT` — предоставленного контекста недостаточно для ответственного выбора.
+- `NEEDS_CORPUS` — для классификации предпочтения нужны эмпирические данные об употреблении или частоте.
+- `NEEDS_NORM_SOURCE` — рецензент подозревает нормативную границу, но не называет конструкцию ошибкой без проверки подходящего источника.
 
-Also choose a practical verdict:
+Также выберите практический вердикт:
 
 - `KEEP`
 - `CHANGE`
 - `REVIEW`
 - `NEEDS_VERIFICATION`
 
-Confidence is `LOW`, `MEDIUM` or `HIGH`.
+Уверенность: `LOW`, `MEDIUM` или `HIGH`.
 
-## Evidence discipline
+## Требования к доказательствам
 
-If `primary_class=LANGUAGE_ERROR`, give a source that actually supports the relevant norm. A style handbook saying “prefer X” is not automatically evidence that Y is ungrammatical.
+Если `primary_class=LANGUAGE_ERROR`, приведите источник, который действительно подтверждает соответствующую норму. Рекомендация справочника по стилю «предпочтительно X» сама по себе не означает, что Y неграмматично.
 
-For contested usage, distinguish:
+Для спорного употребления различайте:
 
-1. dictionary/grammar/normative status;
-2. corpus distribution;
-3. genre/register preference;
-4. individual authorial preference.
+1. словарный, грамматический или нормативный статус;
+2. распределение по корпусу;
+3. предпочтение жанра или регистра;
+4. индивидуальное авторское предпочтение.
 
-If a claim is corpus-dependent, say `NEEDS_CORPUS` rather than estimating prevalence from intuition.
+Если утверждение зависит от корпуса, укажите `NEEDS_CORPUS`, а не оценивайте распространённость по интуиции.
 
-For context-sensitive recommendations, give at least one counterexample or boundary where the opposite choice is valid. The validation schema deliberately requires this for marked/native/editorial/author/context classifications.
+Для контекстно зависимых рекомендаций дайте хотя бы один контрпример или пограничный случай, где противоположный выбор допустим. Схема проверки намеренно требует это для маркированных, носительских, редакторских, авторских и контекстных классификаций.
 
-## High-risk areas covered by the 28 cases
+## Зоны повышенного риска в 28 случаях
 
-The case set deliberately concentrates on boundaries likely to produce harmful overgeneralization:
+Набор специально сосредоточен на границах, где чрезмерное обобщение особенно опасно:
 
-- theme/rheme and Russian word order;
-- strong initial focus vs final-focus tendencies;
-- `не X, а Y` and factoring common repeated material;
-- functional repetition;
-- functional differences among `а`, `но`, `зато`;
-- dialogue ellipsis, zero subjects and referential ambiguity;
-- gerund subject agreement vs legitimate participial/gerund use;
-- passive voice;
-- nominalization and official/technical register;
-- parcellated enumeration vs purposeful parcellation;
-- pragmatic particles;
-- professional borrowings and audience fit;
-- literal calques/collocations;
-- idiom contamination vs wordplay;
-- metaphor/image collision vs intentional artistic effect;
-- author voice and editorial overreach;
-- POV consistency;
-- possessive over-explicitness;
-- repeated explicit subjects/context undercompression;
-- semantic gain in contrast constructions;
-- colon before introduced enumeration;
-- long-sentence clarity without numerical bans;
-- agreement of multiple editorial sources vs independent language norm.
+- тема, рема и русский порядок слов;
+- сильный начальный фокус и тенденция к финальному фокусу;
+- `не X, а Y` и вынос общего повторяющегося материала;
+- функциональный повтор;
+- функциональные различия `а`, `но`, `зато`;
+- эллипсис в диалоге, нулевые субъекты и референциальная двусмысленность;
+- связь деепричастия с субъектом и допустимое употребление причастных/деепричастных конструкций;
+- пассивный залог;
+- номинализация и официально-деловой/технический регистр;
+- парцеллированное перечисление и намеренная парцелляция;
+- прагматические частицы;
+- профессиональные заимствования и соответствие аудитории;
+- буквальные кальки и нарушения сочетаемости;
+- смешение идиом и намеренная языковая игра;
+- конфликт образов и намеренный художественный эффект;
+- авторский голос и чрезмерное редакторское вмешательство;
+- согласованность точки зрения;
+- избыточная явность притяжательных местоимений;
+- повтор явных субъектов и недостаточное контекстное сжатие;
+- смысловой прирост в противопоставлении;
+- двоеточие перед введённым перечислением;
+- ясность длинных предложений без числовых запретов;
+- согласие нескольких редакторских источников и независимая языковая норма.
 
-## Files
+## Файлы
 
-Internal canonical cases:
+Внутренний канонический набор случаев:
 
 - `reviews/philologist-cases.json`
 
-Blind exporter:
+Экспортёр слепого пакета:
 
 - `scripts/export_philologist_packet.py`
 
-Fillable result template:
+Заполняемый шаблон результата:
 
 - `reviews/philologist-review-template.json`
 
-Completed-review schema:
+Схема завершённого ревью:
 
 - `schemas/philologist-review.schema.json`
 
-Validator:
+Валидатор:
 
 - `scripts/validate_philologist_review.py`
 
-## Completing a review
+## Заполнение ревью
 
-Copy the template outside the repository or to a local ignored file, fill all 28 cases, then validate:
+Скопируйте шаблон за пределы репозитория или в локальный игнорируемый файл, заполните все 28 случаев и проверьте:
 
 ```bash
 cp reviews/philologist-review-template.json philologist-review.local.json
 python scripts/validate_philologist_review.py philologist-review.local.json
 ```
 
-`*.local.json` is already ignored by Git.
+`*.local.json` уже игнорируется Git.
 
-A completed review requires:
+Для завершённого ревью обязательны:
 
-- reviewer name;
-- qualification;
-- affiliation or `independent`;
-- conflict-of-interest statement;
-- review date;
-- exactly one answer for PHIL-01..PHIL-28;
-- primary class, verdict and confidence;
-- a non-empty reason;
-- normative source for every `LANGUAGE_ERROR`;
-- a counterexample/boundary for context-sensitive classifications.
+- имя рецензента;
+- квалификация;
+- организация или значение `independent`;
+- заявление о конфликте интересов;
+- дата ревью;
+- ровно один ответ для каждого случая PHIL-01..PHIL-28;
+- основной класс, вердикт и степень уверенности;
+- непустое обоснование;
+- нормативный источник для каждого `LANGUAGE_ERROR`;
+- контрпример или граница для контекстно зависимых классификаций.
 
-The reviewer may leave `preferred_variant`, `normative_source`, `counterexample` or `notes` empty only where they are genuinely not applicable under the validation rules.
+Поля `preferred_variant`, `normative_source`, `counterexample` и `notes` можно оставлять пустыми только там, где по правилам валидации они действительно неприменимы.
 
-## Integration policy after human review
+## Политика интеграции после человеческого ревью
 
-Do not count the 28 answers as votes for a generic “quality score.” Integrate them case by case.
+Не считайте 28 ответов голосами для какого-либо общего «балла качества». Интегрируйте их по отдельным случаям.
 
-A reviewer can:
+Рецензент может:
 
-- confirm or reject a `NORM` boundary;
-- downgrade a supposed norm to marked/native/editorial preference;
-- identify a missing exception or counterexample;
-- request a corpus test;
-- identify terminology that is linguistically inaccurate;
-- show that two project phenomena should be merged or split.
+- подтвердить или отвергнуть границу `NORM`;
+- понизить предполагаемую норму до маркированного, носительского или редакторского предпочтения;
+- найти отсутствующее исключение или контрпример;
+- запросить корпусную проверку;
+- обнаружить лингвистически неточную терминологию;
+- показать, что два явления проекта стоит объединить или разделить.
 
-A reviewer cannot by authority alone:
+Один авторитет рецензента сам по себе не может:
 
-- turn a personal taste into `NORM`;
-- make an editorial rule a `HARD_GATE` without a reliable mechanical condition;
-- prove AI authorship;
-- justify semantic changes;
-- override an established authorial choice when the alternative is also normative without explaining the functional reason.
+- превратить личный вкус в `NORM`;
+- сделать редакторское правило `HARD_GATE` без надёжного механического условия;
+- доказать авторство ИИ;
+- оправдать изменение смысла;
+- отменить установленный авторский выбор, если альтернатива также нормативна, без объяснения функциональной причины.
 
-When integrating feedback, preserve the original review artifact and add project decisions separately. Do not silently rewrite the expert's answer to match the code.
+При интеграции обратной связи сохраняйте исходный артефакт ревью, а решения проекта добавляйте отдельно. Не переписывайте молча ответ эксперта под текущий код.

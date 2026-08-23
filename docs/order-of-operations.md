@@ -1,16 +1,16 @@
-# Order of operations
+# Порядок операций
 
-For dense synthetic sentences, do not apply heuristics independently.
+Для плотных искусственно построенных фраз не нужно применять эвристики независимо друг от друга.
 
-1. Freeze semantics.
-2. Parse the logical/common structure.
-3. Identify repeated common material.
-4. Identify the genuinely contrasting/new material.
-5. Factor or omit common material when safe.
-6. Recompute theme/rheme and information weight after compression.
-7. Read the result prosodically/in context.
-8. Apply semantic/editorial cleanup.
-9. Review AI-calque clusters.
-10. Apply author profile last, without reintroducing errors.
+1. Зафиксировать смысл.
+2. Разобрать логическую структуру и общий материал.
+3. Найти повторяющийся общий материал.
+4. Определить действительно новое или противопоставленное содержание.
+5. Вынести или опустить общий материал там, где это безопасно.
+6. После сжатия заново оценить тему, рему и распределение смыслового веса.
+7. Прочитать результат с предполагаемой интонацией и в контексте.
+8. Выполнить семантическую и редакторскую правку.
+9. Проверить скопления калькированных или машинных схем.
+10. В последнюю очередь применить авторский профиль, не возвращая ошибки.
 
-This ordering is central: deleting a repeated word changes the sentence's rhythm and available focus positions, so word order must be reconsidered after compression rather than before it.
+Порядок здесь принципиален: удаление повторного слова меняет ритм и доступные позиции фокуса, поэтому порядок слов нужно переоценивать после сжатия, а не до него.

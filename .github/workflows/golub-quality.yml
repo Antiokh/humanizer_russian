@@ -1,4 +1,4 @@
-name: golub-quality
+name: Качество Голуб
 
 on:
   push:
@@ -28,28 +28,28 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install validation dependency
+      - name: Установить зависимость для валидации
         run: python -m pip install --disable-pip-version-check jsonschema
-      - name: Compile Python
+      - name: Скомпилировать Python
         run: python -m compileall -q scripts
-      - name: Validate architecture contract
+      - name: Проверить архитектурный контракт
         run: python scripts/validate_architecture.py
-      - name: Validate knowledge libraries
+      - name: Проверить библиотеки знаний
         run: python scripts/validate_libraries.py
-      - name: Validate unified Golub study
+      - name: Проверить единое исследование Голуб
         run: python scripts/validate_golub_study.py
-      - name: Validate Golub integration and preservation
+      - name: Проверить интеграцию Голуб и сохранение текста
         run: python scripts/validate_golub_library.py
-      - name: Source adapter self-tests
+      - name: Самотесты адаптеров источников
         run: |
           python scripts/lint_golub.py --self-test
           python scripts/lint_rosenthal.py --self-test
           python scripts/lint.py --self-test
-      - name: Deterministic Compact benchmark
+      - name: Детерминированный бенчмарк Compact
         run: python scripts/benchmark_lint.py
-      - name: Deterministic Editorial Board benchmark
+      - name: Детерминированный бенчмарк редколлегии
         run: python scripts/benchmark_board.py
-      - name: Golub Compact, Board and preservation smoke test
+      - name: Проверить Compact, редколлегию и сохранение для Голуб
         shell: bash
         run: |
           set -euo pipefail
@@ -77,7 +77,7 @@ jobs:
               assert {x.get('rule_id') for x in rows}==rules,(pid,rows)
           assert not any(x.get('library_id')=='golub' for x in preserve['findings']), preserve
           PY
-      - name: Validate JSON and diff hygiene
+      - name: Проверить JSON и чистоту diff
         run: |
           python - <<'PY'
           import json

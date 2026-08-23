@@ -1,27 +1,27 @@
-# Decision log
+# Журнал решений
 
-## ADR-001 — Independent repository
+## ADR-001 — Самостоятельный репозиторий
 
-Decision: develop `humanizer+ru` in `Antiokh/humanizer_russian`, not as a long-lived branch of `humanizer--ru`.
+Решение: развивать `humanizer_russian` в `Antiokh/humanizer_russian`, а не в долгоживущей ветке `humanizer--ru`.
 
-Reason: the new architecture is no longer a small patch to detector-driven humanizer rules.
+Причина: новая архитектура уже не является небольшим дополнением к хуманайзеру, построенному вокруг детекторов.
 
-## ADR-002 — Separate NORM and NATIVE_USAGE
+## ADR-002 — Разделить `NORM` и `NATIVE_USAGE`
 
-Decision: academic correctness and native naturalness are different layers.
+Решение: нормативная правильность и естественность живого русского относятся к разным слоям.
 
-Reason: a grammatically valid sentence may still be synthetic; a native preference must not be misrepresented as a grammar rule.
+Причина: грамматически правильная фраза всё равно может звучать искусственно, а предпочтение носителей нельзя выдавать за грамматическое правило.
 
-## ADR-003 — Soft AI heuristics
+## ADR-003 — Мягкие эвристики машинного текста
 
-Decision: AI/style/native findings do not gate publication automatically.
+Решение: находки классов AI, стиля и живого употребления сами по себе не блокируют публикацию.
 
-Reason: these signals have high context dependence and false-positive risk.
+Причина: эти сигналы сильно зависят от контекста и дают заметный риск ложных срабатываний.
 
-## ADR-004 — Corpus-derived author layer
+## ADR-004 — Авторский слой по корпусу
 
-Decision: author style is profiled from a corpus; errors are stored separately and not imitated by default.
+Решение: авторский стиль строится по корпусу; ошибки хранятся отдельно и по умолчанию не имитируются.
 
-## ADR-005 — Preserve upstream MIT notice under GPL project
+## ADR-005 — Сохранить исходное уведомление MIT в проекте под GPL
 
-Decision: keep the new repository's GPL-3.0 license while preserving the MIT notice for inherited material in `THIRD_PARTY_NOTICES.md`.
+Решение: оставить новый репозиторий под GPL-3.0 и сохранить уведомление MIT для унаследованных материалов в `THIRD_PARTY_NOTICES.md`.

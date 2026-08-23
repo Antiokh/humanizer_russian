@@ -1,5 +1,5 @@
-# No-merge policy for old fork PRs
+# Не сливать старые PR форка
 
-The migrated PRs are closed **without merge**.
+Перенесённые PR закрыты **без слияния**.
 
-Reason: merging them would transform `humanizer--ru/main` into the new project and destroy the intended separation between the minimal compatibility fork and independent `humanizer_russian` development.
+Причина: их слияние превратило бы `humanizer--ru/main` в новый проект и разрушило бы намеренное разделение между минимальным форком совместимости и самостоятельной разработкой `humanizer_russian`.

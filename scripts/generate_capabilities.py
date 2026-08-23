@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Generate deterministic public capability snapshots from repository manifests.
+"""Генерирует детерминированные публичные снимки возможностей из манифестов.
 
-The generated files deliberately contain only facts that the repository encodes
-machine-readably. Narrative claims such as "fully read" are never inferred from
-rule counts; source_status is copied verbatim from the owning manifest when it
-exists.
+Сгенерированные файлы содержат только факты, которые репозиторий хранит
+в машиночитаемом виде. Нарративные утверждения вроде «полностью прочитано»
+не выводятся из числа правил; source_status копируется дословно из манифеста
+владельца, если это поле есть.
 """
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ def load(path: Path) -> dict[str, Any]:
 
 
 def _rule_inventory(path: Path) -> dict[str, Any]:
-    """Collect rule cards from a direct rules file or a grouped rules index."""
+    """Собирает карточки правил из прямого файла правил или сгруппированного индекса."""
     seen_paths: set[Path] = set()
     source_rules: list[dict[str, Any]] = []
     project_derived_rules: list[dict[str, Any]] = []
@@ -47,12 +47,12 @@ def _rule_inventory(path: Path) -> dict[str, Any]:
         derived = payload.get("project_derived_rules", [])
         if direct:
             if not isinstance(direct, list):
-                raise ValueError(f"{current.relative_to(ROOT)}: rules must be a list")
+                raise ValueError(f"{current.relative_to(ROOT)}: rules должен быть списком")
             source_rules.extend(direct)
         if derived:
             if not isinstance(derived, list):
                 raise ValueError(
-                    f"{current.relative_to(ROOT)}: project_derived_rules must be a list"
+                    f"{current.relative_to(ROOT)}: project_derived_rules должен быть списком"
                 )
             project_derived_rules.extend(derived)
         for relative in payload.get("groups", []):
@@ -64,29 +64,29 @@ def _rule_inventory(path: Path) -> dict[str, Any]:
     missing_ids = [item for item, rule_id in zip(all_rules, ids) if not rule_id]
     duplicates = sorted(rule_id for rule_id, count in Counter(ids).items() if count > 1)
     if missing_ids:
-        raise ValueError(f"{path.relative_to(ROOT)}: rule without rule_id")
+        raise ValueError(f"{path.relative_to(ROOT)}: правило без rule_id")
     if duplicates:
         raise ValueError(
-            f"{path.relative_to(ROOT)}: duplicate rule IDs: {', '.join(duplicates)}"
+            f"{path.relative_to(ROOT)}: дублирующиеся идентификаторы правил: {', '.join(duplicates)}"
         )
 
     automation = Counter(str(item.get("automation_level") or "") for item in all_rules)
     unknown = sorted(level for level in automation if level not in AUTOMATION_LEVELS)
     if unknown:
         raise ValueError(
-            f"{path.relative_to(ROOT)}: unknown automation levels: {', '.join(unknown)}"
+            f"{path.relative_to(ROOT)}: неизвестные уровни автоматизации: {', '.join(unknown)}"
         )
 
     root_payload = load(path)
     declared = root_payload.get("total_rule_count", root_payload.get("rule_count"))
     if declared is not None and not isinstance(declared, int):
-        raise ValueError(f"{path.relative_to(ROOT)}: declared rule count must be integer")
+        raise ValueError(f"{path.relative_to(ROOT)}: объявленное число правил должно быть целым")
     actual_count = len(all_rules)
     source_count = len(source_rules)
     if declared is not None and declared not in {actual_count, source_count}:
         raise ValueError(
-            f"{path.relative_to(ROOT)}: declared rule count {declared} does not match "
-            f"source={source_count} or total={actual_count}"
+            f"{path.relative_to(ROOT)}: объявлено {declared} правил, но это не совпадает "
+            f"ни с числом правил источника {source_count}, ни с общим числом {actual_count}"
         )
 
     return {
@@ -95,7 +95,9 @@ def _rule_inventory(path: Path) -> dict[str, Any]:
         "project_derived_rule_count": len(project_derived_rules),
         "declared_rule_count": declared,
         "source_cycles": root_payload.get("source_cycles"),
-        "automation_counts": {level: automation.get(level, 0) for level in AUTOMATION_LEVELS},
+        "automation_counts": {
+            level: automation.get(level, 0) for level in AUTOMATION_LEVELS
+        },
     }
 
 
@@ -114,14 +116,17 @@ def build_snapshot() -> dict[str, Any]:
                 "source_type": manifest["source_type"],
                 "reviewer_id": manifest["reviewer_id"],
                 "adapter": manifest["adapter"],
-                "enabled_by_default": bool(manifest.get("enabled_by_default", False)),
+                "enabled_by_default": bool(
+                    manifest.get("enabled_by_default", False)
+                ),
                 "status": manifest.get("status"),
                 "source_status": manifest.get("source_status"),
                 "rules_path": rules_path,
                 "rules": inventory,
                 "model_eval": {
                     "registered": bool(
-                        manifest.get("model_eval_path") and manifest.get("model_eval_map_path")
+                        manifest.get("model_eval_path")
+                        and manifest.get("model_eval_map_path")
                     ),
                     "suite_path": manifest.get("model_eval_path"),
                     "map_path": manifest.get("model_eval_map_path"),
@@ -141,7 +146,9 @@ def build_snapshot() -> dict[str, Any]:
     active_reviewer_ids = sorted({item["reviewer_id"] for item in enabled})
     missing_profiles = sorted(set(active_reviewer_ids) - set(reviewer_profiles))
     if missing_profiles:
-        raise ValueError(f"missing reviewer profiles: {', '.join(missing_profiles)}")
+        raise ValueError(
+            f"нет профилей активных рецензентов: {', '.join(missing_profiles)}"
+        )
 
     providers: list[dict[str, Any]] = []
     for path in sorted((ROOT / "evidence").glob("*/provider.json")):
@@ -201,19 +208,19 @@ def _automation_text(rules: dict[str, Any] | None) -> str:
 def render_markdown(snapshot: dict[str, Any]) -> str:
     summary = snapshot["summary"]
     lines = [
-        "# Generated capability snapshot",
+        "# Снимок возможностей проекта",
         "",
-        "> Generated by `scripts/generate_capabilities.py`. Do not edit this file by hand.",
+        "> Сгенерировано `scripts/generate_capabilities.py`. Не редактируйте этот файл вручную.",
         "",
-        f"Enabled libraries: **{summary['enabled_library_count']}**; active reviewers: "
-        f"**{summary['active_reviewer_count']}**; model-eval registrations: "
+        f"Включённых библиотек: **{summary['enabled_library_count']}**; активных рецензентов: "
+        f"**{summary['active_reviewer_count']}**; библиотек с модельными проверками: "
         f"**{summary['model_eval_library_count']}**.",
         "",
-        "Active reviewers: `" + "`, `".join(summary["active_reviewer_ids"]) + "`.",
+        "Активные рецензенты: `" + "`, `".join(summary["active_reviewer_ids"]) + "`.",
         "",
-        "## Libraries",
+        "## Библиотеки",
         "",
-        "| Library | Type | Adapter | Rules | Source cycles | Automation | Model eval |",
+        "| Библиотека | Тип | Адаптер | Правила | Циклы источников | Автоматизация | Модельные проверки |",
         "|---|---|---|---:|---:|---|---|",
     ]
     for item in snapshot["libraries"]:
@@ -224,7 +231,7 @@ def render_markdown(snapshot: dict[str, Any]) -> str:
             if rules and rules.get("source_cycles") is not None
             else "—"
         )
-        model_eval = "yes" if item["model_eval"]["registered"] else "no"
+        model_eval = "да" if item["model_eval"]["registered"] else "нет"
         lines.append(
             f"| `{item['id']}` — {item['display_name']} | `{item['source_type']}` | "
             f"`{item['adapter']}` | {rule_count} | {source_cycles} | "
@@ -234,21 +241,21 @@ def render_markdown(snapshot: dict[str, Any]) -> str:
     lines.extend(
         [
             "",
-            "`Rules` counts canonical runtime cards reachable from `rules_path`; "
-            "project-derived cards are included and reported separately in `capabilities.json`. "
-            "A missing count means the library manifest does not expose a `rules_path`.",
+            "Столбец «Правила» считает канонические рабочие карточки, доступные через `rules_path`; "
+            "проектные производные карточки включаются в число и отдельно отражаются в `capabilities.json`. "
+            "Если число отсутствует, манифест библиотеки не задаёт `rules_path`.",
             "",
-            "Source completeness is **not inferred** from these counts. Where a library has a "
-            "machine-readable `source_status`, its exact value is preserved in `capabilities.json`.",
+            "Полнота источника **не выводится** из числа правил. Если у библиотеки есть машиночитаемый "
+            "`source_status`, его точное значение сохраняется в `capabilities.json`.",
             "",
-            "## Evidence providers",
+            "## Источники дополнительных данных",
             "",
-            "| Provider | Status | Enabled by default |",
+            "| Источник | Статус | Включён по умолчанию |",
             "|---|---|---|",
         ]
     )
     for provider in snapshot["evidence_providers"]:
-        enabled = "yes" if provider["enabled_by_default"] else "no"
+        enabled = "да" if provider["enabled_by_default"] else "нет"
         lines.append(f"| `{provider['id']}` | `{provider['status']}` | {enabled} |")
     lines.append("")
     return "\n".join(lines)
@@ -258,7 +265,7 @@ def _check(path: Path, expected: str) -> bool:
     actual = path.read_text(encoding="utf-8") if path.is_file() else ""
     if actual == expected:
         return True
-    print(f"generated capability snapshot is stale: {path.relative_to(ROOT)}")
+    print(f"сгенерированный снимок возможностей устарел: {path.relative_to(ROOT)}")
     for line in difflib.unified_diff(
         actual.splitlines(),
         expected.splitlines(),
@@ -275,7 +282,7 @@ def main() -> None:
     parser.add_argument(
         "--check",
         action="store_true",
-        help="fail if checked-in generated snapshots differ from repository manifests",
+        help="завершиться ошибкой, если сохранённые снимки расходятся с манифестами репозитория",
     )
     args = parser.parse_args()
 
@@ -285,13 +292,13 @@ def main() -> None:
     if args.check:
         if not (_check(JSON_PATH, json_text) and _check(MD_PATH, md_text)):
             raise SystemExit(1)
-        print("capability snapshot: current")
+        print("снимок возможностей актуален")
         return
 
     JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
     JSON_PATH.write_text(json_text, encoding="utf-8")
     MD_PATH.write_text(md_text, encoding="utf-8")
-    print(f"wrote {JSON_PATH.relative_to(ROOT)} and {MD_PATH.relative_to(ROOT)}")
+    print(f"записаны {JSON_PATH.relative_to(ROOT)} и {MD_PATH.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

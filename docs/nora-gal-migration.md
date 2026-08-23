@@ -1,10 +1,10 @@
-# Nora Gal migration mapping
+# Карта миграции Норы Галь
 
-The old Nora Gal branch used sequential pattern numbers 35–39. The independent project no longer uses those numbers because upstream/fork numbering can collide.
+В старой ветке Норы Галь использовались последовательные номера паттернов 35–39. Самостоятельный проект больше не использует эти номера: нумерация исходного проекта и форка может пересекаться.
 
-Mapping:
+Соответствие:
 
-| Old idea | New identifier | Active reference |
+| Старая идея | Новый идентификатор | Действующий справочник |
 |---|---|---|
 | Словесная алгебра | `SEM-ABSTRACT-ALGEBRA` | `references/nora-gal.md` |
 | Не своим голосом | `SEM-VOICE-MISMATCH` | `references/nora-gal.md` |
@@ -13,4 +13,4 @@ Mapping:
 | Калька чужого синтаксиса | `SEM-SYNTAX-CALQUE` | `references/nora-gal.md` |
 | Смысловое ударение | `SEM-FOCUS` | `references/nora-gal.md` |
 
-All are semantic/contextual checks rather than hard regex bans.
+Все эти проверки семантические и контекстные, а не жёсткие запреты по регулярному выражению.

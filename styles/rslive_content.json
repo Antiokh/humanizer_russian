@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "rslive_content",
-  "display_name": "RS Live Content",
+  "display_name": "Контент RS Live",
   "description": "Редакционная политика для живого русскоязычного справочного контента: конкретика, естественный русский, низкий маркетинговый пафос.",
   "reviewer_weights": {
     "native": 1.0,

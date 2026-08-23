@@ -1,8 +1,8 @@
-# Migration manifest
+# Манифест миграции
 
-This manifest records the active material consolidated from the old `humanizer--ru` development branches into `humanizer_russian`.
+Этот файл перечисляет действующие материалы, перенесённые из старых веток разработки `humanizer--ru` в `humanizer_russian`.
 
-## Core
+## Основные файлы
 
 - `README.md`
 - `SKILL.md`
@@ -11,7 +11,7 @@ This manifest records the active material consolidated from the old `humanizer--
 - `THIRD_PARTY_NOTICES.md`
 - `CONTRIBUTING.md`
 
-## Language and editing references
+## Справочники по языку и редактуре
 
 - `references/russian-language.md`
 - `references/native-russian.md`
@@ -21,14 +21,14 @@ This manifest records the active material consolidated from the old `humanizer--
 - `references/author-profile.md`
 - `knowledge/corrections.md`
 
-## Tooling
+## Инструменты
 
 - `scripts/lint.py`
 - `scripts/profile_author.py`
 - `profiles/schema.json`
 - `.github/workflows/quality.yml`
 
-## Evaluation / GPT
+## Проверки и GPT
 
 - `evals/russian-language.json`
 - `evals/nora-gal.json`
@@ -37,6 +37,6 @@ This manifest records the active material consolidated from the old `humanizer--
 - `gpt/SETUP.md`
 - `gpt/TESTS.md`
 
-## Design documentation
+## Проектная документация
 
-The `docs/` directory preserves the architecture, old PR migration notes, review decisions, taxonomy, source policy, native-use rules, counterexample policy and roadmap so the new repository does not depend on undocumented conversation context.
+Каталог `docs/` сохраняет описание архитектуры, заметки о миграции старых PR, решения по ревью, таксономию, политику источников, правила живого употребления, требования к контрпримерам и план развития. Благодаря этому новый репозиторий не зависит от недокументированного контекста старых разговоров.

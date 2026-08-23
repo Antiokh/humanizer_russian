@@ -1,8 +1,8 @@
-# Contextual economy
+# Контекстная экономия
 
-Russian can leave information in morphology, government and prior discourse instead of repeating it lexically.
+Русский может оставлять информацию в морфологии, управлении и предыдущем контексте вместо того, чтобы повторять её словами.
 
-Examples:
+Примеры:
 
 > — Кого любит Паша? — Машу.
 
@@ -10,13 +10,13 @@ Examples:
 
 > Первый вариант дорогой. Второй — быстрее.
 
-A humanizer should not make every sentence a locally self-contained container of subject, predicate and object.
+Хуманайзер не должен превращать каждое предложение в локально самодостаточный контейнер с явно названными субъектом, сказуемым и объектом.
 
-Safe omission requires:
+Безопасное опущение требует:
 
-1. an unambiguous recoverable referent/action;
-2. grammatical form or context that preserves the relation;
-3. no loss of contrast, focus or confidence;
-4. appropriate genre/risk level.
+1. однозначно восстанавливаемого референта или действия;
+2. грамматической формы или контекста, которые сохраняют отношение;
+3. отсутствия потери противопоставления, фокуса или степени уверенности;
+4. подходящего жанра и уровня риска.
 
-This rule interacts with word order: after removing redundant material, recalculate theme/rheme and information weight rather than preserving the old linear order mechanically.
+Это правило взаимодействует с порядком слов: после удаления лишнего материала нужно заново оценить тему, рему и информационный вес, а не механически сохранять прежний линейный порядок.

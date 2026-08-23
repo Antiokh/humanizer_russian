@@ -1,131 +1,131 @@
-# Editorial Board mode
+# Режим редколлегии
 
-`BOARD_SKILL.md` describes the expanded orchestration mode of `humanizer_russian`.
+`BOARD_SKILL.md` описывает расширенный режим оркестрации `humanizer_russian`.
 
-The compact product remains `SKILL.md` + `scripts/check.py`. Do not replace it with this mode.
+Компактный продукт по-прежнему задаётся `SKILL.md` + `scripts/check.py`. Не заменяйте его режимом редколлегии.
 
-## Goal
+## Цель
 
-Use the same knowledge libraries and mechanical findings as compact mode, preserve source provenance/disagreement, and optionally attach independent evidence without turning evidence sources into fake reviewers.
+Использовать те же библиотеки знаний и механические находки, что и компактный режим, сохранять происхождение выводов и разногласия источников, а при необходимости прикреплять независимые дополнительные данные, не превращая их источники в фиктивных рецензентов.
 
-## Runtime order
+## Порядок работы
 
-1. Preserve `USER_INTENT + SEMANTICS + NORM` as hard constraints.
-2. Run registered mechanical knowledge libraries, including the project-core `russian` layer.
-3. Normalize findings to the shared finding contract.
-4. Group semantically equivalent findings by `phenomenon_id` and local excerpt/span.
-5. Keep each reviewer verdict separate.
-6. If explicitly requested, run optional Evidence providers against normalized findings.
-7. Attach evidence without adding it to reviewer voting.
-8. Apply style policy only after reviewer opinions are preserved.
-9. Use model reasoning only for `MODEL_ONLY` residue or prose rendering.
-10. Re-check semantics and norm before applying a rewrite.
+1. Сохранять `USER_INTENT + SEMANTICS + NORM` как жёсткие ограничения.
+2. Запускать зарегистрированные механические библиотеки знаний, включая проектное ядро `russian`.
+3. Нормализовать находки в общий контракт.
+4. Объединять семантически эквивалентные находки по `phenomenon_id` и локальному фрагменту.
+5. Сохранять вердикт каждого рецензента отдельно.
+6. Только по явному запросу запускать дополнительные источники данных для нормализованных находок.
+7. Прикреплять дополнительные данные, не добавляя их в голосование рецензентов.
+8. Применять редакционную политику стиля только после сохранения отдельных мнений.
+9. Использовать модельное рассуждение только для остатка `MODEL_ONLY` или формирования текста ответа.
+10. Перед применением правки повторно проверять смысл и норму.
 
-## Russian language layer
+## Слой русского языка
 
-The `russian` library is not another editing school. It contains current-norm guardrails and source-neutral Russian usage/register diagnostics.
+Библиотека `russian` — не ещё одна редакторская школа. В ней находятся ограничения современной нормы и независимые от конкретного источника проверки русского употребления и регистра.
 
-Mechanical examples:
+Примеры механических проверок:
 
-- final full stop in a **structurally marked** Markdown heading -> `NORM` guardrail;
-- `1.` followed by a lowercase list item -> rubrication guardrail;
-- adjacent `Это не X. Это Y.` -> review the split contrast, but keep it when emphatic correction is functional;
-- lowercase Latin word inside Russian prose -> check whether a Russian equivalent or explanation is preferable;
-- known technical jargon/terms -> check audience/register;
-- an unmarked short plain-text line that looks like a heading -> soft candidate to mark structurally or punctuate as ordinary prose;
-- mismatched lowercase/uppercase list punctuation -> soft list-formatting review.
+- конечная точка в **структурно размеченном** Markdown-заголовке → ограничение `NORM`;
+- `1.` перед пунктом со строчной буквы → ошибка оформления перечня;
+- соседние `Это не X. Это Y.` → проверить разорванное противопоставление, но сохранить его, если резкая коррекция функциональна;
+- латинское слово со строчной буквы внутри русской прозы → проверить, не лучше ли русский эквивалент или пояснение;
+- известный технический жаргон и термины → проверить аудиторию и регистр;
+- короткая неразмеченная строка, похожая на заголовок → мягкий кандидат: либо разметить её структурно, либо пунктуировать как обычный текст;
+- несогласованное оформление пунктов со строчной и прописной → мягкая проверка списка.
 
-The caller may specify register:
+Вызывающая сторона может задать регистр:
 
 ```bash
 python scripts/review.py text.md --register everyday
 python scripts/review.py text.md --register technical
 ```
 
-In `everyday`, known technical jargon is surfaced more aggressively. It still remains a review finding, not a language error merely because it is jargon or a borrowing.
+В режиме `everyday` известный технический жаргон показывается строже. Но он всё равно остаётся поводом для проверки, а не языковой ошибкой только потому, что это жаргон или заимствование.
 
-### Heading semantics are not heading markup
+### Смысл заголовка не заменяет разметку заголовка
 
-Do not grant heading punctuation merely because a line *means* a section title. A heading must be structurally/typographically identified by the target format: Markdown/HTML heading, document style, explicit rubrication or another reliable signal.
+Не применяйте правила пунктуации заголовка только потому, что строка *по смыслу* похожа на название раздела. Заголовок должен быть структурно или типографически обозначен целевым форматом: заголовком Markdown/HTML, стилем документа, явной рубрикацией или другим надёжным сигналом.
 
-If output is plain text and the line is visually indistinguishable from ordinary prose, choose explicitly:
+Если вывод — обычный текст и строка визуально не отличается от прозы, нужно выбрать явно:
 
-- mark it using a representation available to the target medium; or
-- treat it as ordinary text and punctuate/connect it accordingly.
+- оформить её средствами, доступными в целевом формате; или
+- считать обычным текстом и пунктуировать или связывать с соседним текстом соответствующим образом.
 
-The actual-heading rule and the pseudoheading review are intentionally different findings.
+Правило для настоящего заголовка и мягкая проверка псевдозаголовка намеренно являются разными находками.
 
-### Model-only Russian syntax residue
+### Контекстный остаток русского синтаксиса
 
-After mechanics, load only the relevant cards from:
+После механики загружайте только нужные карточки из:
 
 - `libraries/russian/rules.json`;
 - `libraries/russian/rki-rules.json`;
 - `references/russian-language.md`;
 - `references/russian-rki-grammar.md`.
 
-The RKI cards are source-neutral Russian-core diagnostics. Their study provenance is retained in `studies/velichko-kniga-o-grammatike/`; there is no Velichko reviewer vote. When Velichko confirms or refines a phenomenon already present in the Russian core, enrich the existing `RU-*` card instead of creating a second source-neutral rule for the same `phenomenon_id`.
+Карточки РКИ — независимые от источника диагностические правила русского ядра. Происхождение исследования сохраняется в `studies/velichko-kniga-o-grammatike/`; отдельного голоса Величко в редколлегии нет. Если Величко подтверждает или уточняет явление, уже присутствующее в русском ядре, дополняйте существующую карточку `RU-*`, а не создавайте второе независимое правило с тем же `phenomenon_id`.
 
-In particular review:
+Особенно проверяйте:
 
-- `RU-NORM-GERUND-SUBJECT-ATTACHMENT` — shared semantic subject, including the normative impersonal + infinitive case when the gerund and infinitive have the same controller;
-- `RU-NATIVE-GERUND-GRAMMATICALIZED-GUARD` — distinguish a free gerund from grammaticalized/prepositional uses such as `исходя из`; do not turn a partial list into an unconditional whitelist;
-- `RU-NATIVE-GERUND-OBJECT-INFINITIVE-ATTACHMENT` — when a matrix subject and the controller of an object infinitive compete, resolve who performs the gerundial action before editing;
-- `RU-NATIVE-GERUND-FRAME-POSITION` — background/frame gerunds often work preposed, while a gerund tied to the second conjunct or preparing an antithesis/vector shift should stay close to that conjunct; this is information structure, not a universal positional norm;
-- `RU-NORM-PARTICIPLE-HEAD-ATTACHMENT` and `RU-NORM-PARTICIPLE-AGREEMENT` — identify the true head first, then agree the participle with that head rather than the nearest noun;
-- `RU-NATIVE-PARTICIPLE-TEMPORAL-FIT` — preserve relative time and register after structural checks;
-- `RU-NATIVE-PARTICIPIAL-COMPRESSION` — consider a natural participial phrase instead of reflexively expanding everything into `который + глагол`;
-- `RU-RKI-VALENCY-FRAME-FIT` — resolve lexical sense and participant role before changing case/preposition or copying a frame through nominalization;
-- `RU-NATIVE-SUBJECT-REALIZATION` — compare overt nominative subject with indefinite-personal, impersonal and dative-infinitive Russian models without deleting a functional subject;
-- `RU-NATIVE-EVENT-CONSTRUAL` — distinguish process, boundary/transition, result and resulting state before choosing aspect/voice;
-- `RU-NATIVE-PASSIVE-RESULT-STATE` — choose active/passive/resultative perspective by information focus and register rather than banning passive;
-- `RU-NATIVE-COPULA-SEMANTIC-FIT` — do not use `есть`, `являться`, `представлять собой` as interchangeable generic `be`, but do not stop-list them;
-- `RU-NATIVE-INTRODUCTORY-SCOPE` — keep parenthetic modality/source marking with the proposition it actually scopes over;
-- `RU-RKI-SYNTACTIC-INTERFERENCE-AUDIT` — broader fallback for government, valency, prepositions, agreement, word order/theme-rheme, aspect/tense, clause structure, homogeneous constructions, pronoun reference and punctuation transfer.
+- `RU-NORM-GERUND-SUBJECT-ATTACHMENT` — общий семантический субъект, включая нормативный безличный случай с инфинитивом, когда у деепричастия и инфинитива один контролёр;
+- `RU-NATIVE-GERUND-GRAMMATICALIZED-GUARD` — отличать свободное деепричастие от грамматикализованных или предложных употреблений вроде `исходя из`; неполный список нельзя превращать в безусловный белый список;
+- `RU-NATIVE-GERUND-OBJECT-INFINITIVE-ATTACHMENT` — если матричный субъект конкурирует с контролёром объектного инфинитива, сначала определить, кто выполняет действие деепричастия;
+- `RU-NATIVE-GERUND-FRAME-POSITION` — фоновые и рамочные деепричастия часто естественны в препозиции, а оборот, относящийся ко второй части или готовящий антитезу либо смену вектора, должен оставаться рядом с этой частью; это вопрос информационной структуры, а не универсальная позиционная норма;
+- `RU-NORM-PARTICIPLE-HEAD-ATTACHMENT` и `RU-NORM-PARTICIPLE-AGREEMENT` — сначала определить настоящее определяемое слово, затем согласовать причастие с ним, а не с ближайшим существительным;
+- `RU-NATIVE-PARTICIPLE-TEMPORAL-FIT` — после структурной проверки сохранять относительное время и регистр;
+- `RU-NATIVE-PARTICIPIAL-COMPRESSION` — рассматривать естественный причастный оборот вместо автоматического разворачивания всего в `который + глагол`;
+- `RU-RKI-VALENCY-FRAME-FIT` — определить лексическое значение и роль участника до изменения падежа или предлога и до переноса модели управления через номинализацию;
+- `RU-NATIVE-SUBJECT-REALIZATION` — сравнивать явный именительный субъект с неопределённо-личной, безличной и дательно-инфинитивной русскими моделями, не удаляя функциональный субъект;
+- `RU-NATIVE-EVENT-CONSTRUAL` — различать процесс, границу или переход, результат и результирующее состояние до выбора вида и залога;
+- `RU-NATIVE-PASSIVE-RESULT-STATE` — выбирать активную, пассивную или результативную перспективу по информационному фокусу и регистру, а не запрещать пассив;
+- `RU-NATIVE-COPULA-SEMANTIC-FIT` — не использовать `есть`, `являться`, `представлять собой` как взаимозаменяемый универсальный аналог `be`, но и не запрещать их списком;
+- `RU-NATIVE-INTRODUCTORY-SCOPE` — сохранять вводную модальность или указание источника рядом с тем высказыванием, к которому они относятся;
+- `RU-RKI-SYNTACTIC-INTERFERENCE-AUDIT` — общий запасной аудит управления, валентности, предлогов, согласования, порядка слов и темы-ремы, вида и времени, структуры частей предложения, однородности, местоименной референции и переноса пунктуации.
 
-The three RKI distribution signals in `scripts/lint_russian_rki_metrics.py` are `METRIC_ONLY`. They have no normative threshold and never vote or emit `CHANGE` by themselves.
+Три распределительных сигнала РКИ из `scripts/lint_russian_rki_metrics.py` имеют уровень `METRIC_ONLY`. У них нет нормативного порога; сами по себе они никогда не голосуют и не создают `CHANGE`.
 
-Do **not** force participles/gerunds for decorative variety or by quota. They are desirable as available Russian syntactic resources when they improve compression and keep the attachment clear.
+Не навязывайте причастия и деепричастия ради декоративного разнообразия или по квоте. Это естественные ресурсы русского синтаксиса, когда они улучшают сжатие и сохраняют ясную связь.
 
-### Model-only semantic relation check
+### Контекстная проверка семантического отношения
 
-Apply `RU-SEM-CATEGORY-COLLECTION` when a definition or metaphor appears to confuse an object with a collection/container made of objects of that class.
+Применяйте `RU-SEM-CATEGORY-COLLECTION`, когда определение или метафора, похоже, смешивает отдельный объект с коллекцией или контейнером объектов этого класса.
 
-Example to challenge:
+Пример, который нужно проверить:
 
 > Книги — это библиотеки знаний.
 
-First establish the real relation, then rewrite. Preserve a metaphor only if it adds deliberate useful meaning.
+Сначала установите реальное отношение, затем переписывайте. Метафору сохраняйте, если она намеренно добавляет полезный смысл.
 
-See `references/russian-language.md`, `references/russian-rki-grammar.md` and `docs/russian-error-priorities.md`.
+См. `references/russian-language.md`, `references/russian-rki-grammar.md` и `docs/russian-error-priorities.md`.
 
-## Reviewer semantics
+## Что означает рецензент
 
-A reviewer represents a formalized source system, not a simulation of the real author. UI should say `По системе ...`, not pretend the author personally reviewed the text.
+Рецензент представляет формализованную систему источника, а не имитирует реального автора. Интерфейс должен писать `По системе ...`, а не создавать впечатление, будто автор лично рецензировал текст.
 
-## Evidence semantics and availability
+## Дополнительные данные и их доступность
 
-Evidence providers are not reviewers. Corpus, spoken-language, lexical, normative or parsed data may support/contextualize a finding but must not enter `reviewer_verdicts`.
+Источники дополнительных данных — не рецензенты. Корпусные, разговорные, лексические, нормативные или синтаксически разобранные данные могут поддерживать или уточнять находку, но не должны попадать в `reviewer_verdicts`.
 
-Default board mode performs **zero evidence-provider work**. Compact `scripts/check.py` never calls evidence providers.
+По умолчанию режим редколлегии **вообще не обращается к дополнительным источникам**. Компактный `scripts/check.py` не вызывает их никогда.
 
 ```bash
 python scripts/review.py text.md --style neutral
 python scripts/review.py text.md --style neutral --evidence off
 ```
 
-Opt in only when useful:
+Подключайте их только когда это полезно:
 
 ```bash
 python scripts/review.py text.md --evidence current_usage,spoken_russian
 python scripts/review.py text.md --evidence auto
 ```
 
-`HUMANIZER_EVIDENCE=off` is a global kill switch. Remote providers cannot be enabled by default. Timeout/unavailability is fail-open (`SKIP`) and a global evidence budget prevents a missing service from hanging the board.
+`HUMANIZER_EVIDENCE=off` полностью отключает этот слой. Сетевые источники нельзя включать по умолчанию. Тайм-аут или недоступность работают по принципу «пропустить и продолжить» (`SKIP`), а общий лимит времени не позволяет отсутствующему сервису повесить редколлегию.
 
-See `docs/evidence-provider-architecture.md` and `evidence/README.md`.
+См. `docs/evidence-provider-architecture.md` и `evidence/README.md`.
 
-## Board statuses
+## Статусы редколлегии
 
 - `CONSENSUS`
 - `MAJORITY`
@@ -134,21 +134,21 @@ See `docs/evidence-provider-architecture.md` and `evidence/README.md`.
 - `REVIEW`
 - `NO_ACTION`
 
-Conflicts are data. Evidence does not turn a source conflict into consensus.
+Конфликты — это данные. Дополнительные сведения не превращают конфликт источников в консенсус.
 
-## Styles
+## Стили
 
-Style files are editorial policies, not language rules. They may weight reviewers or define conflict handling, but cannot override semantic/norm guardrails.
+Файлы стилей задают редакционные политики, а не языковые правила. Они могут взвешивать рецензентов или определять обработку конфликтов, но не могут отменять ограничения смысла и нормы.
 
-## Context budget
+## Бюджет контекста
 
-Preferred flow:
+Предпочтительная последовательность:
 
-`mechanical libraries -> normalized findings -> relevant rule cards -> optional targeted evidence -> optional model-only review`.
+`механические библиотеки → нормализованные находки → нужные карточки правил → необязательные точечные дополнительные данные → необязательная контекстная проверка моделью`.
 
-Do not read every book or query every corpus for every text. If evidence is unavailable, continue without it.
+Не читайте каждую книгу и не опрашивайте каждый корпус для каждого текста. Если дополнительные данные недоступны, продолжайте без них.
 
-## CLI
+## Командная строка
 
 ```bash
 python scripts/review.py text.md --style neutral

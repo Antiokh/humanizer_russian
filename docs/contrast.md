@@ -1,39 +1,39 @@
-# Contrast handling
+# Работа с противопоставлением
 
-## Do not ban the grammar
+## Не запрещать нормальную конструкцию
 
-`не X, а Y`, `не только X, но и Y`, `X, но Y` are valid Russian constructions. The editor should not split or remove them solely to avoid an AI-associated pattern.
+`не X, а Y`, `не только X, но и Y`, `X, но Y` — нормальные русские конструкции. Не нужно дробить или убирать их только потому, что похожая схема встречается в машинном тексте.
 
-## Find the actual contrast
+## Найти настоящее противопоставление
 
-Before rewriting, compare the two sides and factor out shared material when it is informationally redundant.
+Перед правкой сравните обе части и вынесите общий материал, если его повтор ничего не добавляет.
 
-Synthetic:
+Тяжеловесно:
 
 > Это не ошибка в расчёте, а ошибка в исходных данных.
 
-Neutral native compression:
+Нейтральное русское сжатие:
 
 > Это ошибка не в расчёте, а в исходных данных.
 
-Marked context-dependent form:
+Маркированный вариант, зависящий от контекста:
 
 > Это не в расчёте ошибка, а в исходных данных.
 
-The marked variant uses both edges of the phrase for information weight and should not become a default template.
+Последний вариант использует оба края фразы для смыслового ударения, поэтому не должен становиться шаблоном по умолчанию.
 
-## Do not synonymize mechanically
+## Не подбирать синонимы механически
 
 > Мы не меняем цену, а меняем условия.
 
-Prefer checking:
+Сначала стоит проверить:
 
 > Мы меняем не цену, а условия.
 
-before inventing a synonym for the second `меняем`.
+а не придумывать синоним ко второму `меняем`.
 
-## Semantic gain
+## Смысловой прирост
 
-The second component should actually replace, contrast, add or re-evaluate something. A decorative `не просто курс, а путешествие` can remain weak even though its grammar is fine.
+Вторая часть должна действительно заменять, противопоставлять, добавлять или переоценивать что-то. Декоративное `не просто курс, а путешествие` может оставаться слабой формулой, хотя грамматически с ней всё в порядке.
 
-How vivid the second component should be belongs to genre and author voice, not to the normative layer.
+Насколько яркой должна быть вторая часть, зависит от жанра и авторского голоса, а не от языковой нормы.

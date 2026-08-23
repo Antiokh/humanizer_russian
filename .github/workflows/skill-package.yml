@@ -1,4 +1,4 @@
-name: skill-package
+name: Пакет skill
 
 on:
   push:
@@ -20,26 +20,26 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Compile packaging tools
+      - name: Скомпилировать инструменты упаковки
         run: python -m py_compile scripts/package_skill.py scripts/install_skill.py
 
-      - name: Build deterministic skill package twice
+      - name: Дважды собрать детерминированный пакет skill
         run: |
           python scripts/package_skill.py --output /tmp/humanizer-russian-a.zip --json >/tmp/package-a.json
           python scripts/package_skill.py --output /tmp/humanizer-russian-b.zip --json >/tmp/package-b.json
           cmp /tmp/humanizer-russian-a.zip /tmp/humanizer-russian-b.zip
           python scripts/install_skill.py /tmp/humanizer-russian-a.zip --dest-root /tmp/unused --inspect >/tmp/inspect.json
-          echo 'Package metadata:'
+          echo 'Метаданные пакета:'
           cat /tmp/package-a.json
-          echo 'Package inspection:'
+          echo 'Проверка пакета:'
           cat /tmp/inspect.json
           mkdir -p dist-ci
           cp /tmp/humanizer-russian-a.zip dist-ci/humanizer-russian.zip
 
-      - name: Install into clean skills root
+      - name: Установить в чистый каталог skills
         run: python scripts/install_skill.py /tmp/humanizer-russian-a.zip --dest-root /tmp/skills
 
-      - name: Reject accidental development payload
+      - name: Отклонить случайное включение материалов разработки
         run: |
           root=/tmp/skills/humanizer-russian
           test -f "$root/SKILL.md"
@@ -52,7 +52,7 @@ jobs:
           test ! -e "$root/scripts/run_model_evals.py"
           test ! -e "$root/scripts/benchmark_lint.py"
 
-      - name: Smoke-test installed Compact runtime
+      - name: Проверить установленный Compact
         working-directory: /tmp/skills/humanizer-russian
         run: |
           printf '%s' 'Командой осуществляется проведение проверки.' | python scripts/check.py --json >/tmp/installed-check.json
@@ -62,7 +62,7 @@ jobs:
           assert any(item.get('rule') == 'ILY-M01' for item in report['findings']), report
           PY
 
-      - name: Smoke-test installed Editorial Board runtime
+      - name: Проверить установленную редколлегию
         working-directory: /tmp/skills/humanizer-russian
         run: |
           printf '%s' 'Это ошибка не в расчёте, а в исходных данных.' | python scripts/review.py --format json >/tmp/installed-board.json
@@ -73,7 +73,7 @@ jobs:
           assert report['libraries'] == 'default', report
           PY
 
-      - name: Project-only evidence stays impossible to enable after install
+      - name: Проверить невозможность включения проектных провайдеров после установки
         working-directory: /tmp/skills/humanizer-russian
         run: |
           set +e
@@ -81,9 +81,9 @@ jobs:
           rc=$?
           set -e
           test "$rc" -ne 0
-          grep -F 'project-only evidence providers cannot be enabled: normative_reference' /tmp/project-evidence.err
+          grep -F 'проектные провайдеры доказательств нельзя включить: normative_reference' /tmp/project-evidence.err
 
-      - name: Smoke-test installed author profiler
+      - name: Проверить установленный профилировщик автора
         working-directory: /tmp/skills/humanizer-russian
         run: |
           mkdir -p /tmp/author-corpus
@@ -97,12 +97,12 @@ jobs:
           assert profile['corpus']['documents'] == 2, profile
           PY
 
-      - name: Validate installed directory against Agent Skills reference implementation
+      - name: Проверить установленный каталог эталонным валидатором Agent Skills
         run: |
           python -m pip install --disable-pip-version-check 'skills-ref @ git+https://github.com/agentskills/agentskills.git@69ef37e9424c0a7ea9dd2293b559e43ec8176379#subdirectory=skills-ref'
           skills-ref validate /tmp/skills/humanizer-russian
 
-      - name: Publish tested skill package
+      - name: Опубликовать проверенный пакет skill
         uses: actions/upload-artifact@v4
         with:
           name: humanizer-russian-skill

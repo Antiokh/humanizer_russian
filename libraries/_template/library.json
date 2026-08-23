@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "sample-author",
-  "display_name": "Sample Author",
+  "display_name": "Имя автора",
   "source_namespace": "SAMPLE",
   "source_type": "book",
   "source_branch": "sample-author",
@@ -13,5 +13,5 @@
   "references": [
     "references/sample-author.md"
   ],
-  "notes": "Copy this directory, replace placeholders, add tests and enable only after integration audit."
+  "notes": "Скопируйте этот каталог, замените заполнители, добавьте проверки и включайте библиотеку только после аудита интеграции."
 }

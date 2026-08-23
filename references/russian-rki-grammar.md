@@ -1,125 +1,125 @@
-# Russian RKI/interference grammar diagnostics
+# Диагностика русской грамматики и РКИ-интерференции
 
-This reference is a compact **source-neutral Russian core** layer derived from the audited available fragment of A. V. Velichko (ed.), *Книга о грамматике: Русский язык как иностранный* (2004), then narrowed by current normative checks. It is not a “Velichko style”.
+Этот компактный слой **русского ядра, нейтральный по отношению к источнику**, выведен из проверенного доступного фрагмента книги под ред. А. В. Величко «Книга о грамматике: Русский язык как иностранный» (2004) и затем ограничен современными нормативными проверками. Это не «стиль Величко».
 
-Use it only after mechanical checks. Most rules here are `MODEL_ONLY`. Preserve `USER_INTENT + SEMANTICS + NORM` first.
+Используйте его только после механических проверок. Большинство правил здесь имеют уровень `MODEL_ONLY`. Сначала сохраняйте `USER_INTENT + SEMANTICS + NORM`.
 
-## 1. Valency and government
+## 1. Валентность и управление
 
-Do not judge a case/preposition by surface similarity between words. Resolve the lexical-semantic variant and participant role first. Russian frames can differ between near-synonyms and between meanings of one verb. Nominalization may change government instead of inheriting the verb's frame mechanically.
+Не оценивайте падеж или предлог по поверхностному сходству слов. Сначала определите конкретное лексико-семантическое значение и роль участника. Русские модели управления могут различаться у близких синонимов и у разных значений одного глагола. Номинализация может менять управление, а не механически наследовать модель глагола.
 
-Audit questions:
+Вопросы для проверки:
 
-- What exact sense of the predicate is active?
-- Which participant role is the dependent noun expressing?
-- Is the frame lexically fixed or semantically motivated?
-- Did a nominalization copy a foreign/verbal frame that Russian changes?
+- Какое именно значение предиката реализовано?
+- Какую роль участника выражает зависимое существительное?
+- Модель управления лексически закреплена или семантически мотивирована?
+- Не скопировала ли номинализация чужую или глагольную модель, которую русский меняет?
 
-Do not build a regex replacement map for valency.
+Не строить карту замен по регулярным выражениям для валентности.
 
-## 2. Subject realization
+## 2. Выражение субъекта
 
-Russian does not require every semantic subject to appear as an overt nominative pronoun. Check whether the natural model is:
+Русский не требует, чтобы каждый семантический субъект был выражен явным местоимением в именительном падеже. Проверяйте, какая модель естественна:
 
-- indefinite-personal (`В магазине продают хлеб`);
-- impersonal (`Мне холодно`, `Меня знобит`);
-- dative-subject infinitive (`Мне завтра ехать`);
-- natural-force impersonal (`Крышу сорвало ветром`);
-- ordinary explicit nominative subject when the referent is discourse-relevant.
+- неопределённо-личная: `В магазине продают хлеб`;
+- безличная: `Мне холодно`, `Меня знобит`;
+- инфинитив с дательным субъектом: `Мне завтра ехать`;
+- безличная конструкция с природной силой: `Крышу сорвало ветром`;
+- обычный явный субъект в именительном падеже, когда референт важен для текущего дискурса.
 
-A high density of overt `я/мы/он/они` can trigger a document-level audit, but never licenses deletion by itself.
+Высокая плотность явных `я/мы/он/они` может стать поводом проверить документ целиком, но сама по себе не разрешает их удалять.
 
-## 3. Quantitative agreement
+## 3. Согласование при количественных конструкциях
 
-Do not turn `много/немного/мало/немало/столько/сколько` into a singular-only correction rule. Current normative references themselves preserve a tension between formal and semantic agreement:
+Не превращайте `много/немного/мало/немало/столько/сколько` в правило «только единственное число». Современные нормативные источники сами сохраняют напряжение между формальным и смысловым согласованием:
 
-- the Gramota Pismovnik, following the academic *Russian Grammar*, states singular agreement for this group;
-- Gramota Help Desk answers № 322014 (2025), № 320220 (2024) and № 298593 (2018) accept plural semantic agreement as current norm, especially when active persons are foregrounded; singular remains common and often preferred.
+- «Письмовник» Грамоты, вслед за академической «Русской грамматикой», указывает единственное число для этой группы;
+- ответы справочной службы Грамоты № 322014 (2025), № 320220 (2024) и № 298593 (2018) допускают множественное смысловое согласование как современную норму, особенно когда на первом плане действия отдельных людей; единственное число остаётся обычным и часто предпочтительным.
 
-So compare function, not just form:
+Поэтому сравнивайте функцию, а не только форму:
 
-- `Собралось много людей` foregrounds the quantity/group and formal agreement;
-- `Много людей пишут нам после публикации` foregrounds the actions of individual people and is not ungrammatical merely because the predicate is plural.
+- `Собралось много людей` выдвигает количество или группу и формальное согласование;
+- `Много людей пишут нам после публикации` выдвигает действия отдельных людей и не становится неграмматичным только из-за множественного числа сказуемого.
 
-Other quantitative groups (`пять экспертов`, `несколько участников`, `директор с юристом`) have their own agreement factors. Do not transfer one construction's preference to another.
+У других количественных групп (`пять экспертов`, `несколько участников`, `директор с юристом`) свои факторы согласования. Не переносите предпочтение одной конструкции на другую.
 
-## 4. Process, transition, result and state
+## 4. Процесс, переход, результат и состояние
 
-Before choosing aspect, voice or copula, identify which event phase is being asserted:
+Перед выбором вида, залога или связки определите, какая фаза события утверждается:
 
-`process → boundary/transition → result → resulting state`.
+`процесс → граница/переход → результат → результирующее состояние`.
 
-Do not map an English progressive/passive form directly onto Russian morphology. The existing `ломаться` rule is one concrete case of this broader event-construal check.
+Не переносите английскую длительную или пассивную форму напрямую на русскую морфологию. Существующее правило для `ломаться` — один конкретный случай этой более общей проверки представления события.
 
-## 5. Aspect under modality
+## 5. Вид при модальности
 
-Aspect in infinitive constructions can distinguish prohibition/non-necessity from inability to achieve a result, but lexical formulas are not absolute. Compare the intended event:
+В инфинитивных конструкциях вид может различать запрет или ненужность действия и невозможность достичь результата, но лексические формулы не абсолютны. Сравните предполагаемое событие:
 
-- `Дверь не открывать` — prohibition / non-performance;
-- `Дверь не открыть: замок сломан` — inability to achieve the result;
-- `В таком шуме невозможно спать` — natural imperfective activity impossibility.
+- `Дверь не открывать` — запрет или предписание не выполнять действие;
+- `Дверь не открыть: замок сломан` — невозможность достичь результата;
+- `В таком шуме невозможно спать` — естественная невозможность деятельности с несовершенным видом.
 
-Aspect selection remains contextual/model-only.
+Выбор вида остаётся контекстным и модельным.
 
-## 6. Voice and resultative perspective
+## 6. Залог и результирующая перспектива
 
-Active and passive structures describe the same broad situation from different information-structural perspectives. Check register and discourse center rather than banning passive.
+Активные и пассивные конструкции описывают одну широкую ситуацию с разных информационно-структурных точек зрения. Проверяйте регистр и центр дискурса, а не запрещайте пассив.
 
-Three distinctions matter:
+Важны три различия:
 
-- agentive three-member passive is strongly book-oriented but legitimate when the agent matters;
-- possessive resultative `у меня + краткое страдательное причастие` can naturally present an available result without identifying the doer (`Билеты у меня куплены`);
-- stative/result description is not the same as an ongoing action-passive on `-ся`; do not write a process form merely because another language uses a passive form.
+- агентный трёхчленный пассив заметно книжный, но нормативен, когда агент важен;
+- результативная конструкция `у меня + краткое страдательное причастие` может естественно показывать наличный результат без указания деятеля (`Билеты у меня куплены`);
+- описание состояния или результата не совпадает с процессуальным пассивом на `-ся`; не пишите форму процесса только потому, что в другом языке стоит пассив.
 
-## 7. Copulas and classificatory predicates
+## 7. Связки и классифицирующие предикаты
 
-Present-tense Russian often uses a zero copula. `есть`, `являться`, `представлять собой`, `состоять в`, `заключаться в`, `сводиться к` are not interchangeable generic equivalents of “be”.
+В настоящем времени русский часто использует нулевую связку. `есть`, `являться`, `представлять собой`, `состоять в`, `заключаться в`, `сводиться к` не являются взаимозаменяемыми универсальными эквивалентами английского `be`.
 
-Check semantic function and register:
+Проверяйте смысловую функцию и регистр:
 
-- identity/classification may need a dash/`это` or zero copula;
-- `являться` is bookish and should earn its semantic/register role rather than appear automatically;
-- `представлять собой` is useful for revealing nature/structure, not simple naming.
+- тождество или классификация могут требовать тире, `это` или нулевой связки;
+- `являться` книжно и должно выполнять смысловую или регистровую функцию, а не появляться автоматически;
+- `представлять собой` полезно при раскрытии природы или устройства, а не для простого называния.
 
-Do not stop-list any of these words.
+Не превращайте эти слова в стоп-лист.
 
-## 8. Participles
+## 8. Причастия
 
-First enforce structural norm: the participial phrase must attach unambiguously to its real head; the participle must agree with that head. Only then compare a relative clause with participial compression.
+Сначала проверяйте структурную норму: причастный оборот должен однозначно относиться к своему определяемому слову, а причастие — согласовываться с ним. Только затем сравнивайте придаточное определительное и причастное сжатие.
 
-Use a participle when it compresses a background property without changing time, reference or register. Do not introduce one by quota, and do not expand a clean participle into `который...` merely for simplicity.
+Используйте причастие, когда оно сжимает фоновый признак без изменения времени, референции или регистра. Не вводите его «по квоте» и не разворачивайте ясное причастие в `который...` только ради простоты.
 
-## 9. Gerunds
+## 9. Деепричастия
 
-Core check: the gerundial action and the action/state it modifies must share a permissible semantic subject.
+Основная проверка: деепричастное действие и действие или состояние, которое оно модифицирует, должны иметь допустимый общий семантический субъект.
 
-Important guards:
+Важные ограничения:
 
-- impersonal clause + infinitive can be normative when the gerund and infinitive share the semantic subject (`Проверяя расчёт, можно найти ошибку`);
-- grammaticalized/prepositional forms such as `исходя из` are not ordinary free gerunds;
-- attachment to an object infinitive can be ambiguous/peripheral and needs explicit semantic review.
+- безличная конструкция с инфинитивом может быть нормативной, если деепричастие и инфинитив имеют общий семантический субъект (`Проверяя расчёт, можно найти ошибку`);
+- грамматикализованные и предложные формы вроде `исходя из` не являются обычными свободными деепричастиями;
+- связь с объектным инфинитивом может быть двусмысленной или периферийной и требует явной семантической проверки.
 
-Do not implement “no nominative subject → dangling gerund” as a regex.
+Не реализуйте правило «нет субъекта в именительном → висячее деепричастие» регулярным выражением.
 
-## 10. Introductory words and scope
+## 10. Вводные слова и область действия
 
-Parenthetic modality/source markers are not disposable filler. Position can change scope:
+Вводные маркеры модальности или источника не являются одноразовым мусором. Позиция может менять область действия:
 
-- `Олег, кажется, сказал, что приедет` — speaker uncertainty may concern the saying;
-- `Олег сказал, что, кажется, приедет` — uncertainty scopes inside the reported proposition.
+- `Олег, кажется, сказал, что приедет` — неуверенность говорящего может относиться к самому факту высказывания;
+- `Олег сказал, что, кажется, приедет` — неуверенность находится внутри передаваемой пропозиции.
 
-Also distinguish parenthetic framing from a predicative complement (`Как известно, ...` vs `Известно, что ...`).
+Также различайте вводную рамку и предикативное дополнение: `Как известно, ...` и `Известно, что ...`.
 
-## 11. Explicit non-rules from the source
+## 11. Явные не-правила источника
 
-Do **not** infer any of the following:
+**Не** выводите из источника ничего из следующего:
 
-- `есть` is forbidden in present-tense existence;
-- `много/столько/сколько` licenses only singular agreement in all current contexts;
-- `невозможно` always requires perfective;
-- `не нужно` always requires imperfective;
-- bare `к радости` is ungrammatical;
-- passive, participles or gerunds are inherently non-native;
-- unusual colloquial syntactic phraseologisms should be regularized.
+- `есть` запрещено в настоящем времени при выражении существования;
+- `много/столько/сколько` допускает только единственное число во всех современных контекстах;
+- `невозможно` всегда требует совершенного вида;
+- `не нужно` всегда требует несовершенного вида;
+- отдельное `к радости` неграмматично;
+- пассив, причастия или деепричастия сами по себе неносительские;
+- необычные разговорные синтаксические фразеологизмы нужно нормализовать.
 
-For provenance and full guards, see `studies/velichko-kniga-o-grammatike/`.
+Происхождение и полные ограничения: `studies/velichko-kniga-o-grammatike/`.

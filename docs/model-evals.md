@@ -1,54 +1,54 @@
-# Live model evaluation
+# Проверка на реальных моделях
 
-`humanizer_russian` separates deterministic surface checks from contextual model behavior. Deterministic CI proves software/routing contracts; it does **not** prove that `MODEL_ONLY` linguistic/editorial rules are handled correctly by a live model.
+`humanizer_russian` отделяет детерминированные поверхностные проверки от контекстного поведения модели. Детерминированный CI доказывает корректность программных контрактов и маршрутизации; он **не доказывает**, что языковые и редакторские правила `MODEL_ONLY` правильно обрабатываются реальной моделью.
 
-`scripts/run_model_evals.py` is the opt-in, manifest-driven harness for that second layer.
+`scripts/run_model_evals.py` — отключённый по умолчанию стенд второго уровня, управляемый манифестами.
 
-## Library contract
+## Контракт библиотеки
 
-A participating knowledge library declares in `libraries/<id>/library.json`:
+Участвующая библиотека знаний объявляет в `libraries/<id>/library.json`:
 
-- `model_eval_path` — synthetic/project eval suite;
-- `model_eval_map_path` — case → canonical rule/source traceability;
-- `rules_path` — canonical runtime rules.
+- `model_eval_path` — синтетический или проектный набор проверок;
+- `model_eval_map_path` — связь примера с каноническим правилом и источником;
+- `rules_path` — канонические рабочие правила.
 
-The harness discovers only libraries with a complete declared contract. `scripts/validate_libraries.py` also rejects half-registered libraries and guards the intended operational registration set against silent disappearance.
+Стенд обнаруживает только библиотеки с полностью объявленным контрактом. `scripts/validate_libraries.py` также отклоняет наполовину зарегистрированные библиотеки и защищает задуманный набор рабочих регистраций от незаметного исчезновения.
 
-Current registered libraries:
+Сейчас зарегистрированы:
 
-- Gal;
-- Chukovsky;
-- Ilyakhov/Sarycheva;
-- Golub;
-- Visson;
-- Rosenthal.
+- Галь;
+- Чуковский;
+- Ильяхов / Сарычева;
+- Голуб;
+- Виссон;
+- Розенталь.
 
-Visson keeps the older `evals/lynn-visson.json` + `evals/lynn-visson-map.json` pair as a research positive/negative/boundary fixture. Those files are not user-prompt model evals. The live-model harness uses the separate project-authored `evals/visson-context.json` + `evals/visson-context-map.json` runtime pair. Rosenthal likewise uses a compact project-authored synthetic suite mapped to canonical `ROS-R*` rules across the integrated source cycles. Both runtime suites are deliberately preservation-heavy; historical/source-period advice never becomes current `NORM` merely because a model agrees with it.
+У Виссон старая пара `evals/lynn-visson.json` + `evals/lynn-visson-map.json` остаётся исследовательским набором положительных, отрицательных и пограничных примеров. Эти файлы не являются пользовательскими запросами для модельных проверок. Стенд реальных моделей использует отдельную созданную проектом рабочую пару `evals/visson-context.json` + `evals/visson-context-map.json`. Розенталь аналогично использует компактный проектный синтетический набор, связанный с каноническими правилами `ROS-R*` всех интегрированных циклов источников. Оба рабочих набора намеренно содержат много проверок сохранения: исторический или относящийся к эпохе источника совет не становится современной `NORM` только потому, что модель с ним согласилась.
 
-## How one case runs
+## Как выполняется один пример
 
-For each selected case the harness makes two independent API calls:
+Для каждого выбранного примера стенд делает два независимых вызова API:
 
-1. **candidate** — receives the user prompt, project hard constraints and only the mapped source-derived rule cards. It does **not** receive expected answers or counterexample labels;
-2. **judge** — receives the prompt, candidate answer and explicit expectations, then returns a strict structured judgment.
+1. **кандидат** — получает пользовательский запрос, жёсткие ограничения проекта и только связанные с примером карточки правил из источников. Он **не** получает ожидаемый ответ или метки контрпримеров;
+2. **судья** — получает запрос, ответ кандидата и явные ожидания, затем возвращает строгую структурированную оценку.
 
-The default scope is `model-only`: a case is selected when at least one mapped rule has `automation_level=MODEL_ONLY`. `--scope all` includes all mapped suite cases, including preservation/mechanical boundary cases where the library provides them.
+Область по умолчанию — `model-only`: пример выбирается, если хотя бы одно связанное правило имеет `automation_level=MODEL_ONLY`. `--scope all` включает все связанные примеры набора, в том числе проверки сохранения и механических границ, если библиотека их предоставляет.
 
-This is calibration, not a normative truth oracle. Results remain model-, prompt- and snapshot-dependent. Model/judge agreement cannot turn a book recommendation into current `NORM` and cannot substitute for deterministic precision evidence required by mechanical rules.
+Это калибровка, а не оракул нормативной истины. Результаты зависят от модели, запроса и снимка состояния проекта. Согласие кандидата и судьи не может превратить книжную рекомендацию в современную `NORM` и не заменяет детерминированные доказательства точности, обязательные для механических правил.
 
-## API contract
+## Контракт API
 
-The harness uses the OpenAI Responses API directly over HTTPS and reads `OPENAI_API_KEY` only from the environment. It sends `store: false` and never writes the API key to reports. Candidate and judge model IDs are supplied explicitly rather than hard-coded.
+Стенд обращается к OpenAI Responses API напрямую по HTTPS и читает `OPENAI_API_KEY` только из окружения. Он отправляет `store: false` и никогда не записывает ключ API в отчёты. Идентификаторы модели-кандидата и модели-судьи задаются явно, а не зашиваются в код.
 
-Official references:
+Официальные материалы:
 
 - `https://platform.openai.com/docs/quickstart/make-your-first-api-request`
 - `https://platform.openai.com/docs/api-reference/responses`
 - `https://platform.openai.com/docs/api-reference/models`
 
-## Discover / dry-run
+## Просмотр и пробный прогон
 
-No API key or live cost:
+Без ключа API и реальных расходов:
 
 ```bash
 python scripts/run_model_evals.py --self-test
@@ -60,21 +60,21 @@ python scripts/run_model_evals.py --library visson --dry-run --model YOUR_MODEL
 python scripts/run_model_evals.py --library rosenthal --dry-run --model YOUR_MODEL
 ```
 
-The offline self-test iterates over every registered library and verifies:
+Офлайн-самопроверка проходит по каждой зарегистрированной библиотеке и проверяет:
 
-- eval ↔ traceability-map joining;
-- rule existence/provenance;
-- `MODEL_ONLY` selection;
-- no expectation leakage into candidate instructions;
-- dry-run provenance construction;
-- `store: false` request construction;
-- strict JSON-schema judge request construction;
-- Responses `output_text` extraction;
-- consistency between per-expectation and overall verdicts.
+- соединение набора проверок с картой происхождения;
+- существование правил и происхождение;
+- выбор `MODEL_ONLY`;
+- отсутствие утечки ожиданий в инструкции кандидата;
+- построение происхождения для пробного прогона;
+- формирование запроса с `store: false`;
+- формирование строгого запроса судьи по JSON-схеме;
+- извлечение `output_text` из Responses API;
+- согласованность отдельных ожиданий с итоговым вердиктом.
 
-## Live run
+## Реальный запуск
 
-Minimal smoke run for one registered library:
+Минимальный дымовой прогон одной зарегистрированной библиотеки:
 
 ```bash
 export OPENAI_API_KEY='...'
@@ -86,7 +86,7 @@ python scripts/run_model_evals.py \
   --output eval-results/gal-smoke.json
 ```
 
-Full contextual run:
+Полный контекстный прогон:
 
 ```bash
 python scripts/run_model_evals.py \
@@ -98,39 +98,39 @@ python scripts/run_model_evals.py \
   --output eval-results/rosenthal-model-only.json
 ```
 
-Use different candidate and judge models when practical. If the same model is used for both roles, the report records that weaker evidence boundary.
+По возможности используйте разные модели для кандидата и судьи. Если обе роли выполняет одна модель, отчёт фиксирует, что такое свидетельство слабее.
 
-## Report contract
+## Контракт отчёта
 
-Reports include library/source context and per-case rule provenance together with:
+Отчёты содержат контекст библиотеки и источника, происхождение правил для каждого примера, а также:
 
-- requested and returned candidate/judge model IDs;
-- response IDs;
-- token usage returned by the API;
-- candidate text;
-- per-expectation `PASS` / `FAIL` / `UNCERTAIN` judgments;
-- semantic/norm violation flags;
-- API/transport/parser failures.
+- запрошенные и фактически использованные идентификаторы моделей кандидата и судьи;
+- идентификаторы ответов;
+- расход токенов, возвращённый API;
+- текст кандидата;
+- оценки `PASS` / `FAIL` / `UNCERTAIN` по каждому ожиданию;
+- флаги нарушения смысла и нормы;
+- сбои API, транспорта или разбора ответа.
 
-Raw local result files belong under `eval-results/`, which is ignored by Git. Do not commit raw output automatically; review it case by case and source-control only conclusions useful for calibration.
+Необработанные локальные результаты нужно хранить в `eval-results/`, который игнорируется Git. Не коммитьте сырой вывод автоматически: просматривайте его по примерам и сохраняйте в репозитории только выводы, полезные для калибровки.
 
-## Exit codes
+## Коды завершения
 
-- `0` — all completed judgments pass and there are no API/parser failures;
-- `1` — at least one completed case is `FAIL` or `UNCERTAIN`;
-- `2` — API/transport/structured-output parsing failed for at least one case.
+- `0` — все завершённые оценки прошли и нет сбоев API или разбора;
+- `1` — хотя бы один завершённый пример получил `FAIL` или `UNCERTAIN`;
+- `2` — хотя бы в одном примере произошёл сбой API, транспорта или разбора структурированного вывода.
 
-`--continue-on-error` controls whether the runner continues after an API/parser failure. It does not convert failures into passes.
+`--continue-on-error` определяет, продолжит ли запускатель работу после сбоя API или разбора. Этот параметр не превращает сбои в успешные проверки.
 
-## Promotion policy
+## Политика продвижения правил
 
-A green model run is never enough to promote a rule to mechanical runtime. Promotion still requires:
+Зелёного модельного прогона никогда недостаточно, чтобы продвинуть правило в механический рабочий контур. По-прежнему требуются:
 
-1. a defensible observable surface or parser-backed signal;
-2. true positives;
-3. natural negative controls;
-4. boundary and intentional-use counterexamples;
-5. acceptable false-positive behavior on real Russian text;
-6. no conflict with `USER_INTENT`, `SEMANTICS`, `NORM`, `AUTHOR` or `NATIVE_USAGE`.
+1. обоснованный наблюдаемый поверхностный или поддержанный анализатором сигнал;
+2. положительные примеры;
+3. естественные отрицательные контроли;
+4. пограничные примеры и контрпримеры намеренного употребления;
+5. приемлемый уровень ложных срабатываний на реальном русском тексте;
+6. отсутствие конфликта с `USER_INTENT`, `SEMANTICS`, `NORM`, `AUTHOR` и `NATIVE_USAGE`.
 
-If those conditions cannot be met, the correct state is still `MODEL_ONLY`.
+Если эти условия выполнить нельзя, правильным состоянием остаётся `MODEL_ONLY`.

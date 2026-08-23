@@ -1,4 +1,4 @@
-name: gpt-package
+name: Пакет GPT
 
 on:
   pull_request:
@@ -59,22 +59,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compile packagers
+      - name: Скомпилировать упаковщики
         run: |
           python3 -m py_compile scripts/package_gpt.py
           python3 -m py_compile scripts/package_skill.py
           python3 -m py_compile scripts/package_gpt_runtime.py
 
-      - name: Build full package twice
+      - name: Дважды собрать полный пакет
         run: |
           python3 scripts/package_gpt_runtime.py --output /tmp/humanizer-russian-gpts-a.zip
           python3 scripts/package_gpt_runtime.py --output /tmp/humanizer-russian-gpts-b.zip
           cmp /tmp/humanizer-russian-gpts-a.zip /tmp/humanizer-russian-gpts-b.zip
 
-      - name: Inspect archive
+      - name: Проверить архив
         run: python3 scripts/package_gpt_runtime.py --inspect /tmp/humanizer-russian-gpts-a.zip
 
-      - name: Validate GPT Builder layout and upload count
+      - name: Проверить структуру GPT Builder и число загрузок
         run: |
           rm -rf /tmp/gpts-package
           mkdir -p /tmp/gpts-package
@@ -96,7 +96,7 @@ jobs:
           grep -q "humanizer_runtime.py" "$root/Instructions/INSTRUCTIONS.md"
           grep -q "Code Interpreter" "$root/Instructions/GPT_BUILDER.md"
 
-      - name: Verify packaged runtime integrity
+      - name: Проверить целостность упакованного runtime
         run: |
           runtime=/tmp/gpts-package/humanizer-russian-gpts/Runtime/humanizer_runtime.py
           python3 -m py_compile "$runtime"
@@ -108,7 +108,7 @@ jobs:
           grep -q 'lint-golub' /tmp/runtime-list.json
           grep -q 'editorial-board' /tmp/runtime-list.json
 
-      - name: Compare packaged checker with repository checker
+      - name: Сравнить упакованный checker с репозиторным
         run: |
           runtime=/tmp/gpts-package/humanizer-russian-gpts/Runtime/humanizer_runtime.py
           cat > /tmp/gpt-runtime-sample.md <<'EOF'
@@ -132,14 +132,14 @@ jobs:
           compare_mode mechanical
           compare_mode extended --extended
 
-      - name: Stage exact tested package
+      - name: Подготовить точно проверенный пакет
         run: |
           mkdir -p dist-ci
           cp /tmp/humanizer-russian-gpts-a.zip dist-ci/humanizer-russian-gpts.zip
           sha256sum dist-ci/humanizer-russian-gpts.zip
           unzip -l dist-ci/humanizer-russian-gpts.zip
 
-      - name: Upload Custom GPT package
+      - name: Загрузить пакет Custom GPT
         uses: actions/upload-artifact@v4
         with:
           name: humanizer-russian-gpts

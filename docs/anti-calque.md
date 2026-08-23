@@ -1,16 +1,16 @@
-# Anti-calque layer
+# Слой борьбы с кальками
 
-The editor fixes observable Russian output rather than guessing why a model produced it.
+Редактор исправляет наблюдаемый русский результат, а не гадает, почему модель его породила.
 
-Main categories:
+Основные категории:
 
-- lexical collocation calques;
-- possessive/pronoun over-explicitness;
-- SVO lock across sentence chains;
-- locally self-contained sentences that repeat context;
-- slogan-like question/answer templates;
-- literal translated discourse organization.
+- кальки в лексической сочетаемости;
+- избыточная явность притяжательных местоимений и других местоимений;
+- жёсткий порядок SVO в цепочках предложений;
+- локально самодостаточные предложения, которые заново проговаривают уже заданный контекст;
+- слоганные шаблоны «вопрос — ответ»;
+- буквальный перенос английской организации дискурса.
 
-A professional English loanword is not automatically a calque. Audience and established domain use matter.
+Профессиональное заимствование из английского само по себе не является калькой. Важны аудитория и устоявшееся употребление в предметной области.
 
-The layer should not claim a specific internal LLM mechanism (for example, repetition penalties) unless that mechanism is known for the exact system being discussed.
+Этот слой не должен приписывать LLM конкретный внутренний механизм, например штраф за повтор, если такой механизм не известен для обсуждаемой системы.

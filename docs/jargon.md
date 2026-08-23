@@ -1,12 +1,12 @@
-# Jargon and anglicisms
+# Жаргон и англицизмы
 
-Professional terminology is evaluated against the audience and author profile, not against a generic purity rule.
+Профессиональную терминологию нужно оценивать по аудитории и авторскому профилю, а не по абстрактному требованию языковой чистоты.
 
-For senior engineers, `deploy`, `latency`, `rollback`, API, RLS or Supabase can be more natural and precise than forced Russian paraphrases. For a general audience the same terms may need explanation or replacement.
+Для опытных инженеров `deploy`, `latency`, `rollback`, API, RLS или Supabase могут быть естественнее и точнее натянутых русских пересказов. Для широкой аудитории те же слова могут требовать пояснения или замены.
 
-The editor should distinguish:
+Редактор должен различать:
 
-- established domain terminology;
-- author-preferred code-switching;
-- unnecessary prestige jargon;
-- literal English collocation calques.
+- устоявшуюся профессиональную терминологию;
+- привычное для автора переключение кодов;
+- ненужный статусный жаргон;
+- буквальные кальки английских сочетаний.

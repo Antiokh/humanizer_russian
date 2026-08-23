@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "native",
-  "display_name": "Живой русский / core",
+  "display_name": "Живой русский / ядро",
   "source_namespace": "NATIVE",
   "source_type": "project_core",
   "source_branch": "main",
@@ -14,5 +14,5 @@
     "references/native-russian.md",
     "references/russian-language.md"
   ],
-  "notes": "Native/core emits normalized findings directly through review_v1 while preserving the established Compact display surface and filtering source-specific findings."
+  "notes": "Ядро живого русского выдаёт нормализованные находки напрямую через review_v1, сохраняя установленный формат Compact и отфильтровывая находки конкретных источников."
 }

@@ -1,11 +1,11 @@
-# Genre sensitivity
+# Зависимость от жанра
 
-Natural Russian differs by genre. A rule calibrated on social media should not automatically rewrite contracts, academic prose, support documentation or senior-engineering chat.
+Естественный русский различается по жанрам. Правило, настроенное на социальные сети, не должно автоматически переписывать договоры, научный текст, документацию поддержки или чат опытных инженеров.
 
-Examples:
+Примеры:
 
-- ellipsis threshold is lower in chat/social prose than in legal text;
-- jargon is more acceptable for expert audiences;
-- explicit summaries may be useful in reports/training material but redundant in short posts;
-- rhetorical questions may fit a personal post but not a technical incident report;
-- author profile metrics should ideally be segmented by genre.
+- в чате и постах допустим больший объём эллипсиса, чем в юридическом тексте;
+- для экспертной аудитории профессиональный жаргон уместнее;
+- явные итоговые формулировки могут быть полезны в отчётах и учебных материалах, но избыточны в коротком посте;
+- риторический вопрос может подходить личному посту, но не техническому отчёту об инциденте;
+- показатели авторского профиля по возможности нужно разделять по жанрам.

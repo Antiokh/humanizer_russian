@@ -1,4 +1,4 @@
-name: russian-messages
+name: Русский человекочитаемый слой
 
 on:
   pull_request:
@@ -11,11 +11,14 @@ permissions:
 
 jobs:
   validate:
+    name: Проверка русских сообщений
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Проверить русский человекочитаемый слой
+      - name: Проверить русские runtime-сообщения
         run: python scripts/validate_russian_messages.py
+      - name: Проверить русскую публичную оболочку
+        run: python scripts/validate_public_russian.py

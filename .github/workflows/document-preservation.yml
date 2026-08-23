@@ -1,4 +1,4 @@
-name: document-preservation
+name: Сохранение документов
 
 on:
   push:
@@ -19,5 +19,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Enforce document-level default baseline
+      - name: Проверить базовый уровень на документах
         run: python scripts/benchmark_documents.py

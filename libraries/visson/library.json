@@ -10,7 +10,7 @@
   "linter_path": "scripts/lint_visson.py",
   "enabled_by_default": true,
   "status": "OPERATIONAL",
-  "source_status": "OPERATIONAL_FOR_INTEGRATION; full sequential EPUB study; 55/55 content XHTML documents and 117/117 endnotes covered",
+  "source_status": "OPERATIONAL_FOR_INTEGRATION; последовательное исследование EPUB завершено; покрыты 55 из 55 содержательных XHTML-документов и 117 из 117 концевых примечаний",
   "source_version": "epub-sha256:45cd09d0101caa90effa2f7943d4ddf45659536857ae548910fccad144c806ca",
   "rules_path": "libraries/visson/rules.json",
   "model_only_reference": "libraries/visson/model-only.md",
@@ -35,5 +35,5 @@
     "evals/visson-context.json",
     "evals/visson-context-map.json"
   ],
-  "notes": "39 operational rules derived from 72 atomic observations: 0 HARD_GATE, 2 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 2 METRIC_ONLY, 32 MODEL_ONLY. The legacy lynn-visson eval pair remains a research positive/negative/boundary fixture; the manifest-driven live-model harness uses a separate project-authored synthetic runtime suite."
+  "notes": "39 рабочих правил получены из 72 атомарных наблюдений: 0 HARD_GATE, 2 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 2 METRIC_ONLY, 32 MODEL_ONLY. Старый набор lynn-visson остаётся исследовательской фикстурой с положительными, отрицательными и пограничными случаями; контур живых модельных проверок по манифесту использует отдельный синтетический runtime-набор, написанный проектом."
 }

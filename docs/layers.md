@@ -1,13 +1,13 @@
-# Layers
+# Слои
 
-| Layer | Question | Automatic gate? |
+| Слой | Вопрос | Автоматический блокер? |
 |---|---|---|
-| SEMANTICS | Did meaning/facts change? | Yes |
-| NORM | Is the Russian actually wrong? | Yes |
-| AUTHOR | Is this how this author writes? | No |
-| NATIVE_USAGE | Which valid form sounds natural here? | No |
-| EDITING | Can this be clearer/denser? | No |
-| AI_CALQUE | Is this an observable machine/translation pattern? | No |
-| ARTIFACT | Did a technical chatbot trace leak into text? | Yes when reliable |
+| `SEMANTICS` | Изменились ли смысл или факты? | Да |
+| `NORM` | Есть ли настоящая ошибка русского языка? | Да |
+| `AUTHOR` | Так ли обычно пишет этот автор? | Нет |
+| `NATIVE_USAGE` | Какой из допустимых вариантов естественнее здесь? | Нет |
+| `EDITING` | Можно ли сказать яснее или плотнее? | Нет |
+| `AI_CALQUE` | Есть ли наблюдаемая машинная или переводная схема? | Нет |
+| `ARTIFACT` | Просочился ли в текст технический след чат-бота? | Да, если сигнал надёжен |
 
-Detector score is not a layer and cannot override the table above.
+Показатель детектора не является отдельным слоем и не может отменять решения из таблицы выше.

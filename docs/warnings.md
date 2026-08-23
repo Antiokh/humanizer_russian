@@ -1,11 +1,11 @@
-# Warning severity
+# Строгость замечаний
 
-- `ARTIFACT`: reliable technical trace; default gate.
-- `LANGUAGE_ERROR`: actual language error; default gate.
-- `SEMANTIC_ERROR`: meaning/factual error; default gate.
-- `NATIVE_WARNING`: native-usage candidate; never a gate by itself.
-- `STYLE_WARNING`: contextual style candidate; never a gate by itself.
-- `AI_PATTERN`: probabilistic pattern; never a gate by itself.
-- `AUTHOR_MISMATCH`: corpus-based mismatch; never a gate by itself.
+- `ARTIFACT` — надёжный технический след; по умолчанию блокирует результат.
+- `LANGUAGE_ERROR` — настоящая языковая ошибка; по умолчанию блокирует результат.
+- `SEMANTIC_ERROR` — смысловая или фактическая ошибка; по умолчанию блокирует результат.
+- `NATIVE_WARNING` — кандидат на более естественное употребление; сам по себе никогда не блокирует результат.
+- `STYLE_WARNING` — контекстное стилистическое замечание; само по себе никогда не блокирует результат.
+- `AI_PATTERN` — вероятностный паттерн; сам по себе никогда не блокирует результат.
+- `AUTHOR_MISMATCH` — несовпадение с корпусным профилем автора; само по себе никогда не блокирует результат.
 
-A warning becomes a rewrite only after contextual review confirms that the construction is not intentional and the rewrite does not damage a higher-priority layer.
+Замечание превращается в правку только после контекстной проверки: конструкция должна быть ненамеренной, а исправление не должно повреждать слой с более высоким приоритетом.

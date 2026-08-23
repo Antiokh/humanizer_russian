@@ -1,44 +1,44 @@
-# Evidence-provider architecture
+# Архитектура источников дополнительных данных
 
-`humanizer_russian` separates editorial opinions from evidence.
+`humanizer_russian` отделяет редакторские мнения от подтверждающих данных.
 
 ```text
-BOOK/SOURCE -> KNOWLEDGE LIBRARY -> NORMALIZED FINDING (reviewer verdict)
-CORPUS/DICTIONARY/NORMATIVE REFERENCE/PARSED DATA -> EVIDENCE PROVIDER -> NORMALIZED EVIDENCE (not a vote)
-finding + evidence + style -> EDITORIAL BOARD
+КНИГА/ИСТОЧНИК → БИБЛИОТЕКА ЗНАНИЙ → НОРМАЛИЗОВАННАЯ НАХОДКА (вердикт рецензента)
+КОРПУС/СЛОВАРЬ/НОРМАТИВНЫЙ СПРАВОЧНИК/РАЗОБРАННЫЕ ДАННЫЕ → ДОПОЛНИТЕЛЬНЫЙ ИСТОЧНИК → НОРМАЛИЗОВАННЫЕ ДАННЫЕ (не голос)
+находка + данные + стиль → РЕДКОЛЛЕГИЯ
 ```
 
-A reviewer library answers: **what does this editorial system recommend?** An evidence provider answers: **what evidence is available about this phenomenon?**
+Библиотека рецензента отвечает на вопрос: **что рекомендует эта редакторская система?** Источник дополнительных данных отвечает: **какие сведения доступны об этом явлении?**
 
-## Runtime rule: evidence is optional
+## Правило рабочего контура: дополнительные данные необязательны
 
-Evidence must never become a hidden availability or latency dependency.
+Этот слой никогда не должен становиться скрытой зависимостью по доступности или задержке.
 
-- Compact `scripts/check.py` does not import or run evidence providers.
-- Board `scripts/review.py` defaults to evidence **off**.
-- Evidence is requested explicitly with `--evidence auto`, `--evidence all`, or provider ids.
-- `--evidence off` and `HUMANIZER_EVIDENCE=off` disable it immediately.
-- Remote providers are forbidden from `enabled_by_default=true`.
-- Provider calls are subprocess-isolated and hard-timed.
-- A global evidence budget caps total delay.
-- Default failure policy is `SKIP`: timeout/unavailability is reported, not raised.
+- Компактный `scripts/check.py` не импортирует и не запускает дополнительные источники.
+- Редколлегия `scripts/review.py` по умолчанию работает с выключенным слоем дополнительных данных.
+- Источники запрашиваются явно через `--evidence auto`, `--evidence all` или их идентификаторы.
+- `--evidence off` и `HUMANIZER_EVIDENCE=off` немедленно отключают слой.
+- Сетевым источникам запрещено иметь `enabled_by_default=true`.
+- Каждый источник запускается изолированно в отдельном процессе с жёстким тайм-аутом.
+- Общий лимит времени ограничивает задержку всего этапа.
+- Политика сбоя по умолчанию — `SKIP`: тайм-аут или недоступность отражаются в отчёте, но не вызывают ошибку всей проверки.
 
-Unavailable evidence lowers evidence coverage; it does not block editing.
+Недоступность дополнительных данных уменьшает полноту подтверждений, но не блокирует редактуру.
 
-## Normalized contract
+## Нормализованный контракт
 
-Provider manifests live under `evidence/<id>/provider.json`. Operational modules implement `evidence_v1` and return evidence keyed by the same source-neutral `phenomenon_id` namespace used by reviewer findings.
+Манифесты источников находятся в `evidence/<id>/provider.json`. Рабочие модули реализуют `evidence_v1` и возвращают данные с тем же независимым от источника пространством `phenomenon_id`, которое используют находки рецензентов.
 
-Evidence directions (`SUPPORTS_KEEP`, `SUPPORTS_CHANGE`, `CONTEXT`, `NEUTRAL`) are evidence, not verdicts. They must never be copied into `reviewer_verdicts`.
+Направления данных (`SUPPORTS_KEEP`, `SUPPORTS_CHANGE`, `CONTEXT`, `NEUTRAL`) — сведения, а не вердикты. Их нельзя копировать в `reviewer_verdicts`.
 
-Board status/recommendation continues to be calculated from reviewer findings. Evidence remains attached and visible for contextual/model reasoning.
+Статус и рекомендация редколлегии по-прежнему вычисляются по находкам рецензентов. Дополнительные данные остаются прикреплёнными и видимыми для контекстного или модельного рассуждения.
 
-## Availability lifecycle
+## Жизненный цикл доступности
 
-`PLANNED` means the source family is known but no runtime adapter is active. `OPERATIONAL` requires a tested module. `DISABLED` is intentionally unavailable.
+`PROJECT` означает проектную заготовку без рабочего адаптера. `OPERATIONAL` требует проверенного модуля. `DISABLED` означает намеренно недоступный источник.
 
-Explicitly requesting `PLANNED` or `DISABLED` returns immediate `UNAVAILABLE` without a network attempt.
+Явный запрос источника `PROJECT` или `DISABLED` должен завершаться немедленным отказом без сетевой попытки.
 
-## Calibration use
+## Использование для калибровки
 
-Evidence providers also support offline calibration: candidate mechanical rule -> natural corpora -> false-positive analysis by genre/register -> automation-level decision. Do not invent universal numeric thresholds in advance.
+Дополнительные источники полезны и для офлайн-калибровки: кандидат на механическое правило → естественные корпуса → анализ ложных срабатываний по жанрам и регистрам → решение об уровне автоматизации. Универсальные численные пороги нельзя придумывать заранее.

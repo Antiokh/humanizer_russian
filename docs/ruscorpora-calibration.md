@@ -1,12 +1,12 @@
-# Reproducible NKRЯ calibration workflow
+# Воспроизводимая калибровка по НКРЯ
 
-The Nora Gal corpus claims are intentionally separated from the source study. `scripts/run_ruscorpora_query.py` exists to **replay an already designed and exported NKRЯ query**, not to invent a query or turn a concordance page into a prevalence estimate.
+Корпусные утверждения, связанные с Норой Галь, намеренно отделены от исследования источника. `scripts/run_ruscorpora_query.py` предназначен для **повторного запуска уже спроектированного и экспортированного запроса НКРЯ**, а не для самостоятельного придумывания запроса или превращения одной страницы конкорданса в оценку распространённости.
 
-## Official API contract used
+## Используемый официальный контракт API
 
-The National Corpus of the Russian Language currently documents a public API with bearer authentication. Its OpenAPI 1.0.2 schema exposes `POST /api/v1/lex-gramm/concordance` with a `LexGramQuery` JSON body. The official search guide recommends building the intended search and subcorpus in the web interface and pressing `Ctrl+Shift+E` on the result page to copy the generated JSON.
+Национальный корпус русского языка документирует публичный API с авторизацией bearer-токеном. Схема OpenAPI 1.0.2 содержит `POST /api/v1/lex-gramm/concordance` с телом JSON типа `LexGramQuery`. Официальная инструкция рекомендует сначала настроить нужный поиск и подкорпус в веб-интерфейсе, а затем на странице результата нажать `Ctrl+Shift+E`, чтобы скопировать сформированный JSON.
 
-Official references:
+Официальные источники:
 
 - `https://ruscorpora.github.io/public-api/`
 - `https://ruscorpora.ru/api/v1/openapi.json`
@@ -17,40 +17,40 @@ Official references:
 - `https://ruscorpora.github.io/public-api/about-api/search/formula-rule.html`
 - `https://ruscorpora.github.io/public-api/about-api/results/concordance.html`
 
-The formula documentation exposes, among other syntax values, `partp` for an expanded participial construction and `gerp` for a gerund construction. These are suitable starting points for `GAL-CLAIM-03`, but the project must still define the exact comparison subcorpora before running them.
+Документация формул, среди прочего, использует значение `partp` для развёрнутой причастной конструкции и `gerp` для деепричастной конструкции. Это подходящие отправные точки для `GAL-CLAIM-03`, но до запуска проект всё равно должен точно определить сравниваемые подкорпусы.
 
-## Why the runner does not generate query JSON
+## Почему программа не генерирует JSON-запрос сама
 
-A reproducible corpus claim requires a deliberately chosen subcorpus. Hand-building the request in project code would hide assumptions about period, genre, sphere, disambiguation, distance, sampling and pagination. The official UI can export the exact query that produced a result, so the project treats that exported JSON as the research fixture.
+Воспроизводимое корпусное утверждение требует сознательно выбранного подкорпуса. Если собирать запрос вручную внутри проектного кода, станут неявными предположения о периоде, жанре, сфере, снятии омонимии, расстоянии, выборке и пагинации. Официальный интерфейс умеет экспортировать точный запрос, давший результат, поэтому проект считает экспортированный JSON исследовательским артефактом.
 
-Workflow:
+Порядок работы:
 
-1. Log in to NKRЯ and obtain API access according to the official documentation.
-2. Build the search and subcorpus in the NKRЯ web UI.
-3. Run the search and, on the results page, press `Ctrl+Shift+E`.
-4. Save the copied JSON locally, for example as `queries/claim03-written-partp.json`.
-5. Inspect the JSON and record what corpus slice it represents.
-6. Dry-run the fixture through the project runner.
-7. Run the live request only after the design is accepted.
-8. Review returned examples for false matches before calculating or publishing any aggregate.
+1. Войдите в НКРЯ и получите доступ к API по официальной документации.
+2. Настройте поиск и подкорпус в веб-интерфейсе НКРЯ.
+3. Запустите поиск и на странице результата нажмите `Ctrl+Shift+E`.
+4. Сохраните скопированный JSON локально, например `queries/claim03-written-partp.json`.
+5. Проверьте JSON и зафиксируйте, какой именно срез корпуса он описывает.
+6. Выполните пробный локальный запуск через проектную программу.
+7. Отправляйте реальный запрос только после согласования дизайна исследования.
+8. Перед вычислением или публикацией агрегатов вручную проверьте возвращённые примеры на ложные совпадения.
 
-## Offline dry run
+## Пробный запуск без сети
 
 ```bash
 python scripts/run_ruscorpora_query.py queries/claim03-written-partp.json --dry-run
 ```
 
-The dry run validates that the fixture contains `corpus` and `lexGramm`, computes a canonical SHA-256 and records the query metadata without contacting NKRЯ.
+Пробный запуск проверяет наличие `corpus` и `lexGramm`, вычисляет канонический SHA-256 и фиксирует метаданные запроса без обращения к НКРЯ.
 
-Offline harness test:
+Самотест программы:
 
 ```bash
 python scripts/run_ruscorpora_query.py --self-test
 ```
 
-## Live replay
+## Реальный повторный запрос
 
-The runner reads the API key only from `RUSCORPORA_API_TOKEN`:
+Программа читает ключ API только из `RUSCORPORA_API_TOKEN`:
 
 ```bash
 export RUSCORPORA_API_TOKEN='...'
@@ -59,33 +59,33 @@ python scripts/run_ruscorpora_query.py \
   --output corpus-results/claim03-written-partp.json
 ```
 
-`corpus-results/` is ignored by Git. The saved report includes:
+`corpus-results/` игнорируется Git. Сохранённый отчёт содержит:
 
-- timestamp;
-- fixture file name;
-- canonical query SHA-256;
-- endpoint;
-- corpus/subcorpus presence and request params;
-- raw response SHA-256;
-- raw API response;
-- counts of groups/documents/snippet groups/snippets actually returned on that page.
+- отметку времени;
+- имя файла запроса;
+- канонический SHA-256 запроса;
+- конечную точку API;
+- сведения о корпусе/подкорпусе и параметры запроса;
+- SHA-256 сырого ответа;
+- сырой ответ API;
+- число групп, документов, групп фрагментов и фрагментов, реально возвращённых на этой странице.
 
-It never writes `RUSCORPORA_API_TOKEN` or the `Authorization` header.
+Программа никогда не записывает `RUSCORPORA_API_TOKEN` и заголовок `Authorization`.
 
-## Important counting boundary
+## Важная граница подсчёта
 
-A concordance response is paginated. The runner therefore calls its counts `returned_*` and explicitly states that they are **not corpus prevalence or total hit counts**. It does not sum page-level data into an IPM or prevalence number by inference.
+Ответ конкорданса разбит на страницы. Поэтому программа называет свои счётчики `returned_*` и прямо указывает, что это **не распространённость в корпусе и не полное число совпадений**. Она не выводит IPM или показатель распространённости простым суммированием данных одной страницы.
 
-For a publishable frequency comparison, first establish from NKRЯ documentation/output which field is the valid total numerator and which corpus/subcorpus statistic is the valid word-count denominator. Then normalize consistently across matched slices and record that calculation separately.
+Для публикуемого сравнения частот сначала нужно по документации и ответу НКРЯ установить, какое поле является корректным полным числителем и какая статистика корпуса/подкорпуса является корректным знаменателем по числу слов. После этого одинаково нормализовать сопоставимые срезы и отдельно зафиксировать расчёт.
 
-## Claim-specific use
+## Использование для конкретных утверждений
 
-For `GAL-CLAIM-01`, export separate matched queries/subcorpora for the predeclared bureaucratic constructions across institutional, publicistic/newspaper and non-official registers and comparable periods. A raw modern hit count is not evidence of diffusion.
+Для `GAL-CLAIM-01` экспортируйте отдельные сопоставимые запросы и подкорпусы для заранее определённых бюрократических конструкций в институциональном, публицистическом/газетном и неофициальном регистрах за сопоставимые периоды. Простое число современных совпадений не доказывает распространение конструкции между регистрами.
 
-For `GAL-CLAIM-03`, export separate `partp` and `gerp` searches across deliberately matched written/spoken/register slices. Lower spoken frequency is not a grammatical error and does not by itself establish “dryness.”
+Для `GAL-CLAIM-03` экспортируйте отдельные поиски `partp` и `gerp` по сознательно сопоставленным срезам письменной, устной речи и регистров. Более низкая частота в устной речи не является грамматической ошибкой и сама по себе не доказывает «сухость» конструкции.
 
-For `GAL-CLAIM-14`, this lexicogrammatical concordance runner is not sufficient by itself. Lexical-diversity work needs a preregistered measure, matched/equalized samples and a separate analysis pipeline; do not force a “vocabulary impoverishment” conclusion out of concordance counts.
+Для `GAL-CLAIM-14` одного лексико-грамматического конкорданса недостаточно. Исследование лексического разнообразия требует заранее выбранной метрики, сопоставимых или выровненных выборок и отдельного анализа; нельзя выводить «обеднение словаря» из числа совпадений конкорданса.
 
-## Evidence promotion
+## Повышение статуса доказательств
 
-A successful API response proves only that the query executed. A reviewed, normalized corpus result may change a claim's empirical evidence status. It still does not promote a Nora Gal editorial rule to `NORM`, `HARD_GATE` or `DEFAULT_MECHANICAL` without the project's separate normative/mechanical criteria.
+Успешный ответ API доказывает только то, что запрос выполнился. Проверенный и нормализованный корпусный результат может изменить статус эмпирического подтверждения утверждения. Но сам по себе он не превращает редакторское правило Норы Галь в `NORM`, `HARD_GATE` или `DEFAULT_MECHANICAL`: для этого остаются отдельные нормативные и механические критерии проекта.

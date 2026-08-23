@@ -1,8 +1,8 @@
-# Third-party notices
+# Уведомления о сторонних материалах
 
-`humanizer_russian` contains and adapts material that originated in `smixs/humanizer-ru` and was carried through `Antiokh/humanizer--ru`.
+`humanizer_russian` содержит и адаптирует материалы, происходящие из `smixs/humanizer-ru` и перенесённые через `Antiokh/humanizer--ru`.
 
-The inherited material was distributed under the MIT License. Its notice is preserved below as required by that license.
+Унаследованные материалы распространялись по лицензии MIT. Её оригинальный текст сохранён ниже, как того требует лицензия.
 
 ## humanizer-ru — MIT License
 
@@ -28,6 +28,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Project lineage
+## История проекта
 
-See `MIGRATION.md` for the development history and the old PRs from which the Russian semantic and native-usage layers were consolidated.
+См. `MIGRATION.md`: там описана история разработки и старые PR, из которых были объединены русский семантический слой и слой живого употребления.

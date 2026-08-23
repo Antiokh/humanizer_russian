@@ -1,21 +1,21 @@
-# Information structure
+# Информационная структура
 
-Russian word order should be selected from discourse context, not randomized and not restored to English SVO by default.
+Порядок слов в русском нужно выбирать по контексту, а не переставлять слова случайно и не возвращать фразу к английской схеме SVO по умолчанию.
 
-Ask:
+Нужно установить:
 
-- what is already known;
-- what is new;
-- what question is being answered;
-- whether the sentence continues or resets the discourse;
-- where the intended prosodic focus falls.
+- что уже известно;
+- что сообщается впервые;
+- на какой вопрос отвечает фраза;
+- продолжает ли она текущую линию или задаёт новую рамку;
+- куда приходится предполагаемое интонационное ударение.
 
-Neutral given→new movement often puts new information later, but an answer, correction or objection can place the strongest element first.
+Нейтральное движение от известного к новому часто ставит новую информацию ближе к концу, но ответ, поправка или возражение могут вынести самый сильный элемент в начало.
 
-Examples:
+Примеры:
 
 > Что Паша чувствует к Маше? — Паша Машу любит.
 
 > Кто любит Машу? — Паша Машу любит.
 
-The same surface order can carry different focus under different context/intonation, so no positional rule should be universal.
+Один и тот же порядок слов при разном контексте и интонации может давать разный фокус, поэтому универсального позиционного правила здесь нет.

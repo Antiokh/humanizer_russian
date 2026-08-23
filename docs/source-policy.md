@@ -1,23 +1,23 @@
-# Source policy
+# Политика работы с источниками
 
-## NORM
+## `NORM`
 
-Claims that a construction is correct/incorrect Russian should cite a directly relevant normative or academic source where practical. Preferred sources include Gramota's academic reference materials and Russian grammar/corpus resources.
+Утверждения о том, что конструкция правильна или неправильна в русском языке, по возможности должны опираться на прямо относящийся к вопросу нормативный или академический источник. Предпочтительны академические справочные материалы «Грамоты» и ресурсы по русской грамматике и корпусам.
 
-## NATIVE_USAGE
+## `NATIVE_USAGE`
 
-Native-speaker observations are explicitly labelled as usage/editorial rules, not disguised as academic norms. They should include context and counterexamples. Corpus validation and philologist feedback can strengthen them.
+Наблюдения носителей явно помечаются как правила употребления или редакторские предпочтения, а не маскируются под академическую норму. Для них нужны контекст и контрпримеры. Корпусная проверка и отзыв филолога могут усилить такие правила.
 
-## EDITING
+## `EDITING`
 
-Nora Gal and information-style sources guide editing quality. Their advice does not automatically become grammar and should not be converted into word blacklists.
+Нора Галь и источники по информационному стилю помогают оценивать качество редактуры. Их советы не становятся грамматикой автоматически и не должны превращаться в чёрные списки слов.
 
-## AI claims
+## Утверждения об ИИ
 
-Model-authorship claims are probabilistic. A single word, punctuation mark or rhetorical construction is not sufficient evidence of AI authorship.
+Утверждения о машинном авторстве вероятностны. Одного слова, знака препинания или риторической конструкции недостаточно, чтобы считать текст созданным ИИ.
 
-Numeric thresholds require a documented validation corpus. Until then, the linter reports soft candidates rather than an AI probability.
+Численные пороги требуют документированного проверочного корпуса. Пока его нет, линтер сообщает о мягких кандидатах, а не выдаёт вероятность ИИ.
 
-## External sources
+## Внешние источники
 
-When documenting unstable product behavior (for example, current ChatGPT/GPT Builder availability), use current first-party documentation and avoid freezing temporary product assumptions into language rules.
+При описании изменчивого поведения продуктов, например текущей доступности ChatGPT или GPT Builder, используйте актуальную документацию первой стороны и не превращайте временные особенности продукта в языковые правила.

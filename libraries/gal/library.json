@@ -10,7 +10,7 @@
   "linter_path": "scripts/lint_gal.py",
   "enabled_by_default": true,
   "status": "OPERATIONAL",
-  "source_status": "OPERATIONAL_FOR_INTEGRATION; full sequential EPUB study; 35/35 spine documents covered",
+  "source_status": "OPERATIONAL_FOR_INTEGRATION; последовательное исследование EPUB завершено; покрыты 35 из 35 документов spine",
   "source_version": "epub-sha256:38bdce9dfaf93ea820aae3fd0c7da74e9c2a908f5a3c77da2764793535bf4aa9",
   "rules_path": "libraries/gal/rules.json",
   "model_only_reference": "libraries/gal/model-only.md",
@@ -33,5 +33,5 @@
     "libraries/gal/rules.json",
     "libraries/gal/model-only.md"
   ],
-  "notes": "42 audited book-derived EDITING rules: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 3 METRIC_ONLY, 36 MODEL_ONLY. Compact default consumes the library but remains silent for Gal; --extended exposes only the calibrated surface candidates. Editorial Board uses the same review_v1 output and preserves Gal provenance. Promoted to OPERATIONAL after the full deterministic architecture/library/source/compact/board CI suite passed on PR #16. Historical/empirical source claims are separately calibrated against modern external evidence in studies/nora-gal/external-evidence-2026.md with machine-readable dispositions in external-evidence-2026.json; corpus-dependent claims have an explicit reproducible NKRЯ plan and never become NORM by source authority."
+  "notes": "42 проверенных книжных правила класса EDITING: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 3 METRIC_ONLY, 36 MODEL_ONLY. Compact по умолчанию использует библиотеку, но не показывает замечания Галь; --extended выводит только откалиброванные поверхностные кандидаты. Редколлегия использует тот же вывод review_v1 и сохраняет происхождение замечаний Галь. Библиотека переведена в OPERATIONAL после прохождения полного детерминированного набора проверок архитектуры, библиотек, источника, Compact и редколлегии в PR #16. Исторические и эмпирические утверждения источника отдельно сверяются с современными внешними данными в studies/nora-gal/external-evidence-2026.md; машиночитаемые решения находятся в external-evidence-2026.json. Для утверждений, зависящих от корпуса, есть явный воспроизводимый план НКРЯ; авторитет источника сам по себе никогда не превращает их в NORM."
 }
