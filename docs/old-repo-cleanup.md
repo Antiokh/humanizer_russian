@@ -1,13 +1,13 @@
-# Old repository cleanup
+# Очистка старого репозитория
 
-`Antiokh/humanizer--ru/main` is intentionally left unchanged by the migration.
+`Antiokh/humanizer--ru/main` намеренно не меняется в ходе миграции.
 
-The following development lines were consolidated into this repository and should no longer be active work branches in the old fork:
+Следующие линии разработки перенесены в этот репозиторий и больше не должны использоваться как рабочие ветки старого форка:
 
-- `agent/add-nora-gal-language-patterns` (old PR #1);
-- `agent/russian-language-layer` (old PR #2);
-- `humanizer_russian` (migration staging branch).
+- `agent/add-nora-gal-language-patterns` — старый PR #1;
+- `agent/russian-language-layer` — старый PR #2;
+- `humanizer_russian` — промежуточная ветка миграции.
 
-Old PRs are closed without merge so their review discussion remains accessible.
+Старые PR закрыты без слияния, поэтому обсуждение ревью остаётся доступным.
 
-Deleting the old branch refs is a repository-cleanup step only; it does not delete the closed PR discussion or commit history reachable from GitHub's PR pages. If the available integration cannot delete git refs, remove the branch refs from the GitHub UI after confirming the independent repository is complete.
+Удаление старых ссылок на ветки — только уборка репозитория. Оно не удаляет обсуждения закрытых PR и историю коммитов, доступную со страниц PR на GitHub. Если используемая интеграция не умеет удалять git-ссылки, ветки нужно удалить через интерфейс GitHub после проверки полноты самостоятельного репозитория.
