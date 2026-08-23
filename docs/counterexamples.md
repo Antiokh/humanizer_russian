@@ -1,14 +1,14 @@
-# Counterexamples
+# Контрпримеры
 
-Every soft heuristic must include at least one case where the same surface form should be preserved.
+У каждой мягкой эвристики должен быть хотя бы один случай, где ту же внешнюю форму нужно сохранить.
 
-Examples:
+Примеры:
 
-- repeated word: preserve `Никогда. Никогда больше.`;
-- short sentence: preserve `Не приехал.` after an expectation-setting sentence;
-- rhetorical question: preserve `Стоило ли оно того? Пока не знаю.`;
-- em dash: preserve normative ellipsis `Второй — быстрее.`;
-- particle: preserve `же` when it refers to a prior dispute;
-- jargon: preserve domain terminology for an expert audience.
+- повтор слова: сохранить `Никогда. Никогда больше.`;
+- короткое предложение: сохранить `Не приехал.` после фразы, задающей ожидание;
+- риторический вопрос: сохранить `Стоило ли оно того? Пока не знаю.`;
+- тире: сохранить нормативный эллипсис `Второй — быстрее.`;
+- частица: сохранить `же`, если она отсылает к предыдущему спору;
+- жаргон: сохранить профессиональный термин для экспертной аудитории.
 
-Without counterexamples, a heuristic tends to become a destructive hard ban.
+Без контрпримеров эвристика быстро превращается в разрушительный безусловный запрет.
