@@ -32,7 +32,7 @@
   "libraries": [
     {
       "id": "chukovsky",
-      "display_name": "Корней Чуковский — Живой как жизнь",
+      "display_name": "Корней Чуковский — «Живой как жизнь»",
       "source_type": "book",
       "reviewer_id": "chukovsky",
       "adapter": "review_v1",
@@ -68,7 +68,7 @@
       "adapter": "review_v1",
       "enabled_by_default": true,
       "status": "OPERATIONAL",
-      "source_status": "OPERATIONAL_FOR_INTEGRATION; full sequential EPUB study; 35/35 spine documents covered",
+      "source_status": "OPERATIONAL_FOR_INTEGRATION; последовательное исследование EPUB завершено; покрыты 35 из 35 документов spine",
       "rules_path": "libraries/gal/rules.json",
       "rules": {
         "rule_count": 42,
@@ -122,7 +122,7 @@
     },
     {
       "id": "ilyakhov",
-      "display_name": "Максим Ильяхов и Людмила Сарычева — Пиши, сокращай",
+      "display_name": "Максим Ильяхов и Людмила Сарычева — «Пиши, сокращай»",
       "source_type": "book",
       "reviewer_id": "ilyakhov",
       "adapter": "review_v1",
@@ -152,7 +152,7 @@
     },
     {
       "id": "native",
-      "display_name": "Живой русский / core",
+      "display_name": "Живой русский / ядро",
       "source_type": "project_core",
       "reviewer_id": "native",
       "adapter": "review_v1",
@@ -175,7 +175,7 @@
       "adapter": "review_v1",
       "enabled_by_default": true,
       "status": "OPERATIONAL",
-      "source_status": "6 owner-supplied Rosenthal source cycles fully read and integrated; cycle 6 is the image-only 2001 «Справочник по русскому языку. Практическая стилистика»",
+      "source_status": "Шесть предоставленных владельцем циклов источников Розенталя полностью прочитаны и интегрированы; цикл 6 — сканированное издание «Справочник по русскому языку. Практическая стилистика» 2001 года",
       "rules_path": "libraries/rosenthal/rules-index.json",
       "rules": {
         "rule_count": 79,
@@ -222,7 +222,7 @@
       "adapter": "review_v1",
       "enabled_by_default": true,
       "status": "OPERATIONAL",
-      "source_status": "OPERATIONAL_FOR_INTEGRATION; full sequential EPUB study; 55/55 content XHTML documents and 117/117 endnotes covered",
+      "source_status": "OPERATIONAL_FOR_INTEGRATION; последовательное исследование EPUB завершено; покрыты 55 из 55 содержательных XHTML-документов и 117 из 117 концевых примечаний",
       "rules_path": "libraries/visson/rules.json",
       "rules": {
         "rule_count": 39,
