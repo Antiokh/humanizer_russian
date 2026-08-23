@@ -1,43 +1,43 @@
-# Project status
+# Состояние проекта
 
-## 2026-08-21 — eight-profile Russian editor operational
+## 21 августа 2026 года — работает русский редактор с восемью профилями
 
-Canonical repository: `Antiokh/humanizer_russian`.
+Канонический репозиторий: `Antiokh/humanizer_russian`.
 
-Volatile inventory facts are generated from repository manifests and rule indexes. See [`docs/capabilities.md`](docs/capabilities.md) for the human-readable snapshot and [`docs/capabilities.json`](docs/capabilities.json) for the machine-readable form. `scripts/validate_libraries.py` fails CI when those checked-in generated files drift from their sources.
+Изменчивые сведения о составе проекта генерируются из манифестов репозитория и индексов правил. Человекочитаемый снимок находится в [`docs/capabilities.md`](docs/capabilities.md), машинная форма — в [`docs/capabilities.json`](docs/capabilities.json). `scripts/validate_libraries.py` останавливает CI, если сохранённые сгенерированные файлы расходятся со своими источниками.
 
-The project currently combines:
+Сейчас проект объединяет:
 
-- two project-core profiles: **Russian language / norm and usage** and **Native Russian**;
-- six author/source libraries: **Nora Gal**, **Ilyakhov/Sarycheva**, **Chukovsky**, **Lynn Visson**, **D. E. Rosenthal**, **I. B. Golub**;
-- the bounded A. V. Velichko RKI/grammar study integrated source-neutrally into the Russian core;
-- deterministic Compact checking and provenance-preserving Editorial Board review;
-- opt-in model-eval infrastructure for contextual rules;
-- optional evidence-provider architecture kept separate from reviewer votes;
-- deterministic source/library validation, preservation tests and external-review/corpus protocols.
+- два проектных профиля ядра: **Русский язык / норма и употребление** и **Живой русский**;
+- шесть авторских библиотек и библиотек источников: **Нора Галь**, **Ильяхов / Сарычева**, **Чуковский**, **Линн Виссон**, **Д. Э. Розенталь**, **И. Б. Голуб**;
+- ограниченное исследование А. В. Величко по РКИ и грамматике, встроенное в русское ядро независимо от источника;
+- детерминированную компактную проверку и редколлегию, сохраняющую происхождение выводов;
+- отключённую по умолчанию инфраструктуру модельных проверок контекстных правил;
+- необязательную архитектуру дополнительных источников данных, отделённую от голосов рецензентов;
+- детерминированную валидацию источников и библиотек, проверки сохранения текста и протоколы внешней рецензии и корпусных измерений.
 
-## Core policy
+## Основная политика
 
-Hard constraints:
+Жёсткие ограничения:
 
 `USER_INTENT + SEMANTICS + NORM`
 
-Selection among valid variants:
+Выбор среди допустимых вариантов:
 
 `AUTHOR > NATIVE_USAGE > EDITING > AI_CALQUE > detector score`
 
-Consequences:
+Следствия:
 
-- editorial authority cannot create a language error by itself;
-- current norm outranks historical or stylistic advice;
-- native usage and information structure select among normative variants;
-- author voice is protected among normative variants;
-- detector-like signals remain weak diagnostics;
-- **no change** is a valid result.
+- редакторский авторитет сам по себе не может создать языковую ошибку;
+- современная норма важнее исторического или стилистического совета;
+- живое употребление и информационная структура помогают выбирать среди нормативных вариантов;
+- голос автора защищается среди нормативных вариантов;
+- сигналы, похожие на оценки детекторов, остаются слабыми диагностическими признаками;
+- **ничего не менять** — полноценный результат.
 
-## Product modes
+## Режимы продукта
 
-Compact:
+Компактный режим:
 
 ```bash
 python scripts/check.py text.md
@@ -45,71 +45,71 @@ python scripts/check.py --extended text.md
 python scripts/check.py --register everyday text.md
 ```
 
-Default Compact exposes only `HARD_GATE` and `DEFAULT_MECHANICAL` findings. `--extended` adds lower-confidence non-model mechanical/style candidates.
+По умолчанию компактный режим показывает только находки `HARD_GATE` и `DEFAULT_MECHANICAL`. `--extended` добавляет механические и стилистические кандидаты с меньшей уверенностью, не требующие модели.
 
-Editorial Board:
+Редколлегия:
 
 ```bash
 python scripts/review.py text.md --style neutral
 ```
 
-Board preserves reviewer identity, provenance and disagreement. `SEMANTICS`, `NORM` and `ARTIFACT` guardrails stay outside stylistic voting. Real author/source disagreement remains `SOURCE_CONFLICT` rather than being averaged away.
+Редколлегия сохраняет личность рецензента, происхождение вывода и разногласия. Ограничения `SEMANTICS`, `NORM` и `ARTIFACT` находятся вне стилистического голосования. Реальное расхождение авторов или источников остаётся `SOURCE_CONFLICT`, а не усредняется.
 
-All operational libraries use the normalized `review_v1` runtime contract. Exact enabled-library/reviewer inventory is generated in the capability snapshot rather than copied here.
+Все рабочие библиотеки используют нормализованный контракт `review_v1`. Точный список включённых библиотек и рецензентов генерируется в снимке возможностей, а не копируется сюда вручную.
 
-## Runtime precision
+## Точность рабочего контура
 
-Compact deduplication preserves the strongest compatible guardrail/severity and is order-invariant. Normalized findings are validated against one contract for project class, automation level, verdict and hard-gate legality before they can enter Compact or Board.
+Удаление дублей в компактном режиме сохраняет самое сильное совместимое ограничение или уровень строгости и не зависит от порядка входных данных. Нормализованные находки проверяются по единому контракту класса проекта, уровня автоматизации, вердикта и допустимости `HARD_GATE` до попадания в компактный режим или редколлегию.
 
-Russian prose-oriented mechanical checks share a length-preserving masker for fenced code, inline code, URLs, Markdown link targets and HTML comments. This keeps line/span mapping stable while preventing prose rules from firing solely on non-prose payloads.
+Механические проверки русской прозы используют общий маскировщик с сохранением длины для блоков кода, встроенного кода, URL, адресов Markdown-ссылок и HTML-комментариев. Благодаря этому номера строк и диапазоны остаются стабильными, а правила прозы не срабатывают только на содержимом, которое прозой не является.
 
-## Russian core and Velichko
+## Русское ядро и Величко
 
-The Russian core owns current norm and general Russian-usage rules. Normative findings may become guardrails; native-usage, register, RKI-like interference and calque findings remain non-blocking unless independently established as `NORM`.
+Русское ядро отвечает за современную норму и общие правила употребления. Нормативные находки могут стать блокирующими; находки живого употребления, регистра, РКИ-интерференции и калек остаются неблокирующими, пока их независимо не установят как `NORM`.
 
-The A. V. Velichko study is **complete for the source supplied to the project**. The supplied file contains the introduction and chapter bodies 1–13; its table of contents advertises later chapters whose bodies are absent from that file. The study verified 100% of the physically available fragment and did not reconstruct missing material from headings alone.
+Исследование А. В. Величко **полностью обработано в границах источника, предоставленного проекту**. В доступном файле есть введение и тексты глав 1–13; оглавление перечисляет более поздние главы, но их текст в этом файле отсутствует. Исследование проверило 100% физически доступного фрагмента и не реконструировало отсутствующий материал по одним заголовкам.
 
-If a legitimately obtained fuller source is supplied later, that is a new source cycle rather than unfinished work in the current study. Velichko contributes source-neutral Russian/RKI knowledge and is not an additional Editorial Board reviewer.
+Если позже появится законно полученный более полный источник, это будет новый цикл работы с источником, а не незавершённость текущего исследования. Величко добавляет независимые от источника знания о русском и РКИ и не является отдельным рецензентом редколлегии.
 
-## Source libraries
+## Библиотеки источников
 
-Author/source libraries remain separate from current norm. New books in the same school enrich one long-lived library rather than creating extra votes. Repeated mechanisms reuse source-neutral `phenomenon_id` values where appropriate; new source locators are preserved as provenance.
+Авторские библиотеки и библиотеки источников отделены от современной нормы. Новые книги одной школы обогащают одну долгоживущую библиотеку, а не создают дополнительные голоса. Повторяющиеся механизмы по возможности используют независимые от источника значения `phenomenon_id`; ссылки на конкретный источник сохраняются как сведения о происхождении.
 
-Do not copy numeric inventories into this document. Current rule counts, automation distributions, source-cycle counts exposed by indexes, adapters and model-eval registration are generated in [`docs/capabilities.md`](docs/capabilities.md).
+Не копируйте численные показатели состава в этот документ. Текущие количества правил, распределения уровней автоматизации, число циклов обработки источников, индексы, адаптеры и регистрация модельных проверок генерируются в [`docs/capabilities.md`](docs/capabilities.md).
 
-Source completeness is not inferred from rule counts. Where a library manifest explicitly records `source_status`, the generated JSON snapshot preserves that statement verbatim.
+Полнота источника не выводится из числа правил. Если манифест библиотеки явно содержит `source_status`, сгенерированный JSON-снимок сохраняет это утверждение без изменения.
 
-## Contextual model evals
+## Контекстные модельные проверки
 
-`scripts/run_model_evals.py` is a manifest-driven, opt-in harness for contextual rules. Candidate and judge roles are separated; candidate prompts do not receive expected answers or counterexample labels. Live API calls remain outside CI.
+`scripts/run_model_evals.py` — управляемый манифестами стенд для контекстных правил, отключённый по умолчанию. Роли модели-кандидата и модели-судьи разделены; кандидат не получает ожидаемые ответы или метки контрпримеров. Реальные вызовы API остаются вне CI.
 
-All intended author/source libraries with model-eval support are now registered in the generic harness; the exact set is generated in the capability snapshot. Visson's older positive/negative/boundary research fixture remains separate from its project-authored runtime prompt suite rather than being special-cased in the generic harness.
+Все задуманные авторские библиотеки и библиотеки источников с поддержкой модельных проверок зарегистрированы в общем стенде; точный набор генерируется в снимке возможностей. Старый исследовательский набор Виссон с положительными, отрицательными и пограничными примерами остаётся отдельно от созданного проектом набора рабочих запросов и не требует особой ветки в общем стенде.
 
-A green model run is calibration evidence only. It cannot create current `NORM`, `HARD_GATE` or a mechanical rule by itself.
+Зелёный модельный прогон — только калибровочные данные. Сам по себе он не может создать современную `NORM`, `HARD_GATE` или механическое правило.
 
-## Evidence providers
+## Источники дополнительных данных
 
-Evidence is kept separate from reviewer opinion. Provider state is generated in [`docs/capabilities.md`](docs/capabilities.md).
+Дополнительные данные отделены от мнения рецензентов. Состояние источников генерируется в [`docs/capabilities.md`](docs/capabilities.md).
 
-All currently unfinished provider families are explicitly `PROJECT`: they remain visible as roadmap scaffolds but are not runtime-selectable. `--evidence auto` and `--evidence all` consider only `OPERATIONAL` providers, and an explicit attempt to select a `PROJECT` provider is rejected rather than simulated as an unavailable feature.
+Все пока незавершённые семейства источников явно имеют статус `PROJECT`: они видны как заготовки плана развития, но недоступны рабочему контуру. `--evidence auto` и `--evidence all` рассматривают только источники `OPERATIONAL`, а явная попытка выбрать источник `PROJECT` отклоняется вместо имитации недоступной функции.
 
-The next evidence milestone is #49: promote one real, versioned, opt-in current normative-reference provider to `OPERATIONAL` only after its source, rights/terms, version/provenance, query contract and calibration are real. A frequency or corpus signal cannot substitute for normative evidence.
+Следующий этап для этого слоя — #49: перевести один реальный, версионированный и отключённый по умолчанию источник современной нормы в `OPERATIONAL` только после того, как реально определены источник, права и условия использования, версия и происхождение данных, контракт запросов и калибровка. Частота или корпусный сигнал не могут подменять нормативное свидетельство.
 
-## Validation still requiring external resources
+## Проверки, которым ещё нужны внешние ресурсы
 
-These are genuine external-validation tasks rather than unfinished repository plumbing:
+Это настоящие внешние задачи валидации, а не незаконченная внутренняя проводка репозитория:
 
-1. **#22** — execute live contextual/model calibration using explicit API models and credentials;
-2. **#23** — run the planned authenticated NKRЯ calibration for the remaining empirical Gal claims with exported queries and validated denominators;
-3. **#24** — obtain an independent qualified philologist review of the prepared Russian-language boundary cases.
+1. **#22** — выполнить реальную контекстную и модельную калибровку с явно заданными API-моделями и учётными данными;
+2. **#23** — провести запланированную авторизованную калибровку НКРЯ для оставшихся эмпирических утверждений Галь с экспортированными запросами и проверенными знаменателями;
+3. **#24** — получить независимую рецензию квалифицированного филолога на подготовленные пограничные случаи русского языка.
 
-Until they are completed, the project must not claim live-model validation, completed NKRЯ measurement for those claims or independent philologist validation.
+До завершения этих задач проект не должен заявлять о реальной модельной валидации, завершённом измерении НКРЯ для этих утверждений или независимой филологической проверке.
 
-## Internal work still open
+## Открытые внутренние задачи
 
-- **#49** — first operational current normative-reference evidence provider;
-- **#58** — document-level preservation corpus and audited false-positive/noise baseline for realistic multi-paragraph texts.
+- **#49** — первый рабочий источник современной нормативной информации;
+- **#58** — корпус документов для проверки сохранения текста и проверенная базовая оценка ложных срабатываний и шума на реалистичных многоабзацных текстах.
 
-Recent runtime hardening has already completed the former tails around prose masking, Compact severity/deduplication, normalized finding validation, Native `review_v1` migration and Visson/Rosenthal generic model-eval registration. Their implementation history remains in the corresponding closed issues and merged PRs rather than being duplicated here.
+Недавнее усиление рабочего контура уже закрыло прежние хвосты вокруг маскирования непрозового содержимого, строгости и удаления дублей в компактном режиме, валидации нормализованных находок, миграции Native на `review_v1` и регистрации Виссон и Розенталя в общем стенде модельных проверок. История реализации остаётся в соответствующих закрытых задачах и слитых PR, а не дублируется здесь.
 
-The next high-value internal step is #58: measure aggregate behavior on realistic good Russian before adding more mechanical heuristics.
+Следующий наиболее полезный внутренний шаг — #58: измерить совокупное поведение на реалистичном хорошем русском до добавления новых механических эвристик.
