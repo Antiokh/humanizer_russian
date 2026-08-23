@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic regression suite for editorial-board and evidence separation."""
+"""Детерминированный регрессионный набор для редколлегии и слоя дополнительных данных."""
 
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ def evidence_contract_failures() -> list[str]:
     }
     items, status = run_provider(slow, "текст")
     if items or status["status"] != "TIMEOUT":
-        failures.append(f"evidence hard-timeout contract failed: {status}")
+        failures.append(f"нарушен контракт жёсткого тайм-аута дополнительных данных: {status}")
 
     vote_board = build_board(
         [
@@ -71,15 +71,22 @@ def evidence_contract_failures() -> list[str]:
         or group["reviewer_verdicts"].get("test") != "CHANGE"
         or len(group.get("evidence", [])) != 1
     ):
-        failures.append(f"evidence-vs-vote separation failed: {group}")
+        failures.append(f"нарушено разделение дополнительных данных и голосования: {group}")
 
     try:
         run_review("Обычный текст.", evidence_ids=["current_usage"])
     except ValueError as exc:
-        if "project-only" not in str(exc) or "current_usage" not in str(exc):
-            failures.append(f"project-only evidence rejection is unclear: {exc}")
+        message = str(exc).lower()
+        if "current_usage" not in message or (
+            "проект" not in message and "project" not in message
+        ):
+            failures.append(
+                f"неясное отклонение проектного источника дополнительных данных: {exc}"
+            )
     else:
-        failures.append("project-only evidence provider current_usage was selectable")
+        failures.append(
+            "проектный источник дополнительных данных current_usage оказался доступен для выбора"
+        )
     return failures
 
 
@@ -90,13 +97,19 @@ def run_cases(cases: list[dict], validator: Draft202012Validator) -> list[str]:
         if case.get("type", "runtime") == "board_unit":
             board = build_board(case["findings"], style, evidence=case.get("evidence"))
             if len(board["groups"]) != 1:
-                failures.append(f"{case['id']}: expected one board group, got {len(board['groups'])}")
+                failures.append(
+                    f"{case['id']}: ожидалась одна группа редколлегии, получено {len(board['groups'])}"
+                )
                 continue
             group = board["groups"][0]
             if group["status"] != case["expect_status"]:
-                failures.append(f"{case['id']}: status {group['status']} != {case['expect_status']}")
+                failures.append(
+                    f"{case['id']}: статус {group['status']} != {case['expect_status']}"
+                )
             if group["recommendation"] != case["expect_recommendation"]:
-                failures.append(f"{case['id']}: recommendation {group['recommendation']} != {case['expect_recommendation']}")
+                failures.append(
+                    f"{case['id']}: рекомендация {group['recommendation']} != {case['expect_recommendation']}"
+                )
             continue
 
         report = run_review(
@@ -109,40 +122,52 @@ def run_cases(cases: list[dict], validator: Draft202012Validator) -> list[str]:
         try:
             validator.validate(report)
         except Exception as exc:
-            failures.append(f"{case['id']}: report schema failed: {exc}")
+            failures.append(f"{case['id']}: отчёт не прошёл схему: {exc}")
             continue
         if case.get("evidence") is None and report["evidence_status"]:
-            failures.append(f"{case['id']}: default board unexpectedly ran evidence providers")
+            failures.append(
+                f"{case['id']}: редколлегия по умолчанию неожиданно запустила дополнительные источники"
+            )
 
         groups = report["board"]["groups"]
         phenomena = {g["phenomenon_id"] for g in groups}
         statuses = {g["phenomenon_id"]: g["status"] for g in groups}
         guardrails = len(report["board"]["guardrails"])
         rule_ids = {x["rule_id"] for x in report["findings"]}
-        reviewers = {x.get("reviewer_id") for x in report["findings"] if x.get("reviewer_id")}
+        reviewers = {
+            x.get("reviewer_id") for x in report["findings"] if x.get("reviewer_id")
+        }
 
         for expected in case.get("expect_phenomena", []):
             if expected not in phenomena:
-                failures.append(f"{case['id']}: missing phenomenon {expected}")
+                failures.append(f"{case['id']}: нет ожидаемого явления {expected}")
         for forbidden in case.get("must_not_have_phenomena", []):
             if forbidden in phenomena:
-                failures.append(f"{case['id']}: forbidden phenomenon {forbidden}")
+                failures.append(f"{case['id']}: найдено запрещённое явление {forbidden}")
         for expected in case.get("expect_rule_ids", []):
             if expected not in rule_ids:
-                failures.append(f"{case['id']}: missing rule_id {expected}")
+                failures.append(f"{case['id']}: нет rule_id {expected}")
         for forbidden in case.get("must_not_have_rule_ids", []):
             if forbidden in rule_ids:
-                failures.append(f"{case['id']}: forbidden rule_id {forbidden}")
+                failures.append(f"{case['id']}: найден запрещённый rule_id {forbidden}")
         for expected in case.get("expect_reviewers", []):
             if expected not in reviewers:
-                failures.append(f"{case['id']}: missing reviewer {expected}")
-        for phenomenon, expected_status in case.get("expect_status_by_phenomenon", {}).items():
+                failures.append(f"{case['id']}: нет рецензента {expected}")
+        for phenomenon, expected_status in case.get(
+            "expect_status_by_phenomenon", {}
+        ).items():
             if statuses.get(phenomenon) != expected_status:
-                failures.append(f"{case['id']}: status for {phenomenon} {statuses.get(phenomenon)} != {expected_status}")
+                failures.append(
+                    f"{case['id']}: статус для {phenomenon} {statuses.get(phenomenon)} != {expected_status}"
+                )
         if "expect_guardrails" in case and guardrails != case["expect_guardrails"]:
-            failures.append(f"{case['id']}: guardrails {guardrails} != {case['expect_guardrails']}")
+            failures.append(
+                f"{case['id']}: обязательных замечаний {guardrails} != {case['expect_guardrails']}"
+            )
         if "expect_guardrails_min" in case and guardrails < case["expect_guardrails_min"]:
-            failures.append(f"{case['id']}: guardrails {guardrails} < {case['expect_guardrails_min']}")
+            failures.append(
+                f"{case['id']}: обязательных замечаний {guardrails} < {case['expect_guardrails_min']}"
+            )
     return failures
 
 
@@ -153,18 +178,22 @@ def main() -> None:
 
     cases_path = Path(args.cases)
     cases = json.loads(cases_path.read_text(encoding="utf-8"))
-    schema = json.loads((ROOT / "schemas/review-report.schema.json").read_text(encoding="utf-8"))
+    schema = json.loads(
+        (ROOT / "schemas/review-report.schema.json").read_text(encoding="utf-8")
+    )
     Draft202012Validator.check_schema(schema)
     validator = Draft202012Validator(schema)
 
     failures = evidence_contract_failures()
     failures.extend(run_cases(cases, validator))
     if failures:
-        print("EDITORIAL BOARD BENCHMARK FAILED")
+        print("БЕНЧМАРК РЕДКОЛЛЕГИИ НЕ ПРОЙДЕН")
         for failure in failures:
             print(f"- {failure}")
         raise SystemExit(1)
-    print(f"editorial-board benchmark: {len(cases)} cases + evidence contracts OK")
+    print(
+        f"Бенчмарк редколлегии: {len(cases)} сценариев и контракты дополнительных данных — OK"
+    )
 
 
 if __name__ == "__main__":
