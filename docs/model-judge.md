@@ -1,21 +1,21 @@
-# Model-judge contract
+# Контракт модельного судьи
 
-Future semantic/native eval automation should pass the judge:
+Будущая автоматизация семантических проверок и проверок живого русского должна передавать судье:
 
-- source text;
-- user task;
-- candidate rewrite;
-- scenario expectations;
-- optional genre/author context.
+- исходный текст;
+- задачу пользователя;
+- предложенную редактуру;
+- ожидания проверочного сценария;
+- при необходимости контекст жанра или автора.
 
-The judge scores dimensions separately:
+Судья оценивает измерения отдельно:
 
-1. semantic preservation;
-2. norm correctness;
-3. native naturalness;
-4. editorial quality;
-5. author compatibility when applicable;
-6. unsupported additions;
-7. destructive over-editing.
+1. сохранение смысла;
+2. соблюдение нормы;
+3. естественность русского;
+4. качество редактуры;
+5. соответствие автору, если это применимо;
+6. неподтверждённые добавления;
+7. разрушительную избыточную редактуру.
 
-Do not give the judge one reference rewrite as a string-match target. Russian word order and style often admit several good outputs.
+Не нужно давать судье единственный эталонный вариант как строку для точного совпадения. Русский порядок слов и стиль часто допускают несколько хороших решений.
