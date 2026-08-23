@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Guard mechanical-first, dual-runtime architecture against regressions."""
+"""Защищает архитектурный контракт: сначала механика, затем контекстные слои."""
 from __future__ import annotations
 
 import json
@@ -50,10 +50,11 @@ REQUIRED_FILES = [
     "references/russian-core-rules.md",
     ".github/workflows/quality.yml",
 ]
+
 AGENT_MARKERS = [
     "USER_INTENT + SEMANTICS + NORM",
     "AUTHOR > NATIVE_USAGE > EDITING > AI_CALQUE > detector score",
-    "Mechanical-first",
+    "Сначала механика",
     "DEFAULT_MECHANICAL",
     "EXTENDED_SOFT",
     "MODEL_ONLY",
@@ -61,21 +62,24 @@ AGENT_MARKERS = [
     "Два продуктовых режима",
     "Книги — подключаемые библиотеки знаний",
 ]
+
 CHECK_MARKERS = [
     "MECHANICAL_RULES",
     "--extended",
     "--register",
     "from library_runtime import compact_shape, run_libraries",
 ]
+
 BOARD_MARKERS = [
-    "Editorial Board mode",
+    "Режим редколлегии",
     "scripts/review.py",
     "CONSENSUS",
     "SOURCE_CONFLICT",
-    "Evidence",
-    "Russian language layer",
+    "Дополнительные данные",
+    "Слой русского языка",
     "RU-SEM-CATEGORY-COLLECTION",
 ]
+
 QUALITY_MARKERS = [
     "python -m compileall -q scripts",
     "python scripts/lint.py --self-test",
@@ -108,7 +112,7 @@ def _finding_schema_failures() -> list[str]:
         actual = set(props.get(field, {}).get("enum", []))
         if actual != values:
             failures.append(
-                f"review-report finding {field} enum drift: {sorted(actual)} != {sorted(values)}"
+                f"review-report: enum поля {field} изменился: {sorted(actual)} != {sorted(values)}"
             )
     return failures
 
@@ -121,11 +125,12 @@ def _adapter_contract_failures() -> list[str]:
         manifest = json.loads(path.read_text(encoding="utf-8"))
         if manifest.get("source_type") == "project_core" and manifest.get("adapter") != "review_v1":
             failures.append(
-                f"project core {manifest.get('id', path.parent.name)} must use review_v1, got {manifest.get('adapter')!r}"
+                f"ядро проекта {manifest.get('id', path.parent.name)} должно использовать review_v1, "
+                f"получено {manifest.get('adapter')!r}"
             )
     runtime = read("scripts/library_runtime.py")
     if "legacy_lint_v1" in runtime or "normalize_legacy" in runtime:
-        failures.append("shared library runtime reintroduced legacy adapter compatibility")
+        failures.append("общий runtime библиотек снова содержит совместимость со старым адаптером")
     return failures
 
 
@@ -133,7 +138,7 @@ def main() -> None:
     failures: list[str] = []
     for path in REQUIRED_FILES:
         if not (ROOT / path).is_file():
-            failures.append(f"missing required architecture file: {path}")
+            failures.append(f"нет обязательного архитектурного файла: {path}")
 
     if not failures:
         agents = read("AGENTS.md")
@@ -143,29 +148,29 @@ def main() -> None:
         contributing = read("CONTRIBUTING.md")
         for marker in AGENT_MARKERS:
             if marker not in agents:
-                failures.append(f"AGENTS.md lost required marker: {marker}")
+                failures.append(f"AGENTS.md потерял обязательный маркер: {marker}")
         for marker in CHECK_MARKERS:
             if marker not in check:
-                failures.append(f"scripts/check.py lost compact-library marker: {marker}")
+                failures.append(f"scripts/check.py потерял обязательный маркер: {marker}")
         for marker in BOARD_MARKERS:
             if marker not in board:
-                failures.append(f"BOARD_SKILL.md lost required marker: {marker}")
+                failures.append(f"BOARD_SKILL.md потерял обязательный маркер: {marker}")
         for marker in QUALITY_MARKERS:
             if marker not in quality:
-                failures.append(f"quality workflow lost required check: {marker}")
+                failures.append(f"workflow качества потерял обязательную проверку: {marker}")
         if "evidence_runtime" in check or "run_evidence" in check:
-            failures.append("scripts/check.py must not invoke evidence providers")
+            failures.append("scripts/check.py не должен вызывать источники дополнительных данных")
         if "humanizer+ru" in contributing:
-            failures.append("CONTRIBUTING.md reintroduced deprecated project name humanizer+ru")
+            failures.append("CONTRIBUTING.md снова использует устаревшее имя humanizer+ru")
         failures.extend(_finding_schema_failures())
         failures.extend(_adapter_contract_failures())
 
     if failures:
-        print("ARCHITECTURE CONTRACT FAILED")
+        print("АРХИТЕКТУРНЫЙ КОНТРАКТ НАРУШЕН")
         for failure in failures:
             print(f"- {failure}")
         raise SystemExit(1)
-    print("Architecture contract: OK")
+    print("Архитектурный контракт: OK")
 
 
 if __name__ == "__main__":
