@@ -1,43 +1,43 @@
-# Pre-migration review notes
+# Заметки ревью до миграции
 
-The old `Antiokh/humanizer--ru` PR #2 received an automated CodeRabbit review before the project moved here. The useful findings were treated as review input, not blindly applied.
+Старый PR #2 в `Antiokh/humanizer--ru` получил автоматическое ревью CodeRabbit до переноса проекта в этот репозиторий. Полезные замечания рассматривались как входные данные для проверки, а не применялись вслепую.
 
-## Applied
+## Принято
 
-### Preserve document boundaries in author profiling
+### Сохранять границы документов при профилировании автора
 
-The profiler previously joined source documents before sentence and n-gram analysis. This could create a sentence/n-gram across two unrelated files. Fixed by aggregating these statistics per document.
+Раньше профилировщик объединял исходные документы до анализа предложений и n-грамм. Из-за этого предложение или n-грамма могли пересечь границу двух несвязанных файлов. Исправлено: эта статистика теперь агрегируется по документам.
 
-### Do not emit source paths
+### Не выводить пути исходных файлов
 
-Raw caller paths could expose usernames/home directories when a profile is shared. `corpus.files` was removed from generated profiles.
+Необработанные пути вызывающей стороны могли раскрыть имена пользователей или домашние каталоги при передаче профиля. Поле `corpus.files` удалено из создаваемых профилей.
 
-### One canonical profile contract
+### Один канонический контракт профиля
 
-The old profiler/docs/schema had drifted. v1 is now defined by `profiles/schema.json`, emitted by `profile_author.py`, documented in `author-profile.md`, and validated in CI.
+Старые профилировщик, документация и схема разошлись. Версия 1 теперь определяется `profiles/schema.json`, создаётся `profile_author.py`, документируется в `author-profile.md` и проверяется в CI.
 
-### Keep NATIVE_WARNING non-gating
+### `NATIVE_WARNING` не должен блокировать
 
-Native-use findings are preferences, not proof of error. Only semantic/norm errors and reliable technical artifacts are automatic blockers.
+Находки живого употребления — предпочтения, а не доказательство ошибки. Автоматически блокируют только ошибки смысла или нормы и надёжные технические артефакты.
 
-### Cover `но` in repeated-common-material candidates
+### Учитывать `но` при поиске повторённого общего материала
 
-The linter now checks common repeated material across both `а` and `но` patterns, while remaining a soft warning.
+Линтер теперь проверяет общий повтор и в конструкциях с `а`, и с `но`, сохраняя статус мягкого предупреждения.
 
-### Update eval count
+### Обновить число проверочных случаев
 
-The Russian suite is documented through `ru-21`.
+Русский набор документирован до `ru-21` включительно.
 
-### Fix the zero-subject/ellipsis source mapping
+### Исправить привязку источника для нулевого субъекта и эллипсиса
 
-A citation to a general preposition chapter did not support the exact combined claim. The normative reference now distinguishes zero-subject constructions from other ellipsis mechanisms and links them separately.
+Ссылка на общую главу о предлогах не подтверждала точное составное утверждение. Нормативный справочник теперь отделяет конструкции с нулевым субъектом от других механизмов эллипсиса и связывает их с источниками отдельно.
 
-## Rejected
+## Отклонено
 
-### “Only Business/Enterprise/Edu can create GPTs”
+### «GPT могут создавать только Business / Enterprise / Edu»
 
-Rejected after checking current official OpenAI documentation. The current guidance says building/editing GPTs applies to paid ChatGPT users; managed workspaces can impose additional role/permission controls. The project therefore does not encode the narrower automated-review claim.
+Отклонено после проверки актуальной официальной документации OpenAI. Текущее руководство говорит, что создание и редактирование GPT доступно платным пользователям ChatGPT; управляемые рабочие пространства могут вводить дополнительные ограничения ролей и прав. Поэтому проект не закрепляет более узкое утверждение автоматического ревью.
 
-## Principle
+## Принцип
 
-Review comments are evidence to verify, not instructions to execute mechanically. This is especially important in a language-editing project where the core problem is already over-mechanical rule application.
+Комментарии ревью — сведения, которые нужно проверять, а не инструкции для механического исполнения. Для проекта языковой редактуры это особенно важно: его центральная проблема как раз состоит в чрезмерно механическом применении правил.
