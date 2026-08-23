@@ -1,48 +1,48 @@
-# Old PR #2 — Russian-first / native-usage architecture
+# Старый PR #2 — архитектура «сначала русский» и живое употребление
 
-Historical source: `Antiokh/humanizer--ru` PR #2, `Rebuild humanizer as Russian-first editor (humanizer+ru)`.
+Исторический источник: PR #2 `Rebuild humanizer as Russian-first editor (humanizer+ru)` в `Antiokh/humanizer--ru`.
 
-The branch became the staging ground for the independent `humanizer_russian` repository. It is intentionally not merged into `humanizer--ru/main`.
+Эта ветка стала промежуточной площадкой перед созданием самостоятельного репозитория `humanizer_russian`. Намеренно не сливается в `humanizer--ru/main`.
 
-## Architecture carried forward
+## Перенесённая архитектура
 
-Hard constraints:
+Жёсткие ограничения:
 
 `SEMANTICS + NORM`
 
-Selection among valid forms:
+Выбор среди допустимых форм:
 
 `AUTHOR > NATIVE_USAGE > EDITING > AI_CALQUE > detector score`
 
-The central split is between:
+Главное разделение:
 
-- **NORM** — what is valid/correct Russian;
-- **NATIVE_USAGE** — which valid wording sounds natural to a native speaker in the given context;
-- **AUTHOR** — how a specific person actually writes, derived from a corpus.
+- **NORM** — что допустимо и правильно в русском языке;
+- **NATIVE_USAGE** — какой из допустимых вариантов естественно звучит для носителя в данном контексте;
+- **AUTHOR** — как на самом деле пишет конкретный человек по данным его корпуса.
 
-## Native-usage work carried forward
+## Перенесённые правила живого русского
 
-### Contextual economy
+### Контекстная экономия
 
-Russian does not need every sentence to repeat all recoverable context.
+Русскому не нужно повторять в каждом предложении весь восстанавливаемый контекст.
 
-Examples:
+Примеры:
 
 - `— Кого любит Паша? — Машу.`
 - `Первый вариант дорогой. Второй — быстрее.`
-- zero/implicit subject when unambiguous.
+- нулевой или невыраженный субъект, когда он однозначен.
 
-### Repetition and common-material factoring
+### Повтор и вынос общего материала
 
-A grammatically valid sentence may still sound synthetic:
+Грамматически правильная фраза всё равно может звучать искусственно:
 
 > Это не ошибка в расчёте, а ошибка в исходных данных.
 
-Neutral native compression:
+Нейтральное русское сжатие:
 
 > Это ошибка не в расчёте, а в исходных данных.
 
-Likewise:
+Аналогично:
 
 > Мы не меняем цену, а меняем условия.
 
@@ -50,117 +50,117 @@ Likewise:
 
 > Мы меняем не цену, а условия.
 
-The rule is not “never repeat”. Intentional repetition such as `Никогда. Никогда больше.` is preserved.
+Это не правило «никогда не повторять». Намеренный повтор вроде `Никогда. Никогда больше.` сохраняется.
 
-### Information structure
+### Информационная структура
 
-Word order is selected from theme/rheme, prior context and intended focus rather than mechanically preserving English SVO or randomly varying syntax.
+Порядок слов выбирается по теме и реме, предтексту и нужному фокусу, а не механически копирует английский SVO и не меняется случайным образом ради разнообразия.
 
-Both beginning and ending can be strong positions depending on the discourse move.
+В зависимости от движения мысли сильной позицией может быть и начало, и конец фразы.
 
-### Russian contrast
+### Русское противопоставление
 
-`не X, а Y`, `не только X, но и Y`, `X, но Y` are not hard-banned. The editor checks:
+`не X, а Y`, `не только X, но и Y`, `X, но Y` не запрещаются по форме. Редактор проверяет:
 
-- whether the second part adds real semantic contrast/gain;
-- whether repeated common material can be factored;
-- whether the resulting word order matches the intended focus.
+- есть ли во второй части настоящий смысловой контраст или прирост;
+- можно ли вынести повторяющийся общий материал;
+- соответствует ли получившийся порядок слов нужному фокусу.
 
-### Punctuation
+### Пунктуация
 
-Normative em dashes, colons, rhetorical questions and meaningful parcellation are not deleted for detector score.
+Нормативные тире, двоеточия, риторические вопросы и осмысленная парцелляция не удаляются ради показателя детектора.
 
-## Old 34-rule audit
+## Старый аудит 34 правил
 
-The active project moved the inherited rules into `references/rule-audit.md` and reclassified them rather than preserving a flat detector-driven list.
+В действующем проекте унаследованные правила перенесены в `references/rule-audit.md` и переклассифицированы вместо сохранения плоского списка, ориентированного на детекторы.
 
-Notable changes:
+Ключевые изменения:
 
-- negative parallelism hard ban removed;
-- rule of three becomes cluster-only warning;
-- real hedging is preserved;
-- stop-words are review triggers, not deletion commands;
-- technical jargon is audience-dependent;
-- short sentences/parcellation are checked by function;
-- repeated verbs do not force synonym cycling;
-- explicit paragraph connectors are not mandatory.
+- снят жёсткий запрет на отрицательный параллелизм;
+- «правило трёх» стало предупреждением только для заметных серий;
+- настоящие оговорки и маркеры неуверенности сохраняются;
+- стоп-слова являются поводом проверить контекст, а не командой удалить слово;
+- технический жаргон оценивается по аудитории;
+- короткие предложения и парцелляция проверяются по функции;
+- повтор глагола не требует обязательного перебора синонимов;
+- явные связки между абзацами не являются обязательными.
 
-## Evidence audit
+## Аудит доказательств
 
-`references/evidence-audit.md` separates:
+`references/evidence-audit.md` разделяет:
 
-- normative claims;
-- limited empirical findings;
-- editorial heuristics;
-- unsupported hypotheses.
+- нормативные утверждения;
+- ограниченные эмпирические данные;
+- редакторские эвристики;
+- неподтверждённые гипотезы.
 
-Unsupported pseudo-precision from the old approach is not carried forward as active logic: fixed “burstiness” thresholds, bold-density rules, compulsory informal openings and detector-derived AI scores.
+Ложная точность старого подхода не переносится в действующую логику: фиксированные пороги «burstiness», правила плотности полужирного текста, обязательные неформальные вступления и вычисленные по детектору «проценты ИИ» не используются.
 
-## Author profile work
+## Авторский профиль
 
-The old branch introduced the first `humanizer+ru+user` tooling. It was reviewed and corrected before migration.
+В старой ветке появились первые инструменты `humanizer+ru+user`. Перед миграцией их проверили и исправили.
 
-Current implementation:
+Текущая реализация:
 
 - `scripts/profile_author.py`;
 - `profiles/schema.json`;
 - `references/author-profile.md`.
 
-The generated v1 profile:
+Сгенерированный профиль v1:
 
-- preserves document boundaries;
-- never creates n-grams across source files;
-- does not expose raw filesystem paths;
-- uses one strict schema shared by profiler, docs and CI;
-- keeps observed errors separate from style;
-- defaults to `imitate_errors=false`.
+- сохраняет границы документов;
+- никогда не строит n-граммы через границу двух исходных файлов;
+- не раскрывает сырые пути файловой системы;
+- использует одну строгую схему для профилировщика, документации и CI;
+- хранит наблюдаемые ошибки отдельно от стиля;
+- по умолчанию задаёт `imitate_errors=false`.
 
-## CodeRabbit findings incorporated
+## Учтённые замечания CodeRabbit
 
-Useful findings from the old PR review were verified and fixed:
+Полезные замечания старого ревью были проверены и исправлены:
 
-1. **Document-boundary bug** — fixed by per-document sentence/n-gram aggregation.
-2. **Schema drift** — fixed with one canonical profile v1 contract.
-3. **Filesystem path leakage** — removed from generated profiles.
-4. **`NATIVE_WARNING` accidentally treated as blocking** — corrected; it is always contextual.
-5. **`а` only in repeated-common-material detection** — extended to a bounded `но` candidate and self-test.
-6. **Eval documentation still said 18 scenarios** — updated to `ru-01` — `ru-21`.
-7. **Unrelated RusGram citation** — replaced and the claim narrowed to distinguish zero subjects from ellipsis.
-8. **Linter output contract missing `NATIVE_WARNING`** — now documented in README/skill/docs.
+1. **Ошибка на границах документов** — статистика предложений и n-грамм теперь собирается по каждому документу отдельно.
+2. **Расхождение схемы** — введён единый канонический контракт профиля v1.
+3. **Утечка путей файловой системы** — пути удалены из сгенерированных профилей.
+4. **`NATIVE_WARNING` ошибочно считался блокирующим** — исправлено; это всегда контекстное замечание.
+5. **Проверялся только союз `а` при повторе общего материала** — добавлен ограниченный кандидат с `но` и самотест.
+6. **Документация проверок всё ещё говорила о 18 сценариях** — обновлено до `ru-01` — `ru-21`.
+7. **Нерелевантная ссылка на RusGram** — заменена, а формулировка сужена так, чтобы различать нулевые субъекты и эллипсис.
+8. **В контракте вывода линтера не было `NATIVE_WARNING`** — теперь он описан в README, skill и документации.
 
-One automated suggestion about GPT availability was rejected after checking first-party product documentation; product availability is not frozen into the language architecture.
+Одно автоматическое предложение о доступности GPT было отклонено после проверки официальной документации продукта: временные ограничения продукта не закрепляются в языковой архитектуре.
 
-## Linter carried forward
+## Перенесённый линтер
 
-The independent `scripts/lint.py` is a conservative surface linter.
+Самостоятельный `scripts/lint.py` — консервативный поверхностный линтер.
 
-Only reliable `ARTIFACT` findings affect its default exit status.
+На код возврата по умолчанию влияют только надёжные находки `ARTIFACT`.
 
-`NATIVE_WARNING`, `AI_PATTERN` and `STYLE_WARNING` are candidates requiring contextual review.
+`NATIVE_WARNING`, `AI_PATTERN` и `STYLE_WARNING` — кандидаты для контекстной проверки.
 
-## Evals carried forward
+## Перенесённые проверочные сценарии
 
-`evals/russian-language.json` contains `ru-01` — `ru-21`, covering:
+`evals/russian-language.json` содержит `ru-01` — `ru-21` и покрывает:
 
-- normative contrast;
-- semantic gain;
-- colon/enumeration;
-- ellipsis;
-- theme/rheme;
-- strong initial focus;
-- SVO lock;
-- possessive calques;
-- particles;
-- dangling gerunds;
-- good/bad parcellation;
-- rhetorical questions;
-- jargon by audience;
-- author errors;
-- repeated noun/verb factoring;
-- marked two-edge focus.
+- нормативное противопоставление;
+- смысловой прирост;
+- двоеточие и перечисление;
+- эллипсис;
+- тему и рему;
+- сильный начальный фокус;
+- фиксацию на SVO;
+- кальки с притяжательными местоимениями;
+- частицы;
+- висячие деепричастия;
+- уместную и неуместную парцелляцию;
+- риторические вопросы;
+- жаргон с учётом аудитории;
+- ошибки автора;
+- вынос повторяющихся существительных и глаголов;
+- маркированный фокус на двух краях фразы.
 
-## Why the old PR is closed instead of merged
+## Почему старый PR закрыт без слияния
 
-The work has become a separate project. Merging it into `humanizer--ru` would defeat the new separation: the old repository should remain a small compatibility fork, while `Antiokh/humanizer_russian` becomes the active development base.
+Работа стала отдельным проектом. Слияние с `humanizer--ru` уничтожило бы новое разделение: старый репозиторий должен остаться небольшим форком совместимости, а `Antiokh/humanizer_russian` — стать основной площадкой разработки.
 
-Closing the old PR keeps CodeRabbit comments, diffs and history available as review provenance without changing the old `main`.
+Закрытый PR сохраняет комментарии CodeRabbit, diff и историю как источник ревью, не меняя старый `main`.
