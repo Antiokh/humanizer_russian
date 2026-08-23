@@ -10,7 +10,7 @@
   "linter_path": "scripts/lint_rosenthal.py",
   "enabled_by_default": true,
   "status": "OPERATIONAL",
-  "source_status": "6 owner-supplied Rosenthal source cycles fully read and integrated; cycle 6 is the image-only 2001 «Справочник по русскому языку. Практическая стилистика»",
+  "source_status": "Шесть предоставленных владельцем циклов источников Розенталя полностью прочитаны и интегрированы; цикл 6 — сканированное издание «Справочник по русскому языку. Практическая стилистика» 2001 года",
   "source_version": "cycle1 sha256:b239448a8ebcaaf566340441c22eb94c272e128e82ec53c70231dcf70704c4f5; cycle2 sha256:e48193cd41cda3ffb85b3ad64f793039b6dbbc4b098d890b61946d1125c779ac; cycle3 sha256:45f01400ff6d954488dc06236b931ff2f10aa59c30f95d2720ded858468d2667; cycle4 sha256:1a737311abfacf32a1c5551e4e1ce21c061883dcbf1800d9ac97a3b49ef3bdeb; cycle5 sha256:20d76510863a76a345b4c6ff32c15bd614131f79d821924f33c7f27fd4c71cc0; cycle6 sha256:99c8cca2ecc144ab617c08b3187ed5ef772a8e2ce858a23d00c69e06366a25a5",
   "rules_path": "libraries/rosenthal/rules-index.json",
   "rule_groups": [
@@ -122,5 +122,5 @@
     "evals/rosenthal.json",
     "evals/rosenthal-map.json"
   ],
-  "notes": "79 cumulative Rosenthal rules across 6 source cycles: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 1 METRIC_ONLY, 75 MODEL_ONLY. The registered model-eval suite is compact, synthetic and preservation-oriented; it never promotes source-period advice to current NORM. Cycle 6 adds 125 atomic observations, 1 contextual AUTHOR/MODEL_ONLY rule (R79), 64 provenance enrichments and no mechanical detector."
+  "notes": "79 совокупных правил Розенталя по шести циклам источников: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 3 EXTENDED_SOFT, 1 METRIC_ONLY, 75 MODEL_ONLY. Зарегистрированный набор модельных проверок компактный, синтетический и ориентирован на сохранение текста; он никогда не превращает историческую рекомендацию источника в современную NORM. Цикл 6 добавляет 125 атомарных наблюдений, одно контекстное правило AUTHOR/MODEL_ONLY (R79), 64 уточнения происхождения и ни одного нового механического детектора."
 }
