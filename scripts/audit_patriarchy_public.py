@@ -17,7 +17,7 @@ from pathlib import Path
 
 BASE = "https://patriarchy.pages.dev"
 ROOT = Path(__file__).resolve().parents[1]
-UA = "humanizer_russian patriarchy audit/1.0"
+UA = "humanizer_russian patriarchy audit/2.0"
 
 
 def fetch_text(url: str) -> str:
@@ -60,57 +60,94 @@ def sitemap_urls() -> list[str]:
     return sorted(url for url in pages if "/ru/" in url)
 
 
-class MainTextParser(HTMLParser):
-    BLOCKS = {"p", "li", "h1", "h2", "h3", "h4", "blockquote", "dd", "dt", "tr"}
-    IGNORE = {"script", "style", "svg", "code", "pre", "nav", "button"}
+class ArticleTextParser(HTMLParser):
+    """Reconstruct a Markdown-like view of Starlight article content only."""
+
+    IGNORE_TAGS = {"script", "style", "svg", "code", "pre", "button"}
+    BLOCKS = {"p", "blockquote", "dd", "dt", "tr"}
+    HEADINGS = {"h1": "#", "h2": "##", "h3": "###", "h4": "####"}
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.main_depth = 0
+        self.capture_depth = 0
         self.ignore_depth = 0
         self.parts: list[str] = []
-        self.saw_main = False
+        self.saw_article = False
+        self.list_depth = 0
+
+    @staticmethod
+    def _attrs(attrs) -> dict[str, str]:
+        return {str(k): str(v or "") for k, v in attrs}
 
     def handle_starttag(self, tag: str, attrs) -> None:
-        if tag == "main":
-            self.main_depth += 1
-            self.saw_main = True
+        data = self._attrs(attrs)
+        classes = set(data.get("class", "").split())
+
+        if tag == "div" and "sl-markdown-content" in classes:
+            self.capture_depth = 1
+            self.saw_article = True
             self.parts.append("\n")
             return
-        if self.main_depth and tag in self.IGNORE:
+        if self.capture_depth:
+            self.capture_depth += 1
+
+        if not self.capture_depth:
+            return
+
+        if self.ignore_depth:
             self.ignore_depth += 1
             return
-        if self.main_depth and not self.ignore_depth and tag in self.BLOCKS:
+
+        if tag in self.IGNORE_TAGS or "sr-only" in classes or "visually-hidden" in classes:
+            self.ignore_depth = 1
+            return
+
+        if tag in self.HEADINGS:
+            self.parts.append(f"\n{self.HEADINGS[tag]} ")
+        elif tag in {"ul", "ol"}:
+            self.list_depth += 1
+            self.parts.append("\n")
+        elif tag == "li":
+            self.parts.append("\n- ")
+        elif tag in self.BLOCKS:
+            self.parts.append("\n")
+        elif tag == "br":
             self.parts.append("\n")
 
     def handle_endtag(self, tag: str) -> None:
-        if tag == "main" and self.main_depth:
-            self.main_depth -= 1
-            self.parts.append("\n")
+        if not self.capture_depth:
             return
-        if self.main_depth and tag in self.IGNORE and self.ignore_depth:
+
+        if self.ignore_depth:
             self.ignore_depth -= 1
-            return
-        if self.main_depth and not self.ignore_depth and tag in self.BLOCKS:
-            self.parts.append("\n")
+        else:
+            if tag in self.HEADINGS or tag in self.BLOCKS or tag == "li":
+                self.parts.append("\n")
+            elif tag in {"ul", "ol"}:
+                self.list_depth = max(0, self.list_depth - 1)
+                self.parts.append("\n")
+
+        self.capture_depth -= 1
 
     def handle_data(self, data: str) -> None:
-        if self.main_depth and not self.ignore_depth:
+        if self.capture_depth and not self.ignore_depth:
             self.parts.append(data)
 
     def text(self) -> str:
         value = html.unescape("".join(self.parts))
+        value = value.replace("\xa0", " ")
         value = re.sub(r"[ \t\r\f\v]+", " ", value)
         value = re.sub(r" *\n *", "\n", value)
         value = re.sub(r"\n{3,}", "\n\n", value)
+        value = re.sub(r"(?m)^-\s*$", "", value)
         return value.strip()
 
 
 def page_text(url: str) -> str:
-    parser = MainTextParser()
+    parser = ArticleTextParser()
     parser.feed(fetch_text(url))
-    if not parser.saw_main:
-        raise RuntimeError(f"На странице нет <main>: {url}")
+    if not parser.saw_article:
+        raise RuntimeError(f"На странице нет .sl-markdown-content: {url}")
     return parser.text()
 
 
@@ -153,6 +190,7 @@ def main() -> None:
             report["pages"].append({
                 "url": url,
                 "text_chars": len(text),
+                "text": text,
                 "compact": compact,
                 "board": board,
             })
