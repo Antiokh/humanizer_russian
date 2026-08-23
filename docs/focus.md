@@ -1,11 +1,11 @@
-# Strong-edge focus
+# Смысловой фокус на краях фразы
 
-Russian information weight is not governed by a single “put the important word last” rule.
+Распределение смыслового веса в русском не сводится к правилу «самое важное ставить в конец».
 
-Useful working model:
+Полезная рабочая модель:
 
-- beginning can carry a corrective answer, negation, objection or frame reset;
-- end often carries the newly delivered or resolving information;
-- middle often carries connective/given material.
+- начало может нести ответ-поправку, отрицание, возражение или смену рамки;
+- конец часто несёт новую или разрешающую информацию;
+- середина чаще содержит связующий и уже известный материал.
 
-This is a discourse heuristic, not a positional grammar rule. It must be checked against prior context and intended intonation.
+Это дискурсивная эвристика, а не позиционное правило грамматики. Её нужно проверять по предтексту и предполагаемой интонации.
