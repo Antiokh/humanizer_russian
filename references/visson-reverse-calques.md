@@ -1,34 +1,34 @@
-# Visson reverse-calque layer
+# Виссон: слой обратного анализа калек
 
-This reference is source-specific provenance for reverse contrastive analysis. It supplements, not replaces, `references/russian-calques.md`.
+Этот справочник фиксирует происхождение обратного контрастивного анализа из конкретного источника. Он дополняет, а не заменяет `references/russian-calques.md`.
 
-## Core diagnostic
+## Основная диагностическая схема
 
-`ENGLISH PATTERN → RUSSIAN NATIVE PATTERN → LIKELY INTERFERENCE/CALQUE → DIAGNOSIS → POSSIBLE RUSSIAN REPAIRS`
+`АНГЛИЙСКАЯ МОДЕЛЬ → ЕСТЕСТВЕННАЯ РУССКАЯ МОДЕЛЬ → ВЕРОЯТНАЯ ИНТЕРФЕРЕНЦИЯ ИЛИ КАЛЬКА → ДИАГНОЗ → ВОЗМОЖНЫЕ РУССКИЕ ИСПРАВЛЕНИЯ`
 
-The useful unit is often not a word pair. Check:
+Полезной единицей часто является не пара слов. Проверяйте:
 
-- semantic sense;
-- valency and participant roles;
-- subject/object class;
-- state/process/boundary/result/iteration;
-- Russian aspect after event classification;
-- information structure and reference;
-- register and speech act.
+- конкретное значение;
+- валентность и роли участников;
+- класс субъекта и объекта;
+- состояние, процесс, границу, результат и повторяемость;
+- русский вид после классификации события;
+- информационную структуру и референцию;
+- регистр и речевой акт.
 
-## High-value families
+## Особенно полезные семейства
 
-- `ask a question → задать вопрос / спросить о...`; direct `спросить вопрос` is a high-precision valency error.
-- `pretend → притворяться / делать вид`; direct `претендовать, что...` is a likely false-friend frame, while `претендовать на должность` is normal.
-- `actual → реальный/фактический` only when factuality is meant; modern Russian `актуальный` is fully legitimate for relevance/current importance.
-- `decade → десятилетие` for ten years; Russian `декада` normally denotes ten days.
-- broad `argument / artist / meeting` must be narrowed before choosing `аргумент / артист / митинг`.
-- progressive is not a morphological recipe. Reconstruct the Russian event model first.
+- `ask a question → задать вопрос / спросить о...`; прямое `спросить вопрос` — высокоточная ошибка валентности.
+- `pretend → притворяться / делать вид`; буквальное `претендовать, что...` — вероятная конструкция ложного друга, тогда как `претендовать на должность` нормально.
+- `actual → реальный/фактический` только когда имеется в виду фактичность; современное русское `актуальный` полностью нормативно в значении релевантности или текущей важности.
+- `decade → десятилетие` для десяти лет; русское `декада` обычно означает десять дней.
+- широкие английские `argument / artist / meeting` нужно сначала сузить по смыслу и только затем выбирать `аргумент / артист / митинг` или другой русский эквивалент.
+- английская длительная форма не является морфологическим рецептом. Сначала восстановите русскую модель события.
 
-## Relation to existing break model
+## Связь с существующей моделью `break`
 
-The existing project state machine
+Существующая в проекте модель состояний
 
 `работает → появляются признаки неисправности → сломалось → сломано / не работает`
 
-is a concrete Russian-core model. Visson supports the **methodological** need to reconstruct aspect/event semantics, but the book does not supply `break → ломаться`; do not invent that provenance.
+является конкретной моделью русского ядра. Виссон подтверждает **методологическую** необходимость восстанавливать видовую и событийную семантику, но книга не содержит пары `break → ломаться`; не приписывайте ей это происхождение.
