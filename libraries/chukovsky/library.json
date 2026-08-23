@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "chukovsky",
-  "display_name": "Корней Чуковский — Живой как жизнь",
+  "display_name": "Корней Чуковский — «Живой как жизнь»",
   "source_namespace": "CHUK",
   "source_type": "book",
   "source_branch": "chukovsky",
@@ -21,11 +21,11 @@
     "studies/chukovsky-zhivoy-kak-zhizn/external-provenance-gap.md"
   ],
   "source_status": "OPERATIONAL_FOR_INTEGRATION",
-  "source_version": "2010 EPUB; text identifies 2nd corrected and expanded edition",
+  "source_version": "EPUB 2010 года; в тексте указано второе, исправленное и дополненное издание",
   "source_fingerprint_sha256": "e4db5cef1d6d3483b232020994953aada176f4cde5597d314a0a152428e41bf9",
   "rules_path": "libraries/chukovsky/rules.json",
   "model_only_reference": "references/chukovsky.md",
   "model_eval_path": "evals/chukovsky.json",
   "model_eval_map_path": "evals/chukovsky-map.json",
-  "notes": "38 audited rules: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 7 EXTENDED_SOFT, 2 METRIC_ONLY, 29 MODEL_ONLY. CHUK-Rxx is the canonical runtime rule namespace; historical CHK-Rxx study IDs are retained only as research aliases. Primary-book provenance is reproducible. EXT-01..EXT-14 now have reproducible machine-readable source/access metadata and claim dispositions in external-evidence-2026.json; that closure does not itself promote current NORM or runtime severity. Public repository contains derived knowledge only; the source EPUB is not stored here."
+  "notes": "38 проверенных правил: 0 HARD_GATE, 0 DEFAULT_MECHANICAL, 7 EXTENDED_SOFT, 2 METRIC_ONLY, 29 MODEL_ONLY. CHUK-Rxx — каноническое пространство имён правил runtime; исторические идентификаторы исследования CHK-Rxx сохраняются только как исследовательские псевдонимы. Происхождение правил из основной книги воспроизводимо. Для EXT-01..EXT-14 добавлены воспроизводимые машиночитаемые сведения об источниках, доступе и решениях по утверждениям в external-evidence-2026.json; само по себе это не повышает их до текущей NORM и не меняет строгость runtime. Публичный репозиторий содержит только производное знание; исходный EPUB здесь не хранится."
 }
