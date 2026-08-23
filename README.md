@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/editorial-board.webp" alt="Редакционная коллегия humanizer_russian" width="100%">
+  <img src="assets/humanizer_russian.webp" alt="Редакционная коллегия humanizer_russian" width="100%">
 </p>
 
 # humanizer_russian
