@@ -1,4 +1,4 @@
-name: visson-quality
+name: Качество Виссон
 
 on:
   push:
@@ -31,31 +31,31 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install validation dependency
+      - name: Установить зависимость для валидации
         run: python -m pip install --disable-pip-version-check jsonschema
-      - name: Compile Python
+      - name: Скомпилировать Python
         run: python -m compileall -q scripts
-      - name: Validate architecture
+      - name: Проверить архитектуру
         run: python scripts/validate_architecture.py
-      - name: Validate libraries
+      - name: Проверить библиотеки
         run: python scripts/validate_libraries.py
-      - name: Validate Visson study
+      - name: Проверить исследование Виссон
         run: python scripts/validate_visson.py
-      - name: Core linter self-test
+      - name: Самотест основного линтера
         run: python scripts/lint.py --self-test
-      - name: Visson linter self-test
+      - name: Самотест линтера Виссон
         run: python scripts/lint_visson.py --self-test
-      - name: Standard compact benchmark
+      - name: Стандартный бенчмарк Compact
         run: python scripts/benchmark_lint.py
-      - name: Visson compact benchmark
+      - name: Бенчмарк Compact для Виссон
         run: python scripts/benchmark_lint.py tests/visson_compact_cases.json
-      - name: Visson source/dual-runtime benchmark
+      - name: Бенчмарк источника и двух режимов Виссон
         run: python scripts/benchmark_visson.py
-      - name: Standard board benchmark
+      - name: Стандартный бенчмарк редколлегии
         run: python scripts/benchmark_board.py
-      - name: Visson board benchmark
+      - name: Бенчмарк редколлегии для Виссон
         run: python scripts/benchmark_board.py tests/visson_board_cases.json
-      - name: Validate all JSON
+      - name: Проверить все JSON
         run: |
           python - <<'PY'
           import json
@@ -63,5 +63,5 @@ jobs:
           for path in sorted(Path('.').rglob('*.json')):
               with path.open(encoding='utf-8') as f:
                   json.load(f)
-          print('all json: OK')
+          print('Все JSON: OK')
           PY
