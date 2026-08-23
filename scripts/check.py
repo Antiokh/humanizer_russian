@@ -34,6 +34,24 @@ MECHANICAL_RULES = {
     "ascii hyphen used as dash",
 }
 
+MODE_LABELS = {
+    "mechanical": "механический",
+    "extended": "расширенный",
+}
+REGISTER_LABELS = {
+    "general": "общий",
+    "everyday": "бытовой",
+    "professional": "профессиональный",
+    "technical": "технический",
+}
+KIND_LABELS = {
+    "ARTIFACT": "ТЕХНИЧЕСКИЙ АРТЕФАКТ",
+    "LANGUAGE_ERROR": "ОШИБКА ЯЗЫКА",
+    "NATIVE_WARNING": "ЖИВОЙ РУССКИЙ",
+    "STYLE_WARNING": "СТИЛЬ",
+    "AI_PATTERN": "КАЛЬКА ИЛИ МАШИННЫЙ ПАТТЕРН",
+}
+
 
 def select_normalized(findings: list[dict], extended: bool = False) -> list[dict]:
     allowed = (
@@ -114,7 +132,9 @@ def _group_compatible_surface(findings: list[dict]) -> list[list[dict]]:
 
 def _compact_winner_key(item: dict) -> tuple[int, int, int, str, str, str]:
     project_class = item.get("project_class")
-    guardrail_rank = 2 if project_class == "ARTIFACT" else 1 if project_class == "NORM" else 0
+    guardrail_rank = (
+        2 if project_class == "ARTIFACT" else 1 if project_class == "NORM" else 0
+    )
     return (
         guardrail_rank,
         AUTOMATION_PRIORITY[item["automation_level"]],
@@ -168,24 +188,29 @@ def check_text(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Compact mechanical-first checker for humanizer_russian")
-    parser.add_argument("file", nargs="?")
+    parser = argparse.ArgumentParser(
+        description="Механическая проверка русского текста в humanizer_russian"
+    )
+    parser.add_argument("file", nargs="?", help="файл с текстом; без файла читается stdin")
     parser.add_argument(
         "--extended",
         action="store_true",
-        help="include lower-confidence mechanical/style/AI heuristics from enabled libraries",
+        help="включить менее надёжные механические, стилистические и AI-эвристики",
     )
     parser.add_argument(
         "--register",
         choices=["general", "everyday", "professional", "technical"],
         default="general",
-        help="text register; everyday promotes jargon/term candidates into the compact default surface",
+        help=(
+            "регистр текста: general, everyday, professional или technical; "
+            "в everyday жаргон и термины проверяются строже"
+        ),
     )
-    parser.add_argument("--json", action="store_true", dest="as_json")
+    parser.add_argument("--json", action="store_true", dest="as_json", help="вывести JSON")
     parser.add_argument(
         "--fail-on-findings",
         action="store_true",
-        help="return exit 2 if any selected finding exists (useful in tests/CI)",
+        help="вернуть код 2 при любой найденной проблеме; удобно для тестов и CI",
     )
     args = parser.parse_args()
 
@@ -207,12 +232,19 @@ def main() -> None:
         )
     else:
         mode = "extended" if args.extended else "mechanical"
-        print(f"mode: {mode}; register: {args.register}")
+        print(
+            f"режим: {MODE_LABELS[mode]}; "
+            f"регистр: {REGISTER_LABELS.get(args.register, args.register)}"
+        )
         for item in findings:
             loc = f":{item['line']}" if item["line"] else ""
             note = f" — {item['note']}" if item["note"] else ""
             source = f" · {item['library_id']}" if item.get("library_id") else ""
-            print(f"{item['kind']}{loc} [{item['rule']}]{source}: {item['excerpt']}{note}")
+            kind = KIND_LABELS.get(item["kind"], item["kind"])
+            print(
+                f"{kind}{loc} [{item['rule']}]{source}: "
+                f"{item['excerpt']}{note}"
+            )
         print(json.dumps(metrics, ensure_ascii=False))
 
     if has_blocking_findings(findings):
