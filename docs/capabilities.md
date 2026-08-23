@@ -10,11 +10,11 @@
 
 | Библиотека | Тип | Адаптер | Правила | Циклы источников | Автоматизация | Модельные проверки |
 |---|---|---|---:|---:|---|---|
-| `chukovsky` — Корней Чуковский — Живой как жизнь | `book` | `review_v1` | 38 | — | HARD=0, DEFAULT=0, EXT=7, METRIC=2, MODEL=29 | да |
+| `chukovsky` — Корней Чуковский — «Живой как жизнь» | `book` | `review_v1` | 38 | — | HARD=0, DEFAULT=0, EXT=7, METRIC=2, MODEL=29 | да |
 | `gal` — Нора Галь — «Слово живое и мертвое» | `book` | `review_v1` | 42 | — | HARD=0, DEFAULT=0, EXT=3, METRIC=3, MODEL=36 | да |
 | `golub` — И. Б. Голуб — единая система двух книг (в соавторстве с Д. Э. Розенталем) | `book` | `review_v1` | 93 | — | HARD=0, DEFAULT=3, EXT=1, METRIC=2, MODEL=87 | да |
-| `ilyakhov` — Максим Ильяхов и Людмила Сарычева — Пиши, сокращай | `book` | `review_v1` | 103 | — | HARD=0, DEFAULT=1, EXT=9, METRIC=4, MODEL=89 | да |
-| `native` — Живой русский / core | `project_core` | `review_v1` | — | — | — | нет |
+| `ilyakhov` — Максим Ильяхов и Людмила Сарычева — «Пиши, сокращай» | `book` | `review_v1` | 103 | — | HARD=0, DEFAULT=1, EXT=9, METRIC=4, MODEL=89 | да |
+| `native` — Живой русский / ядро | `project_core` | `review_v1` | — | — | — | нет |
 | `rosenthal` — Д. Э. Розенталь — долгоживущая библиотека культуры речи и литературной правки | `book` | `review_v1` | 79 | 6 | HARD=0, DEFAULT=0, EXT=3, METRIC=1, MODEL=75 | да |
 | `russian` — Русский язык / норма и употребление | `project_core` | `review_v1` | — | — | — | нет |
 | `visson` — Линн Виссон — «Русские проблемы в английской речи» | `book` | `review_v1` | 39 | — | HARD=0, DEFAULT=2, EXT=3, METRIC=2, MODEL=32 | да |
