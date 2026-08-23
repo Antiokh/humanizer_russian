@@ -1,14 +1,14 @@
-# Why detector score is not the optimization target
+# Почему показатель детектора не является целью оптимизации
 
-AI detectors change. Their correlations are model-, genre-, language- and date-dependent. Optimizing prose directly for a detector can reward edits that make Russian worse: deleting normative punctuation, fragmenting coherent syntax, injecting artificial irregularity or replacing precise repeated terms with weaker synonyms.
+AI-детекторы меняются. Их корреляции зависят от модели, жанра, языка и времени. Прямая оптимизация текста под детектор может поощрять правки, которые делают русский хуже: удаление нормативной пунктуации, дробление связного синтаксиса, искусственную неровность или замену точных повторяющихся терминов более слабыми синонимами.
 
-The project therefore treats detector output as an external diagnostic only.
+Поэтому проект рассматривает результат детектора только как внешний диагностический сигнал.
 
-A detector result may motivate review, but it cannot override:
+Он может стать поводом для проверки, но не может отменять:
 
-1. semantic preservation;
-2. Russian norm;
-3. native naturalness;
-4. confirmed author voice.
+1. сохранение смысла;
+2. норму русского языка;
+3. естественность живого русского;
+4. подтверждённый авторский голос.
 
-If a detector penalizes a correct em dash or a normal `не X, а Y` contrast, the detector is not allowed to define the language rule.
+Если детектор штрафует правильное тире или нормальное противопоставление `не X, а Y`, это не даёт ему права определять языковое правило.
