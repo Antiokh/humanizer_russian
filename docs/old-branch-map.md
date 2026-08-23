@@ -1,9 +1,9 @@
-# Old branch map
+# Карта старых веток
 
-| Old branch | Old PR | Consolidated into |
+| Старая ветка | Старый PR | Куда перенесено |
 |---|---:|---|
-| `agent/add-nora-gal-language-patterns` | #1 | `references/nora-gal.md`, `evals/nora-gal.json`, semantic guidance/tests |
-| `agent/russian-language-layer` | #2 | `references/russian-language.md`, `references/native-russian.md`, audits, linter, author profile, evals, GPT config |
-| `humanizer_russian` | staging | final pre-migration review/fixes before independent repo |
+| `agent/add-nora-gal-language-patterns` | #1 | `references/nora-gal.md`, `evals/nora-gal.json`, семантические рекомендации и проверки |
+| `agent/russian-language-layer` | #2 | `references/russian-language.md`, `references/native-russian.md`, аудиты, линтер, авторский профиль, проверки и конфигурация GPT |
+| `humanizer_russian` | промежуточная | финальное ревью и исправления перед переносом в самостоятельный репозиторий |
 
-No old development branch needs to be merged into `humanizer--ru/main`.
+Ни одну старую ветку разработки не нужно сливать в `humanizer--ru/main`.
