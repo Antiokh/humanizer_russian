@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "native",
   "display_name": "Живой русский",
-  "short_label": "Native Russian",
+  "short_label": "Живой русский",
   "review_label": "По системе живого русского",
   "kind": "project_core",
   "avatar": null,
