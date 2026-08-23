@@ -1,32 +1,32 @@
-# Dual runtime: compact humanizer + editorial board
+# Два рабочих режима: компактный хуманайзер и редколлегия
 
-`humanizer_russian` has one codebase and two product modes.
+У `humanizer_russian` одна кодовая база и два продуктовых режима.
 
-## Compact
+## Компактный режим
 
-`scripts/check.py` is the cheap mechanical-first path. **Compact never invokes evidence providers**, so corpus/API availability cannot slow or break the normal skill.
+`scripts/check.py` — дешёвый путь, который начинает с механической проверки. **Компактный режим никогда не вызывает дополнительные источники данных**, поэтому доступность корпуса или API не может замедлить или сломать обычную работу навыка.
 
-## Editorial board
+## Редколлегия
 
-`scripts/review.py` preserves source opinions, disagreement and style policy. Evidence providers are optional and off by default.
+`scripts/review.py` сохраняет мнения источников, разногласия и редакционную политику стиля. Дополнительные источники данных необязательны и по умолчанию выключены.
 
-## Four independent axes
+## Четыре независимые оси
 
-1. **Source libraries** — native Russian, Gal, Ilyakhov/Sarycheva, Chukovsky, future books. They produce reviewer findings.
-2. **Evidence providers** — corpora, spoken Russian, discourse lexicons, current normative references, parsed data. They produce evidence, not votes.
-3. **Product mode** — compact or editorial board.
-4. **Editorial style** — neutral, `rslive_content`, future business/literary/social profiles.
+1. **Библиотеки источников** — живой русский, Галь, Ильяхов / Сарычева, Чуковский и будущие книги. Они создают находки рецензентов.
+2. **Источники дополнительных данных** — корпуса, разговорный русский, дискурсивные словари, современные нормативные справочники, разобранные данные. Они дают сведения, а не голоса.
+3. **Режим продукта** — компактный или редколлегия.
+4. **Редакционный стиль** — нейтральный, `rslive_content`, будущие деловые, литературные или социальные профили.
 
-Both findings and evidence use source-neutral `phenomenon_id`, while provenance remains separate.
+И находки, и дополнительные данные используют независимый от источника `phenomenon_id`, а происхождение хранится отдельно.
 
-## Availability boundary
+## Граница доступности
 
-Normal `check.py` and normal `review.py` perform no external evidence queries. Evidence is explicit via `--evidence ...`. Provider calls are hard-timed; the whole evidence phase has a global budget; failures are skipped by default; `HUMANIZER_EVIDENCE=off` disables everything immediately.
+Обычные `check.py` и `review.py` не делают внешних запросов к дополнительным источникам. Этот слой включается явно через `--evidence ...`. Вызовы источников имеют жёсткие тайм-ауты; на весь этап действует общий лимит времени; сбои по умолчанию пропускаются; `HUMANIZER_EVIDENCE=off` немедленно отключает весь слой.
 
-## Voting boundary
+## Граница голосования
 
-Reviewer disagreement remains `CONSENSUS`, `MAJORITY`, `SOURCE_CONFLICT`, `SINGLE_REVIEW`, `REVIEW`, or `NO_ACTION`. Evidence is attached after grouping and does not modify reviewer verdicts or style score automatically.
+Разногласия рецензентов по-прежнему выражаются статусами `CONSENSUS`, `MAJORITY`, `SOURCE_CONFLICT`, `SINGLE_REVIEW`, `REVIEW` или `NO_ACTION`. Дополнительные данные прикрепляются после группировки и автоматически не меняют ни вердикты рецензентов, ни оценку стиля.
 
-Hard constraints remain outside voting: `USER_INTENT + SEMANTICS + NORM`.
+Жёсткие ограничения остаются вне голосования: `USER_INTENT + SEMANTICS + NORM`.
 
-See `docs/evidence-provider-architecture.md` for the evidence contract.
+Контракт дополнительных данных описан в `docs/evidence-provider-architecture.md`.
