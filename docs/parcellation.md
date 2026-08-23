@@ -1,17 +1,17 @@
-# Parcellation
+# Парцелляция
 
-Parcellation is judged by function, not sentence length.
+Парцелляцию нужно оценивать по функции, а не по длине предложения.
 
-Intentional:
+Осмысленный разрыв:
 
 > Он обещал приехать. Не приехал.
 
-Likely mechanical in neutral enumeration:
+В нейтральном перечислении разрыв, скорее всего, механический:
 
 > С такими курсами обычно две беды. Либо теория. Либо пересказ.
 
-Compare:
+Сравните:
 
 > С такими курсами обычно две беды: либо теория, либо пересказ.
 
-A deterministic linter can flag clusters or an obvious generalizer-plus-fragments pattern, but contextual review decides whether the break creates a real accent.
+Детерминированный линтер может отмечать серии фрагментов или очевидную схему «обобщение + обрывки», но только контекстная проверка решает, создаёт ли разрыв настоящий акцент.
