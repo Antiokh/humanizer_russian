@@ -1,14 +1,14 @@
-# Legacy policy
+# Политика старых правил
 
-Historical `humanizer-ru` rules are reference material, not implicit active policy.
+Исторические правила `humanizer-ru` — справочный материал, а не неявно действующая политика проекта.
 
-To reintroduce a legacy rule:
+Чтобы вернуть старое правило:
 
-1. classify it under the new taxonomy;
-2. separate grammar from style/AI claims;
-3. remove unsupported causal explanations and numeric thresholds;
-4. add counterexamples;
-5. add eval coverage;
-6. ensure a soft heuristic cannot override SEMANTICS/NORM.
+1. отнести его к новой таксономии;
+2. отделить грамматику от стилистических выводов и предположений об ИИ;
+3. убрать неподтверждённые причинные объяснения и числовые пороги;
+4. добавить контрпримеры;
+5. добавить проверочные случаи;
+6. убедиться, что мягкая эвристика не может отменить `SEMANTICS` или `NORM`.
 
-This is why the old `patterns.md` was not copied as an authoritative active file during migration.
+Именно поэтому старый `patterns.md` при миграции не был перенесён как авторитетный действующий файл.
