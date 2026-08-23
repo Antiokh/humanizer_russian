@@ -1,12 +1,12 @@
-# Project principles
+# Принципы проекта
 
-1. Do not make Russian worse to look less like AI.
-2. Grammar constrains; native usage chooses.
-3. Meaning is preserved before style is optimized.
-4. Context can carry information; do not repeat it automatically.
-5. Repetition is removed when informationally redundant, preserved when rhetorically functional.
-6. Word order follows information structure, not English SVO and not random variation.
-7. Stop-words and particles are checked for function, not deleted by list.
-8. AI markers are probabilistic clusters, not proof of authorship.
-9. Author voice is corpus-derived; author errors are not imitated by default.
-10. Every heuristic needs counterexamples.
+1. Не ухудшать русский ради меньшего сходства с машинным текстом.
+2. Норма задаёт границы, живое употребление выбирает среди допустимых вариантов.
+3. Смысл сохраняется раньше, чем оптимизируется стиль.
+4. Контекст может хранить информацию; не нужно автоматически повторять её в каждом предложении.
+5. Избыточный повтор убирается, функциональный риторический повтор сохраняется.
+6. Порядок слов определяется информационной структурой, а не английским SVO и не случайными перестановками.
+7. Стоп-слова и частицы проверяются по функции, а не удаляются по списку.
+8. Маркеры ИИ — вероятностные совокупности признаков, а не доказательство авторства.
+9. Голос автора выводится из корпуса; ошибки автора по умолчанию не имитируются.
+10. Для каждой эвристики нужны контрпримеры.
