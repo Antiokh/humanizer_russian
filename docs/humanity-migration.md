@@ -1,44 +1,44 @@
-# “Humanity” / native-Russian layer migration
+# Миграция слоя «человечности» в живой русский
 
-The work that began as “make the text look less AI-written” was reframed during development into a native-language problem.
+Работа, которая начиналась с задачи «сделать текст менее похожим на написанный ИИ», в ходе разработки была переосмыслена как задача естественного русского языка.
 
-## Core change
+## Главное изменение
 
-Old question:
+Старый вопрос:
 
-> Which surface features make a detector think this is AI?
+> Какие внешние признаки заставляют детектор считать текст машинным?
 
-New question:
+Новый вопрос:
 
-> Given the same meaning and correct Russian, which form would a native speaker naturally choose here?
+> Если смысл тот же и русский правильный, какую форму естественно выбрал бы носитель в этом контексте?
 
-This produced the separate `NATIVE_USAGE` layer.
+Из этого появился отдельный слой `NATIVE_USAGE`.
 
-## Main rules carried forward
+## Основные перенесённые правила
 
-- context can carry recoverable information;
-- common repeated material is factored before synonymization;
-- exact repetition is preserved when rhetorically functional;
-- case/agreement/government allow word order to follow information structure;
-- sentence beginning and ending can both carry strong focus;
-- parcellation is evaluated by function;
-- particles can encode relation to prior context;
-- native preferences are not mislabelled as grammar;
-- native warnings are non-gating;
-- author-specific habits are derived from corpus data instead of injected generically.
+- восстанавливаемую информацию может нести контекст;
+- общий повторяющийся материал сначала выносится или опускается, и только потом рассматриваются синонимы;
+- точный повтор сохраняется, если он выполняет риторическую функцию;
+- падеж, согласование и управление позволяют выбирать порядок слов по информационной структуре;
+- и начало, и конец фразы могут быть сильной позицией;
+- парцелляция оценивается по функции;
+- частицы могут показывать отношение к предыдущему контексту;
+- предпочтения носителей не выдаются за грамматическую норму;
+- замечания живого русского сами по себе не блокируют результат;
+- индивидуальные привычки автора выводятся из корпуса, а не добавляются всем подряд.
 
-## Key example
+## Ключевой пример
 
-Synthetic but grammatical:
+Искусственно, но грамматически допустимо:
 
 > Это не ошибка в расчёте, а ошибка в исходных данных.
 
-Neutral native compression:
+Нейтральное русское сжатие:
 
 > Это ошибка не в расчёте, а в исходных данных.
 
-Marked correction under suitable context:
+Маркированная поправка в подходящем контексте:
 
 > Это не в расчёте ошибка, а в исходных данных.
 
-The project treats these as a joint compression + information-structure decision, not as independent “remove repetition” and “randomize word order” operations.
+Проект рассматривает это как единое решение о сжатии и информационной структуре, а не как две независимые операции «убрать повтор» и «случайно переставить слова».
