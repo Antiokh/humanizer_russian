@@ -1,18 +1,18 @@
-# Rule taxonomy
+# Таксономия правил
 
-Use stable namespaced identifiers instead of a single sequential list.
+Используйте стабильные идентификаторы с пространствами имён вместо единого последовательного списка.
 
-- `NORM-PUNCT-*` — punctuation
-- `NORM-SYN-*` — syntax/agreement/government
-- `SEM-*` — semantic/literary issues
-- `NATIVE-REPEAT-*` — unnecessary repetition/common-material factoring
-- `NATIVE-CONTEXT-*` — contextual economy/ellipsis
-- `NATIVE-FOCUS-*` — theme/rheme/information weight
-- `EDIT-*` — editorial clarity/density
-- `AI-CALQUE-LEX-*` — lexical calques
-- `AI-CALQUE-SYN-*` — syntactic/discourse calques
-- `AI-PATTERN-*` — probabilistic formula clusters
-- `AUTHOR-*` — corpus-derived idiolect rules
-- `ARTIFACT-*` — technical traces
+- `NORM-PUNCT-*` — пунктуация;
+- `NORM-SYN-*` — синтаксис, согласование и управление;
+- `SEM-*` — семантические и литературные проблемы;
+- `NATIVE-REPEAT-*` — лишний повтор и вынос общего материала;
+- `NATIVE-CONTEXT-*` — контекстная экономия и эллипсис;
+- `NATIVE-FOCUS-*` — тема, рема и информационный вес;
+- `EDIT-*` — редакторская ясность и плотность;
+- `AI-CALQUE-LEX-*` — лексические кальки;
+- `AI-CALQUE-SYN-*` — синтаксические и дискурсивные кальки;
+- `AI-PATTERN-*` — вероятностные кластеры шаблонов;
+- `AUTHOR-*` — правила идиолекта, подтверждённые корпусом;
+- `ARTIFACT-*` — технические следы.
 
-A new rule must declare its layer, confidence/evidence type, detection method, rewrite guidance, counterexamples and eval cases.
+Новое правило должно явно указывать слой, тип уверенности или подтверждения, способ обнаружения, рекомендации по правке, контрпримеры и проверочные случаи.
