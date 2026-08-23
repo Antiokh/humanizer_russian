@@ -1,10 +1,10 @@
-# Punctuation policy
+# Политика пунктуации
 
-Punctuation is evaluated as Russian punctuation first.
+Пунктуация прежде всего оценивается по правилам русского языка.
 
-- `—` is not an AI token to replace with `-`.
-- `:` is not a forbidden lead-in marker; it may be the correct sign before explanation/enumeration.
-- `?` is not banned because some LLM copy uses rhetorical questions.
-- sentence boundaries are not adjusted solely to create detector-friendly rhythm.
+- `—` не является «маркером ИИ», который нужно заменять на `-`.
+- `:` не запрещено как вводный знак: перед пояснением или перечислением оно может быть единственно правильным.
+- `?` не запрещается только потому, что некоторые модели злоупотребляют риторическими вопросами.
+- границы предложений не меняются только ради более удобного для детектора ритма.
 
-Surface frequency may produce a style warning when one construction repeats mechanically, but the sign itself remains governed by syntax, meaning and authorial intent.
+Частотность конструкции может дать стилистическое предупреждение, если один приём повторяется механически. Но сам знак по-прежнему определяется синтаксисом, смыслом и авторским намерением.
