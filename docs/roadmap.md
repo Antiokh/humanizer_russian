@@ -1,29 +1,29 @@
-# Roadmap
+# Дорожная карта
 
-## Near term
+## Ближайшие задачи
 
-- run/repair CI in the independent repository;
-- add model-judge evaluation harness;
-- collect a Russian human/LLM corpus by genre;
-- add false-positive counterexamples for every native/AI heuristic;
-- review `NATIVE_USAGE` rules with Russian philologists;
-- extend author profiling beyond regex proxies.
+- запускать и при необходимости чинить CI в самостоятельном репозитории;
+- добавить стенд оценки моделью-судьёй;
+- собрать по жанрам корпус русских человеческих и LLM-текстов;
+- добавить контрпримеры ложных срабатываний для каждой эвристики живого русского и ИИ;
+- проверить правила `NATIVE_USAGE` с русскими филологами;
+- расширить профилирование автора за пределы прокси на регулярных выражениях.
 
-## Editing sources
+## Редакторские источники
 
-- incorporate additional Russian grammar/style references with precise source mapping;
-- add a private analytical summary of legally available Ilyakhov material when supplied by the repository owner;
-- keep Nora Gal rules as contextual semantic/editorial checks.
+- подключать дополнительные справочники по русской грамматике и стилистике с точной привязкой к источникам;
+- при предоставлении владельцем репозитория законно доступного материала Ильяхова добавить приватное аналитическое резюме;
+- сохранять правила Норы Галь как контекстные семантические и редакторские проверки.
 
-## Author layer
+## Авторский слой
 
-- genre-separated profiles;
-- local/generational lexicon dictionaries;
-- stable preferred/allowed/rare/avoid vocabulary sets;
-- discourse-transition and self-repair metrics;
-- reference-distance / explicitness measures;
-- comparison between dictated/ASR and manually typed corpora.
+- профили, разделённые по жанрам;
+- словари локальной и поколенческой лексики;
+- стабильные наборы предпочитаемой, допустимой, редкой и нежелательной лексики;
+- метрики дискурсивных переходов и самокоррекции;
+- измерения расстояния до референта и явности;
+- сравнение продиктованных или распознанных по речи текстов с набранными вручную корпусами.
 
-## Linter
+## Линтер
 
-The deterministic linter remains intentionally conservative. New regex rules should not try to replace semantic or discourse analysis.
+Детерминированный линтер намеренно остаётся консервативным. Новые правила на регулярных выражениях не должны пытаться заменить семантический или дискурсивный анализ.
