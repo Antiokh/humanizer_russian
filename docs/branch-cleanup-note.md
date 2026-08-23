@@ -1,8 +1,8 @@
-# Branch cleanup note
+# Заметка об очистке веток
 
-Audit date: 2026-08-21.
+Дата аудита: 21 августа 2026 года.
 
-The repository intentionally keeps long-lived source branches for recurring book/source work. These branches must **not** be deleted:
+Репозиторий намеренно сохраняет долгоживущие ветки источников для повторяющейся работы с книгами и другими материалами. Эти ветки **нельзя удалять**:
 
 - `gal`
 - `chukovsky`
@@ -13,11 +13,11 @@ The repository intentionally keeps long-lived source branches for recurring book
 - `golub`
 - `main`
 
-At audited `main` `c108a44794742f617ef91de1989cf7552d7ce463`, only `rosenthal` was synchronized. Other long-lived branches were behind main and ahead by 0. Synchronization and cleanup are tracked in issue #51.
+На проверенном `main` `c108a44794742f617ef91de1989cf7552d7ce463` только `rosenthal` была синхронизирована. Остальные долгоживущие ветки отставали от `main` и не содержали новых коммитов поверх него. Синхронизация и очистка отслеживаются в задаче #51.
 
-## Temporary/merged refs to review
+## Временные и слитые ссылки на ветки, которые нужно проверить
 
-Deletion must be manual and only after checking that a branch contains no unique unmerged research. Candidate stale refs include:
+Удалять их можно только вручную и только после проверки, что в ветке нет уникального неслитого исследования. Среди возможных устаревших ссылок:
 
 - `migration-test`
 - `migration-test-2`
@@ -26,10 +26,10 @@ Deletion must be manual and only after checking that a branch contains no unique
 - `tmp-noop`
 - `golub-recovery-inspect`
 - `sync/velichko-main-20260820`
-- merged `docs/*` branches
-- merged `feature/*` branches
-- superseded `agent/*` and `study/*` branches
+- слитые ветки `docs/*`;
+- слитые ветки `feature/*`;
+- заменённые ветки `agent/*` и `study/*`.
 
-Do not delete a branch merely because its name looks temporary. Compare it with `main` first.
+Не удаляйте ветку только потому, что её имя выглядит временным. Сначала сравните её с `main`.
 
-The current GitHub integration used by the audit does not expose branch-ref deletion, so destructive cleanup is deliberately left as an explicit manual action.
+Интеграция GitHub, использованная при этом аудите, не поддерживала удаление ссылок на ветки, поэтому разрушительная очистка намеренно оставлена отдельным явным ручным действием.
