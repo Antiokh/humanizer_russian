@@ -1,0 +1,8 @@
+{"id":"sr-ai-001","text":"Ovo nije samo pitanje tehnike, već i pitanje prioriteta.","expected":[],"note":"Single contrast construction is ordinary Serbian; anti-rule."}
+{"id":"sr-ai-002","text":"Sistem nije samo efikasan, već i pouzdan. Proces nije samo brz, već i transparentan. Rešenje nije samo moderno, već i održivo. Promena nije samo tehnička, već i društvena.","expected":["sr_ai_negative_parallelism_density"],"note":"Repeated near-identical contrast scaffold should be a document-level soft signal."}
+{"id":"sr-ai-003","text":"Potrebni su red, mir i stabilnost.","expected":[],"note":"One three-item enumeration is normal; anti-rule."}
+{"id":"sr-ai-004","text":"Sistem je brz, pouzdan i transparentan. Rešenje je moderno, održivo i inkluzivno. Proces je jasan, efikasan i predvidljiv. Cilj je rast, razvoj i stabilnost.","expected":["sr_ai_triplet_density"],"note":"Repeated triplet architecture is a soft accumulated signal."}
+{"id":"sr-ai-005","text":"## Cilj kom stremimo\nTekst prve mere.\n\n## Promene koje dolaze\nPrva promena.\n\n## Cilj kom stremimo\nTekst druge mere.\n\n## Promene koje dolaze\nDruga promena.\n\n## Cilj kom stremimo\nTekst treće mere.\n\n## Promene koje dolaze\nTreća promena.","expected":["sr_ai_repeated_section_scaffold"],"note":"Repeated paired headings; structural signal."}
+{"id":"sr-ai-006","text":"Pišem ovako — sa crtom — još od škole.","expected":[],"note":"Em dash must never be an AI signal by itself."}
+{"id":"sr-ai-007","text":"Ово је сасвим обична реченица на српском.","expected":[],"note":"Cyrillic is normal Serbian."}
+{"id":"sr-ai-008","text":"Ovo je sasvim obična rečenica na srpskom.","expected":[],"note":"Latin script is normal Serbian."}
