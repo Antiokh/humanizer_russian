@@ -1,0 +1,66 @@
+[
+  {
+    "id": "LDB-E001",
+    "rule": "LDB-001",
+    "profile": "official-admin",
+    "text": "Просим предоставить сведения до 15 сентября 2026 года. Основанием запроса является пункт 4 соглашения от 10 августа 2026 года.",
+    "expected": "REVIEW",
+    "reason": "For a formal request letter, moving the legal basis before the request may improve expected information order; this is genre/context dependent, not a hard error."
+  },
+  {
+    "id": "LDB-E002",
+    "rule": "LDB-004",
+    "profile": "official-admin",
+    "text": "Во исполнение приказа от 12 августа 2026 года направляем отчёт.",
+    "expected": "PASS",
+    "reason": "A conventional grounds formula performs a document function and must not be rejected merely as a cliché."
+  },
+  {
+    "id": "LDB-E003",
+    "rule": "LDB-005",
+    "profile": "contractual",
+    "text": "Исполнитель передаёт Заказчику отчёт в течение пяти дней после его получения.",
+    "expected": "REVIEW",
+    "reason": "The pronoun may ambiguously refer to the report or another recoverable event; deadline reference point needs review."
+  },
+  {
+    "id": "LDB-E004",
+    "rule": "LDB-006",
+    "profile": "contractual",
+    "text": "Общество с ограниченной ответственностью «Альфа», далее — Исполнитель. Исполнитель выполняет работы. Подрядчик передаёт результат Заказчику.",
+    "expected": "REVIEW",
+    "reason": "A defined party is renamed without an explicit legal reason."
+  },
+  {
+    "id": "LDB-E005",
+    "rule": "LDB-008",
+    "profile": "normative",
+    "text": "Сотрудник может представить отчёт не позднее 18:00.",
+    "expected": "REVIEW",
+    "reason": "If the intended meaning is a duty, permission wording changes modality; semantic intent must be checked before rewriting."
+  },
+  {
+    "id": "LDB-E006",
+    "rule": "LDB-009",
+    "profile": "contractual",
+    "text": "Оплата производится в ближайшее время после подписания акта.",
+    "expected": "REVIEW",
+    "reason": "A payment deadline requires a more determinate period if enforceable timing matters."
+  },
+  {
+    "id": "LDB-E007",
+    "rule": "LDB-010",
+    "profile": "official-admin",
+    "text": "До 18:00 отчёт обязан представить руководителю секретарь комиссии.",
+    "expected": "PASS",
+    "reason": "Marked word order is not itself an error if actor, action, addressee and deadline remain unambiguous."
+  },
+  {
+    "id": "LDB-E008",
+    "rule": "LDB-003",
+    "profile": "legal-procedural",
+    "text": "В приложении указана сумма 120 000 рублей, в просительной части — 102 000 рублей.",
+    "expected": "REVIEW",
+    "reason": "Document-level factual consistency must be checked before stylistic editing."
+  }
+]
