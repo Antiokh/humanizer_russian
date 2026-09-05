@@ -1,0 +1,23 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "antiokh-skills",
+  "owner": {
+    "name": "Anton Nazarov",
+    "url": "https://github.com/Antiokh"
+  },
+  "metadata": {
+    "description": "Public skills by Antiokh",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "humanizer-russian",
+      "source": "./",
+      "description": "Source-aware Russian editorial humanizer with deterministic linting and native-language checks.",
+      "version": "0.3.1",
+      "skills": [
+        "./"
+      ]
+    }
+  ]
+}
