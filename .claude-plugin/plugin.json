@@ -1,0 +1,22 @@
+{
+  "name": "humanizer-russian",
+  "description": "Source-aware Russian editorial humanizer with deterministic linting, native-language checks, and optional author-profile adaptation.",
+  "version": "0.3.1",
+  "author": {
+    "name": "Anton Nazarov",
+    "url": "https://github.com/Antiokh"
+  },
+  "homepage": "https://github.com/Antiokh/humanizer_russian",
+  "repository": "https://github.com/Antiokh/humanizer_russian",
+  "license": "GPL-3.0",
+  "keywords": [
+    "russian",
+    "humanizer",
+    "editing",
+    "writing",
+    "style"
+  ],
+  "skills": [
+    "./"
+  ]
+}
