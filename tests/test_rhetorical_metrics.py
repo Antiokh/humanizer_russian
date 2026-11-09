@@ -132,6 +132,29 @@ class RhetoricalMetricsTests(unittest.TestCase):
             "Потому что сервер был недоступен."
         )["explicit_question_answer_marker_pairs"], 1)
 
+    def test_numbers_are_tokens_for_counts_and_exact_openers(self):
+        text = (
+            "В 2022 году проект начался.\n\n"
+            "В 2023 году проект продолжился.\n\n"
+            "В 2024 году проект завершился."
+        )
+        report = audit(text)
+        self.assertEqual(report["repeated_two_word_sentence_openers"], [])
+        self.assertEqual(audit("Купили 5 машин.")["word_count"], 3)
+        self.assertEqual(audit("Оценка составила 3.14 балла.")["word_count"], 4)
+        self.assertIn({"text": "в 2024", "count": 3}, audit(
+            "В 2024 году начали. В 2024 году продолжили. В 2024 году закончили."
+        )["repeated_two_word_sentence_openers"])
+
+    def test_question_answer_combined_punctuation_and_dialogue_dash(self):
+        self.assertEqual(audit("Почему?! Ответ: сервер недоступен.")[
+            "explicit_question_answer_marker_pairs"], 1)
+        self.assertEqual(audit("Почему? — Потому что сервер недоступен.")[
+            "explicit_question_answer_marker_pairs"], 1)
+        self.assertEqual(audit("Почему!? «Ответ: сервер недоступен.»")[
+            "explicit_question_answer_marker_pairs"], 1)
+        self.assertEqual(audit("Почему?! — Ответ директору отправлен.")[
+            "explicit_question_answer_marker_pairs"], 0)
     def test_empty_input(self):
         report = audit("")
         self.assertEqual(report["paragraph_count"], 0)
