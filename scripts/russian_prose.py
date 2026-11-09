@@ -34,6 +34,32 @@ def _fence_parts(line: str) -> tuple[str, int, str] | None:
     return marker[0], len(marker), rest
 
 
+def _code_span_closer(text: str, start: int, width: int) -> re.Match[str] | None:
+    """Find a matching delimiter within the same Markdown inline block.
+
+    An unmatched delimiter cannot consume code from another paragraph or
+    from a new block. Soft-wrapped lines can still close a code span.
+    """
+    limit = len(text)
+    newline = text.find("\n", start)
+    while newline >= 0:
+        line_start = newline + 1
+        line_end = text.find("\n", line_start)
+        line = text[line_start:line_end if line_end >= 0 else len(text)].rstrip("\r")
+        if (not line.strip()
+                or _fence_parts(line) is not None
+                or re.match(r"^ {0,3}(?:#{1,6}\s|>|[-*+]\s|\d+[.)]\s)", line)
+                or re.fullmatch(r" {0,3}(?:=+|-+)\s*", line)):
+            limit = line_start
+            break
+        newline = line_end
+    return next(
+        (run for run in BACKTICK_RUN_RE.finditer(text, start, limit)
+         if len(run.group()) == width),
+        None,
+    )
+
+
 def mask_fenced(text: str) -> str:
     """Mask fenced Markdown regions without opening fences inside HTML/code spans.
 
@@ -91,8 +117,7 @@ def mask_fenced(text: str) -> str:
                 assert match is not None
                 width = len(match.group())
                 # Unmatched delimiters are literal; do not suppress later fences.
-                if any(len(run.group()) == width
-                       for run in BACKTICK_RUN_RE.finditer(text, offset + match.end())):
+                if _code_span_closer(text, offset + match.end(), width) is not None:
                     inline_width = width
                 i = match.end()
             else:
@@ -140,11 +165,7 @@ def _mask_code_and_comments(text: str) -> str:
             opener = BACKTICK_RUN_RE.match(text, i)
             assert opener is not None
             width = len(opener.group())
-            closer = next(
-                (run for run in BACKTICK_RUN_RE.finditer(text, opener.end())
-                 if len(run.group()) == width),
-                None,
-            )
+            closer = _code_span_closer(text, opener.end(), width)
             if closer is None:
                 i = opener.end()
                 continue
