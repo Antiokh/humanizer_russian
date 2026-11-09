@@ -34,6 +34,9 @@ jobs:
       - name: Скомпилировать Python
         run: python -m compileall -q scripts
 
+      - name: Проверить исследовательские метрики риторики
+        run: python -m unittest discover -s tests -p 'test_rhetorical_metrics.py' -v
+
       - name: Проверить архитектурный контракт
         run: python scripts/validate_architecture.py
 
