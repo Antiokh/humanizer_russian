@@ -98,6 +98,40 @@ class RhetoricalMetricsTests(unittest.TestCase):
         self.assertEqual(report["parameters"]["status"],
                          "provisional_not_corpus_calibrated")
 
+    def test_sentence_final_abbreviations(self):
+        self.assertEqual(audit(
+            "Доклад опубликован в 2024 г. Результаты обсуждали отдельно."
+        )["sentence_count"], 2)
+        self.assertEqual(audit(
+            "Отрезок имеет длину 5 см. Измерение повторили."
+        )["sentence_count"], 2)
+        self.assertEqual(audit(
+            "Работу проводили в г. Москве. Затем опубликовали отчёт."
+        )["sentence_count"], 2)
+        self.assertEqual(audit(
+            "В 2024 г. проект работал. В 2025 г. его закрыли."
+        )["sentence_count"], 2)
+
+    def test_thematic_break_setext_and_indented_code_not_prose(self):
+        self.assertEqual(prose_paragraphs(
+            "Первый абзац.\n\n---\n\nВторой абзац."
+        ), ["Первый абзац.", "Второй абзац."])
+        self.assertEqual(prose_paragraphs(
+            "Название главы\n============\n\n"
+            "    В этой главе не проза.\n"
+            "    И здесь тоже код.\n\n"
+            "Обычная проза."
+        ), ["Обычная проза."])
+        self.assertEqual(audit(
+            "Один абзац.\n\n* * *\n\nДругой абзац."
+        )["paragraph_count"], 2)
+
+    def test_qa_across_adjacent_prose_paragraphs(self):
+        self.assertEqual(audit(
+            "Почему проект задержался?\n\n"
+            "Потому что сервер был недоступен."
+        )["explicit_question_answer_marker_pairs"], 1)
+
     def test_empty_input(self):
         report = audit("")
         self.assertEqual(report["paragraph_count"], 0)
