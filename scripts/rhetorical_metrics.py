@@ -26,7 +26,7 @@ ANSWER_RE = re.compile(
     re.IGNORECASE,
 )
 ABBREVIATIONS = frozenset({
-    "г", "гг", "ул", "стр", "рис", "табл", "им", "др", "т", "д", "п", "н",
+    "г", "гг", "ул", "стр", "рис", "табл", "им", "др", "т", "д", "п", "н", "см",
 })
 CLOSING_QUOTES = "»”\"')]}’"
 OPENING_QUOTES = "«„“\"'([{’"
