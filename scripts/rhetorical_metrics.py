@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Optional document-level rhetoric metrics; no editorial findings or rewrite advice.
+"""Opt-in descriptive Russian rhetoric metrics: no findings and no rewrite advice.
 
-The same measured pattern can be a defect, a genre convention or an author's
-intentional rhythm. This module therefore emits METRIC_ONLY statistics.
+The same rhetorical pattern can be ordinary grammar, a genre convention or a
+deliberate authorial choice. These experimental values are METRIC_ONLY.
 """
 from __future__ import annotations
 
@@ -13,81 +13,157 @@ import sys
 from collections import Counter
 from pathlib import Path
 
+if __package__:
+    from .russian_prose import mask_nonprose
+else:
+    from russian_prose import mask_nonprose
+
 WORD_RE = re.compile(r"[^\W\d_]+(?:-[^\W\d_]+)*", re.UNICODE)
-SENTENCE_RE = re.compile(r"[^.!?]+[.!?]?", re.UNICODE)
+WORD_BEFORE_DOT = re.compile(r"([^\W\d_]+)$", re.UNICODE)
 ANSWER_RE = re.compile(
-    r"^(?:потому что|дело в том(?:,)? что|ответ(?:\s+прост)?|причина в том(?:,)? что)\b",
+    r"^(?:потому\s+что\b|дело\s+в\s+том,?\s+что\b|"
+    r"причина\s+в\s+том,?\s+что\b|ответ(?:\s+прост)?\s*:)",
     re.IGNORECASE,
 )
+ABBREVIATIONS = frozenset({
+    "г", "гг", "ул", "стр", "рис", "табл", "им", "др", "т", "д", "п", "н",
+})
+CLOSING_QUOTES = "»”\"')]}’"
+OPENING_QUOTES = "«„“\"'([{’"
+SENTENCE_END = ".?!…"
+SHORT_LE = 7
+MEDIUM_LE = 18
+MIN_REPETITIONS = 3
+MIN_RUN_SENTENCES = 3
 
 
 def prose_paragraphs(text: str) -> list[str]:
-    """Exclude common Markdown non-prose areas, without editing the input."""
+    """Reuse the repository's Markdown/code/URL masker; discard non-prose blocks."""
+    masked = mask_nonprose(text)
     result: list[str] = []
     current: list[str] = []
-    fence: str | None = None
 
     def flush() -> None:
         if current:
             result.append(" ".join(current))
             current.clear()
 
-    for line in text.splitlines():
+    for line in masked.splitlines():
         stripped = line.lstrip()
-        fence_match = re.match(r"^(\x60{3,}|~{3,})", stripped)
-        if fence_match:
-            flush()
-            marker = fence_match.group(1)[0]
-            if fence is None:
-                fence = marker
-            elif fence == marker:
-                fence = None
-            continue
-        if fence is not None:
-            continue
         if not stripped or re.match(r"^(?:#{1,6}\s|>|[-*+]\s|\d+[.)]\s)", stripped):
             flush()
             continue
-        cleaned = re.sub(r"\x60[^\x60]*\x60", "", line)
-        cleaned = re.sub(r"https?://\S+", "", cleaned)
-        if cleaned.strip():
-            current.append(" ".join(cleaned.split()))
-        else:
-            flush()
+        if stripped:
+            current.append(" ".join(stripped.split()))
     flush()
     return result
 
 
-def _words(text: str) -> list[str]:
-    return WORD_RE.findall(text.casefold())
+def _words(value: str) -> list[str]:
+    return WORD_RE.findall(value.casefold())
+
+
+def _nonterminal_dot(value: str, i: int) -> bool:
+    if i and i + 1 < len(value) and value[i - 1].isdigit() and value[i + 1].isdigit():
+        return True
+    match = WORD_BEFORE_DOT.search(value[:i])
+    if not match:
+        return False
+    token = match.group(1)
+    if token.casefold() in ABBREVIATIONS:
+        return True
+    # Personal-name initials such as А. П. Чехов, but not arbitrary one-letter
+    # sentence endings followed by lower-case prose.
+    if len(token) == 1 and token.isupper():
+        following = value[i + 1:].lstrip()
+        if following and following[0].isupper():
+            return True
+    return False
 
 
 def _sentences(paragraph: str) -> list[str]:
-    return [part.strip() for part in SENTENCE_RE.findall(paragraph) if _words(part)]
+    """Conservative segmentation with common abbreviation, decimal and quote guards."""
+    result: list[str] = []
+    start = 0
+    i = 0
+    while i < len(paragraph):
+        mark = paragraph[i]
+        if mark not in SENTENCE_END:
+            i += 1
+            continue
+        if mark == ".":
+            if i + 1 < len(paragraph) and paragraph[i + 1] == ".":
+                i += 1
+                continue
+            if _nonterminal_dot(paragraph, i):
+                i += 1
+                continue
+        j = i + 1
+        while j < len(paragraph) and paragraph[j] in SENTENCE_END:
+            j += 1
+        while j < len(paragraph) and paragraph[j] in CLOSING_QUOTES:
+            j += 1
+        if j < len(paragraph) and not paragraph[j].isspace():
+            i = j
+            continue
+        candidate = paragraph[start:j].strip()
+        if _words(candidate):
+            result.append(candidate)
+        start = j
+        i = j
+    tail = paragraph[start:].strip()
+    if _words(tail):
+        result.append(tail)
+    return result
 
 
-def _repeated(counter: Counter[str], minimum: int = 3) -> list[dict[str, str | int]]:
+def _repeated(counter: Counter[str]) -> list[dict[str, str | int]]:
+    """Show repeated surface n-grams; threshold is a display filter, not a verdict."""
     return [
         {"text": phrase, "count": count}
         for phrase, count in sorted(counter.items(), key=lambda item: (-item[1], item[0]))
-        if count >= minimum
+        if count >= MIN_REPETITIONS
     ]
+
+
+def _bin(words: int) -> str:
+    return "short" if words <= SHORT_LE else "medium" if words <= MEDIUM_LE else "long"
+
+
+def _length_runs(groups: list[list[str]]) -> list[dict[str, int | str]]:
+    """Maximal within-paragraph runs, never cross-paragraph overlapping windows."""
+    runs: list[dict[str, int | str]] = []
+    for paragraph_index, sentences in enumerate(groups, start=1):
+        lengths = [_bin(len(_words(sentence))) for sentence in sentences]
+        if not lengths:
+            continue
+        start = 0
+        for i in range(1, len(lengths) + 1):
+            if i == len(lengths) or lengths[i] != lengths[start]:
+                count = i - start
+                if count >= MIN_RUN_SENTENCES:
+                    runs.append({
+                        "paragraph_index": paragraph_index,
+                        "bin": lengths[start],
+                        "sentences": count,
+                    })
+                start = i
+    return runs
 
 
 def audit(text: str) -> dict:
     paragraphs = prose_paragraphs(text)
-    groups = [_sentences(p) for p in paragraphs]
+    groups = [_sentences(paragraph) for paragraph in paragraphs]
     sentences = [sentence for group in groups for sentence in group]
+    sentence_lengths = [len(_words(sentence)) for sentence in sentences]
     openers: Counter[str] = Counter()
     endings: Counter[str] = Counter()
-    bins: list[str] = []
-    pairs = 0
+    marker_pairs = 0
 
     for sentence in sentences:
         words = _words(sentence)
         if len(words) >= 2:
             openers[" ".join(words[:2])] += 1
-        bins.append("short" if len(words) <= 7 else "medium" if len(words) <= 18 else "long")
 
     for paragraph in paragraphs:
         words = _words(paragraph)
@@ -96,30 +172,40 @@ def audit(text: str) -> dict:
 
     for group in groups:
         for previous, current in zip(group, group[1:]):
-            if previous.rstrip().endswith("?") and ANSWER_RE.search(current.strip()):
-                pairs += 1
+            question = previous.rstrip().rstrip(CLOSING_QUOTES).rstrip()
+            answer = current.lstrip().lstrip(OPENING_QUOTES).lstrip()
+            if question.endswith("?") and ANSWER_RE.search(answer):
+                marker_pairs += 1
 
-    same_length_windows = sum(
-        bins[i] == bins[i - 1] == bins[i - 2]
-        for i in range(2, len(bins))
-    )
-
+    runs = _length_runs(groups)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "classification": "METRIC_ONLY",
         "paragraph_count": len(paragraphs),
         "sentence_count": len(sentences),
-        "length_bins": dict(sorted(Counter(bins).items())),
-        "same_length_three_sentence_windows": same_length_windows,
-        "immediate_question_answer_pairs": pairs,
+        "word_count": sum(sentence_lengths),
+        "length_bins": dict(sorted(Counter(_bin(length) for length in sentence_lengths).items())),
+        "same_length_sentence_run_count": len(runs),
+        "same_length_sentence_runs": runs,
+        "explicit_question_answer_marker_pairs": marker_pairs,
         "repeated_two_word_sentence_openers": _repeated(openers),
         "repeated_two_word_paragraph_endings": _repeated(endings),
-        "interpretation": "Descriptive statistics only; not evidence of AI authorship or a rewrite instruction.",
+        "parameters": {
+            "short_le_words": SHORT_LE,
+            "medium_le_words": MEDIUM_LE,
+            "minimum_repeat_to_display": MIN_REPETITIONS,
+            "minimum_run_sentences": MIN_RUN_SENTENCES,
+            "status": "provisional_not_corpus_calibrated",
+        },
+        "interpretation": (
+            "Descriptive surface proxies only; not validated as genre-adjusted "
+            "rhetorical analysis, AI attribution or a rewrite instruction."
+        ),
     }
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Optional Russian rhetoric metrics (no verdict)")
+    parser = argparse.ArgumentParser(description="Opt-in Russian rhetoric metrics (no verdict)")
     parser.add_argument("path", nargs="?", help="UTF-8 prose or Markdown; stdin if omitted")
     args = parser.parse_args(argv)
     raw = Path(args.path).read_text(encoding="utf-8") if args.path else sys.stdin.read()
