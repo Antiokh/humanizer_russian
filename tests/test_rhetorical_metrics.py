@@ -206,6 +206,37 @@ class RhetoricalMetricsTests(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertEqual(audit(text)["sentence_count"], 2)
 
+    def test_unclosed_backtick_does_not_swallow_fence_or_prose(self):
+        text = (
+            "Вводный текст с одинокой ` кавычкой.\n\n"
+            "```python\n"
+            "print(`x`)\n"
+            "В этой главе написан код.\n"
+            "```\n\n"
+            "Настоящая проза. Другой абзац."
+        )
+        self.assertEqual(prose_paragraphs(text), [
+            "Вводный текст с одинокой ` кавычкой.",
+            "Настоящая проза. Другой абзац.",
+        ])
+        self.assertEqual(audit(text)["sentence_count"], 3)
+
+    def test_unclosed_backtick_does_not_pair_across_paragraphs(self):
+        text = "Первый абзац с одинокой ` кавычкой.\n\nВторой абзац с `кодом` и текстом."
+        self.assertEqual(prose_paragraphs(text), [
+            "Первый абзац с одинокой ` кавычкой.",
+            "Второй абзац с и текстом.",
+        ])
+
+    def test_emphasized_sentence_endings_and_question_answers(self):
+        text = (
+            "**Почему проект задержался?** "
+            "**Потому что сервер недоступен.** "
+            "**Это подтвердили позже.**"
+        )
+        report = audit(text)
+        self.assertEqual(report["sentence_count"], 3)
+        self.assertEqual(report["explicit_question_answer_marker_pairs"], 1)
     def test_empty_input(self):
         report = audit("")
         self.assertEqual(report["paragraph_count"], 0)
