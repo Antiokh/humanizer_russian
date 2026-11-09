@@ -18,7 +18,7 @@ if __package__:
 else:
     from russian_prose import mask_nonprose
 
-WORD_RE = re.compile(r"[^\W\d_]+(?:-[^\W\d_]+)*", re.UNICODE)
+WORD_RE = re.compile(r"\d+(?:[.,]\d+)+|[^\W_]+(?:-[^\W_]+)*", re.UNICODE)
 WORD_BEFORE_DOT = re.compile(r"([^\W\d_]+)$", re.UNICODE)
 ANSWER_RE = re.compile(
     r"^(?:потому\s+что\b|дело\s+в\s+том,?\s+что\b|"
@@ -195,8 +195,8 @@ def audit(text: str) -> dict:
             pairs.append((group[-1], groups[group_index + 1][0]))
         for previous, current in pairs:
             question = previous.rstrip().rstrip(CLOSING_QUOTES).rstrip()
-            answer = current.lstrip().lstrip(OPENING_QUOTES).lstrip()
-            if question.endswith("?") and ANSWER_RE.search(answer):
+            answer = current.lstrip().lstrip(OPENING_QUOTES + "—–- \t").lstrip()
+            if re.search(r"[?!…]*\?[?!…]*$", question) and ANSWER_RE.search(answer):
                 marker_pairs += 1
 
     runs = _length_runs(groups)
