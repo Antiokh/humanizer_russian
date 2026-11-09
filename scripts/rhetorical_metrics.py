@@ -28,8 +28,8 @@ ANSWER_RE = re.compile(
 ABBREVIATIONS = frozenset({
     "г", "гг", "ул", "стр", "рис", "табл", "им", "др", "т", "д", "п", "н", "см",
 })
-CLOSING_QUOTES = "»”\"')]}’"
-OPENING_QUOTES = "«„“\"'([{’"
+CLOSING_QUOTES = "»”\"')]}’*_"
+OPENING_QUOTES = "«„“\"'([{’*_"
 SENTENCE_END = ".?!…"
 SHORT_LE = 7
 MEDIUM_LE = 18
