@@ -179,6 +179,33 @@ class RhetoricalMetricsTests(unittest.TestCase):
         text = "Вводный текст.\n\n<!--\nСкрытая строка.\n\nИ эта тоже."
         self.assertEqual(prose_paragraphs(text), ["Вводный текст."])
 
+    def test_fences_inside_html_comments_do_not_hide_prose(self):
+        text = "<!--\n```\n-->\n\nНастоящая проза. Следующее предложение."
+        self.assertEqual(prose_paragraphs(text), [
+            "Настоящая проза. Следующее предложение."
+        ])
+        self.assertEqual(audit(text)["sentence_count"], 2)
+
+    def test_backticks_in_fence_info_string_are_not_a_fence(self):
+        text = "```inline```\n\nНастоящая проза. Следующее предложение."
+        self.assertEqual(audit(text)["sentence_count"], 2)
+
+    def test_comment_backticks_do_not_pair_with_real_inline_code(self):
+        text = "<!-- ` -->\n\nНастоящая проза. `sample` Другой текст."
+        self.assertEqual(audit(text)["sentence_count"], 2)
+
+    def test_indented_html_marker_does_not_hide_following_prose(self):
+        text = "    <!--\n\nНастоящая проза. Следующее предложение."
+        self.assertEqual(audit(text)["sentence_count"], 2)
+
+    def test_abbreviation_can_terminate_sentence(self):
+        for text in (
+            "Книги, журналы и т. д. Далее идут примеры.",
+            "Тексты, таблицы и т. п. Далее идут примеры.",
+        ):
+            with self.subTest(text=text):
+                self.assertEqual(audit(text)["sentence_count"], 2)
+
     def test_empty_input(self):
         report = audit("")
         self.assertEqual(report["paragraph_count"], 0)
