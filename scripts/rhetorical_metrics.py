@@ -50,6 +50,16 @@ def prose_paragraphs(text: str) -> list[str]:
 
     for line in masked.splitlines():
         stripped = line.lstrip()
+        # The preceding paragraph is a Setext heading, not body prose.
+        if current and re.fullmatch(r"(?:=+|-+)\s*", stripped):
+            current.clear()
+            continue
+        if re.fullmatch(r"(?:\*\s*){3,}|(?:-\s*){3,}|(?:_\s*){3,}", stripped):
+            flush()
+            continue
+        # Indented code begins at a block boundary, not mid-paragraph.
+        if not current and (line.startswith("    ") or line.startswith("\t")):
+            continue
         if not stripped or re.match(r"^(?:#{1,6}\s|>|[-*+]\s|\d+[.)]\s)", stripped):
             flush()
             continue
@@ -71,6 +81,14 @@ def _nonterminal_dot(value: str, i: int) -> bool:
         return False
     token = match.group(1)
     if token.casefold() in ABBREVIATIONS:
+        # Numeric year/measurement abbreviations can finish a sentence.
+        # For city prefixes (e.g. "г. Москва") no digit precedes "г.".
+        following = value[i + 1:].lstrip()
+        preceding = value[:match.start()].rstrip()
+        if (token.casefold() in {"г", "см"}
+                and preceding and preceding[-1].isdigit()
+                and following and following[0].isupper()):
+            return False
         return True
     # Personal-name initials such as А. П. Чехов, but not arbitrary one-letter
     # sentence endings followed by lower-case prose.
@@ -170,8 +188,12 @@ def audit(text: str) -> dict:
         if len(words) >= 2:
             endings[" ".join(words[-2:])] += 1
 
-    for group in groups:
-        for previous, current in zip(group, group[1:]):
+    for group_index, group in enumerate(groups):
+        # Answer paragraphs can follow a question after a blank line.
+        pairs = list(zip(group, group[1:]))
+        if group and group_index + 1 < len(groups) and groups[group_index + 1]:
+            pairs.append((group[-1], groups[group_index + 1][0]))
+        for previous, current in pairs:
             question = previous.rstrip().rstrip(CLOSING_QUOTES).rstrip()
             answer = current.lstrip().lstrip(OPENING_QUOTES).lstrip()
             if question.endswith("?") and ANSWER_RE.search(answer):
