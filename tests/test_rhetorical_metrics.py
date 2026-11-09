@@ -155,6 +155,30 @@ class RhetoricalMetricsTests(unittest.TestCase):
             "explicit_question_answer_marker_pairs"], 1)
         self.assertEqual(audit("Почему?! — Ответ директору отправлен.")[
             "explicit_question_answer_marker_pairs"], 0)
+    def test_code_spans_with_inner_backticks_do_not_become_prose(self):
+        text = (
+            "\x60\x60В этой главе \x60код\x60 объяснён.\x60\x60\n\n"
+            "\x60\x60В этой главе \x60пример\x60 объяснён.\x60\x60\n\n"
+            "\x60\x60В этой главе \x60шаблон\x60 объяснён.\x60\x60\n\n"
+            "Обычный абзац."
+        )
+        self.assertEqual(prose_paragraphs(text), ["Обычный абзац."])
+        self.assertEqual(audit(text)["repeated_two_word_sentence_openers"], [])
+
+    def test_multiline_code_span_is_not_counted(self):
+        text = "\x60В этой главе\nЕсть два предложения. Всё ещё код.\x60\n\nВидимая проза."
+        self.assertEqual(prose_paragraphs(text), ["Видимая проза."])
+
+    def test_comment_tokens_inside_code_do_not_consume_prose(self):
+        text = "\x60<!--\x60\n\nНастоящая проза.\n\n\x60-->\x60\n\nДругой абзац."
+        self.assertEqual(
+            prose_paragraphs(text), ["Настоящая проза.", "Другой абзац."]
+        )
+
+    def test_unclosed_html_comment_is_not_prose(self):
+        text = "Вводный текст.\n\n<!--\nСкрытая строка.\n\nИ эта тоже."
+        self.assertEqual(prose_paragraphs(text), ["Вводный текст."])
+
     def test_empty_input(self):
         report = audit("")
         self.assertEqual(report["paragraph_count"], 0)
