@@ -81,6 +81,13 @@ def _nonterminal_dot(value: str, i: int) -> bool:
         return False
     token = match.group(1)
     if token.casefold() in ABBREVIATIONS:
+        # The final abbreviation in "т. д." / "т. п." can end a sentence.
+        preceding = value[:match.start()].rstrip()
+        following = value[i + 1:].lstrip()
+        if (token.casefold() in {"д", "п"}
+                and re.search(r"\bт\.\s*$", preceding, re.IGNORECASE)
+                and following and following[0].isupper()):
+            return False
         # Numeric year/measurement abbreviations can finish a sentence.
         # For city prefixes (e.g. "г. Москва") no digit precedes "г.".
         following = value[i + 1:].lstrip()
