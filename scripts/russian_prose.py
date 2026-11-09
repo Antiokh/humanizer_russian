@@ -14,6 +14,7 @@ INLINE_CODE_RE = re.compile(r"(?P<ticks>`+)(?P<body>[^`\n]*?)(?P=ticks)")
 URL_RE = re.compile(r"https?://\S+|www\.\S+", re.I)
 MD_LINK_TARGET_RE = re.compile(r"\]\([^\n)]*\)")
 HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
+BACKTICK_RUN_RE = re.compile(r"`+")
 
 
 def _mask_preserving_newlines(value: str) -> str:
@@ -59,24 +60,55 @@ def mask_fenced(text: str) -> str:
     return "".join(out)
 
 
+def _mask_code_and_comments(text: str) -> str:
+    """Mask inline code and HTML comments without losing offsets or newlines.
+
+    Markdown code spans can contain newlines and unequal internal backtick runs.
+    Comment delimiters within code (and code delimiters within comments) are inert.
+    """
+    chars = list(text)
+    i = 0
+    while i < len(text):
+        if text.startswith("<!--", i):
+            close = text.find("-->", i + 4)
+            end = len(text) if close < 0 else close + 3
+        elif text[i] == "`":
+            opener = BACKTICK_RUN_RE.match(text, i)
+            assert opener is not None
+            width = len(opener.group())
+            closer = next(
+                (run for run in BACKTICK_RUN_RE.finditer(text, opener.end())
+                 if len(run.group()) == width),
+                None,
+            )
+            if closer is None:
+                i = opener.end()
+                continue
+            end = closer.end()
+        else:
+            i += 1
+            continue
+        chars[i:end] = [ch if ch in "\r\n" else " " for ch in text[i:end]]
+        i = end
+    return "".join(chars)
+
+
 def _mask_regex(text: str, pattern: re.Pattern[str]) -> str:
     return pattern.sub(lambda match: _mask_preserving_newlines(match.group(0)), text)
 
 
 def mask_inline(line: str) -> str:
     """Mask inline non-prose spans on one line."""
-    clean = INLINE_CODE_RE.sub(lambda m: " " * len(m.group(0)), line)
+    clean = _mask_code_and_comments(line)
     clean = URL_RE.sub(lambda m: " " * len(m.group(0)), clean)
     clean = MD_LINK_TARGET_RE.sub(lambda m: "]" + " " * (len(m.group(0)) - 1), clean)
-    clean = HTML_COMMENT_RE.sub(lambda m: " " * len(m.group(0)), clean)
     return clean
 
 
 def mask_nonprose(text: str) -> str:
     """Return same-length text with non-prose regions replaced by whitespace."""
     masked = mask_fenced(text)
-    masked = _mask_regex(masked, HTML_COMMENT_RE)
-    masked = _mask_regex(masked, INLINE_CODE_RE)
+    masked = _mask_code_and_comments(masked)
     masked = _mask_regex(masked, URL_RE)
     masked = MD_LINK_TARGET_RE.sub(
         lambda m: "]" + _mask_preserving_newlines(m.group(0)[1:]),
